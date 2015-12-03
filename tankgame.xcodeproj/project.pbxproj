@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		D13AA1721C105626005F8265 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13AA1711C105626005F8265 /* main.cpp */; };
+		D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17C9F761C1059F700EB6C4E /* SDL2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +26,7 @@
 /* Begin PBXFileReference section */
 		D13AA16E1C105626005F8265 /* tankgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tankgame; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13AA1711C105626005F8265 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D17C9F761C1059F700EB6C4E /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -32,6 +34,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -41,6 +44,7 @@
 		D13AA1651C105626005F8265 = {
 			isa = PBXGroup;
 			children = (
+				D17C9F761C1059F700EB6C4E /* SDL2.framework */,
 				D13AA1701C105626005F8265 /* tankgame */,
 				D13AA16F1C105626005F8265 /* Products */,
 			);
@@ -207,6 +211,10 @@
 		D13AA1761C105626005F8265 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -214,6 +222,10 @@
 		D13AA1771C105626005F8265 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(LOCAL_LIBRARY_DIR)/Frameworks",
+				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -237,6 +249,7 @@
 				D13AA1771C105626005F8265 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
