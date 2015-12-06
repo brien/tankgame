@@ -8,6 +8,9 @@
 
 #include <iostream>
 #include <SDL2/SDL.h>
+#include <OpenGL/gl3.h>
+
+
 
 //Screen dimension constants
 const int SCREEN_WIDTH = 640;
