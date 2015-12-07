@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <OpenGL/gl3.h>
 
+#include "Singleton.h"
 
 
 //Screen dimension constants
