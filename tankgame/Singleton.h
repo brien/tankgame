@@ -6,8 +6,8 @@
 //  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
-#ifndef Singleton_h
-#define Singleton_h
+#ifndef BSM_Singleton_h
+#define BSM_Singleton_h
 
 #include <cassert>
 
@@ -51,4 +51,4 @@ public:
 
 template <typename T> T* Singleton <T>::m_singleton = 0;
 
-#endif /* Singleton_h */
+#endif /* BSM_Singleton_h */
