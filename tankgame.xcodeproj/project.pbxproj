@@ -25,6 +25,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D12175011C2381410034C96C /* BaseTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTask.h; sourceTree = "<group>"; };
 		D12EB41A1C1624A500640F9F /* Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		D13AA16E1C105626005F8265 /* tankgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tankgame; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13AA1711C105626005F8265 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
@@ -68,6 +69,7 @@
 			children = (
 				D13AA1711C105626005F8265 /* main.cpp */,
 				D12EB41A1C1624A500640F9F /* Singleton.h */,
+				D12175011C2381410034C96C /* BaseTask.h */,
 			);
 			path = tankgame;
 			sourceTree = "<group>";
