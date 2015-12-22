@@ -6,8 +6,8 @@
 //  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
-#ifndef BaseTask_h
-#define BaseTask_h
+#ifndef BSM_BaseTask_h
+#define BSM_BaseTask_h
 
 class BaseTask
 {
@@ -22,4 +22,4 @@ class BaseTask
     long priority;
 };
 
-#endif /* BaseTask_h */
+#endif /* BSM_BaseTask_h */
