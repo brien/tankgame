@@ -32,6 +32,7 @@
 		D17C9F761C1059F700EB6C4E /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		D182327D1C2A6BE100EBBB3E /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		D182327E1C2BBED000EBBB3E /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
+		D182327F1C2D0E0C00EBBB3E /* GlobalTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalTimer.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -70,6 +71,7 @@
 			isa = PBXGroup;
 			children = (
 				D13AA1711C105626005F8265 /* main.cpp */,
+				D182327F1C2D0E0C00EBBB3E /* GlobalTimer.h */,
 				D12EB41A1C1624A500640F9F /* Singleton.h */,
 				D12175011C2381410034C96C /* BaseTask.h */,
 				D182327D1C2A6BE100EBBB3E /* App.h */,
