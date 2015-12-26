@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D13AA1721C105626005F8265 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13AA1711C105626005F8265 /* main.cpp */; };
 		D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17C9F761C1059F700EB6C4E /* SDL2.framework */; };
+		D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232801C2E627100EBBB3E /* GlobalTimer.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 		D182327D1C2A6BE100EBBB3E /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		D182327E1C2BBED000EBBB3E /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
 		D182327F1C2D0E0C00EBBB3E /* GlobalTimer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GlobalTimer.h; sourceTree = "<group>"; };
+		D18232801C2E627100EBBB3E /* GlobalTimer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GlobalTimer.cpp; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -73,6 +75,7 @@
 				D13AA1711C105626005F8265 /* main.cpp */,
 				D182327F1C2D0E0C00EBBB3E /* GlobalTimer.h */,
 				D12EB41A1C1624A500640F9F /* Singleton.h */,
+				D18232801C2E627100EBBB3E /* GlobalTimer.cpp */,
 				D12175011C2381410034C96C /* BaseTask.h */,
 				D182327D1C2A6BE100EBBB3E /* App.h */,
 				D182327E1C2BBED000EBBB3E /* math.h */,
@@ -136,6 +139,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */,
 				D13AA1721C105626005F8265 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
