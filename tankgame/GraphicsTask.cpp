@@ -11,7 +11,9 @@
 #include <OpenGL/glu.h>
 #include <stdlib.h>
 #include <sys/types.h>
-//#include "app.h"
+
+#include "App.h"
+#include "TankHandler.h"
 
 typedef unsigned int WORD;
 typedef char byte;

@@ -1,5 +1,7 @@
 
 #include "LevelHandler.h"
+#include "TankHandler.h"
+#include "App.h"
 
 //cheap strlen function, requires a NULL TERMINATED STRING be passed.
 //Returns the length of the passed string

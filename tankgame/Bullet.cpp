@@ -9,6 +9,11 @@
 #include "Bullet.h"
 #include "GlobalTimer.h"
 #include "math.h"
+#include "LevelHandler.h"
+#include "TankHandler.h"
+#include "App.h"
+#include <OpenGL/gl.h>
+
 
 Bullet::Bullet()
 {

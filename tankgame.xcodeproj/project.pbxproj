@@ -15,6 +15,8 @@
 		D182328B1C305E2700EBBB3E /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232891C305E2700EBBB3E /* Bullet.cpp */; };
 		D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182328C1C3061E800EBBB3E /* LevelHandler.cpp */; };
 		D18232911C30632400EBBB3E /* Item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182328F1C30632400EBBB3E /* Item.cpp */; };
+		D18232961C3064F500EBBB3E /* Tank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232921C3064F500EBBB3E /* Tank.cpp */; };
+		D18232971C3064F500EBBB3E /* TankHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232941C3064F500EBBB3E /* TankHandler.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +53,10 @@
 		D182328D1C3061E800EBBB3E /* LevelHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelHandler.h; sourceTree = "<group>"; };
 		D182328F1C30632400EBBB3E /* Item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Item.cpp; sourceTree = "<group>"; };
 		D18232901C30632400EBBB3E /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
+		D18232921C3064F500EBBB3E /* Tank.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Tank.cpp; sourceTree = "<group>"; };
+		D18232931C3064F500EBBB3E /* Tank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tank.h; sourceTree = "<group>"; };
+		D18232941C3064F500EBBB3E /* TankHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TankHandler.cpp; sourceTree = "<group>"; };
+		D18232951C3064F500EBBB3E /* TankHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TankHandler.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -104,6 +110,10 @@
 				D18232801C2E627100EBBB3E /* GlobalTimer.cpp */,
 				D12175011C2381410034C96C /* BaseTask.h */,
 				D182327D1C2A6BE100EBBB3E /* App.h */,
+				D18232921C3064F500EBBB3E /* Tank.cpp */,
+				D18232931C3064F500EBBB3E /* Tank.h */,
+				D18232941C3064F500EBBB3E /* TankHandler.cpp */,
+				D18232951C3064F500EBBB3E /* TankHandler.h */,
 				D182327E1C2BBED000EBBB3E /* math.h */,
 				D18232821C30471B00EBBB3E /* InputTask.h */,
 			);
@@ -166,6 +176,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18232971C3064F500EBBB3E /* TankHandler.cpp in Sources */,
 				D182328B1C305E2700EBBB3E /* Bullet.cpp in Sources */,
 				D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */,
 				D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */,
@@ -173,6 +184,7 @@
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,
 				D13AA1721C105626005F8265 /* main.cpp in Sources */,
 				D18232911C30632400EBBB3E /* Item.cpp in Sources */,
+				D18232961C3064F500EBBB3E /* Tank.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

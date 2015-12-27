@@ -11,6 +11,7 @@
 
 #include "BaseTask.h"
 #include "igtl_qmesh.h"
+#include "Tank.h"
 
 class Camera
 {

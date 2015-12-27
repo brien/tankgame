@@ -1,4 +1,5 @@
 #include "Item.h"
+#include "App.h"
 #include <OpenGL/gl.h>
 
 Item::Item()

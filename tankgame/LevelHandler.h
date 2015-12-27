@@ -12,6 +12,7 @@
 #include <vector>
 using namespace std;
 #include "Item.h"
+#include "Singleton.h"
 
 class LevelHandler : public Singleton<LevelHandler>
 {

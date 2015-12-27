@@ -10,15 +10,18 @@
 #define App_h
 
 #include "Singleton.h"
+#include "InputTask.h"
+#include "GlobalTimer.h"
+#include "GraphicsTask.h"
 
 class App : public Singleton<App>
 {
 public:
-    //InputTask* inputTask;
+    InputTask* inputTask;
     //VideoTask* videoTask;
-    //GlobalTimer* globalTimer;
+    GlobalTimer* globalTimer;
     //SoundTask* soundTask;
-    //GraphicsTask* graphicsTask;
+    GraphicsTask* graphicsTask;
     
     //GameTask* gameTask;
     
