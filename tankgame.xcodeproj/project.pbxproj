@@ -14,6 +14,7 @@
 		D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232871C30529000EBBB3E /* GraphicsTask.cpp */; };
 		D182328B1C305E2700EBBB3E /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232891C305E2700EBBB3E /* Bullet.cpp */; };
 		D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182328C1C3061E800EBBB3E /* LevelHandler.cpp */; };
+		D18232911C30632400EBBB3E /* Item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182328F1C30632400EBBB3E /* Item.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -48,6 +49,8 @@
 		D182328A1C305E2700EBBB3E /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = "<group>"; };
 		D182328C1C3061E800EBBB3E /* LevelHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelHandler.cpp; sourceTree = "<group>"; };
 		D182328D1C3061E800EBBB3E /* LevelHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelHandler.h; sourceTree = "<group>"; };
+		D182328F1C30632400EBBB3E /* Item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Item.cpp; sourceTree = "<group>"; };
+		D18232901C30632400EBBB3E /* Item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Item.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -86,6 +89,8 @@
 			isa = PBXGroup;
 			children = (
 				D182328C1C3061E800EBBB3E /* LevelHandler.cpp */,
+				D182328F1C30632400EBBB3E /* Item.cpp */,
+				D18232901C30632400EBBB3E /* Item.h */,
 				D182328D1C3061E800EBBB3E /* LevelHandler.h */,
 				D18232831C3049A400EBBB3E /* igtl_qmesh.cpp */,
 				D18232841C3049A400EBBB3E /* igtl_qmesh.h */,
@@ -167,6 +172,7 @@
 				D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */,
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,
 				D13AA1721C105626005F8265 /* main.cpp in Sources */,
+				D18232911C30632400EBBB3E /* Item.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
