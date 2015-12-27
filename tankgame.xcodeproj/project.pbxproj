@@ -18,6 +18,8 @@
 		D18232961C3064F500EBBB3E /* Tank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232921C3064F500EBBB3E /* Tank.cpp */; };
 		D18232971C3064F500EBBB3E /* TankHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232941C3064F500EBBB3E /* TankHandler.cpp */; };
 		D182329A1C3068E600EBBB3E /* FXHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232981C3068E600EBBB3E /* FXHandler.cpp */; };
+		D182329D1C3069C800EBBB3E /* GameTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182329B1C3069C800EBBB3E /* GameTask.cpp */; };
+		D18232A01C306ADE00EBBB3E /* SoundTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182329E1C306ADE00EBBB3E /* SoundTask.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +62,10 @@
 		D18232951C3064F500EBBB3E /* TankHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TankHandler.h; sourceTree = "<group>"; };
 		D18232981C3068E600EBBB3E /* FXHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FXHandler.cpp; sourceTree = "<group>"; };
 		D18232991C3068E600EBBB3E /* FXHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXHandler.h; sourceTree = "<group>"; };
+		D182329B1C3069C800EBBB3E /* GameTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GameTask.cpp; sourceTree = "<group>"; };
+		D182329C1C3069C800EBBB3E /* GameTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTask.h; sourceTree = "<group>"; };
+		D182329E1C306ADE00EBBB3E /* SoundTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundTask.cpp; sourceTree = "<group>"; };
+		D182329F1C306ADE00EBBB3E /* SoundTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundTask.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -97,6 +103,10 @@
 		D13AA1701C105626005F8265 /* tankgame */ = {
 			isa = PBXGroup;
 			children = (
+				D182329B1C3069C800EBBB3E /* GameTask.cpp */,
+				D182329C1C3069C800EBBB3E /* GameTask.h */,
+				D182329E1C306ADE00EBBB3E /* SoundTask.cpp */,
+				D182329F1C306ADE00EBBB3E /* SoundTask.h */,
 				D18232981C3068E600EBBB3E /* FXHandler.cpp */,
 				D18232991C3068E600EBBB3E /* FXHandler.h */,
 				D182328C1C3061E800EBBB3E /* LevelHandler.cpp */,
@@ -183,7 +193,9 @@
 			files = (
 				D18232971C3064F500EBBB3E /* TankHandler.cpp in Sources */,
 				D182328B1C305E2700EBBB3E /* Bullet.cpp in Sources */,
+				D18232A01C306ADE00EBBB3E /* SoundTask.cpp in Sources */,
 				D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */,
+				D182329D1C3069C800EBBB3E /* GameTask.cpp in Sources */,
 				D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */,
 				D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */,
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,

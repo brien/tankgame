@@ -6,14 +6,17 @@
 //  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
+#include <OpenGL/gl.h>
+
 #include "Bullet.h"
+
 #include "GlobalTimer.h"
 #include "math.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "App.h"
-#include <OpenGL/gl.h>
+
 
 
 Bullet::Bullet()

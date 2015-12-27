@@ -13,6 +13,7 @@
 #include "InputTask.h"
 #include "GlobalTimer.h"
 #include "GraphicsTask.h"
+#include "GameTask.h"
 
 class App : public Singleton<App>
 {
@@ -23,7 +24,7 @@ public:
     //SoundTask* soundTask;
     GraphicsTask* graphicsTask;
     
-    //GameTask* gameTask;
+    GameTask* gameTask;
     
     
     bool quit;
