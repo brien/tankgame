@@ -44,11 +44,11 @@ bool InputTask::Start()
             for(int j=0; j<4; j++)
             {
                 jdA[i][j] = 0;
-                joynames[i]=SDL_JoystickName(i);
+                //joynames[i]=SDL_JoystickInstanceID(i);
             }
         }
     }
-    unsigned char *tempKeys=SDL_GetKeyState(&keyCount);
+    const Uint8 *tempKeys=SDL_GetKeyboardState(&keyCount);
     keys=new unsigned char [keyCount];
     memcpy(keys,tempKeys,sizeof(unsigned char)*keyCount);
     oldKeys=new unsigned char [keyCount];
@@ -63,7 +63,7 @@ void InputTask::Update()
     oldButtons=buttons;
     buttons=SDL_GetRelativeMouseState(&dX,&dY);
     memcpy(oldKeys,keys,sizeof(unsigned char)*keyCount);
-    unsigned char *tempKeys=SDL_GetKeyState(&keyCount);
+    const Uint8 *tempKeys=SDL_GetKeyboardState(&keyCount);
     memcpy(keys,tempKeys,sizeof(unsigned char)*keyCount);
     
     for(int i=0; i<SDL_NumJoysticks(); i++)
