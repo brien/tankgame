@@ -117,42 +117,44 @@ void GameTask::Update()
          gameStarted=true;
       }
 
-      if ( InputTask::KeyDown(SDLK_INSERT) )
+       
+      if ( InputTask::KeyDown(SDL_SCANCODE_INSERT) )
       {
          debug=true;
          App::GetSingleton().soundTask->PlaySound(1);
       }
+       
 
-      if(InputTask::KeyDown(SDLK_2))
+       if(InputTask::KeyDown(SDL_SCANCODE_2))
       {
          TankHandler::GetSingleton().numPlayers=2;
       }
 
       if(menuState==0)
       {
-         if(InputTask::KeyDown(SDLK_RIGHT) || InputTask::GetAxis(0, 0) > 5000 )
+         if(InputTask::KeyDown(SDL_SCANCODE_RIGHT) || InputTask::GetAxis(0, 0) > 5000 )
          {
             menuState=1;
          }
       }
       if(menuState==1)
       {
-         if(InputTask::KeyDown(SDLK_LEFT) || InputTask::GetAxis(0, 0) < -5000)
+         if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::GetAxis(0, 0) < -5000)
          {
             menuState=0;
          }
-         if(InputTask::KeyDown(SDLK_DOWN) || InputTask::GetAxis(0,1) > 5000)
+         if(InputTask::KeyDown(SDL_SCANCODE_DOWN) || InputTask::GetAxis(0,1) > 5000)
          {
             menuState=2;
          }
       }
       if(menuState==2)
       {
-         if(InputTask::KeyDown(SDLK_LEFT) || InputTask::GetAxis(0, 0) < -5000 )
+         if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::GetAxis(0, 0) < -5000 )
          {
             menuState=0;
          }
-         if(InputTask::KeyDown(SDLK_UP) || InputTask::GetAxis(0,1) < -5000 )
+         if(InputTask::KeyDown(SDL_SCANCODE_UP) || InputTask::GetAxis(0,1) < -5000 )
          {
             menuState=1;
          }
@@ -189,11 +191,11 @@ void GameTask::Update()
          xzcam=0.2;
       }
 
-      if(InputTask::KeyDown(SDLK_PAGEUP) && debug)
+      if(InputTask::KeyDown(SDL_SCANCODE_PAGEUP) && debug)
       {
          LevelHandler::GetSingleton().NextLevel(true);
       }
-      if(InputTask::KeyDown(SDLK_PAGEDOWN) && debug)
+      if(InputTask::KeyDown(SDL_SCANCODE_PAGEDOWN) && debug)
       {
          LevelHandler::GetSingleton().NextLevel(false);
       }

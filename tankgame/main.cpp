@@ -58,12 +58,12 @@ void App::Run(int argc, char *argv[])
         
         //Take Input and events
         
-        if(InputTask::KeyDown(SDLK_PAUSE))
+        if(InputTask::KeyDown(SDL_SCANCODE_PAUSE))
         {
             gameTask->paused=!gameTask->paused;
         }
         
-        if(inputTask->KeyDown(SDLK_ESCAPE))
+        if(inputTask->KeyDown(SDL_SCANCODE_ESCAPE))
         {
             quit=true;
         }

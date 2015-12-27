@@ -27,6 +27,9 @@ bool VideoTask::Start()
 	{
 		return false;
 	}
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MAJOR_VERSION, 2 );
+    SDL_GL_SetAttribute( SDL_GL_CONTEXT_MINOR_VERSION, 1 );
+    
 	SDL_GL_SetAttribute( SDL_GL_ALPHA_SIZE, 8 );
 	SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 8 );
 	SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 8 );
@@ -96,6 +99,10 @@ bool VideoTask::Start()
    fclose(filein);
     
     window = SDL_CreateWindow("Tank!Game 2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
+    //sdlRenderer = SDL_CreateRenderer(window, -1, 0);
+    glContext = SDL_GL_CreateContext(window);
+    
+    SDL_GL_SetSwapInterval( 1 );
 	
 
 	if(!window)
@@ -118,6 +125,7 @@ void VideoTask::Stop()
 {
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow( window );
 }
 

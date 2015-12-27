@@ -1599,7 +1599,7 @@ void Tank::HandleInput()
            }
 	   }
 
-	   if(InputTask::KeyStillDown(SDLK_SPACE))
+	   if(InputTask::KeyStillDown(SDL_SCANCODE_SPACE))
 	   {
 		   Jump();
            if(turbo)
@@ -1611,7 +1611,7 @@ void Tank::HandleInput()
       {
          jumping=false;
       }
-	   if( InputTask::KeyStillDown(SDLK_LEFT) )
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_LEFT) )
 	   {
 		   RotTurret(-1);
            if(turbo)
@@ -1620,7 +1620,7 @@ void Tank::HandleInput()
               charge-=jumpCost*GlobalTimer::dT;
            }
 	   }
-	   if( InputTask::KeyStillDown(SDLK_RIGHT))
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_RIGHT))
 	   {
 		   RotTurret(1);
            if(turbo)
@@ -1630,18 +1630,18 @@ void Tank::HandleInput()
            }
 	   }
 
-               if( InputTask::CurKey(SDLK_LSHIFT) && charge>0 )
+               if( InputTask::CurKey(SDL_SCANCODE_LSHIFT) && charge>0 )
          {
           turbo=true;
          }
          else
           turbo=false;
 
-      if( InputTask::KeyStillDown(SDLK_UP) )
+      if( InputTask::KeyStillDown(SDL_SCANCODE_UP) )
 	   {
          App::GetSingleton().graphicsTask->cams[-1*(id+1)].ydist+=10*GlobalTimer::dT;
 	   }
-	   if( InputTask::KeyStillDown(SDLK_DOWN))
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_DOWN))
 	   {
          App::GetSingleton().graphicsTask->cams[-1*(id+1)].ydist-=10*GlobalTimer::dT;
 	   }
@@ -2313,7 +2313,7 @@ void Tank::HandleInput()
    }
 
 
-    if( InputTask::KeyDown(SDLK_INSERT) && App::GetSingleton().gameTask->debug )
+    if( InputTask::KeyDown(SDL_SCANCODE_INSERT) && App::GetSingleton().gameTask->debug )
     {
        TankHandler::GetSingleton().special[0]+=100;
 
@@ -2321,7 +2321,7 @@ void Tank::HandleInput()
        charge+=maxCharge*20;
     }
 
-    if( InputTask::KeyDown(SDLK_HOME) && App::GetSingleton().gameTask->debug )
+    if( InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->debug )
     {
        TankHandler::GetSingleton().special[0]=10;
 

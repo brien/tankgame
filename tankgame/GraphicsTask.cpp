@@ -20,8 +20,7 @@
 #include "VideoTask.h"
 
 typedef unsigned int WORD;
-typedef char byte;
-#define NULL    0
+typedef unsigned char byte;
 
 Camera::Camera()
 {
@@ -313,6 +312,7 @@ bool GraphicsTask::Start()
     
     glEnable(GL_TEXTURE_2D);
     
+    /*
     TGA_Texture(textureArray, "texture/cube1.tga", 10, true);
     TGA_Texture(textureArray, "texture/cube2.tga", 11, true);
     TGA_Texture(textureArray, "texture/trail.tga", 12, false);
@@ -340,7 +340,7 @@ bool GraphicsTask::Start()
     TGA_Texture(textureArray, "texture/8.tga", 8, true);
     TGA_Texture(textureArray, "texture/9.tga", 9, true);
     
-    
+    */
     FILE* tload = fopen("nowbody.gsm","rb");
     
     if(tload!=NULL)

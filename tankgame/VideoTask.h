@@ -20,6 +20,8 @@ public:
 protected:
 	int flags;
     SDL_Window *window;
+    SDL_Renderer *sdlRenderer;
+    SDL_GLContext glContext;
 };
 
 #endif // VIDEO_H

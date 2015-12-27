@@ -29,8 +29,8 @@ public:
     static string joynames[2];
     static int jdA[4][4];
     
-    static unsigned char *keys;
-    static unsigned char *oldKeys;
+    static Uint8 *keys;
+    static Uint8 *oldKeys;
     static int keyCount;
     
     static int GetAxis(int jid, int axis);

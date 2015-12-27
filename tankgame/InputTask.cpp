@@ -49,9 +49,9 @@ bool InputTask::Start()
         }
     }
     const Uint8 *tempKeys=SDL_GetKeyboardState(&keyCount);
-    keys=new unsigned char [keyCount];
-    memcpy(keys,tempKeys,sizeof(unsigned char)*keyCount);
-    oldKeys=new unsigned char [keyCount];
+    keys=new Uint8 [keyCount];
+    memcpy(keys,tempKeys,sizeof(Uint8)*keyCount);
+    oldKeys=new Uint8 [keyCount];
     dX=dY=0;
     SDL_PumpEvents(); SDL_PumpEvents();
     return true;
