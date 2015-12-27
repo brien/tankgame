@@ -11,6 +11,7 @@
 #include "math.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
+#include "FXHandler.h"
 #include "App.h"
 #include <OpenGL/gl.h>
 

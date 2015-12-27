@@ -17,6 +17,7 @@
 		D18232911C30632400EBBB3E /* Item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182328F1C30632400EBBB3E /* Item.cpp */; };
 		D18232961C3064F500EBBB3E /* Tank.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232921C3064F500EBBB3E /* Tank.cpp */; };
 		D18232971C3064F500EBBB3E /* TankHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232941C3064F500EBBB3E /* TankHandler.cpp */; };
+		D182329A1C3068E600EBBB3E /* FXHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232981C3068E600EBBB3E /* FXHandler.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -57,6 +58,8 @@
 		D18232931C3064F500EBBB3E /* Tank.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Tank.h; sourceTree = "<group>"; };
 		D18232941C3064F500EBBB3E /* TankHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TankHandler.cpp; sourceTree = "<group>"; };
 		D18232951C3064F500EBBB3E /* TankHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TankHandler.h; sourceTree = "<group>"; };
+		D18232981C3068E600EBBB3E /* FXHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FXHandler.cpp; sourceTree = "<group>"; };
+		D18232991C3068E600EBBB3E /* FXHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXHandler.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -94,6 +97,8 @@
 		D13AA1701C105626005F8265 /* tankgame */ = {
 			isa = PBXGroup;
 			children = (
+				D18232981C3068E600EBBB3E /* FXHandler.cpp */,
+				D18232991C3068E600EBBB3E /* FXHandler.h */,
 				D182328C1C3061E800EBBB3E /* LevelHandler.cpp */,
 				D182328F1C30632400EBBB3E /* Item.cpp */,
 				D18232901C30632400EBBB3E /* Item.h */,
@@ -184,6 +189,7 @@
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,
 				D13AA1721C105626005F8265 /* main.cpp in Sources */,
 				D18232911C30632400EBBB3E /* Item.cpp in Sources */,
+				D182329A1C3068E600EBBB3E /* FXHandler.cpp in Sources */,
 				D18232961C3064F500EBBB3E /* Tank.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
