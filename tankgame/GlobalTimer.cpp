@@ -15,15 +15,6 @@ float GlobalTimer::dT=0;
 unsigned long GlobalTimer::lastFrameIndex=0;
 unsigned long GlobalTimer::thisFrameIndex=0;
 
-GlobalTimer::GlobalTimer()
-{
-    
-}
-
-GlobalTimer::~GlobalTimer()
-{
-    
-}
 
 bool GlobalTimer::Start()
 {

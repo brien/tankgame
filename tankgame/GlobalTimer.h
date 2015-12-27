@@ -28,8 +28,8 @@ public:
     
     void Reset();
     
-    static inline unsigned long GlobalTimer::TimeToIndex(float t) { return (unsigned long)(t*1000.0f); }
-    static inline float GlobalTimer::IndexToTime(unsigned long i) { return ((float)i)/1000.0f;	      }
+    static inline unsigned long TimeToIndex(float t) { return (unsigned long)(t*1000.0f); }
+    static inline float IndexToTime(unsigned long i) { return ((float)i)/1000.0f;	      }
 };
 
 #endif /* GlobalTimer_h */
