@@ -2,6 +2,7 @@
 
 #include "App.h"
 #include "GameTask.h"
+#include "InputTask.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "FXHandler.h"

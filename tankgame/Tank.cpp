@@ -1,6 +1,10 @@
 #include "Tank.h"
 
+#include <OpenGL/gl.h>
 #include "App.h"
+#include "LevelHandler.h"
+#include "FXHandler.h"
+#include "TankHandler.h"
 
 //#include "TOGLshapes.h"
 

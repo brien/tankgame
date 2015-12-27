@@ -22,6 +22,7 @@
 		D18232A01C306ADE00EBBB3E /* SoundTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182329E1C306ADE00EBBB3E /* SoundTask.cpp */; };
 		D18232A21C306E8500EBBB3E /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */; };
 		D18232A51C30818300EBBB3E /* VideoTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232A31C30818300EBBB3E /* VideoTask.cpp */; };
+		D18232A71C30892E00EBBB3E /* InputTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232A61C30892E00EBBB3E /* InputTask.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -71,6 +72,7 @@
 		D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
 		D18232A31C30818300EBBB3E /* VideoTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoTask.cpp; sourceTree = "<group>"; };
 		D18232A41C30818300EBBB3E /* VideoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTask.h; sourceTree = "<group>"; };
+		D18232A61C30892E00EBBB3E /* InputTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = InputTask.cpp; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -140,6 +142,7 @@
 				D18232951C3064F500EBBB3E /* TankHandler.h */,
 				D182327E1C2BBED000EBBB3E /* math.h */,
 				D18232821C30471B00EBBB3E /* InputTask.h */,
+				D18232A61C30892E00EBBB3E /* InputTask.cpp */,
 			);
 			path = tankgame;
 			sourceTree = "<group>";
@@ -211,6 +214,7 @@
 				D18232A51C30818300EBBB3E /* VideoTask.cpp in Sources */,
 				D13AA1721C105626005F8265 /* main.cpp in Sources */,
 				D18232911C30632400EBBB3E /* Item.cpp in Sources */,
+				D18232A71C30892E00EBBB3E /* InputTask.cpp in Sources */,
 				D182329A1C3068E600EBBB3E /* FXHandler.cpp in Sources */,
 				D18232961C3064F500EBBB3E /* Tank.cpp in Sources */,
 			);
