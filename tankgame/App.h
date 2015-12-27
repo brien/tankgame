@@ -11,17 +11,19 @@
 
 #include "Singleton.h"
 #include "InputTask.h"
+#include "VideoTask.h"
 #include "GlobalTimer.h"
 #include "GraphicsTask.h"
 #include "GameTask.h"
+#include "SoundTask.h"
 
 class App : public Singleton<App>
 {
 public:
     InputTask* inputTask;
-    //VideoTask* videoTask;
+    VideoTask* videoTask;
     GlobalTimer* globalTimer;
-    //SoundTask* soundTask;
+    SoundTask* soundTask;
     GraphicsTask* graphicsTask;
     
     GameTask* gameTask;

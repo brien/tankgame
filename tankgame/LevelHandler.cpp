@@ -1,6 +1,8 @@
 
+#include <OpenGL/gl.h>
 #include "LevelHandler.h"
 #include "TankHandler.h"
+#include "FXHandler.h"
 #include "App.h"
 
 //cheap strlen function, requires a NULL TERMINATED STRING be passed.
@@ -743,7 +745,7 @@ void LevelHandler::DrawTerrain()
 
    //glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
 
-	for(ix=sx; ix>0; ix--)
+	for(int ix=sx; ix>0; ix--)
 	{
 		
 		for(int iz=sz-1; iz>0; iz--)
@@ -856,7 +858,7 @@ void LevelHandler::DrawTerrain()
 		}
 	}
 
-	for(iz=sz; iz>0; iz--)
+	for(int iz=sz; iz>0; iz--)
 	{
 		for(int ix=sx; ix>=0; ix--)
 		{
@@ -1055,7 +1057,7 @@ void LevelHandler::DrawTerrain()
 
 	glColor4fv(colors[colorNumber+1]);
 
-	for(ix=0; ix<=sx; ix++)
+	for(int ix=0; ix<=sx; ix++)
 	{
 		for(int iz=0; iz<=sz; iz++)
 		{
@@ -1086,7 +1088,7 @@ void LevelHandler::DrawTerrain()
 		}
 	}
 
-	for(ix=sx; ix>0; ix--)
+	for(int ix=sx; ix>0; ix--)
 	{
 		for(int iz=sz-1; iz>0; iz--)
 		{
@@ -1125,7 +1127,7 @@ void LevelHandler::DrawTerrain()
 	lastY=0;
 	lastBY=0;
 
-	for(iz=0; iz<sz; iz++)
+	for(int iz=0; iz<sz; iz++)
 	{
 		for(int ix=0; ix<=sx; ix++)
 		{
@@ -1156,7 +1158,7 @@ void LevelHandler::DrawTerrain()
 		}
 	}
 
-	for(iz=sz; iz>0; iz--)
+	for(int iz=sz; iz>0; iz--)
 	{
 		for(int ix=sx; ix>=0; ix--)
 		{
@@ -1326,7 +1328,7 @@ void LevelHandler::DrawTerrain_OLD()
 		}
 	}
 
-	for(ix=sx; ix>0; ix--)
+	for(int ix=sx; ix>0; ix--)
 	{
 		
 		for(int iz=sz-1; iz>0; iz--)
@@ -1404,7 +1406,7 @@ void LevelHandler::DrawTerrain_OLD()
 		}
 	}
 
-	for(iz=sz; iz>0; iz--)
+	for(int iz=sz; iz>0; iz--)
 	{
 		for(int ix=sx; ix>=0; ix--)
 		{
@@ -1559,7 +1561,7 @@ void LevelHandler::DrawTerrain_OLD()
 	if(levelNumber==48) glColor4f(0,1,0,1);
 	else if(levelNumber==49) glColor4f(1,0,0,1);
 
-	for(ix=0; ix<=sx; ix++)
+	for(int ix=0; ix<=sx; ix++)
 	{
 		for(int iz=0; iz<=sz; iz++)
 		{
@@ -1590,7 +1592,7 @@ void LevelHandler::DrawTerrain_OLD()
 		}
 	}
 
-	for(ix=sx; ix>0; ix--)
+	for(int ix=sx; ix>0; ix--)
 	{
 		for(int iz=sz-1; iz>0; iz--)
 		{
@@ -1629,7 +1631,7 @@ void LevelHandler::DrawTerrain_OLD()
 	lastY=0;
 	lastBY=0;
 
-	for(iz=0; iz<sz; iz++)
+	for(int iz=0; iz<sz; iz++)
 	{
 		for(int ix=0; ix<=sx; ix++)
 		{
@@ -1660,7 +1662,7 @@ void LevelHandler::DrawTerrain_OLD()
 		}
 	}
 
-	for(iz=sz; iz>0; iz--)
+	for(int iz=sz; iz>0; iz--)
 	{
 		for(int ix=sx; ix>=0; ix--)
 		{

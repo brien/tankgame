@@ -2,6 +2,7 @@
 
 #include "TankHandler.h"
 #include "LevelHandler.h"
+#include "GLobalTimer.h"
 #include "math.h"
 #include "App.h"
 #include <string>
@@ -344,7 +345,7 @@ void TankHandler::NextFrame()
             if(players[i].deadtime>0.5)
                LevelHandler::GetSingleton().NextLevel(false);
          }
-          players[i].deadtime+=GlobalTimer.dT;
+          players[i].deadtime+=GlobalTimer::dT;
       }
 
    }

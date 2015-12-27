@@ -20,7 +20,13 @@ protected:
     Singleton()
     {
         assert(!m_singleton);
-        m_singleton = 0;
+        m_singleton = static_cast<T*>(this);
+    }
+    
+    ~Singleton()
+    {
+        assert(m_singleton);
+        m_singleton=0;
     }
 public:
     static inline void Create()
@@ -32,7 +38,7 @@ public:
     static inline T& GetSingleton()
     {
         assert(m_singleton);
-        return m_singleton;
+        return *m_singleton;
     }
     static inline T* GetSingletonPtr()
     {

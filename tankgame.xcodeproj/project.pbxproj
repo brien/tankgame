@@ -20,6 +20,8 @@
 		D182329A1C3068E600EBBB3E /* FXHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232981C3068E600EBBB3E /* FXHandler.cpp */; };
 		D182329D1C3069C800EBBB3E /* GameTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182329B1C3069C800EBBB3E /* GameTask.cpp */; };
 		D18232A01C306ADE00EBBB3E /* SoundTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182329E1C306ADE00EBBB3E /* SoundTask.cpp */; };
+		D18232A21C306E8500EBBB3E /* SDL2_mixer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */; };
+		D18232A51C30818300EBBB3E /* VideoTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232A31C30818300EBBB3E /* VideoTask.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -66,6 +68,9 @@
 		D182329C1C3069C800EBBB3E /* GameTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameTask.h; sourceTree = "<group>"; };
 		D182329E1C306ADE00EBBB3E /* SoundTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundTask.cpp; sourceTree = "<group>"; };
 		D182329F1C306ADE00EBBB3E /* SoundTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundTask.h; sourceTree = "<group>"; };
+		D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_mixer.framework; path = ../../../../../../Library/Frameworks/SDL2_mixer.framework; sourceTree = "<group>"; };
+		D18232A31C30818300EBBB3E /* VideoTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = VideoTask.cpp; sourceTree = "<group>"; };
+		D18232A41C30818300EBBB3E /* VideoTask.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoTask.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -74,6 +79,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18232A21C306E8500EBBB3E /* SDL2_mixer.framework in Frameworks */,
 				D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */,
 				D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */,
 			);
@@ -85,6 +91,7 @@
 		D13AA1651C105626005F8265 = {
 			isa = PBXGroup;
 			children = (
+				D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */,
 				D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */,
 				D17C9F761C1059F700EB6C4E /* SDL2.framework */,
 				D13AA1701C105626005F8265 /* tankgame */,
@@ -125,6 +132,8 @@
 				D18232801C2E627100EBBB3E /* GlobalTimer.cpp */,
 				D12175011C2381410034C96C /* BaseTask.h */,
 				D182327D1C2A6BE100EBBB3E /* App.h */,
+				D18232A31C30818300EBBB3E /* VideoTask.cpp */,
+				D18232A41C30818300EBBB3E /* VideoTask.h */,
 				D18232921C3064F500EBBB3E /* Tank.cpp */,
 				D18232931C3064F500EBBB3E /* Tank.h */,
 				D18232941C3064F500EBBB3E /* TankHandler.cpp */,
@@ -199,6 +208,7 @@
 				D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */,
 				D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */,
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,
+				D18232A51C30818300EBBB3E /* VideoTask.cpp in Sources */,
 				D13AA1721C105626005F8265 /* main.cpp in Sources */,
 				D18232911C30632400EBBB3E /* Item.cpp in Sources */,
 				D182329A1C3068E600EBBB3E /* FXHandler.cpp in Sources */,

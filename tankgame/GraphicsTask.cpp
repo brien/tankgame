@@ -7,6 +7,7 @@
 //
 
 #include "GraphicsTask.h"
+
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #include <stdlib.h>
@@ -14,6 +15,9 @@
 
 #include "App.h"
 #include "TankHandler.h"
+#include "LevelHandler.h"
+#include "FXHandler.h"
+#include "VideoTask.h"
 
 typedef unsigned int WORD;
 typedef char byte;
