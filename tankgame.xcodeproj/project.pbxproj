@@ -12,6 +12,8 @@
 		D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232801C2E627100EBBB3E /* GlobalTimer.cpp */; };
 		D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232831C3049A400EBBB3E /* igtl_qmesh.cpp */; };
 		D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232871C30529000EBBB3E /* GraphicsTask.cpp */; };
+		D182328B1C305E2700EBBB3E /* Bullet.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232891C305E2700EBBB3E /* Bullet.cpp */; };
+		D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D182328C1C3061E800EBBB3E /* LevelHandler.cpp */; };
 		D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */; };
 /* End PBXBuildFile section */
 
@@ -42,6 +44,10 @@
 		D18232841C3049A400EBBB3E /* igtl_qmesh.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = igtl_qmesh.h; sourceTree = "<group>"; };
 		D18232861C30523400EBBB3E /* GraphicsTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = GraphicsTask.h; sourceTree = "<group>"; };
 		D18232871C30529000EBBB3E /* GraphicsTask.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GraphicsTask.cpp; sourceTree = "<group>"; };
+		D18232891C305E2700EBBB3E /* Bullet.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Bullet.cpp; sourceTree = "<group>"; };
+		D182328A1C305E2700EBBB3E /* Bullet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Bullet.h; sourceTree = "<group>"; };
+		D182328C1C3061E800EBBB3E /* LevelHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = LevelHandler.cpp; sourceTree = "<group>"; };
+		D182328D1C3061E800EBBB3E /* LevelHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LevelHandler.h; sourceTree = "<group>"; };
 		D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = System/Library/Frameworks/OpenGL.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
@@ -79,9 +85,13 @@
 		D13AA1701C105626005F8265 /* tankgame */ = {
 			isa = PBXGroup;
 			children = (
+				D182328C1C3061E800EBBB3E /* LevelHandler.cpp */,
+				D182328D1C3061E800EBBB3E /* LevelHandler.h */,
 				D18232831C3049A400EBBB3E /* igtl_qmesh.cpp */,
 				D18232841C3049A400EBBB3E /* igtl_qmesh.h */,
 				D18232861C30523400EBBB3E /* GraphicsTask.h */,
+				D18232891C305E2700EBBB3E /* Bullet.cpp */,
+				D182328A1C305E2700EBBB3E /* Bullet.h */,
 				D18232871C30529000EBBB3E /* GraphicsTask.cpp */,
 				D13AA1711C105626005F8265 /* main.cpp */,
 				D182327F1C2D0E0C00EBBB3E /* GlobalTimer.h */,
@@ -151,6 +161,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D182328B1C305E2700EBBB3E /* Bullet.cpp in Sources */,
+				D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */,
 				D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */,
 				D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */,
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,
