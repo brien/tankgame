@@ -46,13 +46,13 @@ bool VideoTask::Start()
 
    if(line[0]=='0')
    {
-      flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_OPENGL;
+      flags = SDL_WINDOW_OPENGL;
       //hide the mouse cursor
 	   //SDL_ShowCursor(SDL_DISABLE);
    }
    else
    {
-      flags = SDL_HWSURFACE|SDL_DOUBLEBUF|SDL_OPENGL|SDL_FULLSCREEN;
+       flags = SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN;
       //hide the mouse cursor
 	   SDL_ShowCursor(SDL_DISABLE);
    }
@@ -94,17 +94,16 @@ bool VideoTask::Start()
    App::GetSingleton().soundTask->disable=(bool)(line[0]-48);
 
    fclose(filein);
+    
+    window = SDL_CreateWindow("Tank!Game 2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
 	
 
-	if(!SDL_SetVideoMode(scrWidth, scrHeight, scrBPP, flags) )
+	if(!window)
 	{
 		return false;
 	}
 
 
-
-
-	SDL_WM_SetCaption("Tank!Game 2", 0);
 
 	return true;
 }
@@ -112,7 +111,7 @@ bool VideoTask::Start()
 void VideoTask::Update()
 {
 	
-	SDL_GL_SwapBuffers();
+	SDL_GL_SwapWindow(window);
 }
 
 void VideoTask::Stop()

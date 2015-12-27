@@ -1,7 +1,7 @@
 #ifndef VIDEO_TASK_H
 #define VIDEO_TASK_H
 
-
+#include <SDL2/SDL.h>
 #include "BaseTask.h"
 
 
@@ -19,6 +19,7 @@ public:
 
 protected:
 	int flags;
+    SDL_Window *window;
 };
 
 #endif // VIDEO_H

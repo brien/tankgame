@@ -1,6 +1,8 @@
 
+#include <OpenGL/gl.h>
 #include "App.h"
 #include "FXHandler.h"
+#include "LevelHandler.h"
 
 
 FX::FX()
