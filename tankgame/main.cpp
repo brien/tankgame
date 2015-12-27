@@ -11,6 +11,8 @@
 #include <OpenGL/gl3.h>
 
 #include "Singleton.h"
+#include "InputTask.h"
+#include "GlobalTimer.h"
 
 
 //Screen dimension constants
