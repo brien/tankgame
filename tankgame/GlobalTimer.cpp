@@ -6,8 +6,6 @@
 //  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
-#include <stdio.h>
-
 #include "GlobalTimer.h"
 #include <SDL2/SDL.h>
 
@@ -15,6 +13,15 @@ float GlobalTimer::dT=0;
 unsigned long GlobalTimer::lastFrameIndex=0;
 unsigned long GlobalTimer::thisFrameIndex=0;
 
+GlobalTimer::GlobalTimer()
+{
+    
+}
+
+GlobalTimer::~GlobalTimer()
+{
+    
+}
 
 bool GlobalTimer::Start()
 {

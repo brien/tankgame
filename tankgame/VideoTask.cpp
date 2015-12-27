@@ -118,5 +118,6 @@ void VideoTask::Stop()
 {
 
 	SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    SDL_DestroyWindow( window );
 }
 

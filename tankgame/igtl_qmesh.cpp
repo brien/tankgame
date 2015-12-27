@@ -8,7 +8,6 @@
 #ifndef IGTL_3D_GENERIC_QUICK_MESH_CPP
 #define IGTL_3D_GENERIC_QUICK_MESH_CPP
 
-#include <OpenGL/gl3.h>
 #include <OpenGL/gl.h>
 
 #include "igtl_qmesh.h"
