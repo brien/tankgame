@@ -83,7 +83,7 @@ void GameTask::Update()
       //TankHandler::GetSingleton().NextFrame();
       FXHandler::GetSingleton().NextFrame();
 
-      if ( InputTask::KeyDown(SDLK_RETURN) || InputTask::MouseDown(1) )
+      if ( InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1) )
       {
          TankHandler::GetSingleton().isInputJoy=false;
          if(menuState>0)
@@ -162,7 +162,7 @@ void GameTask::Update()
 
    }
 
-   if(InputTask::KeyDown(SDLK_m))
+   if(InputTask::KeyDown(SDL_SCANCODE_M))
    {
       App::GetSingleton().soundTask->PauseMusic();
       //App::GetSingleton().soundTask->PlayMusic(1);
@@ -171,21 +171,21 @@ void GameTask::Update()
 
    if(gameStarted && !gameOver)
    {
-      if(InputTask::KeyDown(SDLK_2))
+      if(InputTask::KeyDown(SDL_SCANCODE_2))
       {
          TankHandler::GetSingleton().numPlayers=2;
       }
-      if(InputTask::KeyDown(SDLK_1))
+      if(InputTask::KeyDown(SDL_SCANCODE_1))
       {
          ycam=.8;
          xzcam=1;
       }
-      if(InputTask::KeyDown(SDLK_c))
+      if(InputTask::KeyDown(SDL_SCANCODE_C))
       {
          ycam=1.2;
          xzcam=2;
       }
-      if(InputTask::KeyDown(SDLK_3))
+      if(InputTask::KeyDown(SDL_SCANCODE_3))
       {
          ycam=20.2;
          xzcam=0.2;

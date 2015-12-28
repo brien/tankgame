@@ -1548,7 +1548,7 @@ void Tank::HandleInput()
 	   {
          Special(1);
 	   }
-      if( InputTask::KeyDown(SDLK_t) )
+      if( InputTask::KeyDown(SDL_SCANCODE_T) )
 	   {
          float oldy;
 
@@ -1560,7 +1560,7 @@ void Tank::HandleInput()
          y=oldy;
       }
 
-	   if( InputTask::KeyStillDown(SDLK_w) )//|| SDL_JoystickGetHat(App::GetSingleton().inputTask->joysticks[jid], 0) == SDL_HAT_UP)
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_W) )//|| SDL_JoystickGetHat(App::GetSingleton().inputTask->joysticks[jid], 0) == SDL_HAT_UP)
 	   {
 		   Move(true);
          Move(true);
@@ -1571,7 +1571,7 @@ void Tank::HandleInput()
            }
 
 	   }
-	   if( InputTask::KeyStillDown(SDLK_a) )
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_A) )
 	   {
 		   RotBody(false);
            if(turbo)
@@ -1580,7 +1580,7 @@ void Tank::HandleInput()
               charge-=jumpCost*GlobalTimer::dT;
            }
 	   }
-	   if( InputTask::KeyStillDown(SDLK_d) )
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_D) )
 	   {
 		   RotBody(true);
            if(turbo)
@@ -1589,7 +1589,7 @@ void Tank::HandleInput()
               charge-=jumpCost*GlobalTimer::dT;
            }
 	   }
-	   if( InputTask::KeyStillDown(SDLK_s))
+	   if( InputTask::KeyStillDown(SDL_SCANCODE_S))
 	   {
 		   Move(false);
            if(turbo)
@@ -1646,7 +1646,7 @@ void Tank::HandleInput()
          App::GetSingleton().graphicsTask->cams[-1*(id+1)].ydist-=10*GlobalTimer::dT;
 	   }
 
-      if( InputTask::KeyDown(SDLK_c))
+      if( InputTask::KeyDown(SDL_SCANCODE_C))
       {
          if(App::GetSingleton().graphicsTask->cams[-1*(id+1)].xzdist>20)
          {
@@ -2329,7 +2329,7 @@ void Tank::HandleInput()
        charge=maxCharge;
     }
 
-    if( InputTask::KeyDown(SDLK_i) && inputmode!=0)
+    if( InputTask::KeyDown(SDL_SCANCODE_I) && inputmode!=0)
     {
        inputmode=0;
     }
