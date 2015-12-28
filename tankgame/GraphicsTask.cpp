@@ -1763,11 +1763,12 @@ void GraphicsTask::BuildDisplayLists()
     
     glNewList(cubelist1+14, GL_COMPILE);
     
-    glBegin(GL_LINE_LOOP);
+    //glBegin(GL_LINE_LOOP);
     
     itemmesh.DrawTrianglesExtruded(.01);
+    //itemmesh.DrawEdges();
     
-    glEnd();
+    //glEnd();
     
     glEndList();
     
