@@ -58,6 +58,7 @@ bool VideoTask::Start()
        flags = SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN;
       //hide the mouse cursor
 	   SDL_ShowCursor(SDL_DISABLE);
+       SDL_SetRelativeMouseMode(SDL_TRUE);
    }
 
    fgets(line, 64, filein);
