@@ -15,7 +15,7 @@ template<typename T>
 class Singleton
 {
     static T* m_singleton;
-
+    
 protected:
     Singleton()
     {

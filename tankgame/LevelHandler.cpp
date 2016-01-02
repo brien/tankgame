@@ -1249,7 +1249,7 @@ void LevelHandler::DrawTerrain_OLD()
                     
                     
                     for(int iy=lastY; iy<t[ix][iz]; iy++)
-                    {	
+                    {
                         glBegin(GL_QUADS);
                         
                         glTexCoord2f(0, 0);
