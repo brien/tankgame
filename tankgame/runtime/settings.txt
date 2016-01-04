@@ -1,0 +1,10 @@
+//1=Fullscreen 0=Windowed
+1∫
+//Width resolution
+1280
+//Height resolution
+720
+//Difficulty 0=Easy 1=Normal 2=Hard
+0
+//Disable Sound? 0=No 1=Yes
+0
