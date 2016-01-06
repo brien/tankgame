@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D1103CD01C3CD84F0003110E /* TaskHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1103CCE1C3CD84F0003110E /* TaskHandler.cpp */; };
 		D13AA1721C105626005F8265 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13AA1711C105626005F8265 /* main.cpp */; };
 		D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17C9F761C1059F700EB6C4E /* SDL2.framework */; };
 		D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232801C2E627100EBBB3E /* GlobalTimer.cpp */; };
@@ -39,6 +40,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D1103CCE1C3CD84F0003110E /* TaskHandler.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TaskHandler.cpp; sourceTree = "<group>"; };
+		D1103CCF1C3CD84F0003110E /* TaskHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TaskHandler.h; sourceTree = "<group>"; };
 		D12175011C2381410034C96C /* BaseTask.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BaseTask.h; sourceTree = "<group>"; };
 		D12EB41A1C1624A500640F9F /* Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		D13AA16E1C105626005F8265 /* tankgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tankgame; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -143,6 +146,8 @@
 				D182327E1C2BBED000EBBB3E /* math.h */,
 				D18232821C30471B00EBBB3E /* InputTask.h */,
 				D18232A61C30892E00EBBB3E /* InputTask.cpp */,
+				D1103CCE1C3CD84F0003110E /* TaskHandler.cpp */,
+				D1103CCF1C3CD84F0003110E /* TaskHandler.h */,
 			);
 			path = tankgame;
 			sourceTree = "<group>";
@@ -209,6 +214,7 @@
 				D182328E1C3061E800EBBB3E /* LevelHandler.cpp in Sources */,
 				D182329D1C3069C800EBBB3E /* GameTask.cpp in Sources */,
 				D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */,
+				D1103CD01C3CD84F0003110E /* TaskHandler.cpp in Sources */,
 				D18232881C30529000EBBB3E /* GraphicsTask.cpp in Sources */,
 				D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */,
 				D18232A51C30818300EBBB3E /* VideoTask.cpp in Sources */,
