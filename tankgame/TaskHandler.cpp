@@ -7,3 +7,42 @@
 //
 
 #include "TaskHandler.h"
+
+TaskHandler::TaskHandler()
+{
+    
+
+}
+
+TaskHandler::~TaskHandler()
+{
+    
+}
+
+
+int TaskHandler::Execute()
+{
+    for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
+    {
+        if(!(*it)->canKill)
+        {
+            (*it)->Update();
+        }
+    }
+    
+    for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end();)
+    {
+        if((*it)->canKill)
+        {
+            (*it)->Stop();
+            delete (*it);
+            it = taskList.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
+    
+    return 0;
+}

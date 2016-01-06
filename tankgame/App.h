@@ -16,10 +16,13 @@
 #include "GraphicsTask.h"
 #include "GameTask.h"
 #include "SoundTask.h"
+#include "TaskHandler.h"
 
 class App : public Singleton<App>
 {
 public:
+    TaskHandler taskHandler;
+    
     InputTask* inputTask;
     VideoTask* videoTask;
     GlobalTimer* globalTimer;

@@ -30,8 +30,8 @@ public:
     void KillAllTasks();
     
 protected:
-    std::list< BaseTask > taskList;
-    std::list< BaseTask > pausedTaskList;
+    std::list< BaseTask* > taskList;
+    std::list< BaseTask* > pausedTaskList;
 };
 
 #endif /* TaskHandler_hpp */
