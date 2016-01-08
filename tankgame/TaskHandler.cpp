@@ -62,5 +62,47 @@ bool TaskHandler::AddTask(BaseTask *t)
         }
     }
     return true;
-    
+}
+
+void TaskHandler::SuspendTask(BaseTask *t)
+{
+    if(std::find(taskList.begin(),taskList.end(),t)!=taskList.end())
+    {
+        t->OnSuspend();
+        taskList.remove(t);
+        pausedTaskList.push_back(t);
+    }
+}
+
+void TaskHandler::ResumeTask(BaseTask *t)
+{
+    if(std::find(pausedTaskList.begin(),pausedTaskList.end(),t)
+       !=pausedTaskList.end())
+    {
+        t->OnResume();
+        pausedTaskList.remove(t);
+        //keep the order of priorities straight
+        std::list< BaseTask* >::iterator it;
+        for(it=taskList.begin();it!=taskList.end();it++)
+        {
+            if((*it)->priority>t->priority)break;
+        }
+        taskList.insert(it,t);
+    }
+}
+
+void TaskHandler::RemoveTask(BaseTask *t)
+{
+    if(std::find(taskList.begin(),taskList.end(),t)!=taskList.end())
+    {
+        t->canKill=true;
+    }
+}
+
+void TaskHandler::KillAllTasks()
+{
+    for(std::list< BaseTask* >::iterator it=taskList.begin(); it!=taskList.end();it++)
+    {
+        (*it)->canKill=true;
+    }
 }
