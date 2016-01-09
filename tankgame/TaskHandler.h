@@ -24,9 +24,9 @@ public:
     int Execute();
     
     bool AddTask(BaseTask *t);
-    void SuspendTask(BaseTask &t);
-    void ResumeTask(BaseTask &t);
-    void RemoveTask(BaseTask &t);
+    void SuspendTask(BaseTask *t);
+    void ResumeTask(BaseTask *t);
+    void RemoveTask(BaseTask *t);
     void KillAllTasks();
     
 protected:

@@ -32,13 +32,32 @@ void App::Run(int argc, char *argv[])
     new LevelHandler();
     new FXHandler();
     
+    new TaskHandler();
     
-    videoTask->Start();
-    inputTask->Start();
-    graphicsTask->Start();
+    videoTask->priority = 100;
+    TaskHandler::GetSingleton().AddTask(videoTask);
     
-    soundTask->Start();
-    gameTask->Start();
+    inputTask->priority = 90;
+    TaskHandler::GetSingleton().AddTask(inputTask);
+    
+    graphicsTask->priority = 80;
+    TaskHandler::GetSingleton().AddTask(graphicsTask);
+    
+    soundTask->priority = 70;
+    TaskHandler::GetSingleton().AddTask(soundTask);
+    
+    gameTask->priority = 60;
+    TaskHandler::GetSingleton().AddTask(gameTask);
+    
+    globalTimer->priority = 10;
+    TaskHandler::GetSingleton().AddTask(globalTimer);
+    
+    //videoTask->Start();
+    //inputTask->Start();
+    //graphicsTask->Start();
+    
+    //soundTask->Start();
+    //gameTask->Start();
     
     gameTask->OnResume();
     
@@ -46,51 +65,13 @@ void App::Run(int argc, char *argv[])
     
     soundTask->PlayMusic(0);
     
-    while(!quit)
-    {
-        
-        videoTask->Update();
-        inputTask->Update();
-        graphicsTask->Update();
-        soundTask->Update();
-        if(!gameTask->paused) gameTask->Update();
-        globalTimer->Update();
-        
-        //Take Input and events
-        
-        if(InputTask::KeyDown(SDL_SCANCODE_PAUSE))
-        {
-            gameTask->paused=!gameTask->paused;
-        }
-        
-        if(inputTask->KeyDown(SDL_SCANCODE_ESCAPE))
-        {
-            quit=true;
-        }
-        
-        
-    }
-    
-    
-    inputTask->Stop();
-    soundTask->Stop();
-    gameTask->Stop();
-    globalTimer->Stop();
-    
-    graphicsTask->Stop();
-    videoTask->Stop();
-    
-    
-    delete videoTask;
-    delete graphicsTask;
-    delete inputTask;
-    delete soundTask;
-    delete gameTask;
-    delete globalTimer;
+    TaskHandler::GetSingleton().Execute();
     
     delete TankHandler::GetSingletonPtr();
     delete LevelHandler::GetSingletonPtr();
     delete FXHandler::GetSingletonPtr();
+    
+    delete TaskHandler::GetSingletonPtr();
     
 }
 

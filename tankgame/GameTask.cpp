@@ -77,6 +77,11 @@ void GameTask::Update()
     //static float ycam=1.8f;
     static float xzcam=1.0f;
     
+    if(InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
+    {
+        TaskHandler::GetSingleton().KillAllTasks();
+    }
+    
     if(!gameStarted)
     {
         App::GetSingleton().graphicsTask->drawMenu=true;
