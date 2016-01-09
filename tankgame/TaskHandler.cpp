@@ -22,25 +22,28 @@ TaskHandler::~TaskHandler()
 
 int TaskHandler::Execute()
 {
-    for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
+    while(!taskList.empty())
     {
-        if(!(*it)->canKill)
+        for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
         {
-            (*it)->Update();
+            if(!(*it)->canKill)
+            {
+                (*it)->Update();
+            }
         }
-    }
-    
-    for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end();)
-    {
-        if((*it)->canKill)
+        
+        for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end();)
         {
-            (*it)->Stop();
-            delete (*it);
-            it = taskList.erase(it);
-        }
-        else
-        {
-            it++;
+            if((*it)->canKill)
+            {
+                (*it)->Stop();
+                delete (*it);
+                it = taskList.erase(it);
+            }
+            else
+            {
+                it++;
+            }
         }
     }
     
@@ -53,14 +56,15 @@ bool TaskHandler::AddTask(BaseTask *t)
     {
         return false;
     }
-    for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
+    std::list<BaseTask*>::iterator it;
+    for(it = taskList.begin(); it != taskList.end(); it++)
     {
         if( (*it)->priority > t->priority)
         {
-            taskList.insert(it, t);
             break;
         }
     }
+    taskList.insert(it, t);
     return true;
 }
 

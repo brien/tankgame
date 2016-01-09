@@ -32,13 +32,32 @@ void App::Run(int argc, char *argv[])
     new LevelHandler();
     new FXHandler();
     
+    new TaskHandler();
     
-    videoTask->Start();
-    inputTask->Start();
-    graphicsTask->Start();
+    videoTask->priority = 100;
+    TaskHandler::GetSingleton().AddTask(videoTask);
     
-    soundTask->Start();
-    gameTask->Start();
+    inputTask->priority = 90;
+    TaskHandler::GetSingleton().AddTask(inputTask);
+    
+    graphicsTask->priority = 80;
+    TaskHandler::GetSingleton().AddTask(graphicsTask);
+    
+    soundTask->priority = 70;
+    TaskHandler::GetSingleton().AddTask(soundTask);
+    
+    gameTask->priority = 60;
+    TaskHandler::GetSingleton().AddTask(gameTask);
+    
+    globalTimer->priority = 10;
+    TaskHandler::GetSingleton().AddTask(globalTimer);
+    
+    //videoTask->Start();
+    //inputTask->Start();
+    //graphicsTask->Start();
+    
+    //soundTask->Start();
+    //gameTask->Start();
     
     gameTask->OnResume();
     
@@ -46,9 +65,11 @@ void App::Run(int argc, char *argv[])
     
     soundTask->PlayMusic(0);
     
+    TaskHandler::GetSingleton().Execute();
+    
+    /*
     while(!quit)
     {
-        
         videoTask->Update();
         inputTask->Update();
         graphicsTask->Update();
@@ -67,9 +88,7 @@ void App::Run(int argc, char *argv[])
         {
             quit=true;
         }
-        
-        
-    }
+    }*/
     
     
     inputTask->Stop();
@@ -91,6 +110,8 @@ void App::Run(int argc, char *argv[])
     delete TankHandler::GetSingletonPtr();
     delete LevelHandler::GetSingletonPtr();
     delete FXHandler::GetSingletonPtr();
+    
+    delete TaskHandler::GetSingletonPtr();
     
 }
 

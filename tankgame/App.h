@@ -21,7 +21,7 @@
 class App : public Singleton<App>
 {
 public:
-    TaskHandler taskHandler;
+    TaskHandler* taskHandler;
     
     InputTask* inputTask;
     VideoTask* videoTask;
