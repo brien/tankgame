@@ -51,14 +51,7 @@ void App::Run(int argc, char *argv[])
     
     globalTimer->priority = 10;
     TaskHandler::GetSingleton().AddTask(globalTimer);
-    
-    //videoTask->Start();
-    //inputTask->Start();
-    //graphicsTask->Start();
-    
-    //soundTask->Start();
-    //gameTask->Start();
-    
+
     gameTask->OnResume();
     
     quit=false;
