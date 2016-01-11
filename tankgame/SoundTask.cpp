@@ -14,8 +14,7 @@ unsigned int SoundTask::samplingRate = 44100;
 
 SoundTask::SoundTask()
 {
-    bool disable=false;
-    
+    disable=false;
 }
 
 SoundTask::~SoundTask()
