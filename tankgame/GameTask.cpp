@@ -74,7 +74,6 @@ void GameTask::Update()
 {
     
     static float ycam=0.8f;
-    //static float ycam=1.8f;
     static float xzcam=1.0f;
     
     if(InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
@@ -85,7 +84,6 @@ void GameTask::Update()
     if(!gameStarted)
     {
         App::GetSingleton().graphicsTask->drawMenu=true;
-        //TankHandler::GetSingleton().NextFrame();
         FXHandler::GetSingleton().NextFrame();
         
         if ( InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1) )
@@ -170,7 +168,6 @@ void GameTask::Update()
     if(InputTask::KeyDown(SDL_SCANCODE_M))
     {
         App::GetSingleton().soundTask->PauseMusic();
-        //App::GetSingleton().soundTask->PlayMusic(1);
     }
     
     
