@@ -377,7 +377,7 @@ bool LevelHandler::PointCollision(float x, float y, float z)
 {
     bool ret;
     
-    if( x<0 || y<0 || x>=sizeX || z>=sizeZ)
+    if( x<0 || z<0 || x>=sizeX || z>=sizeZ)
     {
         return(true);
     }
