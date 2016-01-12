@@ -159,7 +159,6 @@ void SoundTask::PlayMusic(int ID)
         }
     }
 }
-//the tanks must destroy eachother
 
 void SoundTask::PauseMusic()
 {
