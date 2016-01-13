@@ -18,7 +18,6 @@ public:
     int comboNum[2];
     int hitCombo[2];
     int wins[2];
-    //nk player2;
     
     vector<Tank> tanks;
     
@@ -36,7 +35,6 @@ public:
     
     int diff;
     
-    //bool twop;
     int numPlayers;
     int attackingTanks;
     
