@@ -35,7 +35,6 @@ public:
     int start[2];
     int enemy[16][2];
     
-    //char *fileName;
     char fileName[18];
     int sizeX;
     int sizeZ;
