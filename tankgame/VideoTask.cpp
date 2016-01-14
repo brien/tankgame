@@ -61,6 +61,7 @@ bool VideoTask::Start()
         SDL_SetRelativeMouseMode(SDL_TRUE);
     }
     
+    
     fgets(line, 64, filein);
     fgets(line, 64, filein);
     
@@ -105,12 +106,10 @@ bool VideoTask::Start()
     
     SDL_GL_SetSwapInterval( 1 );
     
-    
     if(!window)
     {
         return false;
     }
-    
     
     
     return true;
