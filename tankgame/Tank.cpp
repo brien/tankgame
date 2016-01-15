@@ -2313,7 +2313,7 @@ void Tank::HandleInput()
     }
     
     
-    if( InputTask::KeyDown(SDL_SCANCODE_INSERT) && App::GetSingleton().gameTask->debug )
+    if( InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->debug )
     {
         TankHandler::GetSingleton().special[0]+=100;
         
@@ -2329,7 +2329,7 @@ void Tank::HandleInput()
         charge=maxCharge;
     }
     
-    if( InputTask::KeyDown(SDL_SCANCODE_I) && inputmode!=0)
+    if( InputTask::KeyDown(SDL_SCANCODE_K) && inputmode!=0)
     {
         inputmode=0;
     }

@@ -121,7 +121,7 @@ void GameTask::Update()
         }
         
         
-        if ( InputTask::KeyDown(SDL_SCANCODE_INSERT) )
+        if ( InputTask::KeyDown(SDL_SCANCODE_I) )
         {
             debug=true;
             App::GetSingleton().soundTask->PlaySound(1);
@@ -193,11 +193,11 @@ void GameTask::Update()
             xzcam=0.2;
         }
         
-        if(InputTask::KeyDown(SDL_SCANCODE_PAGEUP) && debug)
+        if(InputTask::KeyDown(SDL_SCANCODE_H) && debug)
         {
             LevelHandler::GetSingleton().NextLevel(true);
         }
-        if(InputTask::KeyDown(SDL_SCANCODE_PAGEDOWN) && debug)
+        if(InputTask::KeyDown(SDL_SCANCODE_L) && debug)
         {
             LevelHandler::GetSingleton().NextLevel(false);
         }
