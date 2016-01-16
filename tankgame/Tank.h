@@ -46,7 +46,6 @@ public:
     
     float x, y, z;
     float vx, vy, vz;
-    //float vy;
     void SetPosition(float _x, float _y, float _z);
     
     float collisionPoints[21];
@@ -56,13 +55,10 @@ public:
     unsigned int inputmode;
     unsigned int jid;
     
-    //float DTR;
-    //float x, y, z;
     float rx, ry, rz, rr, rrl;
     float rtx, rty, rtz;
     float rotRate, movRate, jumpRate;
     float fallRate;
-    //void SetPosition(float _x, float _y, float _z);
     void Fall();
     void Jump();
     void HandleInput();
