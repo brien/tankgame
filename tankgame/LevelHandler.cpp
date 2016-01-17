@@ -943,11 +943,12 @@ void LevelHandler::DrawTerrain()
     {
         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
         glTranslatef(0, -30, 0);
+        glFrontFace(GL_CCW);
     }
     
     glBegin(GL_QUADS);
     
-    glColor3fv(colors[colorNumber]);
+    glColor3fv(colors[colorNumber2]);
     
     glTexCoord2f(0, 30);
     glVertex3f((float)1,(float)30,(float)1);
