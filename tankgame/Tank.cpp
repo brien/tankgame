@@ -6,9 +6,6 @@
 #include "FXHandler.h"
 #include "TankHandler.h"
 
-//#include "TOGLshapes.h"
-
-//#include <string>
 
 void Tank::SetType(int t1, int t2)
 {
@@ -17,6 +14,7 @@ void Tank::SetType(int t1, int t2)
     
     jumpRate=18.0f;
     fallRate=16.0f;
+
     
     if(type1==0) //grey
     {
