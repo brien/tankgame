@@ -1071,9 +1071,9 @@ void LevelHandler::DrawTerrain()
                     //glColor4f(0,1,0,0);
                     
                     glTexCoord2i(0, 1);
-                    glVertex3f((float)ix,(float)lastY+1,(float)iz);
+                    glVertex3f((float)ix,(float)lastY+2,(float)iz);
                     glTexCoord2i(1, 1);
-                    glVertex3f((float)ix+1,(float)lastY+1,(float)iz);
+                    glVertex3f((float)ix+1,(float)lastY+2,(float)iz);
                     
                     //glColor4f(0,1,0,1);
                     
@@ -1102,9 +1102,9 @@ void LevelHandler::DrawTerrain()
                     //glColor4f(0,10,0,0);
                     
                     glTexCoord2i(0, 1);
-                    glVertex3f((float)ix,(float)lastBY+1,(float)iz+1);
+                    glVertex3f((float)ix,(float)lastBY+2,(float)iz+1);
                     glTexCoord2i(1, 1);
-                    glVertex3f((float)ix+1,(float)lastBY+1,(float)iz+1);
+                    glVertex3f((float)ix+1,(float)lastBY+2,(float)iz+1);
                     
                     //glColor4f(0,10,0,1);
                     
@@ -1141,9 +1141,9 @@ void LevelHandler::DrawTerrain()
                     //glColor4f(0,10,0,0);
                     
                     glTexCoord2i(0, 1);
-                    glVertex3f((float)ix,(float)lastY+1,(float)iz);
+                    glVertex3f((float)ix,(float)lastY+2,(float)iz);
                     glTexCoord2i(1, 1);
-                    glVertex3f((float)ix,(float)lastY+1,(float)iz+1);
+                    glVertex3f((float)ix,(float)lastY+2,(float)iz+1);
                     
                     //glColor4f(0,10,0,1);
                     
@@ -1174,9 +1174,9 @@ void LevelHandler::DrawTerrain()
                     //glColor4f(0,10,0,0);
                     
                     glTexCoord2i(0, 1);
-                    glVertex3f((float)ix+1,(float)lastBY+1,(float)iz);
+                    glVertex3f((float)ix+1,(float)lastBY+2,(float)iz);
                     glTexCoord2i(1, 1);
-                    glVertex3f((float)ix+1,(float)lastBY+1,(float)iz+1);
+                    glVertex3f((float)ix+1,(float)lastBY+2,(float)iz+1);
                     
                     //glColor4f(0,10,0,1);
                     
