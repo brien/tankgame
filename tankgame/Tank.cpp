@@ -21,11 +21,9 @@ void Tank::SetType(int t1, int t2)
         fireRate=.5;
         
         attack=250;
-        //maxEnergy=1000;
         maxCharge=100;
         
         chargeRegen=50;
-        //energyRegen=100;
         
         moveCost=0;
         jumpCost=150;
@@ -40,11 +38,9 @@ void Tank::SetType(int t1, int t2)
         fireRate=.05;
         
         attack=100;
-        //maxEnergy=1000;
         maxCharge=100;
         
         chargeRegen=60;
-        //energyRegen=100;
         
         moveCost=0;
         jumpCost=150;
@@ -90,11 +86,9 @@ void Tank::SetType(int t1, int t2)
         fireRate=0.05;
         
         attack=1100;
-        //maxEnergy=1000;
         maxCharge=100;
         
         chargeRegen=50;
-        //energyRegen=100;
         
         moveCost=0;
         jumpCost=150;
@@ -132,11 +126,9 @@ void Tank::SetType(int t1, int t2)
         fireRate=.5;
         
         attack=200;
-        //maxEnergy=1000;
         maxCharge=100;
         
         chargeRegen=50;
-        //energyRegen=100;
         
         moveCost=0;
         jumpCost=150;
