@@ -24,6 +24,7 @@ public:
     float maxCharge;
     float chargeRegen;
     
+    
     float fireCost;
     float jumpCost;
     float moveCost;

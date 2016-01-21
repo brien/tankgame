@@ -12,6 +12,8 @@ void Tank::SetType(int t1, int t2)
     type1=t1;
     type2=t2;
     
+    jumpCost = 250;
+    
     jumpRate=18.0f;
     fallRate=16.0f;
 
@@ -26,7 +28,6 @@ void Tank::SetType(int t1, int t2)
         chargeRegen=50;
         
         moveCost=0;
-        jumpCost=150;
         fireCost=maxCharge/4;
         chargeCost=200;
         
@@ -43,7 +44,6 @@ void Tank::SetType(int t1, int t2)
         chargeRegen=60;
         
         moveCost=0;
-        jumpCost=150;
         fireCost=maxCharge/10;
         chargeCost=200;
         
@@ -91,7 +91,6 @@ void Tank::SetType(int t1, int t2)
         chargeRegen=50;
         
         moveCost=0;
-        jumpCost=150;
         fireCost=maxCharge;
         chargeCost=200;
         
@@ -131,7 +130,6 @@ void Tank::SetType(int t1, int t2)
         chargeRegen=50;
         
         moveCost=0;
-        jumpCost=150;
         fireCost=maxCharge/2;
         chargeCost=200;
         
@@ -175,7 +173,6 @@ void Tank::SetType(int t1, int t2)
         chargeRegen=50;
         
         moveCost=0;
-        jumpCost=150;
         fireCost=maxCharge/2;
         chargeCost=200;
         
