@@ -1,5 +1,5 @@
 # tankgame
-A simple 3D video game for Mac OS X using OpenGL and SDL. This project was originally started and finished around 2003.
+A simple 3D video game for Mac OS X using OpenGL and SDL. This project was originally started and finished around 2003. I have recently started toying with it again.
 
 # How this was made:
 Step 1. Install SDL 2.0
