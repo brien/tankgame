@@ -124,7 +124,7 @@ void Tank::SetType(int t1, int t2)
     {
         fireRate=.5;
         
-        attack=200;
+        attack=250;
         maxCharge=100;
         
         chargeRegen=50;
