@@ -12,6 +12,7 @@ void Tank::SetType(int t1, int t2)
     type1=t1;
     type2=t2;
     
+    movRate = 5;
     jumpCost = 250;
     
     jumpRate=18.0f;
@@ -30,8 +31,6 @@ void Tank::SetType(int t1, int t2)
         moveCost=0;
         fireCost=maxCharge/4;
         chargeCost=200;
-        
-        movRate=5;
     }
     
     if(type1==1) //red
@@ -46,8 +45,6 @@ void Tank::SetType(int t1, int t2)
         moveCost=0;
         fireCost=maxCharge/10;
         chargeCost=200;
-        
-        movRate=5;
         
         bounces=0;
         
@@ -94,8 +91,6 @@ void Tank::SetType(int t1, int t2)
         fireCost=maxCharge;
         chargeCost=200;
         
-        movRate=5;
-        
         bounces=0;
         
         if(type2==1)
@@ -132,9 +127,6 @@ void Tank::SetType(int t1, int t2)
         moveCost=0;
         fireCost=maxCharge/2;
         chargeCost=200;
-        
-
-        movRate=5;
         
         bounces=8000;
         
@@ -175,8 +167,6 @@ void Tank::SetType(int t1, int t2)
         moveCost=0;
         fireCost=maxCharge/2;
         chargeCost=200;
-        
-        movRate=5;
         
         bounces=0;
         
