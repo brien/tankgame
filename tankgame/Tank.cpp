@@ -340,7 +340,7 @@ void Tank::Die()
         FXHandler::GetSingleton().CreateFX(6, x+.5, y, z-.5, 2, .01, 0, 0, ry, 0, r2, g2, b2, .15);
         FXHandler::GetSingleton().CreateFX(6, x+.5, y, z-.5, 2, .05, 0, -2, ry, 0, r2, g2, b2, .15);
         
-        /*
+        
          FXHandler::GetSingleton().CreateFX(5, x, y, z+.5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
          
          FXHandler::GetSingleton().CreateFX(5, x, y, z+.5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
@@ -354,7 +354,7 @@ void Tank::Die()
          
          FXHandler::GetSingleton().CreateFX(5, x+.5, y, z-.5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
          FXHandler::GetSingleton().CreateFX(5, x+.5, y, z-.5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1);
-         */
+        
         
     }
     if( TankHandler::GetSingleton().tanks.size()==1 && id>=0)
