@@ -8,6 +8,15 @@
 using namespace std;
 #include "bullet.h"
 
+enum TankType
+{
+    TYPE_GREY,
+    TYPE_RED,
+    TYPE_BLUE,
+    TYPE_YELLOW,
+    TYPE_PURPLE
+};
+
 class Tank
 {
 public:
@@ -80,10 +89,10 @@ public:
     void Special(float dTpressed);
     void Die();
     
-    void SetType(int t1, int t2);
+    void SetType(TankType t1, TankType t2);
     
-    int type1;
-    int type2;
+    TankType type1;
+    TankType type2;
     
     float r;
     float g;

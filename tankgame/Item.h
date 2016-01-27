@@ -1,12 +1,14 @@
 #ifndef ITEM_H_INCLUDED
 #define ITEM_H_INCLUDED
 
+#include "Tank.h"
+
 class Item
 {
 public:
     
     Item();
-    Item(float nx, float ny, float nz, int ntype);
+    Item(float nx, float ny, float nz, TankType ntype);
     
     bool alive;
     float x, y, z;
@@ -14,7 +16,7 @@ public:
     
     float r, g, b;
     
-    int type;
+    TankType type;
     
     
     void Draw();

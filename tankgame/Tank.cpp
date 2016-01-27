@@ -7,7 +7,7 @@
 #include "TankHandler.h"
 
 
-void Tank::SetType(int t1, int t2)
+void Tank::SetType(TankType t1, TankType t2)
 {
     type1=t1;
     type2=t2;
@@ -859,8 +859,8 @@ void Tank::Fall()
 
 Tank::Tank()
 {
-    type1=1;
-    type2=2;
+    type1=TYPE_RED;
+    type2=TYPE_BLUE;
     bonus=0;
     bonusTime=0.0f;
     deadtime=0.0f;

@@ -9,7 +9,7 @@ Item::Item()
     alive=true;
 }
 
-Item::Item(float nx, float ny, float nz, int ntype)
+Item::Item(float nx, float ny, float nz, TankType ntype)
 {
     x=nx;
     y=ny;

@@ -319,7 +319,7 @@ bool LevelHandler::FallCollision(float x, float y, float z)
     return(ret);
 }
 
-void LevelHandler::AddItem(float x, float y, float z, int type)
+void LevelHandler::AddItem(float x, float y, float z, TankType type)
 {
     if(x<sizeX || z<sizeZ)
     {

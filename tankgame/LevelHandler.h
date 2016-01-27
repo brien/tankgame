@@ -42,7 +42,7 @@ public:
     void Flatten(int height);
     bool PointCollision(float x, float y, float z);
     void ItemCollision();
-    void AddItem(float x, float y, float z, int type);
+    void AddItem(float x, float y, float z, TankType type);
     
     bool HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz);
     bool FallCollision(float x, float y, float z);

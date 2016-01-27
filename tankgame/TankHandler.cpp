@@ -279,12 +279,12 @@ void TankHandler::Init()
         
         if((LevelHandler::GetSingleton().levelNumber-48)==0)
         {
-            temp.SetType(1+i%3, 0);
-            if(temp.type1==2)
-                temp.SetType(3, 0);
+            temp.SetType(static_cast<TankType>(1+i%3), TYPE_GREY);
+            if(temp.type1==TYPE_BLUE)
+                temp.SetType(TYPE_YELLOW, TYPE_GREY);
             if(temp.id==4)
             {
-                temp.SetType(2,0);
+                temp.SetType(TYPE_BLUE,TYPE_GREY);
                 temp.attack=temp.attack/3;
             }
         }
@@ -292,10 +292,10 @@ void TankHandler::Init()
         else
             if((LevelHandler::GetSingleton().levelNumber-48)==2 ||  (LevelHandler::GetSingleton().levelNumber-48)==5 || (LevelHandler::GetSingleton().levelNumber-48)==12 )
             {
-                temp.SetType(i%4+1, i%3+1);
+                temp.SetType(static_cast<TankType>(i%4+1), static_cast<TankType>(i%3+1));
             }
             else
-                temp.SetType(1+i%3, i%3);
+                temp.SetType(static_cast<TankType>(1+i%3), static_cast<TankType>(i%3));
         
         temp.jumpCost=0;
         
