@@ -964,16 +964,6 @@ void Tank::RotBody(float rate)
         rate=-1;
     
     ry += rate*rotRate*GlobalTimer::dT;
-    /*
-     if(ry>360)
-     {
-     ry=0;
-     }
-     else
-     if(ry<0)
-     {
-     ry=360;
-     }*/
 }
 
 
@@ -983,17 +973,6 @@ void Tank::RotBody(bool forb)
         ry += rotRate*GlobalTimer::dT;
     else
         ry -= rotRate*GlobalTimer::dT;
-    /*
-     if(ry>360)
-     {
-     ry=0;
-     }
-     else
-     if(ry<0)
-     {
-     ry=360;
-     }*/
-    
 }
 
 void Tank::RotTurret(float rate)
@@ -1010,18 +989,6 @@ void Tank::RotTurret(float rate)
     }
     
     rty += rtplus;
-    
-    
-    /*
-     if(rty>360)
-     {
-     rty=0;
-     }
-     else
-     if(rty<0)
-     {
-     rty=360;
-     }*/
 }
 
 void Tank::RotBarrel(bool forb)
