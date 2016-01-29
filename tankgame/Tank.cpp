@@ -999,13 +999,6 @@ void Tank::RotBarrel(bool forb)
 void Tank::Jump()
 {
     
-    /*if(LevelHandler::GetSingleton().FallCollision(x, y, z)
-     ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[0],y,z+collisionPoints[2])
-     ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[3],y,z+collisionPoints[5])
-     ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[6],y,z+collisionPoints[8])
-     ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[9],y,z+collisionPoints[11]))
-     {*/
-    
     if(charge>0)
     {
         jumpTime+=GlobalTimer::dT;
