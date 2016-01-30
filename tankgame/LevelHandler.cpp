@@ -56,7 +56,7 @@ LevelHandler::~LevelHandler()
 }
 
 
-bool LevelHandler::Load(char filePath[])
+bool LevelHandler::Load(const char filePath[])
 {
     
     for(int q=0; q<128; q++)
@@ -66,22 +66,6 @@ bool LevelHandler::Load(char filePath[])
             f[q][w]=0;
         }
     }
-    
-    
-    /*
-     f[60][60]=2;
-     f[60][61]=2;
-     f[60][62]=2;
-     f[60][63]=2;
-     f[60][64]=2;
-     
-     f[64][64]=2;
-     f[64][63]=2;
-     f[64][62]=2;
-     f[64][61]=2;
-     f[64][60]=2;
-     */
-    
     
     Flatten(1);
     
@@ -100,13 +84,6 @@ bool LevelHandler::Load(char filePath[])
     
     if(filePath[0]!=NULL)
     {
-        int filePathLen=Strlen(filePath);
-        
-        if(filePath[filePathLen]=='\n')
-        {
-            filePath[filePathLen]=' ';
-        }
-        
         FILE *filein;
         filein=fopen(filePath, "rt");
         

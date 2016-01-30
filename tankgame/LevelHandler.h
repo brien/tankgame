@@ -24,7 +24,7 @@ public:
     
     void Init();
     
-    bool Load(char filepath[]);
+    bool Load(const char filepath[]);
     
     bool drawFloor;
     bool drawWalls;
