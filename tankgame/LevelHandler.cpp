@@ -12,12 +12,15 @@ int LevelHandler::Strlen(const char * stringy)
     int cp=0;			//Incrementor
     bool cpdone=false;	//boolean looper
     //Error checking
-    if(stringy!=NULL){
+    if(stringy!=NULL)
+    {
         //Read entire string
-        while(!cpdone){
+        while(!cpdone)
+        {
             cp++;
             //Check for null terminator
-            if(stringy[cp]==NULL||stringy[cp]=='\n'){
+            if(stringy[cp]==NULL || stringy[cp]=='\n')
+            {
                 cpdone=true;
             }
         }
