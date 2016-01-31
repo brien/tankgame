@@ -4,6 +4,7 @@
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "App.h"
+#include <iostream>
 
 //cheap strlen function, requires a NULL TERMINATED STRING be passed.
 //Returns the length of the passed string
@@ -91,6 +92,7 @@ bool LevelHandler::Load(const char filePath[])
         if(!filein)
         {
             //Error Logging goes here.
+            std::cerr << "LevelHandler: failed to open file:" << filePath << std::endl;
             return false;
         }
         else

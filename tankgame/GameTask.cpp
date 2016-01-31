@@ -1,5 +1,5 @@
 
-
+#include <iostream>
 #include "App.h"
 #include "GameTask.h"
 #include "InputTask.h"
@@ -10,7 +10,10 @@
 void GameTask::SetUpGame()
 {
     LevelHandler::GetSingleton().Init();
-    LevelHandler::GetSingleton().Load("levels/level0@@.txt");
+    if(!LevelHandler::GetSingleton().Load("levels/level0@@.txt"))
+    {
+        std::cerr << "LevelHandler failed to load level." << std::endl;
+    }
     //LevelHandler::GetSingleton().levelNumber++;
     TankHandler::GetSingleton().Init();
 }
