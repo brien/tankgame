@@ -49,7 +49,7 @@ bool GameTask::Start()
     }
     App::GetSingleton().graphicsTask->drawHUD=false;
     
-    LevelHandler::GetSingleton().Load("levels/title@@.txt");
+    LevelHandler::GetSingleton().Load("./levels/title@@.txt");
     
     paused = false;
     debug = false;

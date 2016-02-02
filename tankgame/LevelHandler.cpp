@@ -5,6 +5,7 @@
 #include "FXHandler.h"
 #include "App.h"
 #include <iostream>
+#include <mach-o/dyld.h>
 
 //cheap strlen function, requires a NULL TERMINATED STRING be passed.
 //Returns the length of the passed string
@@ -86,6 +87,7 @@ bool LevelHandler::Load(const char filePath[])
     if(filePath[0]!=NULL)
     {
         FILE *filein;
+        int errnum;
         filein=fopen(filePath, "rt");
         
         //Error checking
@@ -93,6 +95,17 @@ bool LevelHandler::Load(const char filePath[])
         {
             //Error Logging goes here.
             std::cerr << "LevelHandler: failed to open file:" << filePath << std::endl;
+            errnum = errno;
+            fprintf(stderr, "Value of errno: %d\n", errno);
+            perror("Error printed by perror");
+            fprintf(stderr, "Error opening file: %s\n", strerror( errnum ));
+            
+            char path[1024];
+            uint32_t size = sizeof(path);
+            if (_NSGetExecutablePath(path, &size) == 0)
+                printf("executable path is %s\n", path);
+            else
+                printf("buffer too small; need size %u\n", size);
             return false;
         }
         else
