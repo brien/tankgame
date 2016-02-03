@@ -231,18 +231,26 @@ void LevelHandler::NextLevel(bool forb)
     }
     
     if(colorNumber>=15)
+    {
         colorNumber=0;
+    }
     
     if(levelNumber==58)
     {
         if(forb)
+        {
             levelNumber=65;
+        }
     }
     
     if(levelNumber<76)
+    {
         fileName[12]=levelNumber;
+    }
     else
+    {
         fileName[12]=levelNumber-25;
+    }
     
     Load(fileName);
     
@@ -251,11 +259,10 @@ void LevelHandler::NextLevel(bool forb)
         colorNumber2=colorNumber+2;
     }
     else
+    {
         colorNumber2=colorNumber;
-    
-    
-    
-    
+    }
+
     TankHandler::GetSingleton().Init();
     
     return;
