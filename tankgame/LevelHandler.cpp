@@ -950,7 +950,7 @@ void LevelHandler::DrawTerrain()
     
     glBegin(GL_QUADS);
     
-    glColor3fv(colors[colorNumber2]);
+    glColor3fv(colors[colorNumber]);
     
     glTexCoord2f(0, 30);
     glVertex3f((float)1,(float)30,(float)1);
