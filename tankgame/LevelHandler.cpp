@@ -875,8 +875,6 @@ void LevelHandler::DrawTerrain()
                         if(iy==t[ix][iz])
                         {
                             
-                            //glColor3f(0,1,0);
-                            
                             glBegin(GL_QUADS);
                             
                             if(lastBY<0)
