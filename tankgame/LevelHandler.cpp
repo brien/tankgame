@@ -877,12 +877,12 @@ void LevelHandler::DrawTerrain()
                             
                             glBegin(GL_QUADS);
                             
+                            glColor3fv(colors[colorNumber2]);
+                            
                             if(lastBY<0)
                             {
                                 glColor3fv(colors[colorNumber+1]);
                             }
-                            
-                            glColor3fv(colors[colorNumber2]);
                             
                             glTexCoord2i(0, 0);
                             glVertex3f((float)ix+1,(float)lastBY,(float)iz);
