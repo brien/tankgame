@@ -941,7 +941,6 @@ void LevelHandler::DrawTerrain()
     
     if(levelNumber==48)//drawWalls)
     {
-        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
         glTranslatef(0, -30, 0);
         glFrontFace(GL_CCW);
     }
