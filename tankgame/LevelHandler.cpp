@@ -634,9 +634,13 @@ void LevelHandler::DrawTerrain()
                 }
                 
                 if(Y==0)
+                {
                     glColor3fv(colors[colorNumber2]);
+                }
                 else
+                {
                     glColor3fv(colors[colorNumber]);
+                }
                 
                 
                 
