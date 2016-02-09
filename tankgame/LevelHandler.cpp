@@ -604,10 +604,16 @@ void LevelHandler::DrawTerrain()
         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[15]);
     }
     else
+    {
         if(levelNumber==48 || levelNumber==70 || levelNumber==69)
+        {
             glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
+        }
         else
+        {
             glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[11]);
+        }
+    }
     
     
     glNormal3f(0,1,0);
