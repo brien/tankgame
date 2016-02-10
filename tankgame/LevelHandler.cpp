@@ -464,9 +464,13 @@ bool LevelHandler::HandlePointCollision(float &x, float &y, float &z, float &vx,
         {
             x-=vx;
             if(vx>0)
+            {
                 x=Xor-.001;
+            }
             else
+            {
                 x=Xint+.001;
+            }
             
             vx=0;
         }
@@ -474,9 +478,13 @@ bool LevelHandler::HandlePointCollision(float &x, float &y, float &z, float &vx,
         {
             z-=vz;
             if(vz>0)
+            {
                 z=Zor-.001;
+            }
             else
+            {
                 z=Zint+.001;
+            }
             vz=0;
         }
     }
