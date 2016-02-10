@@ -14,7 +14,8 @@ enum TankType
     TYPE_RED,
     TYPE_BLUE,
     TYPE_YELLOW,
-    TYPE_PURPLE
+    TYPE_PURPLE,
+    TANK_TYPE_COUNT
 };
 
 class Tank
