@@ -1046,7 +1046,9 @@ void LevelHandler::DrawTerrain()
     glEnd();
     
     if(levelNumber==48)
+    {
         glTranslatef(0,30,0);
+    }
     
     
     
