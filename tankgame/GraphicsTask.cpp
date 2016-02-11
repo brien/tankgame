@@ -329,16 +329,16 @@ bool GraphicsTask::Start()
     TGA_Texture(textureArray, "texture/multi.tga", 23, true);
     TGA_Texture(textureArray, "texture/score.tga", 24, true);
     
-    TGA_Texture(textureArray, "texture/0.tga", 0, true);
-    TGA_Texture(textureArray, "texture/1.tga", 1, true);
-    TGA_Texture(textureArray, "texture/2.tga", 2, true);
-    TGA_Texture(textureArray, "texture/3.tga", 3, true);
-    TGA_Texture(textureArray, "texture/4.tga", 4, true);
-    TGA_Texture(textureArray, "texture/5.tga", 5, true);
-    TGA_Texture(textureArray, "texture/6.tga", 6, true);
-    TGA_Texture(textureArray, "texture/7.tga", 7, true);
-    TGA_Texture(textureArray, "texture/8.tga", 8, true);
-    TGA_Texture(textureArray, "texture/9.tga", 9, true);
+    TGA_Texture(textureArray, "texture/0.tga", TEXTURE_ZERO, true);
+    TGA_Texture(textureArray, "texture/1.tga", TEXTURE_ONE, true);
+    TGA_Texture(textureArray, "texture/2.tga", TEXTURE_TWO, true);
+    TGA_Texture(textureArray, "texture/3.tga", TEXTURE_THREE, true);
+    TGA_Texture(textureArray, "texture/4.tga", TEXTURE_FOUR, true);
+    TGA_Texture(textureArray, "texture/5.tga", TEXTURE_FIVE, true);
+    TGA_Texture(textureArray, "texture/6.tga", TEXTURE_SIX, true);
+    TGA_Texture(textureArray, "texture/7.tga", TEXTURE_SEVEN, true);
+    TGA_Texture(textureArray, "texture/8.tga", TEXTURE_EIGHT, true);
+    TGA_Texture(textureArray, "texture/9.tga", TEXTURE_NINE, true);
     
     
     FILE* tload = fopen("nowbody.gsm","rb");
