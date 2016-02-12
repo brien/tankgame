@@ -84,7 +84,7 @@ public:
     
     unsigned int textureArray[32];
     
-    void TGA_Texture(unsigned int textureArray[], char* strFileName, int ID, bool wrap);
+    void TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap);
     tImageTGA *Load_TGA(const char *strfilename);
     
     void BuildDisplayLists();

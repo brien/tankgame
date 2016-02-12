@@ -55,7 +55,7 @@ GraphicsTask::~GraphicsTask()
     
 }
 
-void GraphicsTask::TGA_Texture(unsigned int textureArray[], char* strFileName, int ID, bool wrap)
+void GraphicsTask::TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap)
 {
     if(!strFileName)
     {
@@ -313,21 +313,21 @@ bool GraphicsTask::Start()
     glEnable(GL_TEXTURE_2D);
     
     
-    TGA_Texture(textureArray, "texture/cube1.tga", 10, true);
-    TGA_Texture(textureArray, "texture/cube2.tga", 11, true);
-    TGA_Texture(textureArray, "texture/trail.tga", 12, false);
-    TGA_Texture(textureArray, "texture/bang.tga", 13, true);
-    TGA_Texture(textureArray, "texture/x.tga", 14, true);
-    TGA_Texture(textureArray, "texture/cube12.tga", 15, true);
-    TGA_Texture(textureArray, "texture/heart.tga", 16, true);
-    TGA_Texture(textureArray, "texture/p_itemstar.tga", 17, true);
-    TGA_Texture(textureArray, "texture/p.tga", 18, true);
-    TGA_Texture(textureArray, "texture/star.tga", 19, true);
-    TGA_Texture(textureArray, "texture/ring.tga", 20, true);
-    TGA_Texture(textureArray, "texture/long.tga", 21, true);
-    TGA_Texture(textureArray, "texture/bank.tga", 22, true);
-    TGA_Texture(textureArray, "texture/multi.tga", 23, true);
-    TGA_Texture(textureArray, "texture/score.tga", 24, true);
+    TGA_Texture(textureArray, "texture/cube1.tga", TEXTURE_WHITE_CUBE, true);
+    TGA_Texture(textureArray, "texture/cube2.tga", TEXTURE_BLACK_CUBE, true);
+    TGA_Texture(textureArray, "texture/trail.tga", TEXTURE_EXIT, false);
+    TGA_Texture(textureArray, "texture/bang.tga", TEXTURE_BANG, true);
+    TGA_Texture(textureArray, "texture/x.tga", TEXTURE_X, true);
+    TGA_Texture(textureArray, "texture/cube12.tga", TEXTURE_CHECKER, true);
+    TGA_Texture(textureArray, "texture/heart.tga", TEXTURE_HEART, true);
+    TGA_Texture(textureArray, "texture/p_itemstar.tga", TEXTURE_DIAMOND, true);
+    TGA_Texture(textureArray, "texture/p.tga", TEXTURE_P, true);
+    TGA_Texture(textureArray, "texture/star.tga", TEXTURE_STAR, true);
+    TGA_Texture(textureArray, "texture/ring.tga", TEXTURE_RING, true);
+    TGA_Texture(textureArray, "texture/long.tga", TEXTURE_LONGSHOT, true);
+    TGA_Texture(textureArray, "texture/bank.tga", TEXTURE_BANKSHOT, true);
+    TGA_Texture(textureArray, "texture/multi.tga", TEXTURE_MULTISHOT, true);
+    TGA_Texture(textureArray, "texture/score.tga", TEXTURE_SCORE, true);
     
     TGA_Texture(textureArray, "texture/0.tga", TEXTURE_ZERO, true);
     TGA_Texture(textureArray, "texture/1.tga", TEXTURE_ONE, true);
