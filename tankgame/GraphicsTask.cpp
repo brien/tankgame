@@ -652,14 +652,14 @@ void GraphicsTask::DrawSky()
     glPushMatrix();
     glTranslatef(400, rot/2 - 50, 400);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(400, 10, 200);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -667,14 +667,14 @@ void GraphicsTask::DrawSky()
     glTranslatef(-400, 50, -500);
     glRotatef(TankHandler::GetSingleton().closest, 0, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-200, 40, 600);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[10]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WHITE_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -682,7 +682,7 @@ void GraphicsTask::DrawSky()
     
     glTranslatef(-100, 40, -500);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -691,7 +691,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(300, rot/2 - 50, -500);
     glRotatef(TankHandler::GetSingleton().closest, 0, 1, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -700,7 +700,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(64, 30, -500);
     glRotatef(TankHandler::GetSingleton().closest, 0, 1, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -709,7 +709,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(800, 30, 90);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -718,7 +718,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(-80, 2, -900);
     glRotatef(TankHandler::GetSingleton().closest, 0, 0, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -727,7 +727,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(80, -20, 450);
     glRotatef(rot, 1, 0, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -736,7 +736,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(900, 20, 600);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -745,7 +745,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(-900, 30, 60);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -755,7 +755,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(80, 15, -600);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
     glCallList(cubelist1);
     glPopMatrix();
     
@@ -822,7 +822,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[16]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_HEART]);
     glColor4f(1.0f,0.6,0.6f,1.0f);
     
     //Armor
@@ -841,7 +841,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glVertex3f(-0.55f,0.34f,(float)0);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[13]);
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BANG]);
     
     glColor4f(0.6f,0.6,1.0f,1.0f);
     
