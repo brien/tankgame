@@ -33,7 +33,6 @@ Camera::Camera()
     
     ydist=1.0;
     xzdist=2;
-    
 }
 
 Camera::~Camera()
@@ -47,7 +46,6 @@ GraphicsTask::GraphicsTask()
     drawHUD=true;
     drawMenu=false;
     cubelist1=1;
-    
 }
 
 GraphicsTask::~GraphicsTask()
@@ -61,8 +59,6 @@ void GraphicsTask::TGA_Texture(unsigned int textureArray[], const char* strFileN
     {
         return;
     }
-    
-    
     
     tImageTGA *pBitMap = Load_TGA(strFileName);
     
@@ -184,9 +180,10 @@ tImageTGA *GraphicsTask::Load_TGA(const char *strfilename)
                 pImgData->data[i * 3 + 2] = b;
             }
         }
-        
         else
+        {
             return NULL;
+        }
     }
     
     else
