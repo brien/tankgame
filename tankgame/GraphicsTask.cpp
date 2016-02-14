@@ -460,6 +460,7 @@ void GraphicsTask::Update()
     glDisable(GL_LIGHTING);
     
     if(App::GetSingleton().gameTask->gameStarted)
+    {
         for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
         {
             
@@ -472,6 +473,7 @@ void GraphicsTask::Update()
             cams[i].yfocus=TankHandler::GetSingleton().players[i].y+.3;
             cams[i].zfocus=(TankHandler::GetSingleton().players[i].z + (float)sin((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
         }
+    }
     
     if(TankHandler::GetSingleton().numPlayers>1)
     {
