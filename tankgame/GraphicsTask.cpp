@@ -185,10 +185,8 @@ tImageTGA *GraphicsTask::Load_TGA(const char *strfilename)
             return NULL;
         }
     }
-    
     else
     {
-        
         byte rleID = 0;
         int colorsRead = 0;
         channels = bits / 8;
@@ -222,7 +220,6 @@ tImageTGA *GraphicsTask::Load_TGA(const char *strfilename)
                     colorsRead += channels;
                 }
             }
-            
             else
             {
                 rleID -= 127;
