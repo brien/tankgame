@@ -598,12 +598,6 @@ void GraphicsTask::Update()
     //LevelHandler::GetSingleton().DrawTerrain();
     //LevelHandler::GetSingleton().DrawTerrain();
     //LevelHandler::GetSingleton().DrawTerrain();
-    
-    
-    
-    
-    
-    
 }
 
 
@@ -778,7 +772,9 @@ void GraphicsTask::DrawHUD(Tank& player)
     static int times2=1;
     
     if(times2>60000)
+    {
         times2=1;
+    }
     
     times2*=2;
     
