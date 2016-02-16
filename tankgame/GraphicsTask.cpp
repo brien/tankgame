@@ -948,14 +948,14 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     if(App::GetSingleton().gameTask->debug)
     {
-      		float test=(2*(float)GlobalTimer::dT);
-      		//if(test>1)test=1;
-      		glColor3f(1.0f,test,1.0f);
+        float test=(2*(float)GlobalTimer::dT);
+        //if(test>1)test=1;
+        glColor3f(1.0f,test,1.0f);
         
-      		glVertex3f(0.50f,-0.30f,0);
-      		glVertex3f(0.50f,-0.30f+test,0);
-      		glVertex3f(0.50f+0.01f,-0.30f+test,0);
-      		glVertex3f(0.50f+0.01f,-0.30f,0);
+        glVertex3f(0.50f,-0.30f,0);
+        glVertex3f(0.50f,-0.30f+test,0);
+        glVertex3f(0.50f+0.01f,-0.30f+test,0);
+        glVertex3f(0.50f+0.01f,-0.30f,0);
     }
     
     glEnd();
@@ -1003,7 +1003,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     for(int i=1; i<=nspec; i++)
     {
         glVertex3f(0.52f,-0.37f+costspec*i,0);
-      		glVertex3f(0.52f+0.01f,-0.37f+costspec*i,0);
+        glVertex3f(0.52f+0.01f,-0.37f+costspec*i,0);
     }
     
     
