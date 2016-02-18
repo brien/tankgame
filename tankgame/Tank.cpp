@@ -797,7 +797,6 @@ void Tank::Fall()
         
     }
     else
-        
         if(LevelHandler::GetSingleton().FallCollision(x, y, z)
            ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[0],y,z+collisionPoints[2])
            ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[3],y,z+collisionPoints[5])
@@ -829,16 +828,7 @@ void Tank::Fall()
             //if(y>(float)highest)
             y=(float)highest;
             
-            if(!grounded)
-            {
-                if(charge<2*maxCharge/3)
-                    charge+=maxCharge/3;
-                if(id<0)
-                    App::GetSingleton().soundTask->PlaySound(5);
-            }
-            jumping=false;
-            grounded=true;
-            jumpTime=0.0f;
+
             
             //y=(float)LevelHandler::t[(int)x][(int)z];
             if(highest<-10 && (id==-1 || id==-2))
@@ -849,7 +839,22 @@ void Tank::Fall()
                 y=24;
             }
             else
+            {
                 vy=0;
+                if(!grounded)
+                {
+                    if(id<0)
+                        App::GetSingleton().soundTask->PlaySound(5);
+                }
+            }
+            if(!grounded)
+            {
+                if(charge<2*maxCharge/3)
+                    charge+=maxCharge/3;
+            }
+            jumping=false;
+            grounded=true;
+            jumpTime=0.0f;
         }
         else
             grounded=false;
