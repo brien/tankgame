@@ -97,10 +97,14 @@ void GameTask::Update()
                 TankHandler::GetSingleton().numPlayers=2;
             }
             if(menuState==1)
+            {
                 versus=false;
+            }
             
             if(menuState==2)
+            {
                 versus=true;
+            }
             
             SetUpGame();
             gameStarted=true;
@@ -114,10 +118,13 @@ void GameTask::Update()
                 TankHandler::GetSingleton().numPlayers=2;
             }
             if(menuState==1)
+            {
                 versus=false;
-            
+            }
             if(menuState==2)
+            {
                 versus=true;
+            }
             
             SetUpGame();
             gameStarted=true;
