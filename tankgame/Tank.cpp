@@ -857,7 +857,9 @@ void Tank::Fall()
             jumpTime=0.0f;
         }
         else
+        {
             grounded=false;
+        }
     
 }
 
@@ -964,9 +966,13 @@ void Tank::Init()
 void Tank::RotBody(float rate)
 {
     if(rate>1)
+    {
         rate=1;
+    }
     if(rate<-1)
+    {
         rate=-1;
+    }
     
     ry += rate*rotRate*GlobalTimer::dT;
 }
@@ -975,9 +981,13 @@ void Tank::RotBody(float rate)
 void Tank::RotBody(bool forb)
 {
     if(forb)
+    {
         ry += rotRate*GlobalTimer::dT;
+    }
     else
+    {
         ry -= rotRate*GlobalTimer::dT;
+    }
 }
 
 void Tank::RotTurret(float rate)
