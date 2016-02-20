@@ -698,7 +698,9 @@ bool Tank::PointCollision(float cx, float cy, float cz)
     if((cy-y)<.3 && (y-cy)<0)
     {
         if(sqrt((cx-x)*(cx-x)+(cz-z)*(cz-z))<size*2)
+        {
             result=true;
+        }
     }
     return result;
     
@@ -785,9 +787,13 @@ void Tank::Fall()
         if(!grounded)
         {
             if(charge<2*maxCharge/3)
+            {
                 charge+=maxCharge/3;
+            }
             if(id<0)
+            {
                 App::GetSingleton().soundTask->PlaySound(5);
+            }
         }
         jumping=false;
         grounded=true;
@@ -850,7 +856,9 @@ void Tank::Fall()
             if(!grounded)
             {
                 if(charge<2*maxCharge/3)
+                {
                     charge+=maxCharge/3;
+                }
             }
             jumping=false;
             grounded=true;
