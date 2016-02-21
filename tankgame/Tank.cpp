@@ -613,7 +613,9 @@ void Tank::Special(float dTpressed)
             //temp.y+=.25;
             
             if(type2!=1)
+            {
                 temp.y+=.25;
+            }
             
             bullets.push_back(temp);
             
@@ -624,7 +626,9 @@ void Tank::Special(float dTpressed)
             temp.z+= .2  * (float)sin((rty+ry+90)*DTR);
             
             if(type2==1)
+            {
                 temp.ry-=10;
+            }
             
             bullets.push_back(temp);
             
@@ -633,7 +637,9 @@ void Tank::Special(float dTpressed)
             temp.z-= .4  * (float)sin((rty+ry+90)*DTR);
             
             if(type2==1)
+            {
                 temp.ry+=20;
+            }
             
             bullets.push_back(temp);
             
@@ -644,7 +650,9 @@ void Tank::Special(float dTpressed)
         if(type1==3)
         {
             if(type2!=3)
+            {
                 temp.maxbounces=4;
+            }
             
             bullets.push_back(temp);
             
