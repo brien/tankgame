@@ -1060,7 +1060,9 @@ void Tank::Jump()
         
         FXHandler::GetSingleton().CreateFX(1, x, y-.2, z, 0, .5*vy*GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1);
         if(!jumping && id<0)
+        {
             App::GetSingleton().soundTask->PlaySound(4);
+        }
         jumping=true;
     }
     
