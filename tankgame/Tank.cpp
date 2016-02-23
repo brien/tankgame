@@ -1088,27 +1088,39 @@ void Tank::NextFrame()
      ry=360;*/
     
     if(!jumping)
+    {
         jumpTime=0.0f;
+    }
     
     bonusTime+=GlobalTimer::dT;
     if(bonusTime>1)
+    {
         bonus=0;
+    }
     
     if(hitAlpha>0)
+    {
         hitAlpha-=1*GlobalTimer::dT;
+    }
     
     
     if(TankHandler::GetSingleton().hitCombo[(-1*id)-1]!=hitNum)
+    {
         hitAlpha=1.0;
+    }
     
     hitNum=TankHandler::GetSingleton().hitCombo[(-1*id)-1];
     
     
     if(energy>maxEnergy && !App::GetSingleton().gameTask->debug)
+    {
         energy=maxEnergy;
+    }
     
     if(energy<maxEnergy/2)
+    {
         FXHandler::GetSingleton().CreateFX(2, x, y+.1, z, 0, .01, 0, 0, ry+rty, 90, .2, .2, .2, 1);
+    }
     
     
     if(x>=128 || x<=0 || z>=128 || z<=0)
@@ -1129,9 +1141,13 @@ void Tank::NextFrame()
         if(id<0 && App::GetSingleton().gameTask->versus)
         {
             if(id==-1)
+            {
                 TankHandler::GetSingleton().wins[1]++;
+            }
             else
+            {
                 TankHandler::GetSingleton().wins[0]++;
+            }
         }
     }
     else
