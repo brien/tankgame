@@ -1194,30 +1194,6 @@ void Tank::NextFrame()
         }
         
     }
-    
-    
-    
-    
-    /*
-     
-     if(!alive && energy<500)
-     {
-     energy+=100*GlobalTimer::dT;
-     }
-     
-     for(i=0; i<=TankHandler::GetSingleton().tanks.size(); i++)
-     {
-     if(TankHandler::GetSingleton().tanks[i]->PointCollision(x,y,z) && TankHandler::GetSingleton().tanks[i]->id!=id)
-     {
-     //x -= GlobalTimer::dT*movRate * (float)cos(ry*DTR);
-     //z -= GlobalTimer::dT*movRate * (float)sin(ry*DTR);
-     if(!TankHandler::GetSingleton().tanks[i]->alive)
-     {
-     energy-=100*GlobalTimer::dT;
-     }
-     }
-     }
-     */
 }
 
 bool Tank::Move(float rate)
