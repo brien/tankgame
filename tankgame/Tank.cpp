@@ -1199,12 +1199,16 @@ void Tank::NextFrame()
 bool Tank::Move(float rate)
 {
     if(rate>1.25)
+    {
         rate=1.25;
+    }
     
     bool forb=true;
     
     if(rate<0)
+    {
         forb=false;
+    }
     
     bool moved;
     
