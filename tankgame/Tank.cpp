@@ -1465,7 +1465,7 @@ void Tank::HandleInput()
     {
         RotTurret(InputTask::dX*2);
         
-        if((type1==4 || type2==4) && InputTask::MouseStillDown(1))
+        if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::MouseStillDown(1))
         {
             Fire(InputTask::dX*GlobalTimer::dT);
             /*if( InputTask::MouseStillDown(1))
@@ -1483,7 +1483,7 @@ void Tank::HandleInput()
             Fire(1);
         }
         
-        if((type1==4 || type2==4) && InputTask::MouseStillDown(3))
+        if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::MouseStillDown(3))
         {
             Special(InputTask::dX*GlobalTimer::dT);
             /*if( InputTask::MouseStillDown(1))
@@ -1635,7 +1635,7 @@ void Tank::HandleInput()
     }
     else if(inputmode>0 && inputmode<4) //Jay's flight stick + PS2, P880 stupid mode
     {
-        if((type1==4 || type2==4) && InputTask::GetButton(jid,0) || InputTask::GetButton(jid,3) || InputTask::GetButton(jid,7) )
+        if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::GetButton(jid,0) || InputTask::GetButton(jid,3) || InputTask::GetButton(jid,7) )
         {
             Fire((float)InputTask::GetAxis(jid,3)/(float)3200);
         }
