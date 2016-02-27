@@ -19,7 +19,7 @@ void Tank::SetType(TankType t1, TankType t2)
     fallRate=16.0f;
 
     
-    if(type1==0) //grey
+    if(type1==TYPE_GREY)
     {
         fireRate=.5;
         
@@ -33,7 +33,7 @@ void Tank::SetType(TankType t1, TankType t2)
         chargeCost=200;
     }
     
-    if(type1==1) //red
+    if(type1==TYPE_RED)
     {
         fireRate=.05;
         
@@ -48,21 +48,21 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=0;
         
-        if(type2==0)
+        if(type2==TYPE_GREY)
         {
             fireRate=.05;
             attack=attack/2;
             fireCost*=2;
         }
         
-        if(type2==2)
+        if(type2==TYPE_BLUE)
         {
             attack=200;
             fireCost=maxCharge/5;
             fireRate=.1;
         }
         
-        if(type2==3)
+        if(type2==TYPE_YELLOW)
         {
             attack=120;
             fireCost=maxCharge/8;
@@ -70,7 +70,7 @@ void Tank::SetType(TankType t1, TankType t2)
             bounces=2;
         }
         
-        if(type2==4)
+        if(type2==TYPE_PURPLE)
         {
             attack=200;
             fireCost=maxCharge/8;
@@ -78,7 +78,7 @@ void Tank::SetType(TankType t1, TankType t2)
         }
     }
     
-    if(type1==2) //blue
+    if(type1==TYPE_BLUE)
     {
         fireRate=0.05;
         
@@ -93,21 +93,21 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=0;
         
-        if(type2==1)
+        if(type2==TYPE_RED)
         {
             attack=750;
             fireCost=maxCharge/1.5;
             
         }
         
-        if(type2==3)
+        if(type2==TYPE_YELLOW)
         {
             attack=800;
             fireCost=maxCharge/1.5;
             bounces=1;
         }
         
-        if(type2==4)
+        if(type2==TYPE_PURPLE)
         {
             attack=500;
             fireCost=maxCharge/1.5;
@@ -115,7 +115,7 @@ void Tank::SetType(TankType t1, TankType t2)
         
     }
     
-    if(type1==3) //yellow
+    if(type1==TYPE_YELLOW)
     {
         fireRate=.5;
         
@@ -155,7 +155,7 @@ void Tank::SetType(TankType t1, TankType t2)
         }
     }
     
-    if(type1==4) //purple
+    if(type1==TYPE_PURPLE)
     {
         fireRate=.5;
         
