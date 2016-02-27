@@ -1729,7 +1729,9 @@ void Tank::HandleInput()
             turbo=true;
         }
         else
+        {
             turbo=false;
+        }
         
         /* if( InputTask::GetButton(jid,11))
          {
@@ -2145,7 +2147,9 @@ void Tank::HandleInput()
                 Fire((float)InputTask::GetAxis(jid,2)/(float)6400);
             }
             else
+            {
                 Fire(1);
+            }
         }
         
         if(InputTask::GetButton(jid,5) || InputTask::GetButton(jid,6))
@@ -2155,7 +2159,9 @@ void Tank::HandleInput()
                 Special((float)InputTask::GetAxis(jid,2)/(float)6000);
             }
             else
+            {
                 Special(1);
+            }
             
             /*if( InputTask::MouseStillDown(1))
              {
@@ -2234,7 +2240,9 @@ void Tank::HandleInput()
             turbo=true;
         }
         else
+        {
             turbo=false;
+        }
         
         
         if( SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_UP)
@@ -2344,7 +2352,7 @@ void Tank::AI()
                 state=1;
     }
     
-    if(TankHandler::GetSingleton().tanks.size()==1 || TankHandler::GetSingleton().attackingTanks < (LevelHandler::GetSingleton().levelNumber-47) && !App::GetSingleton().gameTask->versus )
+    if(TankHandler::GetSingleton().tanks.size()==1 || (TankHandler::GetSingleton().attackingTanks < (LevelHandler::GetSingleton().levelNumber-47) && !App::GetSingleton().gameTask->versus) )
     {
         state=5;
         TankHandler::GetSingleton().attackingTanks++;
