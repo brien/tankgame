@@ -44,7 +44,7 @@ bool VideoTask::Start()
     
     char line[64];
     FILE *filein;
-    filein=fopen("./settings.txt", "rt");
+    filein=fopen("settings.txt", "rt");
     if(!filein)
     {
         std::cerr << "VideoTask::Start: Failed to open settings.txt" << std::endl;
