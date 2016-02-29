@@ -116,7 +116,7 @@ bool VideoTask::Start()
     
     fclose(filein);
     
-    window = SDL_CreateWindow("Tank!Game 2", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
+    window = SDL_CreateWindow("tankgame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
     //sdlRenderer = SDL_CreateRenderer(window, -1, 0);
     glContext = SDL_GL_CreateContext(window);
     
