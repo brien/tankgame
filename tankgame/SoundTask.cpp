@@ -39,6 +39,7 @@ bool SoundTask::Start()
         death2=NULL;
         
         hit=NULL;
+        bounce=NULL;
         
         cowbellChannel = 0;
         xphoneChannel = 1;
@@ -51,6 +52,7 @@ bool SoundTask::Start()
         deathChannel = 6;
         death2Channel = 7;
         hitChannel = 8;
+        bounceChannel = 9;
         
         audio_rate = 22050;
         audio_format = AUDIO_S16;
@@ -68,7 +70,7 @@ bool SoundTask::Start()
             exit(1);
         }
         
-        
+        Mix_AllocateChannels(16);
         Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
         
         music = Mix_LoadMUS("sounds/TGTest3.ogg");
@@ -85,6 +87,7 @@ bool SoundTask::Start()
         
         jump = Mix_LoadWAV("sounds/jump.wav");
         land = Mix_LoadWAV("sounds/land.wav");
+        bounce = Mix_LoadWAV("sounds/elastik.wav");
         
         Mix_Volume(-1, 50);
         
@@ -136,6 +139,8 @@ void SoundTask::PlaySound(int ID)
             Mix_PlayChannel(-1, death2, 0);
         if(ID==hitChannel)
             Mix_PlayChannel(-1, hit, 0);
+        if(ID==bounceChannel)
+            Mix_PlayChannel(ID, bounce, 0);
     }
     
 }
@@ -188,6 +193,7 @@ void SoundTask::Stop()
         Mix_FreeChunk(death);
         Mix_FreeChunk(death2);
         Mix_FreeChunk(hit);
+        Mix_FreeChunk(bounce);
         
         Mix_HaltMusic();
         Mix_FreeMusic(music);

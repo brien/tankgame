@@ -37,6 +37,7 @@ public:
     Mix_Chunk *death;
     Mix_Chunk *death2;
     Mix_Chunk *hit;
+    Mix_Chunk *bounce;
     
     int audio_rate;
     Uint16 audio_format;
@@ -54,6 +55,7 @@ public:
     int deathChannel;
     int death2Channel;
     int hitChannel;
+    int bounceChannel;
     
     static unsigned int samplingRate;
     
