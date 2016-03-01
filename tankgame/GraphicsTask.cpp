@@ -12,6 +12,7 @@
 #include <OpenGL/glu.h>
 #include <stdlib.h>
 #include <sys/types.h>
+#include <iostream>
 
 #include "App.h"
 #include "TankHandler.h"
@@ -111,6 +112,7 @@ tImageTGA *GraphicsTask::Load_TGA(const char *strfilename)
     
     if((pFile = fopen(strfilename, "rb")) == NULL)
     {
+        std::cerr << "GraphicsTask:Load_TGA: Failed to open " << strfilename << std::endl;
         //GuiTask::RenderSpacedBitmapString(30,30,10,(void *)GuiTask::font,"ERROR");
         return NULL;
     }
