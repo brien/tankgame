@@ -101,12 +101,12 @@ void Bullet::NextFrame()
                     ry=-ry;
             }
             
-            
-
-             int dist=(int)sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
+            int dist=(int)sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
              
-             if(dist>128)
+            if(dist>128)
+            {
                  dist=128;
+            }
             Mix_Volume(9, 128-dist);
              
              //Mix_SetPosition(2, ryp, (int)dist);
@@ -116,10 +116,13 @@ void Bullet::NextFrame()
             if(numbounces<1)
             {
                 if(type1==3 && type2==3)
+                {
                     power*=2.0;
+                }
                 else
+                {
                     power*=1.5;
-                
+                }
             }
             
             if(tid<0 && spec && type1==3)
