@@ -96,9 +96,13 @@ void Bullet::NextFrame()
             if((int)(x+xpp)!=(int)x && (int)(z+zpp)!=(int)z)
             {
                 if(LevelHandler::GetSingleton().PointCollision((x+xpp),y,z) && !LevelHandler::GetSingleton().PointCollision(x,y,z+zpp))
+                {
                     ry=-ry+180;
+                }
                 else
+                {
                     ry=-ry;
+                }
             }
             
             int dist=(int)sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
