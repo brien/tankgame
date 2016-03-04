@@ -44,9 +44,13 @@ void Bullet::NextFrame()
     if(type1==4 && spec)
     {
         if(dty<0)
+        {
             dty-=1000*GlobalTimer::dT;
+        }
         else
+        {
             dty+=1000*GlobalTimer::dT;
+        }
         
     }
     
