@@ -37,8 +37,6 @@ Bullet::Bullet()
 void Bullet::NextFrame()
 {
     
-    //ry-=GlobalTimer::dT*400;
-    
     dT+=GlobalTimer::dT;
     
     if(type1==4 && spec)
