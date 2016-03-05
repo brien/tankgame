@@ -254,7 +254,9 @@ void GameTask::Update()
     }
     
     if(gameOver)
+    {
         GameOver();
+    }
     
     
 }
