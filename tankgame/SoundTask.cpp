@@ -128,19 +128,33 @@ void SoundTask::PlaySound(int ID)
             Mix_PlayChannel(-1, xphone, 0);
         }
         if(ID==energyChannel)
+        {
             Mix_PlayChannel(-1, energy, 0);
+        }
         if(ID==jumpChannel)
+        {
             Mix_PlayChannel(-1, jump, 0);
+        }
         if(ID==landChannel)
+        {
             Mix_PlayChannel(-1, land, 0);
+        }
         if(ID==deathChannel)
+        {
             Mix_PlayChannel(-1, death, 0);
+        }
         if(ID==death2Channel)
+        {
             Mix_PlayChannel(-1, death2, 0);
+        }
         if(ID==hitChannel)
+        {
             Mix_PlayChannel(-1, hit, 0);
+        }
         if(ID==bounceChannel)
+        {
             Mix_PlayChannel(ID, bounce, 0);
+        }
     }
     
 }
