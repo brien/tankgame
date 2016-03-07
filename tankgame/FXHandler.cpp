@@ -176,19 +176,29 @@ void FX::Draw()
     glDisable(GL_CULL_FACE);
     
     if(type==0)
+    {
         glScalef(5*time/maxTime, 1, 5*time/maxTime);
+    }
     
     if(type==1)
+    {
         glScalef(1*time/maxTime, 1, 1*time/maxTime);
+    }
     
     if(type==2)
+    {
         glScalef(.25*time/maxTime, .25, .25*time/maxTime);
+    }
     
     if(type==4)
+    {
         glScalef(.5*time/maxTime, .5, .5*time/maxTime);
+    }
     
     if(type==5)
+    {
         glScalef(.3*time/maxTime, .3, .3*time/maxTime);
+    }
     
     if(type==6)
     {
@@ -196,7 +206,9 @@ void FX::Draw()
     }
     
     if(type==0)
+    {
         glCallList(App::GetSingleton().graphicsTask->squarelist2);
+    }
     
     glEnable(GL_BLEND);
     glEnable(GL_DEPTH_TEST);
