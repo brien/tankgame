@@ -96,9 +96,13 @@ unsigned char InputTask::GetButton(int jid, int bid)
 {
     unsigned char ret;
     if(jid<0 || jid>3 || joysticks[jid]==NULL)
+    {
         ret=0;
+    }
     else
+    {
         ret = SDL_JoystickGetButton(joysticks[jid], bid);
+    }
     
     return ret;
 }
