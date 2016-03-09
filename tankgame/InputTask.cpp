@@ -85,9 +85,13 @@ int InputTask::GetAxis(int jid, int axis)
 {
     int ret;
     if(jid<0 || jid>3 || joysticks[jid]==NULL)
+    {
         ret=-1;
+    }
     else
+    {
         ret = SDL_JoystickGetAxis(joysticks[jid], axis);
+    }
     
     return ret;
 }
