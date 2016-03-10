@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		D1103CD01C3CD84F0003110E /* TaskHandler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D1103CCE1C3CD84F0003110E /* TaskHandler.cpp */; };
 		D13AA1721C105626005F8265 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D13AA1711C105626005F8265 /* main.cpp */; };
+		D143EC6F1C91BFA30026B3F1 /* SDL2_ttf.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D143EC6E1C91BFA20026B3F1 /* SDL2_ttf.framework */; };
 		D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D17C9F761C1059F700EB6C4E /* SDL2.framework */; };
 		D18232811C2E627100EBBB3E /* GlobalTimer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232801C2E627100EBBB3E /* GlobalTimer.cpp */; };
 		D18232851C3049A400EBBB3E /* igtl_qmesh.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D18232831C3049A400EBBB3E /* igtl_qmesh.cpp */; };
@@ -46,6 +47,7 @@
 		D12EB41A1C1624A500640F9F /* Singleton.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Singleton.h; sourceTree = "<group>"; };
 		D13AA16E1C105626005F8265 /* tankgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tankgame; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13AA1711C105626005F8265 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		D143EC6E1C91BFA20026B3F1 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
 		D17C9F761C1059F700EB6C4E /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		D182327D1C2A6BE100EBBB3E /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		D182327E1C2BBED000EBBB3E /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
@@ -84,6 +86,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D143EC6F1C91BFA30026B3F1 /* SDL2_ttf.framework in Frameworks */,
 				D17C9F771C1059F700EB6C4E /* SDL2.framework in Frameworks */,
 				D18232A21C306E8500EBBB3E /* SDL2_mixer.framework in Frameworks */,
 				D18A7DFE1C14F3E1000EA314 /* OpenGL.framework in Frameworks */,
@@ -96,6 +99,7 @@
 		D13AA1651C105626005F8265 = {
 			isa = PBXGroup;
 			children = (
+				D143EC6E1C91BFA20026B3F1 /* SDL2_ttf.framework */,
 				D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */,
 				D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */,
 				D17C9F761C1059F700EB6C4E /* SDL2.framework */,

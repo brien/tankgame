@@ -9,6 +9,8 @@
 #ifndef GraphicsTask_h
 #define GraphicsTask_h
 
+#include <SDL2_ttf/SDL_ttf.h>
+
 #include "BaseTask.h"
 #include "igtl_qmesh.h"
 #include "Tank.h"
@@ -83,6 +85,7 @@ public:
     virtual ~GraphicsTask();
     
     unsigned int textureArray[32];
+    TTF_Font *defaultFont;
     
     void TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap);
     tImageTGA *Load_TGA(const char *strfilename);
