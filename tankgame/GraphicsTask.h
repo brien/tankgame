@@ -93,7 +93,6 @@ public:
     void BuildDisplayLists();
     
     Camera cams[4];
-    //Camera cam2;
     
     int alphalist[26];
     
