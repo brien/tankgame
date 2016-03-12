@@ -590,7 +590,6 @@ void TankHandler::DrawTanks()
             glFrontFace(GL_CCW);
             
             
-            //if(special[k]>=players[k].fireCost/5)
             glCallList(App::GetSingleton().graphicsTask->bodylist);
             
             
