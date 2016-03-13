@@ -603,13 +603,14 @@ void TankHandler::DrawTanks()
             glColor3f(players[k].r2, players[k].g2, players[k].b2);
             
             if(special[k]>=players[k].fireCost/5)
+            {
                 glCallList(App::GetSingleton().graphicsTask->turretlist);
+            }
             
             
             glFrontFace(GL_CW);
             
             glPopMatrix();
-            //-----
             
             
             
