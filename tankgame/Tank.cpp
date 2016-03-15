@@ -310,18 +310,24 @@ void Tank::Die()
     
     if(!alive && deadtime<0.01)
     {
-        if(id<0)
+        if(id < 0)
+        {
             App::GetSingleton().soundTask->PlaySound(7);
+        }
         else
+        {
             App::GetSingleton().soundTask->PlaySound(6);
+        }
     }
     
     TankHandler::GetSingleton().attackingTanks--;
     
     if(TankHandler::GetSingleton().tanks.size()!=1 && id>=0)
+    {
         LevelHandler::GetSingleton().AddItem(x, y+.2, z, type1);
+    }
     
-    if(deadtime<0.01)
+    if(deadtime < 0.01)
     {
         
         //FXHandler::GetSingleton().CreateFX(0, x, y, z, rx, ry, rz, r, g, b, 1);
