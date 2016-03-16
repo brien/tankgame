@@ -330,8 +330,6 @@ void Tank::Die()
     if(deadtime < 0.01)
     {
         
-        //FXHandler::GetSingleton().CreateFX(0, x, y, z, rx, ry, rz, r, g, b, 1);
-        
         FXHandler::GetSingleton().CreateFX(6, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, 1);
         
         FXHandler::GetSingleton().CreateFX(6, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, .15);
