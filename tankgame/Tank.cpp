@@ -411,13 +411,19 @@ void Tank::Fire(float dTpressed)
         {
             temp.dty=320*dTpressed;
             if(dTpressed<0)
+            {
                 dTpressed*=-1;
+            }
             temp.power*=dTpressed;
             if(temp.power>1000)
+            {
                 temp.power=1000;
+            }
             
             if(temp.power<100)
+            {
                 temp.power=100;
+            }
         }
         else
             if(type2==4)
