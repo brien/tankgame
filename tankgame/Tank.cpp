@@ -390,9 +390,6 @@ void Tank::Fire(float dTpressed)
         App::GetSingleton().soundTask->PlaySound(2);
         
         
-        //		if(ammoNum>=maxAmmo) ammoNum=0;
-        //		int i = ammoNum;
-        
         Bullet temp;
         
         
