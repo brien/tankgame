@@ -431,12 +431,18 @@ void Tank::Fire(float dTpressed)
                 temp.power*=0.5f;
                 temp.dty=160*dTpressed;
                 if(dTpressed<0)
+                {
                     dTpressed*=-1;
+                }
                 temp.power+=temp.power*dTpressed/2;
                 if(temp.power>1000)
+                {
                     temp.power=1000;
+                }
                 if(temp.power<100)
+                {
                     temp.power=100;
+                }
             }
         
         temp.r=r;
