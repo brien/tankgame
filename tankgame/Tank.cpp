@@ -467,7 +467,6 @@ void Tank::Fire(float dTpressed)
         fireTimer=0;
         
         charge-=fireCost;
-        //energy-=0;
     }
 }
 
