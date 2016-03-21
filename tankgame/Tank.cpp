@@ -2410,7 +2410,6 @@ void Tank::Wander()
 void Tank::Fear()
 {
     recharge=false;
-    //charge+=10*GlobalTimer::dT;
     
     double ratio;
     
