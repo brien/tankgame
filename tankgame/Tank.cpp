@@ -2427,10 +2427,16 @@ void Tank::Fear()
     ryp-=180;
     
     if(ryp<(ry-5))
+    {
         RotBody(false);
+    }
     else
+    {
         if(ryp>(ry+5))
+        {
             RotBody(true);
+        }
+    }
     
     
     ratio = (double)(z-TankHandler::GetSingleton().players[0].z)/(double)(x-TankHandler::GetSingleton().players[0].x);
