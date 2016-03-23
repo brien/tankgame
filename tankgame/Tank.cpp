@@ -2364,9 +2364,13 @@ void Tank::AI()
             break;
         case 5:
             if(p2target)
+            {
                 Hunt(TankHandler::GetSingleton().players[1]);
+            }
             else
+            {
                 Hunt(TankHandler::GetSingleton().players[0]);
+            }
             
             
         default:
