@@ -2292,15 +2292,6 @@ void Tank::AI()
     static int state=2;
     bool p2target=false;
     
-    float angle=30;
-    float frames=10;
-    float xpp = x + (GlobalTimer::dT*frames*movRate) * (float)cos((ry-angle)*DTR);
-    float zpp = z + (GlobalTimer::dT*frames*movRate) * (float)sin((ry-angle)*DTR);
-    
-    
-    float xpp2 = x + (GlobalTimer::dT*frames*movRate) * (float)cos((ry+angle)*DTR);
-    float zpp2 = z + (GlobalTimer::dT*frames*movRate) * (float)sin((ry+angle)*DTR);
-    
     dist=sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
     
     if(TankHandler::GetSingleton().numPlayers>1 && TankHandler::GetSingleton().players[1].alive)
