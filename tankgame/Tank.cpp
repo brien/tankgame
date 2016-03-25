@@ -2289,7 +2289,9 @@ void Tank::HandleInput()
 
 void Tank::AI()
 {
-    static int state=2;
+    //static int state=2;
+    static EnemyState state=STATE_TURN;
+    
     bool p2target=false;
     
     dist=sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
@@ -2311,22 +2313,22 @@ void Tank::AI()
     
     if(dist>(15+3*(LevelHandler::GetSingleton().levelNumber-48)))
     {
-        state=0;
+        state=STATE_WANDER;
     }
     else
     {
         if(energy>(maxEnergy/2) && !App::GetSingleton().gameTask->versus)
-            state=5;
+            state=STATE_HUNT;
         else
             if((LevelHandler::GetSingleton().levelNumber-48)<2)
-                state=5;
+                state=STATE_FEAR;
             else
-                state=1;
+                state=STATE_HUNT;
     }
     
     if(TankHandler::GetSingleton().tanks.size()==1 || (TankHandler::GetSingleton().attackingTanks < (LevelHandler::GetSingleton().levelNumber-47) && !App::GetSingleton().gameTask->versus) )
     {
-        state=5;
+        state=STATE_HUNT;
         TankHandler::GetSingleton().attackingTanks++;
     }
     
@@ -2335,16 +2337,16 @@ void Tank::AI()
     
     switch(state)
     {
-        case 0:
+        case STATE_WANDER:
             Wander();
             break;
-        case 1:
+        case STATE_FEAR:
             Fear();
             break;
-        case 2:
+        case STATE_TURN:
             RotBody(true);
             break;
-        case 5:
+        case STATE_HUNT:
             if(p2target)
             {
                 Hunt(TankHandler::GetSingleton().players[1]);

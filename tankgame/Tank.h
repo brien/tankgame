@@ -8,6 +8,17 @@
 using namespace std;
 #include "bullet.h"
 
+enum EnemyState
+{
+    STATE_WANDER = 0,
+    STATE_FEAR,
+    STATE_TURN,
+    STATE_BLANK,
+    STATE_OTHER,
+    STATE_HUNT,
+    ENEMY_STATE_COUNT
+};
+
 enum TankType
 {
     TYPE_GREY,
