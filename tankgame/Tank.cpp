@@ -2309,15 +2309,6 @@ void Tank::AI()
         p2target=false;
     
     
-    /*if(LevelHandler::GetSingleton().PointCollision(xpp,y,zpp) || LevelHandler::GetSingleton().PointCollision(xpp2,y,zpp2))
-     {
-     state=0;
-     }
-     else
-     {
-     state=5;
-     }*/
-    
     if(dist>(15+3*(LevelHandler::GetSingleton().levelNumber-48)))
     {
         state=0;
@@ -2369,10 +2360,6 @@ void Tank::AI()
     }
     
 }
-
-//AIstate:
-//0 - wait
-//1 - turnbody
 
 void Tank::Wander()
 {
