@@ -2318,12 +2318,20 @@ void Tank::AI()
     else
     {
         if(energy>(maxEnergy/2) && !App::GetSingleton().gameTask->versus)
+        {
             state=STATE_HUNT;
+        }
         else
+        {
             if((LevelHandler::GetSingleton().levelNumber-48)<2)
+            {
                 state=STATE_FEAR;
+            }
             else
+            {
                 state=STATE_HUNT;
+            }
+        }
     }
     
     if(TankHandler::GetSingleton().tanks.size()==1 || (TankHandler::GetSingleton().attackingTanks < (LevelHandler::GetSingleton().levelNumber-47) && !App::GetSingleton().gameTask->versus) )
