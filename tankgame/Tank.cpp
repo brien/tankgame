@@ -2494,10 +2494,16 @@ void Tank::Hunt(Tank& player)
     //ry=ryp;
     
     if(ryp<(ry-5))
+    {
         RotBody(false);
+    }
     else
+    {
         if(ryp>(ry+5))
+        {
             RotBody(true);
+        }
+    }
     
     
     ratio = (double)(z-player.z)/(double)(x-player.x);
@@ -2524,7 +2530,9 @@ void Tank::Hunt(Tank& player)
         else
         {
             if(ryp<(ry-5))
+            {
                 ry-=30;
+            }
             else
             {
                 if(ryp>(ry+5))
@@ -2537,8 +2545,12 @@ void Tank::Hunt(Tank& player)
         Move(true);
     }
     else
+    {
         if(charge>=(maxCharge/2) && (int)player.y == (int)y)
+        {
             Fire(1);
+        }
+    }
 }
 
 
