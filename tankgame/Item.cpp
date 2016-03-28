@@ -18,31 +18,31 @@ Item::Item(float nx, float ny, float nz, TankType ntype)
     type=ntype;
     alive=true;
     
-    if(ntype==0)
+    if(ntype==TYPE_GREY)
     {
         r=.5;
         g=.5;
         b=.5;
     }
-    else if(ntype==1)
+    else if(ntype==TYPE_RED)
     {
         r=1;
         g=0;
         b=0;
     }
-    else if(ntype==2)
+    else if(ntype==TYPE_BLUE)
     {
         r=0;
         g=0;
         b=1;
     }
-    else if(ntype==3)
+    else if(ntype==TYPE_YELLOW)
     {
         r=1;
         g=1;
         b=0;
     }
-    else if(ntype==4)
+    else if(ntype==TYPE_PURPLE)
     {
         r=1;
         g=0;
