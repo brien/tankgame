@@ -507,10 +507,8 @@ void Bullet::NextFrame()
     {
         alive=false;
         
-        
         if(tid<0)
         {
-            //TankHandler::GetSingleton().combo[(-1*tid)-1]+=(float)TankHandler::GetSingleton().hitCombo[(-1*tid)-1]/2;
             TankHandler::GetSingleton().hitCombo[(-1*tid)-1]=0;
         }
     }
