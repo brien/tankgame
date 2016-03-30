@@ -506,7 +506,6 @@ void Bullet::NextFrame()
     if(x>=LevelHandler::GetSingleton().sizeX || x <=0 ||  z>=LevelHandler::GetSingleton().sizeZ || z <=0)
     {
         alive=false;
-        
         if(tid<0)
         {
             TankHandler::GetSingleton().hitCombo[(-1*tid)-1]=0;
@@ -517,7 +516,6 @@ void Bullet::NextFrame()
         alive=false;
         if(tid<0)
         {
-            //TankHandler::GetSingleton().combo[(-1*tid)-1]+=(float)TankHandler::GetSingleton().hitCombo[(-1*tid)-1]/2;
             TankHandler::GetSingleton().hitCombo[(-1*tid)-1]=0;
         }
     }
