@@ -429,8 +429,6 @@ void Bullet::NextFrame()
                     
                     if(tid<0 && (*it).energy<=0)
                     {
-                        //if(TankHandler::GetSingleton().combo[(-1*tid)-1]
-                        
                         float distx=x-TankHandler::GetSingleton().players[(-1*tid)-1].x;
                         float distz=z-TankHandler::GetSingleton().players[(-1*tid)-1].z;
                         
