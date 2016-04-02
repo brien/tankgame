@@ -312,14 +312,20 @@ void Bullet::NextFrame()
             }
             //else
             if((int)(z+zpp)!=(int)z && (int)(x+xpp)==(int)x)
+            {
                 FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+            }
             
             if((int)(x+xpp)!=(int)x && (int)(z+zpp)!=(int)z)
             {
                 if(LevelHandler::GetSingleton().PointCollision((x+xpp),y,z) && !LevelHandler::GetSingleton().PointCollision(x,y,z+zpp))
+                {
                     FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+                }
                 else
+                {
                     FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+                }
             }
             
             
