@@ -389,33 +389,6 @@ void Bullet::NextFrame()
             }
         }
     }
-    /*
-     if(TankHandler::GetSingleton().player2.PointCollision(x,y,z))
-     {
-     if(tid>=0)
-     {
-     //x -= GlobalTimer::dT*movRate * (float)cos(ry*DTR);
-     //z -= GlobalTimer::dT*movRate * (float)sin(ry*DTR);
-     TankHandler::GetSingleton().player2.energy-=power;
-     alive=false;
-     }
-     else
-     {
-     App::GetSingleton().soundTask->PlaySound(3);
-     if(TankHandler::GetSingleton().player2.energy<TankHandler::GetSingleton().player2.maxEnergy*2)
-     {
-     TankHandler::GetSingleton().player2.energy+=power/2;
-     }
-     else
-     if(TankHandler::GetSingleton().player2.charge<TankHandler::GetSingleton().player2.maxCharge*2)
-     {
-     TankHandler::GetSingleton().player2.charge+=power/8;
-     }
-     
-     alive=false;
-     }
-     }
-     */
     
     
     for(vector<Tank>::iterator it = TankHandler::GetSingleton().tanks.begin(); it!=TankHandler::GetSingleton().tanks.end(); ++it)
