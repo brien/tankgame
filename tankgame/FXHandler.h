@@ -5,6 +5,14 @@
 using namespace std;
 #include "Singleton.h"
 
+//FX types:
+//0 =
+//1 = Jump
+//2 = Smoke or Tank/Level Collision
+//3 =
+//4 =
+//5 = Star
+//6 = Death
 
 class FX
 {

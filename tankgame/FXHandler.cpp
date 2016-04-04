@@ -65,11 +65,14 @@ FX::FX(int _type, float _x, float _y, float _z, float _dx, float _dy, float _dz,
     {
         maxTime=.2;
     }
+    else if(type==6)
+    {
+        maxTime=.4;
+    }
     else
-        if(type==6)
-            maxTime=.4;
-        else
-            maxTime=.3;
+    {
+        maxTime=.3;
+    }
 }
 
 FX::~FX()
