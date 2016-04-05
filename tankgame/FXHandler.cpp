@@ -106,14 +106,13 @@ void FX::Update()
     if(type==3)
         rz+=300*GlobalTimer::dT;
     
-    if(type==1)
-        if(!LevelHandler::GetSingleton().PointCollision(x, y, z))
-        {
-            y-=5*GlobalTimer::dT;
-            r-=.5*GlobalTimer::dT;
-            g-=.5*GlobalTimer::dT;
-            b-=.5*GlobalTimer::dT;
-        }
+    if(type==1 && !LevelHandler::GetSingleton().PointCollision(x, y, z))
+    {
+        y-=5*GlobalTimer::dT;
+        r-=.5*GlobalTimer::dT;
+        g-=.5*GlobalTimer::dT;
+        b-=.5*GlobalTimer::dT;
+    }
     
 }
 
