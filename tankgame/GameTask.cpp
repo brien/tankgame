@@ -14,7 +14,6 @@ void GameTask::SetUpGame()
     {
         std::cerr << "LevelHandler failed to load level." << std::endl;
     }
-    //LevelHandler::GetSingleton().levelNumber++;
     TankHandler::GetSingleton().Init();
 }
 
