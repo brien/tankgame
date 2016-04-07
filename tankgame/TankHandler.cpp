@@ -266,16 +266,6 @@ void TankHandler::Init()
         temp.ry=i*45;
         temp.id=i;
         
-        /*
-         
-         if((LevelHandler::GetSingleton().levelNumber-48)>7 && i>16)
-         {
-         temp.maxCharge=2000;
-         temp.charge=2000;
-         temp.fireCost=20;
-         temp.chargeCost=10;
-         temp.turbo=true;
-         }*/
         
         if((LevelHandler::GetSingleton().levelNumber-48)==0)
         {
