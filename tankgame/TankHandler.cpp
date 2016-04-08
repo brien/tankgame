@@ -310,7 +310,6 @@ void TankHandler::NextFrame()
         }
         else
         {
-            //special[i]+=(float)comboNum[i];
             comboNum[i]=0;
         }
         
