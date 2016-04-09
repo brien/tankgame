@@ -355,13 +355,8 @@ void TankHandler::NextFrame()
                 it->AI();
                 it->NextFrame();
                 
-                float vx = (GlobalTimer::dT*it->movRate) * (float)cos(it->ry*DTR);
-                float vz = (GlobalTimer::dT*it->movRate) * (float)sin(it->ry*DTR);
-                
                 dist=sqrt((it->x-players[0].x)*(it->x-players[0].x)+(it->z-players[0].z)*(it->z-players[0].z));
                 
-                //vx*=dist;
-                //vz*=dist;
                 
                 if(dist<players[0].dist)
                 {
