@@ -250,24 +250,6 @@ FXHandler::~FXHandler()
 
 void FXHandler::NextFrame()
 {
-    /*if(!fx.empty())
-     {
-     vector< FX >::iterator it;
-     for(it=fx.begin();it!=fx.end();)
-     {
-     if(it->alive)
-     {
-     it->Update();
-     ++it;
-     }
-     else
-     {
-     // it->Die();
-     fx.erase(it);
-     }
-     }
-     }*/
-    
    	for(vector<FX>::iterator j = fx.begin(); j != fx.end();)
     {
         if(j->time>j->maxTime)
