@@ -627,7 +627,6 @@ void LevelHandler::DrawTerrain()
     glNormal3f(0,1,0);
     
     float Y=0;
-    int lz=0;
     int n=0;
     
     for(int jx=0; jx<sx; jx++)
