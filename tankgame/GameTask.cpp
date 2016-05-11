@@ -244,11 +244,6 @@ void GameTask::Update()
          App::GetSingleton().graphicsTask->cam2.zfocus=(TankHandler::GetSingleton().player2.z + (float)sin((TankHandler::GetSingleton().player2.ry+TankHandler::GetSingleton().player2.rty)*DTR));
          
          }*/
-        if( !TankHandler::GetSingleton().players[0].alive && 0)
-        {
-            gameOver=true;
-            App::GetSingleton().graphicsTask->drawHUD=false;
-        }
         
     }
     
