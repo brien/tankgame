@@ -2405,9 +2405,6 @@ void Tank::Fear()
     
     double ratio;
     
-    float dist=sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
-    
-    
     ratio = (double)(z-TankHandler::GetSingleton().players[0].z)/(double)(x-TankHandler::GetSingleton().players[0].x);
     float ryp=toDegrees(atan(ratio));
     
