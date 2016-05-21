@@ -2289,7 +2289,6 @@ void Tank::HandleInput()
 
 void Tank::AI()
 {
-    //static int state=2;
     static EnemyState state=STATE_TURN;
     
     bool p2target=false;
@@ -2393,7 +2392,6 @@ void Tank::Wander()
         else
         {
             ry+=90;
-            //RotBody(true);
         }
     }
     
@@ -2457,14 +2455,12 @@ void Tank::Fear()
         else
         {
             ry+=30;
-            //RotBody(float(2));
         }
     }
     
     if(!Move(true))
     {
         ry+=30;
-        //RotBody(true);
     }
 }
 
@@ -2477,8 +2473,6 @@ void Tank::Hunt(Tank& player)
     float xpp;
     float zpp;
     
-    //float dist=sqrt((x-player.x)*(x-TankHandler::GetSingleton().player.x)+(z-TankHandler::GetSingleton().player.z)*(z-TankHandler::GetSingleton().player.z));
-    
     
     ratio = (double)(z-player.z)/(double)(x-player.x);
     float ryp=toDegrees(atan(ratio));
@@ -2487,8 +2481,6 @@ void Tank::Hunt(Tank& player)
     {
         ryp+=180;
     }
-    
-    //ry=ryp;
     
     if(ryp<(ry-5))
     {
