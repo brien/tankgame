@@ -420,7 +420,9 @@ bool LevelHandler::HandlePointCollision(float &x, float &y, float &z, float &vx,
     
     if((int)x!=Xint && (int)z!=Zint)
     {
-        if( (vz<0 && LevelHandler::PointCollision(x, y, z+1) || vz>0 && LevelHandler::PointCollision(x, y, z-1) ) && (vx<0 && LevelHandler::PointCollision(x+1, y, z) || vx>0 && LevelHandler::PointCollision(x-1, y, z) ) )
+        if(  (vz<0 && LevelHandler::PointCollision(x, y, z+1)) ||
+             ((vz>0 && LevelHandler::PointCollision(x, y, z-1)) && (vx<0 && LevelHandler::PointCollision(x+1, y, z))) ||
+             (vx>0 && LevelHandler::PointCollision(x-1, y, z) ) )
         {
             x-=vx;
             vx=0;
