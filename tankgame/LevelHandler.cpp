@@ -385,20 +385,19 @@ bool LevelHandler::PointCollision(float x, float y, float z)
     }
     else
     {
-        
         if((int)y<t[(int)x][(int)z])
+        {
             ret = true;
+        }
         else
+        {
             ret = false;
-        
-        
-        /*
-         if( ((int)y-1)==f[(int)x][(int)z] && f[(int)x][(int)z]>0)
-         ret = true;
-         */
+        }
         
         if( y<f[(int)x][(int)z] && y>=(f[(int)x][(int)z]-1) && f[(int)x][(int)z]>0 )
+        {
             ret = true;
+        }
     }
     
     return(ret);
