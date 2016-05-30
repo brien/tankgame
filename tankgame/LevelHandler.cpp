@@ -77,13 +77,6 @@ bool LevelHandler::Load(const char filePath[])
         enemy[e][1]=64;
     }
     
-    /*if(fileName!=NULL)
-     {
-     delete [] fileName;
-     }*/
-    
-    //fileName=NULL;
-    
     if(filePath[0]!=NULL)
     {
         FILE *filein;
