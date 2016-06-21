@@ -48,6 +48,7 @@
 		D13AA16E1C105626005F8265 /* tankgame */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = tankgame; sourceTree = BUILT_PRODUCTS_DIR; };
 		D13AA1711C105626005F8265 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		D143EC6E1C91BFA20026B3F1 /* SDL2_ttf.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2_ttf.framework; path = ../../../../../../Library/Frameworks/SDL2_ttf.framework; sourceTree = "<group>"; };
+		D166881E1CFCF7660041FE04 /* runtime */ = {isa = PBXFileReference; lastKnownFileType = folder; name = runtime; path = tankgame/runtime; sourceTree = "<group>"; };
 		D17C9F761C1059F700EB6C4E /* SDL2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SDL2.framework; path = ../../../../../../Library/Frameworks/SDL2.framework; sourceTree = "<group>"; };
 		D182327D1C2A6BE100EBBB3E /* App.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = App.h; sourceTree = "<group>"; };
 		D182327E1C2BBED000EBBB3E /* math.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = math.h; sourceTree = "<group>"; };
@@ -99,6 +100,7 @@
 		D13AA1651C105626005F8265 = {
 			isa = PBXGroup;
 			children = (
+				D166881E1CFCF7660041FE04 /* runtime */,
 				D143EC6E1C91BFA20026B3F1 /* SDL2_ttf.framework */,
 				D18232A11C306E8500EBBB3E /* SDL2_mixer.framework */,
 				D18A7DFD1C14F3E1000EA314 /* OpenGL.framework */,

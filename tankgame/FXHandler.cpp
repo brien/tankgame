@@ -36,10 +36,12 @@ FX::FX(int _type, float _x, float _y, float _z, float _rx, float _ry, float _rz,
     time=0;
     if(type==4)
     {
-        maxTime=.2;
+        maxTime=0.2;
     }
     else
-        maxTime=.3;
+    {
+        maxTime=0.3;
+    }
 }
 
 FX::FX(int _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
