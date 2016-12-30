@@ -217,33 +217,6 @@ void GameTask::Update()
         
         FXHandler::GetSingleton().NextFrame();
         TankHandler::GetSingleton().NextFrame();
-        /*
-         
-         for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
-         {
-         
-         App::GetSingleton().graphicsTask->cams[i].xpos=(TankHandler::GetSingleton().players[i].x - xzcam*(float)cos((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
-         App::GetSingleton().graphicsTask->cams[i].ypos=TankHandler::GetSingleton().players[i].y+ycam;
-         App::GetSingleton().graphicsTask->cams[i].zpos=(TankHandler::GetSingleton().players[i].z - xzcam*(float)sin((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
-         
-         
-         App::GetSingleton().graphicsTask->cams[i].xfocus=(TankHandler::GetSingleton().players[i].x + (float)cos((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
-         App::GetSingleton().graphicsTask->cams[i].yfocus=TankHandler::GetSingleton().players[i].y+.3;
-         App::GetSingleton().graphicsTask->cams[i].zfocus=(TankHandler::GetSingleton().players[i].z + (float)sin((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
-         }*/
-        /*
-         if(TankHandler::GetSingleton().twop)
-         {
-         App::GetSingleton().graphicsTask->cam2.xpos=(TankHandler::GetSingleton().player2.x - xzcam*(float)cos((TankHandler::GetSingleton().player2.ry+TankHandler::GetSingleton().player2.rty)*DTR));
-         App::GetSingleton().graphicsTask->cam2.ypos=TankHandler::GetSingleton().player2.y+ycam;
-         App::GetSingleton().graphicsTask->cam2.zpos=(TankHandler::GetSingleton().player2.z - xzcam*(float)sin((TankHandler::GetSingleton().player2.ry+TankHandler::GetSingleton().player2.rty)*DTR));
-         
-         
-         App::GetSingleton().graphicsTask->cam2.xfocus=(TankHandler::GetSingleton().player2.x + (float)cos((TankHandler::GetSingleton().player2.ry+TankHandler::GetSingleton().player2.rty)*DTR));
-         App::GetSingleton().graphicsTask->cam2.yfocus=TankHandler::GetSingleton().player2.y+.3;
-         App::GetSingleton().graphicsTask->cam2.zfocus=(TankHandler::GetSingleton().player2.z + (float)sin((TankHandler::GetSingleton().player2.ry+TankHandler::GetSingleton().player2.rty)*DTR));
-         
-         }*/
         
     }
     
