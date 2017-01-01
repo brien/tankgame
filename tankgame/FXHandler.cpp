@@ -121,41 +121,6 @@ void FX::Update()
 
 void FX::Draw()
 {
-    /*glColor3f(r, g, b);
-     
-     glPushMatrix();
-     
-     glTranslatef(x, y-.05, z);
-     glRotatef(rx, 1, 0, 0);
-     glRotatef(-ry, 0, 1, 0);
-     glRotatef(rz, 0, 0, 1);
-     
-     glDisable(GL_TEXTURE_2D);
-     glDisable(GL_LIGHTING);
-     
-     //glScalef(1, 1, 0.2);
-     
-     glFrontFace(GL_CCW);
-     glCallList(App::GetSingleton().graphicsTask->bodylistEx);
-     
-     glEnable(GL_BLEND);
-     glEnable(GL_DEPTH_TEST);
-     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-     glDepthMask(GL_FALSE);
-     
-     glColor4f(r, g, b, a);
-     
-     glCallList(App::GetSingleton().graphicsTask->squarelist);
-     
-     
-     
-     glDisable(GL_BLEND);
-     glDepthMask(GL_TRUE);
-     glEnable(GL_CULL_FACE);
-     
-     glPopMatrix();*/
-    
     
     glColor3f(r, g, b);
     
