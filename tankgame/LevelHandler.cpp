@@ -96,9 +96,13 @@ bool LevelHandler::Load(const char filePath[])
             char path[1024];
             uint32_t size = sizeof(path);
             if (_NSGetExecutablePath(path, &size) == 0)
+            {
                 printf("executable path is %s\n", path);
+            }
             else
+            {
                 printf("buffer too small; need size %u\n", size);
+            }
             return false;
         }
         else
