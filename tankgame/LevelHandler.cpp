@@ -292,9 +292,13 @@ bool LevelHandler::FloatCollision(float x, float y, float z)
     }
     
     if( y<f[(int)x][(int)z] && y>(f[(int)x][(int)z]-1) && f[(int)x][(int)z]>0 )
+    {
         ret = true;
+    }
     else
+    {
         ret=false;
+    }
     
     return(ret);
 }
