@@ -315,9 +315,13 @@ bool LevelHandler::FallCollision(float x, float y, float z)
     }
     
     if(!(y>t[(int)x][(int)z]))
+    {
         ret = true;
+    }
     else
+    {
         ret = false;
+    }
     
     return(ret);
 }
