@@ -364,16 +364,6 @@ void LevelHandler::ItemCollision()
                 return;
             }
         }
-        
-        /*	for(vector<Tank>::iterator i = TankHandler::GetSingleton().tanks.begin(); i!=TankHandler::GetSingleton().tanks.end(); ++i)
-         {
-         if((*i).PointCollision(j->x,j->y,j->z))
-         {
-         //(*i).energy-=power;
-         j->alive=false;
-         }
-         
-         }*/
     }
     
 }
