@@ -2385,7 +2385,7 @@ void Tank::Wander()
     
     if(LevelHandler::GetSingleton().PointCollision(xpp,y,zpp) || LevelHandler::GetSingleton().PointCollision(xpp2,y,zpp2))
     {
-        if(LevelHandler::GetSingleton().t[(int)xpp][(int)zpp]<(y+vy+3) && charge>(maxCharge/4) && LevelHandler::GetSingleton().t[(int)x][(int)z]>(int)(y-7) )
+        if(LevelHandler::GetSingleton().t[(unsigned int)xpp][(unsigned int)zpp]<(y+vy+3) && charge>(maxCharge/4) && LevelHandler::GetSingleton().t[(unsigned int)x][(unsigned int)z]>(int)(y-7) )
         {
             Jump();
         }
