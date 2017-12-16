@@ -2,7 +2,7 @@
 
 #include "TankHandler.h"
 #include "LevelHandler.h"
-#include "GLobalTimer.h"
+#include "GlobalTimer.h"
 #include "math.h"
 #include "App.h"
 #include <string>

@@ -1,5 +1,5 @@
 //1=Fullscreen 0=Windowed
-0
+1
 //Width resolution
 1280
 //Height resolution
