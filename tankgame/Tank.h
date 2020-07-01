@@ -6,7 +6,7 @@
 #include <vector>
 #include <queue>
 using namespace std;
-#include "bullet.h"
+#include "Bullet.h"
 
 enum EnemyState
 {

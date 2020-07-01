@@ -1,8 +1,8 @@
 #ifndef TANKHANDLER_H_INCLUDED
 #define TANKHANDLER_H_INCLUDED
 
-#include "tank.h"
-#include "singleton.h"
+#include "Tank.h"
+#include "Singleton.h"
 
 class TankHandler : public Singleton<TankHandler>
 {
