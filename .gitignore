@@ -65,6 +65,7 @@ DerivedData/
 /*.gcno
 
 ### Xcode Patch ###
+*.xcodeproj/
 *.xcodeproj/*
 !*.xcodeproj/project.pbxproj
 !*.xcodeproj/xcshareddata/
