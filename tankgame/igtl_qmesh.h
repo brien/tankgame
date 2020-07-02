@@ -62,9 +62,9 @@ public:
     igtl_QGLEdge GetEdge(unsigned int n);//Returns a copy of the requested edge
     igtl_QGLTriangle GetTriangle(unsigned int n);//Returns a copy of the requested triangle
     
-    unsigned int GetNumVerticies();//Returns the amount of verticies
-    unsigned int GetNumEdges();//Returns the amount of verticies
-    unsigned int GetNumTriangles();//Returns the amount of triangles
+    unsigned long GetNumVerticies();//Returns the amount of verticies
+    unsigned long GetNumEdges();//Returns the amount of verticies
+    unsigned long GetNumTriangles();//Returns the amount of triangles
     
     //Set Functions
     //

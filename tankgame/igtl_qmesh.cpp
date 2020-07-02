@@ -93,19 +93,19 @@ igtl_QGLTriangle igtl_QGLMesh::GetTriangle(unsigned int n){
 }
 
 //Return the number of verticies in this qmesh
-unsigned int igtl_QGLMesh::GetNumVerticies(){
+unsigned long igtl_QGLMesh::GetNumVerticies(){
     
     return m_verticies.size();
 }
 
 //Return the number of triangles in this qmesh
-unsigned int igtl_QGLMesh::GetNumEdges(){
+unsigned long igtl_QGLMesh::GetNumEdges(){
     
     return m_edges.size();
 }
 
 //Return the number of triangles in this qmesh
-unsigned int igtl_QGLMesh::GetNumTriangles(){
+unsigned long igtl_QGLMesh::GetNumTriangles(){
     
     return m_triangles.size();
 }
