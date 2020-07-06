@@ -5,9 +5,9 @@
 #ifndef GAME_TASK_H_
 #define GAME_TASK_H_
 
-#include "BaseTask.h"
+#include "ITask.h"
 
-class GameTask : public BaseTask
+class GameTask : public ITask
 {
 public:
     GameTask();

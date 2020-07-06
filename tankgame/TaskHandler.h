@@ -12,7 +12,7 @@
 #include <list>
 
 #include "Singleton.h"
-#include "BaseTask.h"
+#include "ITask.h"
 
 
 class TaskHandler : public Singleton<TaskHandler>
@@ -23,15 +23,15 @@ public:
     
     int Execute();
     
-    bool AddTask(BaseTask *t);
-    void SuspendTask(BaseTask *t);
-    void ResumeTask(BaseTask *t);
-    void RemoveTask(BaseTask *t);
+    bool AddTask(ITask *t);
+    void SuspendTask(ITask *t);
+    void ResumeTask(ITask *t);
+    void RemoveTask(ITask *t);
     void KillAllTasks();
     
 protected:
-    std::list< BaseTask* > taskList;
-    std::list< BaseTask* > pausedTaskList;
+    std::list< ITask* > taskList;
+    std::list< ITask* > pausedTaskList;
 };
 
 #endif /* TaskHandler_hpp */

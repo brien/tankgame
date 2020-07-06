@@ -24,7 +24,7 @@ int TaskHandler::Execute()
 {
     while(!taskList.empty())
     {
-        for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
+        for( std::list<ITask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
         {
             if(!(*it)->canKill)
             {
@@ -32,7 +32,7 @@ int TaskHandler::Execute()
             }
         }
         
-        for( std::list<BaseTask*>::iterator it = taskList.begin(); it != taskList.end();)
+        for( std::list<ITask*>::iterator it = taskList.begin(); it != taskList.end();)
         {
             if((*it)->canKill)
             {
@@ -50,13 +50,13 @@ int TaskHandler::Execute()
     return 0;
 }
 
-bool TaskHandler::AddTask(BaseTask *t)
+bool TaskHandler::AddTask(ITask *t)
 {
     if( !t->Start() )
     {
         return false;
     }
-    std::list<BaseTask*>::iterator it;
+    std::list<ITask*>::iterator it;
     for(it = taskList.begin(); it != taskList.end(); it++)
     {
         if( (*it)->priority > t->priority)
@@ -68,7 +68,7 @@ bool TaskHandler::AddTask(BaseTask *t)
     return true;
 }
 
-void TaskHandler::SuspendTask(BaseTask *t)
+void TaskHandler::SuspendTask(ITask *t)
 {
     if(std::find(taskList.begin(),taskList.end(),t)!=taskList.end())
     {
@@ -78,7 +78,7 @@ void TaskHandler::SuspendTask(BaseTask *t)
     }
 }
 
-void TaskHandler::ResumeTask(BaseTask *t)
+void TaskHandler::ResumeTask(ITask *t)
 {
     if(std::find(pausedTaskList.begin(),pausedTaskList.end(),t)
        !=pausedTaskList.end())
@@ -86,7 +86,7 @@ void TaskHandler::ResumeTask(BaseTask *t)
         t->OnResume();
         pausedTaskList.remove(t);
         //keep the order of priorities straight
-        std::list< BaseTask* >::iterator it;
+        std::list< ITask* >::iterator it;
         for(it=taskList.begin();it!=taskList.end();it++)
         {
             if((*it)->priority>t->priority)break;
@@ -95,7 +95,7 @@ void TaskHandler::ResumeTask(BaseTask *t)
     }
 }
 
-void TaskHandler::RemoveTask(BaseTask *t)
+void TaskHandler::RemoveTask(ITask *t)
 {
     if(std::find(taskList.begin(),taskList.end(),t)!=taskList.end())
     {
@@ -105,7 +105,7 @@ void TaskHandler::RemoveTask(BaseTask *t)
 
 void TaskHandler::KillAllTasks()
 {
-    for(std::list< BaseTask* >::iterator it=taskList.begin(); it!=taskList.end();it++)
+    for(std::list< ITask* >::iterator it=taskList.begin(); it!=taskList.end();it++)
     {
         (*it)->canKill=true;
     }

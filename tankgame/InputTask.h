@@ -13,9 +13,9 @@
 using namespace std;
 
 #include <SDL2/SDL.h>
-#include "BaseTask.h"
+#include "ITask.h"
 
-class InputTask : public BaseTask
+class InputTask : public ITask
 {
 public:
     InputTask();

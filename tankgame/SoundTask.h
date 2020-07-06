@@ -6,9 +6,9 @@
 #define SOUND_TASK_H
 
 #include <SDL2_mixer/SDL_mixer.h>
-#include "BaseTask.h"
+#include "ITask.h"
 
-class SoundTask : public BaseTask
+class SoundTask : public ITask
 {
 public:
     SoundTask();

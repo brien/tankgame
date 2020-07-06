@@ -2,10 +2,10 @@
 #define VIDEO_TASK_H
 
 #include <SDL2/SDL.h>
-#include "BaseTask.h"
+#include "ITask.h"
 
 
-class VideoTask : public BaseTask
+class VideoTask : public ITask
 {
 public:
     VideoTask();

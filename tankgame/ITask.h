@@ -1,19 +1,19 @@
 //
-//  BaseTask.h
+//  ITask.h
 //  tankgame
 //
 //  Created by Brien Smith Martínez on 17/12/15.
 //  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
-#ifndef BSM_BaseTask_h
-#define BSM_BaseTask_h
+#ifndef BSM_ITask_h
+#define BSM_ITask_h
 
-class BaseTask
+class ITask
 {
 public:
-    BaseTask(){canKill=false;priority=5000;}
-    virtual ~BaseTask(){};
+    ITask(){canKill=false;priority=5000;}
+    virtual ~ITask(){};
     virtual bool Start()=0;
     virtual void OnSuspend(){};
     virtual void Update()=0;
@@ -24,4 +24,4 @@ public:
     long priority;
 };
 
-#endif /* BSM_BaseTask_h */
+#endif /* BSM_ITask_h */

@@ -9,9 +9,9 @@
 #ifndef GlobalTimer_h
 #define GlobalTimer_h
 
-#include "BaseTask.h"
+#include "ITask.h"
 
-class GlobalTimer : public BaseTask
+class GlobalTimer : public ITask
 {
 public:
     GlobalTimer();
