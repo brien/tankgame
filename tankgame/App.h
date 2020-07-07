@@ -2,8 +2,6 @@
 //  App.h
 //  tankgame
 //
-//  Created by Brien Smith Martínez on 22/12/15.
-//  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
 #ifndef App_h

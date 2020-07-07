@@ -2,8 +2,6 @@
 //  TaskHandler.hpp
 //  tankgame
 //
-//  Created by Brien Smith Martínez on 5/1/16.
-//  Copyright © 2016 Brien Smith Martínez. All rights reserved.
 //
 
 #ifndef TaskHandler_h

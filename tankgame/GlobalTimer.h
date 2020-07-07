@@ -2,8 +2,6 @@
 //  GlobalTimer.h
 //  tankgame
 //
-//  Created by Brien Smith Martínez on 24/12/15.
-//  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
 #ifndef GlobalTimer_h

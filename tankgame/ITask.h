@@ -2,8 +2,6 @@
 //  ITask.h
 //  tankgame
 //
-//  Created by Brien Smith Martínez on 17/12/15.
-//  Copyright © 2015 Brien Smith Martínez. All rights reserved.
 //
 
 #ifndef BSM_ITask_h
