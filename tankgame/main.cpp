@@ -9,6 +9,7 @@
 #include <OpenGL/gl.h>
 
 #include "App.h"
+#include "Logger.h"
 #include "Singleton.h"
 #include "InputTask.h"
 #include "GlobalTimer.h"
@@ -19,6 +20,8 @@
 
 void App::Run(int argc, char *argv[])
 {
+    if(!Logger::Get().Init())return;
+
     SDL_version compiled;
     SDL_version linked;
     
@@ -66,6 +69,7 @@ void App::Run(int argc, char *argv[])
     
     soundTask->PlayMusic(0);
     
+    Logger::Get().Write("Initialization complete. Entering TaskHandler Execute Loop.");
     TaskHandler::GetSingleton().Execute();
     
     delete TankHandler::GetSingletonPtr();
