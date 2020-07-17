@@ -15,6 +15,7 @@
 #include "GameTask.h"
 #include "SoundTask.h"
 #include "TaskHandler.h"
+#include "Logger.h"
 
 class App : public Singleton<App>
 {

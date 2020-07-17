@@ -9,7 +9,6 @@
 #include <OpenGL/gl.h>
 
 #include "App.h"
-#include "Logger.h"
 #include "Singleton.h"
 #include "InputTask.h"
 #include "GlobalTimer.h"

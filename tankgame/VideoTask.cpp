@@ -26,6 +26,7 @@ bool VideoTask::Start()
     
     if(-1==SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK))
     {
+        Logger::Get().Write("VideoTask::Start Failed: ", SDL_GetError());
         std::cerr << "VideoTask::Start: SDL_InitSubSystem failed." << std::endl;
         return false;
     }
