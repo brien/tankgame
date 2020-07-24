@@ -27,7 +27,7 @@ bool Logger::Init()
     return true;
 }
 
-void Logger::Write(const char *msg, ...)
+void Logger::Write(const char* msg, ...)
 {
     va_list args; va_start(args,msg);
     char szBuf[1024];

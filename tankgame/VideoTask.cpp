@@ -44,8 +44,12 @@ bool VideoTask::Start()
     SDL_GL_SetAttribute( SDL_GL_BUFFER_SIZE, 1 );
     
     char line[64];
+    char const *settingsFilename = "settings.txt";
+    
     FILE *filein;
-    filein=fopen("settings.txt", "rt");
+    
+    filein=fopen(settingsFilename, "rt");
+
     if(!filein)
     {
         std::cerr << "VideoTask::Start: Failed to open settings.txt" << std::endl;
@@ -113,9 +117,8 @@ bool VideoTask::Start()
         fgets(line, 64, filein);
         
         App::GetSingleton().soundTask->disable=(bool)(line[0]-48);
+        fclose(filein);
     }
-    
-    fclose(filein);
     
     window = SDL_CreateWindow("tankgame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
     //sdlRenderer = SDL_CreateRenderer(window, -1, 0);

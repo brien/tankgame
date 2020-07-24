@@ -86,15 +86,15 @@ bool LevelHandler::Load(const char filePath[])
         //Error checking
         if(!filein)
         {
-            Logger::Get().Write("LevelHandler: failed to open file:", filePath);
-            std::cerr << "LevelHandler: failed to open file:" << filePath << std::endl;
+            Logger::Get().Write("ERROR: LevelHandler: failed to open file: %s", filePath);
+            std::cerr << "ERROR: LevelHandler: failed to open file: " << filePath << std::endl;
             
             errnum = errno;
             fprintf(stderr, "Value of errno: %d\n", errno);
             perror("Error printed by perror");
             fprintf(stderr, "Error opening file: %s\n", strerror( errnum ));
             
-            Logger::Get().Write("LevelHandler: failed to open file:", strerror( errnum ));
+            Logger::Get().Write("ERROR: LevelHandler: errnum: %d", strerror( errnum ));
 
             char path[1024];
             uint32_t size = sizeof(path);
@@ -205,6 +205,7 @@ bool LevelHandler::Load(const char filePath[])
             
             delete [] oneline;
             
+            Logger::Get().Write("LevelHandler: finished loading file: %s", filePath);
             fclose(filein);
             return true;
         }

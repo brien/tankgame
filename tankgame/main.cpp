@@ -31,6 +31,7 @@ void App::Run(int argc, char *argv[])
     printf("But we are linking against SDL version %d.%d.%d.\n",
            linked.major, linked.minor, linked.patch);
     
+
     videoTask = new VideoTask;
     graphicsTask = new GraphicsTask;
     soundTask = new SoundTask;
