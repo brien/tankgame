@@ -69,7 +69,7 @@ void App::Run(int argc, char *argv[])
     
     soundTask->PlayMusic(0);
     
-    Logger::Get().Write("Initialization complete. Entering TaskHandler Execute Loop.");
+    Logger::Get().Write("Initialization complete. About to enter TaskHandler Execute Loop. \n");
     TaskHandler::GetSingleton().Execute();
     
     delete TankHandler::GetSingletonPtr();
