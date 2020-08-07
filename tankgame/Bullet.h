@@ -9,9 +9,22 @@
 
 class Bullet
 {
+
 public:
-    
     Bullet();
+    Bullet(int tid, float power,
+           int type1, int type2,
+           int maxbounces,
+           float dTpressed,
+           float r, float g, float b,
+           float r2, float g2, float b2,
+           float x, float y, float z,
+           float rx, float ry, float rz);
+    void NextFrame();
+    void Draw();
+    bool alive;
+
+private:
     float x, y, z;
     float vx, vy, vz;
     float rx, ry, rz;
@@ -23,10 +36,6 @@ public:
     float movRate;
     float power;
     
-    void NextFrame();
-    void Draw();
-    
-    bool alive;
     bool spec;
     
     int id;

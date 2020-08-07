@@ -389,78 +389,16 @@ void Tank::Fire(float dTpressed)
         
         App::GetSingleton().soundTask->PlaySound(2);
         
+        float bulletMovRate = 33.0f;
         
-        Bullet temp;
-        
-        
-        
-        temp.tid=id;
-        
-        
-        temp.x=x + (GlobalTimer::dT*temp.movRate) * (float)cos((rty+ry)*DTR);
-        temp.y=y+.25;
-        temp.z=z + (GlobalTimer::dT*temp.movRate) * (float)sin((rty+ry)*DTR);
-        
-        temp.rx=rtx+rx;
-        temp.ry=rty+ry;
-        temp.rz=rtz+rz;
-        
-        temp.power=attack;
-        
-        if(type1==4)
-        {
-            temp.dty=320*dTpressed;
-            if(dTpressed<0)
-            {
-                dTpressed*=-1;
-            }
-            temp.power*=dTpressed;
-            if(temp.power>1000)
-            {
-                temp.power=1000;
-            }
-            
-            if(temp.power<100)
-            {
-                temp.power=100;
-            }
-        }
-        else
-            if(type2==4)
-            {
-                temp.power*=0.5f;
-                temp.dty=160*dTpressed;
-                if(dTpressed<0)
-                {
-                    dTpressed*=-1;
-                }
-                temp.power+=temp.power*dTpressed/2;
-                if(temp.power>1000)
-                {
-                    temp.power=1000;
-                }
-                if(temp.power<100)
-                {
-                    temp.power=100;
-                }
-            }
-        
-        temp.r=r;
-        temp.b=b;
-        temp.g=g;
-        
-        temp.r2=r2;
-        temp.b2=b2;
-        temp.g2=g2;
-        
-        temp.maxbounces=bounces;
-        
-        temp.type1=type1;
-        temp.type2=type2;
-        
-        
-        temp.id=1;
-        temp.alive=true;
+        Bullet temp(id, attack, type1, type2, bounces,
+                    dTpressed,
+                    r, g, b,
+                    r2, g2, b2,
+                    x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                    y+.25,
+                    z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                    rtx+rx, rty+ry, rtz+rz);
         
         bullets.push_back(temp);
         
@@ -473,236 +411,219 @@ void Tank::Fire(float dTpressed)
 
 void Tank::Special(float dTpressed)
 {
-    
+
     if(TankHandler::GetSingleton().special[(-1*id)-1]>=fireCost/5 && fireTimer>fireRate)
     {
-        
-        
+
+
         float ratio = (double)(z-TankHandler::GetSingleton().players[0].z)/(double)(x-TankHandler::GetSingleton().players[0].x);
         float ryp=toDegrees(atan(ratio));
-        
+
         if(TankHandler::GetSingleton().players[0].x<x)
         {
             ryp+=180;
         }
-        
+
         ryp-=(TankHandler::GetSingleton().players[0].ry+TankHandler::GetSingleton().players[0].rty);
-        
+
         float dist=sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
-        
+
         Mix_SetPosition(2, ryp, 10*(int)dist);
-        
+
         App::GetSingleton().soundTask->PlaySound(2);
         
-        
-        Bullet temp;
-        
-        
-        
-        temp.tid=id;
-        
-        temp.spec=true;
-        
-        
-        temp.x=x + (GlobalTimer::dT*temp.movRate) * (float)cos((rty+ry)*DTR);
-        temp.y=y+.25;
-        temp.z=z + (GlobalTimer::dT*temp.movRate) * (float)sin((rty+ry)*DTR);
-        
-        temp.rx=rtx+rx;
-        temp.ry=rty+ry;
-        temp.rz=rtz+rz;
-        
-        temp.power=attack;
-        
-        
-        if(type1==4)
-        {
-            temp.dty=320*dTpressed;
-            if(dTpressed<0)
-                dTpressed*=-1;
-            temp.power*=dTpressed;
-            if(temp.power>1000)
-                temp.power=1000;
-            
-            if(temp.power<100)
-                temp.power=100;
-        }
-        else
-            if(type2==4)
-            {
-                temp.dty=160*dTpressed;
-                if(dTpressed<0)
-                    dTpressed*=-1;
-                temp.power*=dTpressed/2;
-                if(temp.power>1000)
-                    temp.power=1000;
-                if(temp.power<100)
-                    temp.power=100;
-            }
-        
-        
-        temp.r=r;
-        temp.b=b;
-        temp.g=g;
-        
-        temp.r2=r2;
-        temp.b2=b2;
-        temp.g2=g2;
-        
-        temp.maxbounces=bounces;
-        
-        temp.type1=type1;
-        temp.type2=type2;
-        
-        
-        temp.id=1;
-        temp.alive=true;
-        
-        if(type1==1)
+        float bulletMovRate = 33.0f;
+
+        Bullet temp(id, attack, type1, type2, bounces,
+                    dTpressed,
+                    r, g, b,
+                    r2, g2, b2,
+                    x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                    y+.25,
+                    z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                    rtx+rx, rty+ry, rtz+rz);
+
+        if(type1==TYPE_RED)
         {
             for(int i=0; i<10; i++)
             {
-                
-                Bullet temp2;
-                
-                temp2.tid=id;
-                
-		              temp2.x=x;
-                temp2.y=y+.25;
-                temp2.z=z;
-                
-                temp2.rx=rx;
-                temp2.ry=
-                temp2.rz=rz;
-                
-                temp2.rx=rtx+rx;
-                temp2.ry=rty+ry+i*(270/10)+52;
-                temp2.rz=rtz+rz;
-                
-                temp2.dty = temp.dty;
-                
-                temp2.power=temp.power;
-                
-                temp2.r=1;
-                temp2.b=0;
-                temp2.g=0;
-                
-                temp2.r2=.5;
-                temp2.b2=.5;
-                temp2.g2=.5;
-                
-                temp2.maxbounces=0;
-                temp2.numbounces=0;
-                
-                temp2.type1=type1;
-                temp2.type2=type2;
-                
-                temp2.maxdT=0.20;
-                
-                
-                temp2.id=1;
-                temp2.alive=true;
-                
+                Bullet temp2(id, attack, type1, type2, 0,
+                            dTpressed,
+                            1.0, 0.0, 0.0,
+                            0.5, 0.5, 0.5,
+                            x,
+                            y+.25,
+                            z,
+                            rtx+rx, rty+ry+i*(270/10)+52, rtz+rz);
+
+                //Bullet temp2;
+
+                //temp2.maxdT=0.20;
+
                 bullets.push_back(temp2);
             }
-            
+
             bullets.push_back(temp);
             
-            temp.ry-=10;
+            Bullet temp(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                        y+.25,
+                        z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                        rtx+rx, rty+ry-10, rtz+rz);
             
             bullets.push_back(temp);
-            
-            temp.ry+=20;
-            
-            bullets.push_back(temp);
+
+            Bullet temp2(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                        y+.25,
+                        z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                        rtx+rx, rty+ry+20, rtz+rz);
+
+            bullets.push_back(temp2);
         }
-        if(type1==2)
+        if(type1==TYPE_BLUE)
         {
-            
+
             //temp.y+=.25;
-            
-            if(type2!=1)
+
+            if(type2!=TYPE_RED)
             {
-                temp.y+=.25;
+                Bullet temp(id, attack, type1, type2, bounces,
+                            dTpressed,
+                            r, g, b,
+                            r2, g2, b2,
+                            x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                            y+.50,
+                            z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                            rtx+rx, rty+ry, rtz+rz);
+                
+                bullets.push_back(temp);
             }
             
+            Bullet temp(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR) + .2 * (float)cos((rty+ry+90)*DTR),
+                        y+.25,
+                        z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR) + .2  * (float)sin((rty+ry+90)*DTR),
+                        rtx+rx, rty+ry, rtz+rz);
+
             bullets.push_back(temp);
-            
-            temp.y-=.25;
-            
-            temp.x+= .2 * (float)cos((rty+ry+90)*DTR);
-            temp.y=y+.25;
-            temp.z+= .2  * (float)sin((rty+ry+90)*DTR);
-            
-            if(type2==1)
-            {
-                temp.ry-=10;
-            }
-            
-            bullets.push_back(temp);
-            
-            temp.x-= .4 * (float)cos((rty+ry+90)*DTR);
-            temp.y=y+.25;
-            temp.z-= .4  * (float)sin((rty+ry+90)*DTR);
-            
-            if(type2==1)
-            {
-                temp.ry+=20;
-            }
-            
-            bullets.push_back(temp);
-            
+
+//            if(type2==1)
+//            {
+//                temp.ry-=10;
+//            }
+//
+//            bullets.push_back(temp);
+//
+//            temp.x-= .4 * (float)cos((rty+ry+90)*DTR);
+//            temp.y=y+.25;
+//            temp.z-= .4  * (float)sin((rty+ry+90)*DTR);
+//
+//            if(type2==1)
+//            {
+//                temp.ry+=20;
+//            }
+//
+//            bullets.push_back(temp);
+
             //----
-            
+
         }
-        
-        if(type1==3)
+
+        if(type1==TYPE_YELLOW)
         {
-            if(type2!=3)
+            if(type2!=TYPE_YELLOW)
             {
-                temp.maxbounces=4;
+                Bullet temp(id, attack, type1, type2, 4,
+                            dTpressed,
+                            r, g, b,
+                            r2, g2, b2,
+                            x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                            y+.25,
+                            z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                            rtx+rx, rty+ry, rtz+rz);
+                
+                bullets.push_back(temp);
             }
-            
+
             bullets.push_back(temp);
-            
+
             /*temp.ry-=90;
-             
+
              bullets.push_back(temp);
-             
+
              temp.ry+=180;
-             
+
              bullets.push_back(temp);
-             
+
              temp.ry-=45;
-             
+
              bullets.push_back(temp);
-             
+
              temp.ry-=90;
-             
+
              bullets.push_back(temp);*/
         }
-        
-        if(type1==4)
+
+        if(type1==TYPE_PURPLE)
         {
+            Bullet temp(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                        y+.25,
+                        z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                        rtx+rx, rty+ry, rtz+rz);
             
             bullets.push_back(temp);
+
+            Bullet temp1(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                        y+.25,
+                        z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                        rtx+rx, rty+ry-90, rtz+rz);
             
-            temp.ry-=90;
+            bullets.push_back(temp1);
+
+            Bullet temp2(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                        y+.25,
+                        z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                        rtx+rx, rty+ry+180, rtz+rz);
             
-            bullets.push_back(temp);
-            
-            temp.ry+=180;
-            
-            bullets.push_back(temp);
-            
-            temp.ry+=90;
-            
-            bullets.push_back(temp);
+            bullets.push_back(temp2);
+
+            Bullet temp3(id, attack, type1, type2, bounces,
+                         dTpressed,
+                         r, g, b,
+                         r2, g2, b2,
+                         x + (GlobalTimer::dT*bulletMovRate) * (float)cos((rty+ry)*DTR),
+                         y+.25,
+                         z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
+                         rtx+rx, rty+ry+90, rtz+rz);
+
+            bullets.push_back(temp3);
         }
-        
-        
+
+
         fireTimer=0;
-        
+
         TankHandler::GetSingleton().special[(-1*id)-1]-=fireCost/5;
         //energy-=0;
     }
