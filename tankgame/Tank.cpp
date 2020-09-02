@@ -170,28 +170,28 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=0;
         
-        if(type2==0)
+        if(type2==TYPE_GREY)
         {
             fireRate=.25;
             attack=150;
             fireCost=maxCharge/4;
         }
         
-        if(type2==1)
+        if(type2==TYPE_RED)
         {
             fireRate=.25;
             attack=150;
             fireCost=maxCharge/4;
         }
         
-        if(type2==2)
+        if(type2==TYPE_BLUE)
         {
             fireRate=.8;
             attack=500;
             fireCost=maxCharge/2;
         }
         
-        if(type2==3)
+        if(type2==TYPE_YELLOW)
         {
             fireRate=.8;
             attack=500;
