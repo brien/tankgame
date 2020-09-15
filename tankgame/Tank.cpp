@@ -254,31 +254,31 @@ void Tank::SetType(TankType t1, TankType t2)
     }
     
     
-    if(type2==0)
+    if(type2==TYPE_GREY)
     {
         r2=.5;
         g2=.5;
         b2=.5;
     }
-    else if(type2==1)
+    else if(type2==TYPE_RED)
     {
         r2=1;
         g2=0;
         b2=0;
     }
-    else if(type2==2)
+    else if(type2==TYPE_BLUE)
     {
         r2=0;
         g2=0;
         b2=1;
     }
-    else if(type2==3)
+    else if(type2==TYPE_YELLOW)
     {
         r2=1;
         g2=1;
         b2=0;
     }
-    else if(type2==4)
+    else if(type2==TYPE_PURPLE)
     {
         r2=1;
         g2=0;
