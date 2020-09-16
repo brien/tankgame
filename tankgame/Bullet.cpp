@@ -65,7 +65,7 @@ float rx, float ry, float rz)
     
     this->power=power;
     
-    if(type1==4)
+    if(type1==TYPE_PURPLE)
     {
         this->dty=320*dTpressed;
         if(dTpressed<0)
@@ -84,7 +84,7 @@ float rx, float ry, float rz)
         }
     }
     else
-    if(type2==4)
+    if(type2==TYPE_PURPLE)
     {
         this->power*=0.5f;
         this->dty=160*dTpressed;
@@ -126,7 +126,7 @@ void Bullet::NextFrame()
     
     dT+=GlobalTimer::dT;
     
-    if(type1==4 && spec)
+    if(type1==TYPE_PURPLE && spec)
     {
         if(dty<0)
         {
@@ -208,7 +208,7 @@ void Bullet::NextFrame()
             
             if(numbounces<1)
             {
-                if(type1==3 && type2==3)
+                if(type1==TYPE_YELLOW && type2==TYPE_YELLOW)
                 {
                     power*=2.0;
                 }
@@ -220,7 +220,7 @@ void Bullet::NextFrame()
             
             if(tid<0 && spec && type1==3)
             {
-                if(type2==1)
+                if(type2==TYPE_RED)
                 {
                     for(int i=0; i<20; i++)
                     {
@@ -261,7 +261,7 @@ void Bullet::NextFrame()
                     }
                 }
                 else
-                    if(type2==2)
+                    if(type2==TYPE_BLUE)
                     {
                         for(int i=0; i<2; i++)
                         {
@@ -302,7 +302,7 @@ void Bullet::NextFrame()
                         }
                     }
                     else
-                        if(type2==3 || type2==0)
+                        if(type2==TYPE_YELLOW || type2==TYPE_GREY)
                         {
                             
                             Bullet temp;
