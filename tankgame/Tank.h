@@ -21,7 +21,7 @@ enum EnemyState
 
 enum TankType
 {
-    TYPE_GREY,
+    TYPE_GREY = 0,
     TYPE_RED,
     TYPE_BLUE,
     TYPE_YELLOW,

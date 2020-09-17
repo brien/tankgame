@@ -339,7 +339,7 @@ void Bullet::NextFrame()
                             TankHandler::GetSingleton().players[(-1*tid)-1].bulletq.push(temp);
                         }
                         else
-                            if(type2==4)
+                            if(type2==TYPE_PURPLE)
                             {
                                 
                                 Bullet temp;
@@ -537,7 +537,7 @@ void Bullet::NextFrame()
                         TankHandler::GetSingleton().comboNum[(-1*tid)-1]++;
                     }
                     
-                    if(tid<0 && spec && type1==2)
+                    if(tid<0 && spec && type1==TYPE_BLUE)
                     {
                         alive=true;
                         power+=100;
