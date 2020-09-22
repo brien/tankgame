@@ -591,7 +591,7 @@ void Bullet::Draw()
     glColor3f(r, g, b);
     
     
-    if(type1==2)
+    if(type1==TYPE_BLUE)
     {
         
         glPushMatrix();
