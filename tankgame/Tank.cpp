@@ -517,25 +517,6 @@ void Tank::Special(float dTpressed)
 
             bullets.push_back(temp);
 
-//            if(type2==1)
-//            {
-//                temp.ry-=10;
-//            }
-//
-//            bullets.push_back(temp);
-//
-//            temp.x-= .4 * (float)cos((rty+ry+90)*DTR);
-//            temp.y=y+.25;
-//            temp.z-= .4  * (float)sin((rty+ry+90)*DTR);
-//
-//            if(type2==1)
-//            {
-//                temp.ry+=20;
-//            }
-//
-//            bullets.push_back(temp);
-
-            //----
 
         }
 
