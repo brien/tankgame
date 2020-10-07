@@ -606,7 +606,6 @@ void Tank::Special(float dTpressed)
         fireTimer=0;
 
         TankHandler::GetSingleton().special[(-1*id)-1]-=fireCost/5;
-        //energy-=0;
     }
 }
 
