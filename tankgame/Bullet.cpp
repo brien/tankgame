@@ -484,8 +484,7 @@ void Bullet::NextFrame()
         {
             if((*it).id!=tid )
             {
-                //x -= GlobalTimer::dT*movRate * (float)cos(ry*DTR);
-                //z -= GlobalTimer::dT*movRate * (float)sin(ry*DTR);
+
                 if((*it).energy>0)
                 {
                     (*it).energy-=power;

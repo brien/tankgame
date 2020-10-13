@@ -7,4 +7,4 @@
 //Difficulty 0=Easy 1=Normal 2=Hard
 0
 //Disable Sound? 0=No 1=Yes
-1
+0
