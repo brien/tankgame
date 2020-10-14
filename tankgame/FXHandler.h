@@ -14,6 +14,18 @@ using namespace std;
 //5 = Star
 //6 = Death
 
+enum FxType
+{
+    TYPE_ZERO= 0,
+    TYPE_ONE,
+    TYPE_TWO,
+    TYPE_THREE,
+    TYPE_FOUR,
+    TYPE_FIVE,
+    TYPE_SIZE
+    FX_TYPE_COUNT
+};
+
 class FX
 {
 public:
