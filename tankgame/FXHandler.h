@@ -17,12 +17,12 @@ using namespace std;
 enum FxType
 {
     TYPE_ZERO= 0,
-    TYPE_ONE,
-    TYPE_TWO,
+    TYPE_JUMP,
+    TYPE_SMOKE,
     TYPE_THREE,
     TYPE_FOUR,
-    TYPE_FIVE,
-    TYPE_SIZE
+    TYPE_STAR,
+    TYPE_DEATH,
     FX_TYPE_COUNT
 };
 
