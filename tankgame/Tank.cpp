@@ -1340,15 +1340,6 @@ void Tank::HandleInput()
 {
     static float firePressed=0;
     
-    //static string jname(SDL_JoystickName(jid));
-    
-    //static bool PS2=false;
-    /*
-     if(SDL_JoystickNumAxes(InputTask::joysticks[jid])==4 && SDL_JoystickNumButtons(InputTask::joysticks[jid])==12 && jname.rfind("P880")==string::npos)
-     PS2=true;
-     else
-     PS2=false;*/
-    
     
     if(inputmode==0)
     {
