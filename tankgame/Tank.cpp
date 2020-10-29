@@ -1338,9 +1338,6 @@ bool Tank::Move(bool forb)
 
 void Tank::HandleInput()
 {
-    static float firePressed=0;
-    
-    
     if(inputmode==0)
     {
         RotTurret(InputTask::dX*2);
@@ -1352,7 +1349,7 @@ void Tank::HandleInput()
         else if( InputTask::MouseStillDown(1))
         {
             Fire(1);
-        }
+        }	
         
         if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::MouseStillDown(3))
         {
