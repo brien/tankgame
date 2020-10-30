@@ -1224,7 +1224,6 @@ bool Tank::Move(bool forb)
     
     vx = (GlobalTimer::dT*movRate) * (float)cos(ry*DTR);
     vz = (GlobalTimer::dT*movRate) * (float)sin(ry*DTR);
-    //float vy;
     
     if (forb)
     {
@@ -1349,7 +1348,7 @@ void Tank::HandleInput()
         else if( InputTask::MouseStillDown(1))
         {
             Fire(1);
-        }	
+        }
         
         if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::MouseStillDown(3))
         {
