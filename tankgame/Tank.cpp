@@ -1105,17 +1105,13 @@ bool Tank::Move(float rate)
         forb=false;
     }
     
-    bool moved;
+    bool moved = true;
     
     vx = rate*(GlobalTimer::dT*movRate) * (float)cos(ry*DTR);
     vz = rate*(GlobalTimer::dT*movRate) * (float)sin(ry*DTR);
-    //float vy;
-    
     
     x += vx;
     z += vz;
-    
-    moved=true;
     
     if(LevelHandler::GetSingleton().PointCollision(x,y,z)
        ||LevelHandler::GetSingleton().PointCollision(x+collisionPoints[0],y,z+collisionPoints[2])
