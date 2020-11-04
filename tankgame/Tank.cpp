@@ -862,9 +862,7 @@ void Tank::Init()
     rtx=0;
     rty=0;
     rtz=0;
-    //	vx=0;
-    //vy=0;
-    //	vz=0;
+
     rotRate=75;
     movRate=5;
     fallRate=2;
