@@ -456,10 +456,6 @@ void Tank::Special(float dTpressed)
                             z,
                             rtx+rx, rty+ry+i*(270/10)+52, rtz+rz);
 
-                //Bullet temp2;
-
-                //temp2.maxdT=0.20;
-
                 bullets.push_back(temp2);
             }
 
