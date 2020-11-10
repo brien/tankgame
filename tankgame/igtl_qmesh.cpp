@@ -8,7 +8,14 @@
 #ifndef IGTL_3D_GENERIC_QUICK_MESH_CPP
 #define IGTL_3D_GENERIC_QUICK_MESH_CPP
 
-#include <OpenGL/gl.h>
+#ifdef _WIN32
+    // If building in windows:
+    #include <windows.h>
+    #include <GL/gl.h>
+#else
+    //if not:
+    #include <OpenGL/gl.h>
+#endif
 
 #include "igtl_qmesh.h"
 

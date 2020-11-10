@@ -4,9 +4,18 @@
 //
 //
 
+#ifdef _WIN32
+    // If building in windows:
+#include <windows.h>
+#include <GL/gl.h>
+#else
+    //if not:
+#include <OpenGL/gl.h>
+#include <mach-o/dyld.h>
+#endif
+
 #include <iostream>
 #include <SDL2/SDL.h>
-#include <OpenGL/gl.h>
 
 #include "App.h"
 #include "Singleton.h"

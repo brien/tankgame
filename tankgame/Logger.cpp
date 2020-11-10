@@ -4,6 +4,8 @@
 //
 //
 
+#pragma warning(disable : 4996)
+
 #include <cstdarg>
 #include <stdio.h>
 #include <iostream>

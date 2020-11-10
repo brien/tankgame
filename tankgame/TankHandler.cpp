@@ -1,3 +1,11 @@
+#ifdef _WIN32
+// If building in windows:
+#include <windows.h>
+#include <GL/gl.h>
+#else
+//if not:
+#include <OpenGL/gl.h>
+#endif
 
 
 #include "TankHandler.h"
@@ -6,7 +14,6 @@
 #include "math.h"
 #include "App.h"
 #include <string>
-#include <OpenGL/gl.h>
 
 
 TankHandler::TankHandler()

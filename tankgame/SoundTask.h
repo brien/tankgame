@@ -20,7 +20,7 @@ public:
     void OnResume();
     void Stop();
     
-    void PlaySound(int ID);
+    void PlayChannel(int ID);
     void PlayMusic(int ID);
     void PauseMusic();
     

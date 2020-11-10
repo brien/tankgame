@@ -1,11 +1,20 @@
+#ifdef _WIN32
+    // If building in windows:
+    #pragma warning(disable : 4996)
+    #include <windows.h>
+    #include <GL/gl.h>
+#else
+    //if not:
+    #include <OpenGL/gl.h>
+    #include <mach-o/dyld.h>
+#endif
 
-#include <OpenGL/gl.h>
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "App.h"
 #include <iostream>
-#include <mach-o/dyld.h>
+
 
 //cheap strlen function, requires a NULL TERMINATED STRING be passed.
 //Returns the length of the passed string
@@ -98,7 +107,7 @@ bool LevelHandler::Load(const char filePath[])
 
             char path[1024];
             uint32_t size = sizeof(path);
-            if (_NSGetExecutablePath(path, &size) == 0)
+            if (true) //_NSGetExecutablePath(path, &size) == 0)
             {
                 printf("executable path is %s\n", path);
             }
@@ -364,7 +373,7 @@ void LevelHandler::ItemCollision()
                 
                 FXHandler::GetSingleton().CreateFX(3, j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1);
                 
-                App::GetSingleton().soundTask->PlaySound(3);
+                App::GetSingleton().soundTask->PlayChannel(3);
                 return;
             }
         }

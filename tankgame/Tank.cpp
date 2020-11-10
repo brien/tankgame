@@ -1,6 +1,14 @@
+#ifdef _WIN32
+// If building in windows:
+#include <windows.h>
+#include <GL/gl.h>
+#else
+//if not:
+#include <OpenGL/gl.h>
+#endif
+
 #include "Tank.h"
 
-#include <OpenGL/gl.h>
 #include "App.h"
 #include "LevelHandler.h"
 #include "FXHandler.h"
@@ -312,11 +320,11 @@ void Tank::Die()
     {
         if(id < 0)
         {
-            App::GetSingleton().soundTask->PlaySound(7);
+            App::GetSingleton().soundTask->PlayChannel(7);
         }
         else
         {
-            App::GetSingleton().soundTask->PlaySound(6);
+            App::GetSingleton().soundTask->PlayChannel(6);
         }
     }
     
@@ -387,7 +395,7 @@ void Tank::Fire(float dTpressed)
         
         Mix_SetPosition(2, ryp, 10*(int)dist);
         
-        App::GetSingleton().soundTask->PlaySound(2);
+        App::GetSingleton().soundTask->PlayChannel(2);
         
         float bulletMovRate = 33.0f;
         
@@ -430,7 +438,7 @@ void Tank::Special(float dTpressed)
 
         Mix_SetPosition(2, ryp, 10*(int)dist);
 
-        App::GetSingleton().soundTask->PlaySound(2);
+        App::GetSingleton().soundTask->PlayChannel(2);
         
         float bulletMovRate = 33.0f;
 
@@ -691,7 +699,7 @@ void Tank::Fall()
             }
             if(id<0)
             {
-                App::GetSingleton().soundTask->PlaySound(5);
+                App::GetSingleton().soundTask->PlayChannel(5);
             }
         }
         jumping=false;
@@ -749,7 +757,7 @@ void Tank::Fall()
                 if(!grounded)
                 {
                     if(id<0)
-                        App::GetSingleton().soundTask->PlaySound(5);
+                        App::GetSingleton().soundTask->PlayChannel(5);
                 }
             }
             if(!grounded)
@@ -950,7 +958,7 @@ void Tank::Jump()
         FXHandler::GetSingleton().CreateFX(1, x, y-.2, z, 0, .5*vy*GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1);
         if(!jumping && id<0)
         {
-            App::GetSingleton().soundTask->PlaySound(4);
+            App::GetSingleton().soundTask->PlayChannel(4);
         }
         jumping=true;
     }
