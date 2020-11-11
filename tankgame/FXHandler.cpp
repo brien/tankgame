@@ -227,7 +227,7 @@ void FXHandler::NextFrame()
 {
    	for(vector<FX>::iterator j = fx.begin(); j != fx.end();)
     {
-        if(j->time>j->maxTime)
+        if(j->time > j->maxTime)
         {
             j->alive=false;
         }
@@ -239,7 +239,7 @@ void FXHandler::NextFrame()
         }
         else
         {
-            fx.erase(j);
+            j = fx.erase(j);
         }
     }
     

@@ -409,7 +409,7 @@ void TankHandler::NextFrame()
             else
             {
                 it->Die();
-                tanks.erase(it);
+                it = tanks.erase(it);
             }
         }
     }

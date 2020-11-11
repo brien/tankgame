@@ -522,7 +522,7 @@ void LevelHandler::DrawItems()
         }
         else
         {
-            items.erase(j);
+            j = items.erase(j);
         }
     }
 }
