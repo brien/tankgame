@@ -1,3 +1,5 @@
+#pragma warning(disable : 4996)
+
 #include "VideoTask.h"
 #include "TankHandler.h"
 #include "App.h"

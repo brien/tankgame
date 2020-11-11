@@ -1,5 +1,13 @@
 
+#ifdef _WIN32
+// If building in windows:
+#include <windows.h>
+#include <GL/gl.h>
+#else
+//if not:
 #include <OpenGL/gl.h>
+#endif
+
 #include "App.h"
 #include "FXHandler.h"
 #include "LevelHandler.h"

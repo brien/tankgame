@@ -133,7 +133,7 @@ void GameTask::Update()
         if ( InputTask::KeyDown(SDL_SCANCODE_I) )
         {
             debug=true;
-            App::GetSingleton().soundTask->PlaySound(1);
+            App::GetSingleton().soundTask->PlayChannel(1);
         }
         
         

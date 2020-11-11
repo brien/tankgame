@@ -4,6 +4,7 @@
 
 
 #include "SoundTask.h"
+#include <iostream>
 #include <SDL2/sdl.h>
 
 //////////////////////////////////////////////////////////////////////
@@ -111,7 +112,7 @@ void SoundTask::OnResume()
     
 }
 
-void SoundTask::PlaySound(int ID)
+void SoundTask::PlayChannel(int ID)
 {
     if(!disable)
     {

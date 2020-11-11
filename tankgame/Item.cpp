@@ -1,6 +1,14 @@
+#ifdef _WIN32
+// If building in windows:
+#include <windows.h>
+#include <GL/gl.h>
+#else
+//if not:
+#include <OpenGL/gl.h>
+#endif
+
 #include "Item.h"
 #include "App.h"
-#include <OpenGL/gl.h>
 
 Item::Item()
 {

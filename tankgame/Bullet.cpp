@@ -4,10 +4,18 @@
 //
 //
 
-#include <OpenGL/gl.h>
+#ifdef _WIN32
+    // If building in windows:
+    #include <windows.h>
+    #include <GL/gl.h>
+#else
+    //if not:
+    #include <OpenGL/gl.h>
+#endif
 
 #include "Bullet.h"
 
+#include "SoundTask.h"
 #include "GlobalTimer.h"
 #include "math.h"
 #include "LevelHandler.h"
@@ -204,7 +212,7 @@ void Bullet::NextFrame()
              
              //Mix_SetPosition(2, ryp, (int)dist);
             
-            App::GetSingleton().soundTask->PlaySound(9);
+            App::GetSingleton().soundTask->PlayChannel(9);
             
             if(numbounces<1)
             {
@@ -429,7 +437,7 @@ void Bullet::NextFrame()
             {
                 if(tid<0 && !App::GetSingleton().gameTask->versus)
                 {
-                    App::GetSingleton().soundTask->PlaySound(3);
+                    App::GetSingleton().soundTask->PlayChannel(3);
                     if(TankHandler::GetSingleton().players[i].energy<TankHandler::GetSingleton().players[i].maxEnergy*2)
                     {
                         TankHandler::GetSingleton().players[i].energy+=power/2;
@@ -448,7 +456,7 @@ void Bullet::NextFrame()
                     alive=false;
                     FXHandler::GetSingleton().CreateFX(5, x, y, z, 0, .01, 0, 0, TankHandler::GetSingleton().players[i].ry, 90, r, g, b, 1);
                     FXHandler::GetSingleton().CreateFX(5, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
-                    App::GetSingleton().soundTask->PlaySound(8);
+                    App::GetSingleton().soundTask->PlayChannel(8);
                     
                     TankHandler::GetSingleton().hitCombo[(-1*tid)-1]++;
                     TankHandler::GetSingleton().combo[(-1*tid)-1]+=(float)TankHandler::GetSingleton().hitCombo[(-1*tid)-1]/10;
@@ -461,7 +469,7 @@ void Bullet::NextFrame()
             {
                 if(dT>0.5)
                 {
-                    App::GetSingleton().soundTask->PlaySound(3);
+                    App::GetSingleton().soundTask->PlayChannel(3);
                     if(TankHandler::GetSingleton().players[i].energy<TankHandler::GetSingleton().players[i].maxEnergy)
                     {
                         TankHandler::GetSingleton().players[i].energy+=power/2;
@@ -530,7 +538,7 @@ void Bullet::NextFrame()
                         if(TankHandler::GetSingleton().combo[(-1*tid)-1]>TankHandler::GetSingleton().special[(-1*tid)-1])
                         {
                             TankHandler::GetSingleton().special[(-1*tid)-1]=TankHandler::GetSingleton().combo[(-1*tid)-1];
-                            //App::GetSingleton().soundTask->PlaySound(1);
+                            //App::GetSingleton().soundTask->PlayChannel(1);
                         }
                         
                         TankHandler::GetSingleton().comboNum[(-1*tid)-1]++;
