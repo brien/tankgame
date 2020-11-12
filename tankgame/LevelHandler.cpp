@@ -105,16 +105,6 @@ bool LevelHandler::Load(const char filePath[])
             
             Logger::Get().Write("ERROR: LevelHandler: errnum: %d", strerror( errnum ));
 
-            char path[1024];
-            uint32_t size = sizeof(path);
-            if (true) //_NSGetExecutablePath(path, &size) == 0)
-            {
-                printf("executable path is %s\n", path);
-            }
-            else
-            {
-                printf("buffer too small; need size %u\n", size);
-            }
             return false;
         }
         else
@@ -409,6 +399,31 @@ bool LevelHandler::PointCollision(float x, float y, float z)
     }
     
     return(ret);
+}
+
+int LevelHandler::GetTerrainHeight(int x, int z)
+{
+    if (x < 0 || x > 127 || z < 0 || z > 127)
+    {
+        return 666;
+    }
+    else
+    {
+        return t[x][z];
+    }
+}
+
+bool LevelHandler::SetTerrainHeight(int x, int z, int height)
+{
+    if (x < 0 || x > 127 || z < 0 || z > 127)
+    {
+        return false;
+    }
+    else
+    {
+        return t[x][z] = height;
+        return true;
+    }
 }
 
 bool LevelHandler::HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz)

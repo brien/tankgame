@@ -370,7 +370,7 @@ void Tank::Die()
     }
     if( TankHandler::GetSingleton().tanks.size()==1 && id>=0)
     {
-        LevelHandler::GetSingleton().t[(int)x][(int)z]=-20;
+        LevelHandler::GetSingleton().SetTerrainHeight((int)x, (int)z, -20);
     }
 }
 
@@ -719,23 +719,23 @@ void Tank::Fall()
             //y-= vy;//(fallRate*GlobalTimer::dT);
             
             //Time to find the height of the highest collision point
-            highest=LevelHandler::GetSingleton().t[(int)x][(int)z];
+            highest=LevelHandler::GetSingleton().GetTerrainHeight((int)x, (int)z);
             
-            if(highest<LevelHandler::GetSingleton().t[(int)(x+collisionPoints[0])][(int)(z+collisionPoints[2])])
+            if (highest < LevelHandler::GetSingleton().GetTerrainHeight( (int)(x + collisionPoints[0]), (int)(z + collisionPoints[2]) ) )
             {
-                highest=LevelHandler::GetSingleton().t[(int)(x+collisionPoints[0])][(int)(z+collisionPoints[2])];
+                highest=LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[0]), (int)(z+collisionPoints[2]) );
             }
-            if(highest<LevelHandler::GetSingleton().t[(int)(x+collisionPoints[3])][(int)(z+collisionPoints[5])])
+            if(highest<LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[3]), (int)(z+collisionPoints[5]) ) )
             {
-                highest=LevelHandler::GetSingleton().t[(int)(x+collisionPoints[3])][(int)(z+collisionPoints[5])];
+                highest=LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[3]), (int)(z+collisionPoints[5]) );
             }
-            if(highest<LevelHandler::GetSingleton().t[(int)(x+collisionPoints[6])][(int)(z+collisionPoints[8])])
+            if(highest<LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[6]), (int)(z+collisionPoints[8]) ) )
             {
-                highest=LevelHandler::GetSingleton().t[(int)(x+collisionPoints[6])][(int)(z+collisionPoints[8])];
+                highest=LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[6]), (int)(z+collisionPoints[8]) );
             }
-            if(highest<LevelHandler::GetSingleton().t[(int)(x+collisionPoints[9])][(int)(z+collisionPoints[11])])
+            if(highest<LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[9]), (int)(z+collisionPoints[11]) ) )
             {
-                highest=LevelHandler::GetSingleton().t[(int)(x+collisionPoints[9])][(int)(z+collisionPoints[11])];
+                highest=LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[9]), (int)(z+collisionPoints[11]) );
             }
             
             //if(y>(float)highest)
@@ -2250,7 +2250,7 @@ void Tank::Wander()
     
     if(LevelHandler::GetSingleton().PointCollision(xpp,y,zpp) || LevelHandler::GetSingleton().PointCollision(xpp2,y,zpp2))
     {
-        if(false) //LevelHandler::GetSingleton().t[(unsigned int)xpp][(unsigned int)zpp]<(y+vy+3) && charge>(maxCharge/4) && LevelHandler::GetSingleton().t[(unsigned int)x][(unsigned int)z]>(int)(y-7) )
+        if(LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp)<(y+vy+3) && charge>(maxCharge/4) && LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z) > (int)(y-7) )
         {
             Jump();
         }
@@ -2313,7 +2313,7 @@ void Tank::Fear()
     
     if(LevelHandler::GetSingleton().PointCollision(xpp,y,zpp) || LevelHandler::GetSingleton().PointCollision(xpp2,y,zpp2))
     {
-        if(LevelHandler::GetSingleton().t[(int)xpp][(int)zpp]<(y+3) && charge>(maxCharge/4))
+        if(LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp)<(y+3) && charge>(maxCharge/4))
         {
             Jump();
         }
@@ -2377,7 +2377,7 @@ void Tank::Hunt(Tank& player)
     
     if(LevelHandler::GetSingleton().PointCollision(xpp,y,zpp) )
     {
-        if(LevelHandler::GetSingleton().t[(int)xpp][(int)zpp]<(y+5) && charge>(maxCharge/4))
+        if(LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y+5) && charge>(maxCharge/4))
         {
             Jump();
         }

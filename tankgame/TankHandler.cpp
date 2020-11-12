@@ -269,7 +269,7 @@ void TankHandler::Init()
         
         
         
-        temp.y=LevelHandler::GetSingleton().t[(int)temp.x][(int)temp.z];
+        temp.y=LevelHandler::GetSingleton().GetTerrainHeight((int)temp.x, (int)temp.z);
         temp.ry=i*45;
         temp.id=i;
         

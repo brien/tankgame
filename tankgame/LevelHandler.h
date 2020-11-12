@@ -27,9 +27,9 @@ public:
     bool drawFloor;
     bool drawWalls;
     bool drawTop;
-    
-    int t[128][128];
+
     int f[128][128];
+
     int start[2];
     int enemy[16][2];
     
@@ -45,6 +45,8 @@ public:
     bool HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz);
     bool FallCollision(float x, float y, float z);
     bool FloatCollision(float x, float y, float z);
+    int GetTerrainHeight(int x, int z);
+    bool SetTerrainHeight(int x, int z, int height);
     void GenerateTerrain();
     
     void DrawTerrain();
@@ -60,7 +62,9 @@ public:
     int levelNumber;
     int colorNumber;
     int colorNumber2;
-    
+
+private:
+    int t[128][128];
 };
 
 #endif
