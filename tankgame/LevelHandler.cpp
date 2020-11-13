@@ -41,7 +41,6 @@ int LevelHandler::Strlen(const char * stringy)
 
 LevelHandler::LevelHandler()
 {
-    //t = new int*[64];
     levelNumber=48;
     colorNumber2=colorNumber=0;
     drawFloor=true;
@@ -62,8 +61,7 @@ void LevelHandler::Init()
 
 LevelHandler::~LevelHandler()
 {
-    //delete t[0];
-    //delete t;
+
 }
 
 
@@ -152,8 +150,6 @@ bool LevelHandler::Load(const char filePath[])
             
             int cdepth=sizeZ;
             char* oneline = new char[cdepth];	//Storage per line
-            //Get first line
-            //fgets(oneline, cdepth, filein);
             
             for(int i=0; i<sizeX; i++)
             {
@@ -421,7 +417,7 @@ bool LevelHandler::SetTerrainHeight(int x, int z, int height)
     }
     else
     {
-        return t[x][z] = height;
+        t[x][z] = height;
         return true;
     }
 }
