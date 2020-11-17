@@ -657,9 +657,9 @@ void Tank::Fall()
     
     int highest=-1;
     
-    /*  if(LevelHandler::GetSingleton().f[(int)x][(int)z]>0)
+    /*  if(LevelHandler::GetSingleton().f[(int)x, (int)z]>0)
      {
-     highest=(float)LevelHandler::GetSingleton().f[(int)x][(int)z];
+     highest=(float)LevelHandler::GetSingleton().f[(int)x, (int)z];
      }*/
     
     if(LevelHandler::GetSingleton().FloatCollision(x, y, z)
@@ -669,23 +669,23 @@ void Tank::Fall()
        ||LevelHandler::GetSingleton().FloatCollision(x+collisionPoints[9],y,z+collisionPoints[11]) )
     {
         
-        highest=LevelHandler::GetSingleton().f[(int)x][(int)z];
+        highest=LevelHandler::GetSingleton().GetFloatHeight((int)x, (int)z);
         
-        if(highest<LevelHandler::GetSingleton().f[(int)(x+collisionPoints[0])][(int)(z+collisionPoints[2])])
+        if(highest<LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[0]), (int)(z+collisionPoints[2])))
         {
-            highest=LevelHandler::GetSingleton().f[(int)(x+collisionPoints[0])][(int)(z+collisionPoints[2])];
+            highest=LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[0]), (int)(z+collisionPoints[2]));
         }
-        if(highest<LevelHandler::GetSingleton().f[(int)(x+collisionPoints[3])][(int)(z+collisionPoints[5])])
+        if(highest<LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[3]), (int)(z+collisionPoints[5])))
         {
-            highest=LevelHandler::GetSingleton().f[(int)(x+collisionPoints[3])][(int)(z+collisionPoints[5])];
+            highest=LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[3]), (int)(z+collisionPoints[5]));
         }
-        if(highest<LevelHandler::GetSingleton().f[(int)(x+collisionPoints[6])][(int)(z+collisionPoints[8])])
+        if(highest<LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[6]), (int)(z+collisionPoints[8])))
         {
-            highest=LevelHandler::GetSingleton().f[(int)(x+collisionPoints[6])][(int)(z+collisionPoints[8])];
+            highest=LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[6]), (int)(z+collisionPoints[8]));
         }
-        if(highest<LevelHandler::GetSingleton().f[(int)(x+collisionPoints[9])][(int)(z+collisionPoints[11])])
+        if(highest<LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[9]), (int)(z+collisionPoints[11])))
         {
-            highest=LevelHandler::GetSingleton().f[(int)(x+collisionPoints[9])][(int)(z+collisionPoints[11])];
+            highest=LevelHandler::GetSingleton().GetFloatHeight((int)(x+collisionPoints[9]), (int)(z+collisionPoints[11]));
         }
         
         
@@ -743,7 +743,7 @@ void Tank::Fall()
             
 
             
-            //y=(float)LevelHandler::t[(int)x][(int)z];
+            //y=(float)LevelHandler::t[(int)x, (int)z];
             if(highest<-10 && (id==-1 || id==-2))
             {
                 LevelHandler::GetSingleton().NextLevel(true);

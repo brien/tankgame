@@ -409,6 +409,18 @@ int LevelHandler::GetTerrainHeight(int x, int z)
     }
 }
 
+int LevelHandler::GetFloatHeight(int x, int z)
+{
+    if (x < 0 || x > 127 || z < 0 || z > 127)
+    {
+        return 666;
+    }
+    else
+    {
+        return f[x][z];
+    }
+}
+
 bool LevelHandler::SetTerrainHeight(int x, int z, int height)
 {
     if (x < 0 || x > 127 || z < 0 || z > 127)

@@ -28,8 +28,6 @@ public:
     bool drawWalls;
     bool drawTop;
 
-    int f[128][128];
-
     int start[2];
     int enemy[16][2];
     
@@ -46,6 +44,7 @@ public:
     bool FallCollision(float x, float y, float z);
     bool FloatCollision(float x, float y, float z);
     int GetTerrainHeight(int x, int z);
+    int GetFloatHeight(int x, int z);
     bool SetTerrainHeight(int x, int z, int height);
     void GenerateTerrain();
     
@@ -65,6 +64,7 @@ public:
 
 private:
     int t[128][128];
+    int f[128][128];
 };
 
 #endif
