@@ -738,12 +738,8 @@ void Tank::Fall()
                 highest=LevelHandler::GetSingleton().GetTerrainHeight( (int)(x+collisionPoints[9]), (int)(z+collisionPoints[11]) );
             }
             
-            //if(y>(float)highest)
             y=(float)highest;
             
-
-            
-            //y=(float)LevelHandler::t[(int)x, (int)z];
             if(highest<-10 && (id==-1 || id==-2))
             {
                 LevelHandler::GetSingleton().NextLevel(true);
