@@ -777,13 +777,58 @@ void Tank::Fall()
 
 Tank::Tank()
 {
+    x = y = z = 0.0f;
+    vx = vy = vz = 0.0f;
+    rx = ry = rz = 0.0f;
+    rtx = rty = rtz = 0.0f;
+    rrl = 0.0f;
+    rr = 0.0f;
+    r = 0.0f;
+    r2 = 0.0f;
+    g = 0.0f;
+    g2 = 0.0f;
+    
+    jid = 0;
+    inputmode = 0;
+    id = 0;
+    hitNum = 0;
+    hitAlpha = 0.0f;
+
     type1=TYPE_RED;
     type2=TYPE_BLUE;
     bonus=0;
     bonusTime=0.0f;
     deadtime=0.0f;
     jumpTime=0.0f;
-    
+    turbo = false;
+    recharge = false;
+    jumping = false;
+    grounded = false;
+
+    size = 0.0f;
+    rotRate = 0.0f;
+    movRate = 0.0f;
+    moveCost = 0.0f;
+    maxEnergy = 0.0f;
+    maxCharge = 0.0f;
+    jumpRate = 0.0f;
+    jumpCost = 0.0f;
+    fireTimer = 0.0f;
+    fireRate = 0.0f;
+    fireCost = 0.0f;
+    fallRate = 0.0f;
+    energyRegen = 0.0f;
+    energy = 0.0f;
+    dist = 0.0f;
+    control = 0.0f;
+    chargeRegen = 0.0f;
+    chargeCost = 0.0f;
+    charge = 0.0f;
+    bounces = 0.0f;
+    b = 0.0f;
+    b2 = 0.0f;
+    attack = 0.0f;
+    alive = true;
 }
 
 void Tank::Init()
