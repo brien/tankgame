@@ -403,23 +403,23 @@ void Bullet::NextFrame()
             
             if((int)(x+xpp)!=(int)x && (int)(z+zpp)==(int)z)
             {
-                FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+                FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
             }
             //else
             if((int)(z+zpp)!=(int)z && (int)(x+xpp)==(int)x)
             {
-                FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+                FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
             }
             
             if((int)(x+xpp)!=(int)x && (int)(z+zpp)!=(int)z)
             {
                 if(LevelHandler::GetSingleton().PointCollision((x+xpp),y,z) && !LevelHandler::GetSingleton().PointCollision(x,y,z+zpp))
                 {
-                    FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+                    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
                 }
                 else
                 {
-                    FXHandler::GetSingleton().CreateFX(4, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+                    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
                 }
             }
             
@@ -454,8 +454,8 @@ void Bullet::NextFrame()
                 {
                     TankHandler::GetSingleton().players[i].energy-=power;
                     alive=false;
-                    FXHandler::GetSingleton().CreateFX(5, x, y, z, 0, .01, 0, 0, TankHandler::GetSingleton().players[i].ry, 90, r, g, b, 1);
-                    FXHandler::GetSingleton().CreateFX(5, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+                    FXHandler::GetSingleton().CreateFX(TYPE_STAR, x, y, z, 0, .01, 0, 0, TankHandler::GetSingleton().players[i].ry, 90, r, g, b, 1);
+                    FXHandler::GetSingleton().CreateFX(TYPE_STAR, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
                     App::GetSingleton().soundTask->PlayChannel(8);
                     
                     TankHandler::GetSingleton().hitCombo[(-1*tid)-1]++;
@@ -511,7 +511,7 @@ void Bullet::NextFrame()
                             TankHandler::GetSingleton().combo[(-1*tid)-1]+=TankHandler::GetSingleton().comboNum[(-1*tid)-1]/2;
                             TankHandler::GetSingleton().players[(-1*tid)-1].bonus=23;
                             TankHandler::GetSingleton().players[(-1*tid)-1].bonusTime=0;
-                            FXHandler::GetSingleton().CreateFX(4, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
+                            FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
                         }
                         
                         
@@ -521,7 +521,7 @@ void Bullet::NextFrame()
                             TankHandler::GetSingleton().combo[(-1*tid)-1]+=dist/10;
                             TankHandler::GetSingleton().players[(-1*tid)-1].bonus=21;
                             TankHandler::GetSingleton().players[(-1*tid)-1].bonusTime=0;
-                            FXHandler::GetSingleton().CreateFX(4, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0, 1, 1, 1);
+                            FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0, 1, 1, 1);
                         }
                         
                         if(numbounces>0 && dT<10.0f)
@@ -529,7 +529,7 @@ void Bullet::NextFrame()
                             TankHandler::GetSingleton().combo[(-1*tid)-1]+=(1+dT/2);
                             TankHandler::GetSingleton().players[(-1*tid)-1].bonus=22;
                             TankHandler::GetSingleton().players[(-1*tid)-1].bonusTime=0;
-                            FXHandler::GetSingleton().CreateFX(4, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
+                            FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
                         }
                         
                         
@@ -552,8 +552,8 @@ void Bullet::NextFrame()
                     else
                         alive=false;
                     
-                    FXHandler::GetSingleton().CreateFX(5, x, y, z, 0, .01, 0, 0, (*it).ry, 90, r, g, b, 1);
-                    FXHandler::GetSingleton().CreateFX(5, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+                    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z, 0, .01, 0, 0, (*it).ry, 90, r, g, b, 1);
+                    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
                 }
                 
             }

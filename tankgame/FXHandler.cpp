@@ -25,7 +25,7 @@ FX::FX()
 }
 
 
-FX::FX(int _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
     type=_type;
     x=_x;
@@ -52,7 +52,7 @@ FX::FX(int _type, float _x, float _y, float _z, float _rx, float _ry, float _rz,
     }
 }
 
-FX::FX(int _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
     type=_type;
     x=_x;
@@ -246,7 +246,7 @@ void FXHandler::NextFrame()
     
 }
 
-void FXHandler::CreateFX(int _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
     FX temp(_type, _x, _y, _z, _rx, _ry, _rz, _r, _g, _b, _a);
     
@@ -254,7 +254,7 @@ void FXHandler::CreateFX(int _type, float _x, float _y, float _z, float _rx, flo
     
 }
 
-void FXHandler::CreateFX(int _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
     FX temp(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _r, _g, _b, _a);
     

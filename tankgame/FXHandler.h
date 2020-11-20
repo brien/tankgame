@@ -20,7 +20,7 @@ enum FxType
     TYPE_JUMP,
     TYPE_SMOKE,
     TYPE_THREE,
-    TYPE_FOUR,
+    TYPE_SMALL_SQUARE,
     TYPE_STAR,
     TYPE_DEATH,
     FX_TYPE_COUNT
@@ -30,8 +30,8 @@ class FX
 {
 public:
     FX();
-    FX(int type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
-    FX(int type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
+    FX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
+    FX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     ~FX();
     void Update();
     void Draw();
@@ -62,8 +62,8 @@ public:
     void NextFrame();
     void Draw();
     
-    void CreateFX(int type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
-    void CreateFX(int type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
+    void CreateFX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
+    void CreateFX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
 };
 
 #endif

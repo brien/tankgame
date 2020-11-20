@@ -338,33 +338,33 @@ void Tank::Die()
     if(deadtime < 0.01)
     {
         
-        FXHandler::GetSingleton().CreateFX(6, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, 1);
         
-        FXHandler::GetSingleton().CreateFX(6, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, .15);
-        FXHandler::GetSingleton().CreateFX(6, x, y, z+.5,    0, .05, 2, 0, ry, 0, r, g, b, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x, y, z+.5,    0, .05, 2, 0, ry, 0, r, g, b, .15);
         
-        FXHandler::GetSingleton().CreateFX(6, x+.5, y, z+.5, 0, .05, -3, 0, ry, 0, r, g, b, .15);
-        FXHandler::GetSingleton().CreateFX(6, x+.5, y, z+.5, 0, .05, 2, 0, ry, 0, r, g, b, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x+.5, y, z+.5, 0, .05, -3, 0, ry, 0, r, g, b, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x+.5, y, z+.5, 0, .05, 2, 0, ry, 0, r, g, b, .15);
         
-        FXHandler::GetSingleton().CreateFX(6, x+.5, y, z-.5, 3, .05, 0, 2, ry, 0, r2, g2, b2, .15);
-        FXHandler::GetSingleton().CreateFX(6, x+.5, y, z-.5, 2, .05, 0, 0, ry, 0, r2, g2, b2, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x+.5, y, z-.5, 3, .05, 0, 2, ry, 0, r2, g2, b2, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x+.5, y, z-.5, 2, .05, 0, 0, ry, 0, r2, g2, b2, .15);
         
-        FXHandler::GetSingleton().CreateFX(6, x+.5, y, z-.5, 2, .01, 0, 0, ry, 0, r2, g2, b2, .15);
-        FXHandler::GetSingleton().CreateFX(6, x+.5, y, z-.5, 2, .05, 0, -2, ry, 0, r2, g2, b2, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x+.5, y, z-.5, 2, .01, 0, 0, ry, 0, r2, g2, b2, .15);
+        FXHandler::GetSingleton().CreateFX(TYPE_DEATH, x+.5, y, z-.5, 2, .05, 0, -2, ry, 0, r2, g2, b2, .15);
         
-        FXHandler::GetSingleton().CreateFX(5, x, y, z+.5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z+.5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
          
-        FXHandler::GetSingleton().CreateFX(5, x, y, z+.5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
-        FXHandler::GetSingleton().CreateFX(5, x, y, z+.5, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z+.5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x, y, z+.5, 0, .01, 2, 0, ry, 90, r, g, b, 1);
          
-        FXHandler::GetSingleton().CreateFX(5, x+.5, y, z+.5, 0, .01, -3, 0, ry, 90, r, g, b, 1);
-        FXHandler::GetSingleton().CreateFX(5, x+.5, y, z+.5, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x+.5, y, z+.5, 0, .01, -3, 0, ry, 90, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x+.5, y, z+.5, 0, .01, 2, 0, ry, 90, r, g, b, 1);
          
-        FXHandler::GetSingleton().CreateFX(5, x+.5, y, z-.5, 3, .01, 0, 2, ry, 90, r2, g2, b2, 1);
-        FXHandler::GetSingleton().CreateFX(5, x+.5, y, z-.5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x+.5, y, z-.5, 3, .01, 0, 2, ry, 90, r2, g2, b2, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x+.5, y, z-.5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
          
-        FXHandler::GetSingleton().CreateFX(5, x+.5, y, z-.5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
-        FXHandler::GetSingleton().CreateFX(5, x+.5, y, z-.5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x+.5, y, z-.5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMALL_SQUARE, x+.5, y, z-.5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1);
         
         
     }
@@ -996,7 +996,7 @@ void Tank::Jump()
         
         //Jump damn it
         
-        FXHandler::GetSingleton().CreateFX(1, x, y-.2, z, 0, .5*vy*GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_JUMP, x, y-.2, z, 0, .5*vy*GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1);
         if(!jumping && id<0)
         {
             App::GetSingleton().soundTask->PlayChannel(4);
@@ -1057,7 +1057,7 @@ void Tank::NextFrame()
     
     if(energy<maxEnergy/2)
     {
-        FXHandler::GetSingleton().CreateFX(2, x, y+.1, z, 0, .01, 0, 0, ry+rty, 90, .2, .2, .2, 1);
+        FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x, y+.1, z, 0, .01, 0, 0, ry+rty, 90, .2, .2, .2, 1);
     }
     
     
@@ -1177,22 +1177,22 @@ bool Tank::Move(float rate)
         int which=0;
         if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[0],y,z+collisionPoints[2]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[0], y, z-vz+collisionPoints[2], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[0], y, z-vz+collisionPoints[2], 0, 90, 90, r, g, b, 1);
             which=0;
         }
         else if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[3],y,z+collisionPoints[5]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[3], y, z-vz+collisionPoints[5], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[3], y, z-vz+collisionPoints[5], 0, 90, 90, r, g, b, 1);
             which=1;
         }
         else if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[6],y,z+collisionPoints[8]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[6], y, z-vz+collisionPoints[8], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[6], y, z-vz+collisionPoints[8], 0, 90, 90, r, g, b, 1);
             which=2;
         }
         else if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[9],y,z+collisionPoints[11]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[9], y, z-vz+collisionPoints[11], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[9], y, z-vz+collisionPoints[11], 0, 90, 90, r, g, b, 1);
             which=3;
         }
         
@@ -1204,14 +1204,14 @@ bool Tank::Move(float rate)
         
         if((int)(x+collisionPoints[kx]+vx)!=(int)(x+collisionPoints[kx]) && (int)(z+collisionPoints[kz]+vz)==(int)(z+collisionPoints[kz]) )
         {
-            //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+            //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
             z+=vz/2;
             done=true;
         }
         //else
         if((int)(x+collisionPoints[kx]+vx)==(int)(x+collisionPoints[kx]) && (int)(z+collisionPoints[kz]+vz)!=(int)(z+collisionPoints[kz]) )
         {
-            //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+            //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
             x+=vx/2;
             done=true;
         }
@@ -1220,13 +1220,13 @@ bool Tank::Move(float rate)
         {
             if(LevelHandler::GetSingleton().PointCollision((x+vx+collisionPoints[kx]),y,z+collisionPoints[kz]) && !LevelHandler::GetSingleton().PointCollision(x+collisionPoints[kx],y,z+vz+collisionPoints[kz]))
             {
-                //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+                //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
                 z+=vz/2;
                 done=true;
             }
             else
             {
-                //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+                //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
                 x+=vx/2;
                 done=true;
             }
@@ -1295,22 +1295,22 @@ bool Tank::Move(bool forb)
         int which=0;
         if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[0],y,z+collisionPoints[2]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[0], y, z-vz+collisionPoints[2], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[0], y, z-vz+collisionPoints[2], 0, 90, 90, r, g, b, 1);
             which=0;
         }
         else if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[3],y,z+collisionPoints[5]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[3], y, z-vz+collisionPoints[5], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[3], y, z-vz+collisionPoints[5], 0, 90, 90, r, g, b, 1);
             which=1;
         }
         else if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[6],y,z+collisionPoints[8]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[6], y, z-vz+collisionPoints[8], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[6], y, z-vz+collisionPoints[8], 0, 90, 90, r, g, b, 1);
             which=2;
         }
         else if(LevelHandler::GetSingleton().PointCollision(x+collisionPoints[9],y,z+collisionPoints[11]))
         {
-            FXHandler::GetSingleton().CreateFX(2, x-vx+collisionPoints[9], y, z-vz+collisionPoints[11], 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(TYPE_SMOKE, x-vx+collisionPoints[9], y, z-vz+collisionPoints[11], 0, 90, 90, r, g, b, 1);
             which=3;
         }
         
@@ -1322,13 +1322,13 @@ bool Tank::Move(bool forb)
         
         if((int)(x+collisionPoints[kx]+vx)!=(int)(x+collisionPoints[kx]) && (int)(z+collisionPoints[kz]+vz)==(int)(z+collisionPoints[kz]) )
         {
-            //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+            //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
             z+=vz/2;
         }
         //else
         if((int)(x+collisionPoints[kx]+vx)==(int)(x+collisionPoints[kx]) && (int)(z+collisionPoints[kz]+vz)!=(int)(z+collisionPoints[kz]) )
         {
-            //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+            //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
             x+=vx/2;
         }
         //else
@@ -1336,12 +1336,12 @@ bool Tank::Move(bool forb)
         {
             if(LevelHandler::GetSingleton().PointCollision((x+vx+collisionPoints[kx]),y,z+collisionPoints[kz]) && !LevelHandler::GetSingleton().PointCollision(x+collisionPoints[kx],y,z+vz+collisionPoints[kz]))
             {
-                //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+                //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
                 z+=vz/2;
             }
             else
             {
-                //FXHandler::GetSingleton().CreateFX(3, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+                //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
                 x+=vx/2;
             }
         }
