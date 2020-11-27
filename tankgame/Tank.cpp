@@ -1572,11 +1572,11 @@ void Tank::HandleInput()
         }
         if( InputTask::GetAxis(jid,0) < -8000)
         {
-            RotBody((float)InputTask::GetAxis(jid,0)/(float)32000); //RotBody(false);
+            RotBody((float)InputTask::GetAxis(jid,0)/(float)32000);
         }
         if( InputTask::GetAxis(jid,0) > 8000)
         {
-            RotBody((float)InputTask::GetAxis(jid,0)/(float)32000);//RotBody(true);
+            RotBody((float)InputTask::GetAxis(jid,0)/(float)32000);
             
         }
         if( InputTask::GetAxis(jid,1) > 8000)
