@@ -1409,7 +1409,7 @@ void Tank::HandleInput()
             y=oldy;
         }
         
-        if( InputTask::KeyStillDown(SDL_SCANCODE_W) )//|| SDL_JoystickGetHat(App::GetSingleton().inputTask->joysticks[jid], 0) == SDL_HAT_UP)
+        if( InputTask::KeyStillDown(SDL_SCANCODE_W) )
         {
             Move(true);
             if(turbo)
