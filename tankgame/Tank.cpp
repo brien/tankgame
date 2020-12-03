@@ -1357,6 +1357,7 @@ bool Tank::Move(bool forb)
         
         moved=false;
         
+        //LevelHandler::GetSingleton().HandlePointCollision(x, y, vx, vy, vz);
     }
     
     if(x>=128 || x<=0 || z>=128 || z<=0)
