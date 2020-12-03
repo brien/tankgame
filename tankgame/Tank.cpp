@@ -1336,12 +1336,10 @@ bool Tank::Move(bool forb)
         {
             if(LevelHandler::GetSingleton().PointCollision((x+vx+collisionPoints[kx]),y,z+collisionPoints[kz]) && !LevelHandler::GetSingleton().PointCollision(x+collisionPoints[kx],y,z+vz+collisionPoints[kz]))
             {
-                //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
                 z+=vz/2;
             }
             else
             {
-                //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
                 x+=vx/2;
             }
         }
@@ -1357,7 +1355,6 @@ bool Tank::Move(bool forb)
         
         moved=false;
         
-        //LevelHandler::GetSingleton().HandlePointCollision(x, y, vx, vy, vz);
     }
     
     if(x>=128 || x<=0 || z>=128 || z<=0)
