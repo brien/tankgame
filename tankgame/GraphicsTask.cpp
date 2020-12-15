@@ -605,9 +605,6 @@ void GraphicsTask::Update()
      glVertex3f(0,0,TankHandler::GetSingleton().player.x);
      glEnd();*/
     
-    //LevelHandler::GetSingleton().DrawTerrain();
-    //LevelHandler::GetSingleton().DrawTerrain();
-    //LevelHandler::GetSingleton().DrawTerrain();
 }
 
 
