@@ -618,9 +618,7 @@ void Tank::Fall()
     
     
     vy -= (fallRate*GlobalTimer::dT);
-    
-    //vy=vy*GlobalTimer::dT;
-    
+        
     float dy=vy*GlobalTimer::dT;
     
     if(dy>10.0*GlobalTimer::dT)
