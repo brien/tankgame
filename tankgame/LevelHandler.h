@@ -63,8 +63,11 @@ public:
     int colorNumber2;
 
 private:
-    int t[128][128];
-    int f[128][128];
+    static const int MAX_SIZE_X = 128;
+    static const int MAX_SIZE_Z = 128;
+
+    int t[MAX_SIZE_X][MAX_SIZE_Z];
+    int f[MAX_SIZE_X][MAX_SIZE_Z];
 };
 
 #endif
