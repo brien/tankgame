@@ -17,12 +17,8 @@ public:
     float r, g, b;
     
     TankType type;
-    
-    
+
     void Draw();
-    
-    
-    
 };
 
 

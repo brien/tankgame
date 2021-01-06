@@ -52,7 +52,7 @@ void LevelHandler::Init()
 {
     levelNumber=48;
     sizeX=MAX_SIZE_X;
-    sizeZ= MAX_SIZE_Z;
+    sizeZ=MAX_SIZE_Z;
     colorNumber=0;
     drawFloor=true;
     drawWalls=false;
