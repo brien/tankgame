@@ -285,11 +285,11 @@ bool GraphicsTask::Start()
     
     glFrontFace(GL_CW);
     
-    GLfloat LightAmbient[]=		{ 1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat LightDiffuse[]=		{ 1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat LightSpecular[]=	{ 0.8f, 0.8f, 0.8f, 0.8f};
+    GLfloat LightAmbient[]= { 1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f};
+    GLfloat LightSpecular[]= { 0.8f, 0.8f, 0.8f, 0.8f};
     
-    GLfloat LightPosition[]=	{ 0.0f, 1.0f, 0.0f, 0.0f };
+    GLfloat LightPosition[]= { 0.0f, 1.0f, 0.0f, 0.0f };
     
     
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
