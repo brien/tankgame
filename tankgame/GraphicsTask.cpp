@@ -571,25 +571,15 @@ void GraphicsTask::Update()
     TankHandler::GetSingleton().DrawTanks();
     
     
-    
-    
     if(drawHUD)
     {
         DrawHUD(TankHandler::GetSingleton().players[0]);
     }
     
-    
     if(drawMenu)
     {
         DrawMenu(App::GetSingleton().gameTask->menuState);
     }
-    
-    
-    
-    //glDisable(GL_SCISSOR_TEST);
-    
-    
-    
     
     /*glBegin(GL_QUADS);
      glTexCoord2i(1, 1);
