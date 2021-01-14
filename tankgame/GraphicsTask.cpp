@@ -312,10 +312,7 @@ bool GraphicsTask::Start()
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     
-    
-    
     glEnable(GL_TEXTURE_2D);
-    
     
     TGA_Texture(textureArray, "texture/cube1.tga", TEXTURE_WHITE_CUBE, true);
     TGA_Texture(textureArray, "texture/cube2.tga", TEXTURE_BLACK_CUBE, true);
@@ -353,23 +350,6 @@ bool GraphicsTask::Start()
         fclose(tload);
     }
     
-    /*
-     bodymesh.SafetyCheck();
-     //bodymesh.Unitize(0.5);
-     bodymesh.ScaleVerticies(0.005, 0.005, 0.005);
-     bodymesh.GenerateFacets();
-     //bodymesh.MergeVerticies();
-     bodymesh.GenerateEdges();
-     
-     
-     tload = fopen("body4.gsm","w+b");
-     
-     if(tload!=NULL)
-     {
-     bodymesh.SaveGSM(tload);
-     fclose(tload);
-     }*/
-    
     tload = fopen("nowturret.gsm","rb");
     
     if(tload!=NULL)
@@ -378,27 +358,6 @@ bool GraphicsTask::Start()
         fclose(tload);
     }
     
-    //turretmesh.SafetyCheck();
-    
-    /*for(int j=0; j<turretmesh.GetNumTriangles(); j++)
-     {
-     turretmesh.FlipTriangleWinding(j);
-     }*/
-    
-    //turretmesh.Unitize(0.451);
-    //turretmesh.GenerateFacets();
-    //turretmesh.MergeVerticies();
-    //turretmesh.GenerateEdges();
-    
-    /* tload = fopen("nowturret.gsm","w+b");
-     
-     if(tload!=NULL)
-     {
-     turretmesh.SaveGSM(tload);
-     fclose(tload);
-     }*/
-    
-    
     tload = fopen("cannon.gsm","rb");
     
     if(tload!=NULL)
@@ -406,20 +365,6 @@ bool GraphicsTask::Start()
         cannonmesh.LoadGSM(tload);
         fclose(tload);
     }
-    
-    /*cannonmesh.SafetyCheck();
-     cannonmesh.Unitize(.3);
-     cannonmesh.GenerateFacets();
-     cannonmesh.MergeVerticies();
-     cannonmesh.GenerateEdges();*/
-    /*
-     tload = fopen("cannon.gsm","w+b");
-     
-     if(tload!=NULL)
-     {
-     cannonmesh.SaveGSM(tload);
-     fclose(tload);
-     }*/
     
     tload = fopen("body.gsm","rb");
     
