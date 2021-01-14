@@ -131,5 +131,7 @@ public:
     
     igtl_QGLMesh itemmesh;
     
+private:
+    void FixMesh(igtl_QGLMesh& mesh);
 };
 #endif /* GraphicsTask_h */

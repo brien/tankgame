@@ -431,9 +431,16 @@ bool GraphicsTask::Start()
     
     BuildDisplayLists();
     
-    
-    
     return true;
+}
+
+void GraphicsTask::FixMesh(igtl_QGLMesh& mesh)
+{
+    mesh.SafetyCheck();
+    mesh.Unitize(.3);
+    mesh.GenerateFacets();
+    mesh.MergeVerticies();
+    mesh.GenerateEdges();
 }
 
 void GraphicsTask::Stop()
