@@ -71,7 +71,7 @@ void GraphicsTask::TGA_Texture(unsigned int textureArray[], const char* strFileN
     
     tImageTGA *pBitMap = Load_TGA(strFileName);
     
-    if(pBitMap == NULL)	return;//exit(0);
+    if(pBitMap == NULL)	return;
     
     glGenTextures(1, &textureArray[ID]);
     glBindTexture(GL_TEXTURE_2D, textureArray[ID]);
