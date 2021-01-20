@@ -50,7 +50,7 @@ Camera::~Camera()
 }
 
 
-GraphicsTask::GraphicsTask()
+GraphicsTask::GraphicsTask() : alphalist{ 0 }
 {
     drawHUD=true;
     drawMenu=false;
