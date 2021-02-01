@@ -125,13 +125,12 @@ public:
     bool drawHUD;
     bool drawMenu;
     
+private:
     igtl_QGLMesh bodymesh;
     igtl_QGLMesh turretmesh;
     igtl_QGLMesh cannonmesh;
-    
     igtl_QGLMesh itemmesh;
-    
-private:
+
     void FixMesh(igtl_QGLMesh& mesh);
 };
 #endif /* GraphicsTask_h */
