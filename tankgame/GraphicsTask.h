@@ -19,7 +19,6 @@ public:
     Camera();
     ~Camera();
     
-    //void RemoveFocus();
     float xpos;
     float ypos;
     float zpos;
