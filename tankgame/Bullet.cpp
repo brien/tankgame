@@ -538,7 +538,6 @@ void Bullet::NextFrame()
                         if(TankHandler::GetSingleton().combo[(-1*tid)-1]>TankHandler::GetSingleton().special[(-1*tid)-1])
                         {
                             TankHandler::GetSingleton().special[(-1*tid)-1]=TankHandler::GetSingleton().combo[(-1*tid)-1];
-                            //App::GetSingleton().soundTask->PlayChannel(1);
                         }
                         
                         TankHandler::GetSingleton().comboNum[(-1*tid)-1]++;
