@@ -226,7 +226,7 @@ void Bullet::NextFrame()
                 }
             }
             
-            if(tid<0 && spec && type1==3)
+            if(tid<0 && spec && type1==TYPE_YELLOW)
             {
                 if(type2==TYPE_RED)
                 {
