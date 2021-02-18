@@ -147,10 +147,7 @@ void Bullet::NextFrame()
         
     }
     
-    
     ry+=GlobalTimer::dT*dty;
-    
-    
     
     if(ry>360)
     {
@@ -173,11 +170,8 @@ void Bullet::NextFrame()
     
     float ory=ry;
     
-    
     if(LevelHandler::GetSingleton().PointCollision(x,y,z))
     {
-        
-        
         x -= xpp;
         z -= zpp;
         if(numbounces<maxbounces)

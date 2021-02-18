@@ -18,10 +18,11 @@ FX::FX()
     x=y=z=0;
     rx=ry=rz=0;
     dx=dy=dz=0;
-    r=g=b=0;
+    r=g=b=a=0;
     time=0;
     maxTime=10;
-    
+    alive = true;
+    type = 0;
 }
 
 
