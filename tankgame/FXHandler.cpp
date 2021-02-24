@@ -102,7 +102,7 @@ void FX::Update()
     y+=dy;//*GlobalTimer::dT;
     z+=dz*GlobalTimer::dT;
     
-    if(type==6)
+    if(type==TYPE_DEATH)
     {
         if((int)ry%2==0)
         {
@@ -114,10 +114,10 @@ void FX::Update()
     }
     
     
-    if(type==3)
+    if(type==TYPE_THREE)
         rz+=300*GlobalTimer::dT;
     
-    if(type==1 && !LevelHandler::GetSingleton().PointCollision(x, y, z))
+    if(type==TYPE_JUMP && !LevelHandler::GetSingleton().PointCollision(x, y, z))
     {
         y-=5*GlobalTimer::dT;
         r-=.5*GlobalTimer::dT;
@@ -140,12 +140,12 @@ void FX::Draw()
     glRotatef(-ry, 0, 1, 0);
     glRotatef(rz, 0, 0, 1);
     
-    if(type==3)
+    if(type==TYPE_THREE)
     {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[16]);
     }
-    if(type==5)
+    if(type==TYPE_STAR)
     {
         glEnable(GL_TEXTURE_2D);
         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[19]);
@@ -153,37 +153,37 @@ void FX::Draw()
     
     glDisable(GL_CULL_FACE);
     
-    if(type==0)
+    if(type==TYPE_ZERO)
     {
         glScalef(5*time/maxTime, 1, 5*time/maxTime);
     }
     
-    if(type==1)
+    if(type==TYPE_JUMP)
     {
         glScalef(1*time/maxTime, 1, 1*time/maxTime);
     }
     
-    if(type==2)
+    if(type==TYPE_SMOKE)
     {
         glScalef(.25*time/maxTime, .25, .25*time/maxTime);
     }
     
-    if(type==4)
+    if(type==TYPE_SMALL_SQUARE)
     {
         glScalef(.5*time/maxTime, .5, .5*time/maxTime);
     }
     
-    if(type==5)
+    if(type==TYPE_STAR)
     {
         glScalef(.3*time/maxTime, .3, .3*time/maxTime);
     }
     
-    if(type==6)
+    if(type==TYPE_DEATH)
     {
         glCallList(App::GetSingleton().graphicsTask->squarelist2);
     }
     
-    if(type==0)
+    if(type==TYPE_ZERO)
     {
         glCallList(App::GetSingleton().graphicsTask->squarelist2);
     }
