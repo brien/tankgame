@@ -94,12 +94,11 @@ FX::~FX()
 
 void FX::Update()
 {
-    //ry+=1;
     a-=2*GlobalTimer::dT;
     time+=GlobalTimer::dT;
     
     x+=dx*GlobalTimer::dT;
-    y+=dy;//*GlobalTimer::dT;
+    y+=dy;
     z+=dz*GlobalTimer::dT;
     
     if(type==TYPE_DEATH)
