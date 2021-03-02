@@ -455,8 +455,6 @@ void Bullet::NextFrame()
                     TankHandler::GetSingleton().hitCombo[(-1*tid)-1]++;
                     TankHandler::GetSingleton().combo[(-1*tid)-1]+=(float)TankHandler::GetSingleton().hitCombo[(-1*tid)-1]/10;
                 }
-                //x -= GlobalTimer::dT*movRate * (float)cos(ry*DTR);
-                //z -= GlobalTimer::dT*movRate * (float)sin(ry*DTR);
                 
             }
             else
