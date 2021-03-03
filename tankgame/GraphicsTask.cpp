@@ -341,37 +341,10 @@ bool GraphicsTask::Start()
     TGA_Texture(textureArray, "texture/9.tga", TEXTURE_NINE, true);
     
     
-    FILE* tload = fopen("nowbody.gsm","rb");
-    
-    if(tload!=NULL)
-    {
-        bodymesh.LoadGSM(tload);
-        fclose(tload);
-    }
-    
-    tload = fopen("nowturret.gsm","rb");
-    
-    if(tload!=NULL)
-    {
-        turretmesh.LoadGSM(tload);
-        fclose(tload);
-    }
-    
-    tload = fopen("cannon.gsm","rb");
-    
-    if(tload!=NULL)
-    {
-        cannonmesh.LoadGSM(tload);
-        fclose(tload);
-    }
-    
-    tload = fopen("body.gsm","rb");
-    
-    if(tload!=NULL)
-    {
-        itemmesh.LoadGSM(tload);
-        fclose(tload);
-    }
+    PrepareMesh(bodymesh, "nowbody.gsm");
+    PrepareMesh(turretmesh, "nowturret.gsm");
+    PrepareMesh(cannonmesh, "cannon.gsm");
+    PrepareMesh(itemmesh, "body.gsm");
     
     BuildDisplayLists();
     
@@ -548,6 +521,17 @@ void GraphicsTask::Update()
     
 }
 
+
+void GraphicsTask::PrepareMesh(igtl_QGLMesh& mesh, const char* fileName)
+{
+    FILE* tload = fopen(fileName, "rb");
+
+    if (tload != NULL)
+    {
+        mesh.LoadGSM(tload);
+        fclose(tload);
+    }
+}
 
 void GraphicsTask::DrawSky()
 {
@@ -1465,9 +1449,6 @@ void GraphicsTask::DrawMenu(int option)
     
     
 }
-
-
-
 
 
 void GraphicsTask::BuildDisplayLists()

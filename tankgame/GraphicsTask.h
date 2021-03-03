@@ -131,5 +131,6 @@ private:
     igtl_QGLMesh itemmesh;
 
     void FixMesh(igtl_QGLMesh& mesh);
+    void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
 };
 #endif /* GraphicsTask_h */
