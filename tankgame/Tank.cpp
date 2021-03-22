@@ -1202,14 +1202,12 @@ bool Tank::Move(float rate)
         
         if((int)(x+collisionPoints[kx]+vx)!=(int)(x+collisionPoints[kx]) && (int)(z+collisionPoints[kz]+vz)==(int)(z+collisionPoints[kz]) )
         {
-            //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
             z+=vz/2;
             done=true;
         }
         //else
         if((int)(x+collisionPoints[kx]+vx)==(int)(x+collisionPoints[kx]) && (int)(z+collisionPoints[kz]+vz)!=(int)(z+collisionPoints[kz]) )
         {
-            //FXHandler::GetSingleton().CreateFX(TYPE_THREE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
             x+=vx/2;
             done=true;
         }
