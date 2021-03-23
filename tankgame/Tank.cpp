@@ -494,8 +494,6 @@ void Tank::Special(float dTpressed)
         if(type1==TYPE_BLUE)
         {
 
-            //temp.y+=.25;
-
             if(type2!=TYPE_RED)
             {
                 Bullet temp(id, attack, type1, type2, bounces,
