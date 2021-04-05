@@ -628,9 +628,7 @@ void Tank::Fall()
     {
         dy=-15.0*GlobalTimer::dT;
     }
-    
-    //vy=dy/GlobalTimer::dT;
-    
+        
     y+=dy;
     
     
