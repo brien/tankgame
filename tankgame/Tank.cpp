@@ -424,7 +424,7 @@ void Tank::Special(float dTpressed)
     {
 
 
-        float ratio = (double)(z-TankHandler::GetSingleton().players[0].z)/(double)(x-TankHandler::GetSingleton().players[0].x);
+        float ratio = (z-TankHandler::GetSingleton().players[0].z)/(x-TankHandler::GetSingleton().players[0].x);
         float ryp=toDegrees(atan(ratio));
 
         if(TankHandler::GetSingleton().players[0].x<x)
