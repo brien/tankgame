@@ -203,9 +203,7 @@ void Bullet::NextFrame()
                  dist=128;
             }
             Mix_Volume(9, 128-dist);
-             
-             //Mix_SetPosition(2, ryp, (int)dist);
-            
+                         
             App::GetSingleton().soundTask->PlayChannel(9);
             
             if(numbounces<1)
