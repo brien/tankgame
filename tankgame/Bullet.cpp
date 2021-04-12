@@ -633,9 +633,7 @@ void Bullet::Draw()
         glRotatef(-60, 1, 0, 0);
         
         glDisable(GL_TEXTURE_2D);
-        
-        //glCallList(App::GetSingleton().graphicsTask->alphalist[0]);
-        
+                
         glColor3f(r, g, b);
         
         glScalef(1, 1, 0.2);
