@@ -271,6 +271,4 @@ void FXHandler::Draw()
             }
         }
     }
-    
-    
 }
