@@ -197,8 +197,6 @@ void FX::Draw()
     
     glCallList(App::GetSingleton().graphicsTask->squarelist);
     
-    
-    
     glDisable(GL_BLEND);
     glDisable(GL_TEXTURE_2D);
     glDepthMask(GL_TRUE);
