@@ -381,7 +381,6 @@ void TankHandler::NextFrame()
                     players[0].rr=rtyp;
                     
                     players[0].rrl=players[0].rr;
-                    
                 }
                 
                 dist=sqrt((it->x-players[1].x)*(it->x-players[1].x)+(it->z-players[1].z)*(it->z-players[1].z));

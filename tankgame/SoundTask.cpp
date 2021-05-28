@@ -91,7 +91,6 @@ bool SoundTask::Start()
         bounce = Mix_LoadWAV("sounds/elastik.wav");
         
         Mix_Volume(-1, 50);
-        
     }
     
     return true;
