@@ -97,7 +97,6 @@ TankHandler::~TankHandler()
 
 void TankHandler::Init()
 {
-    
     combo[0]=0;
     combo[1]=0;
     special[0]+=(float)comboNum[0];
