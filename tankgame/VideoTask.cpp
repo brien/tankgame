@@ -140,13 +140,11 @@ bool VideoTask::Start()
 
 void VideoTask::Update()
 {
-    
     SDL_GL_SwapWindow(window);
 }
 
 void VideoTask::Stop()
 {
-    
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow( window );
