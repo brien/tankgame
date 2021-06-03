@@ -134,7 +134,6 @@ bool VideoTask::Start()
         return false;
     }
     
-    
     return true;
 }
 
