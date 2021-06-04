@@ -73,8 +73,6 @@ bool VideoTask::Start()
         if(line[0]=='0')
         {
             flags = SDL_WINDOW_OPENGL;
-            //hide the mouse cursor
-            //SDL_ShowCursor(SDL_DISABLE);
         }
         else
         {
