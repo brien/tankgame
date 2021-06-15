@@ -216,7 +216,6 @@ void GameTask::Update()
         
         FXHandler::GetSingleton().NextFrame();
         TankHandler::GetSingleton().NextFrame();
-        
     }
     
     if(gameOver)
