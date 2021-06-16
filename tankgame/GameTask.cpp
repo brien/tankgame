@@ -222,8 +222,6 @@ void GameTask::Update()
     {
         GameOver();
     }
-    
-    
 }
 
 void GameTask::GameOver()
