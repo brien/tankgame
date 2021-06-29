@@ -210,7 +210,6 @@ void GameTask::Update()
             LevelHandler::GetSingleton().NextLevel(false);
         }
         
-        
         App::GetSingleton().graphicsTask->drawHUD=true;
         App::GetSingleton().graphicsTask->drawMenu=false;
         
