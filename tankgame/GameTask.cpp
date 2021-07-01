@@ -135,7 +135,6 @@ void GameTask::Update()
             App::GetSingleton().soundTask->PlayChannel(1);
         }
         
-        
         if(InputTask::KeyDown(SDL_SCANCODE_2))
         {
             TankHandler::GetSingleton().numPlayers=2;
