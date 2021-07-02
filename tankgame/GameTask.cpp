@@ -128,7 +128,6 @@ void GameTask::Update()
             gameStarted=true;
         }
         
-        
         if ( InputTask::KeyDown(SDL_SCANCODE_I) )
         {
             debug=true;
