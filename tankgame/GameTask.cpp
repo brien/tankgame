@@ -73,7 +73,6 @@ void GameTask::OnSuspend()
 
 void GameTask::Update()
 {
-    
     static float ycam=0.8f;
     static float xzcam=1.0f;
     
