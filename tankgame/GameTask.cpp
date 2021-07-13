@@ -198,13 +198,16 @@ void GameTask::Update()
             xzcam=0.2;
         }
         
-        if(InputTask::KeyDown(SDL_SCANCODE_H) && debug)
+        if (debug)
         {
-            LevelHandler::GetSingleton().NextLevel(true);
-        }
-        if(InputTask::KeyDown(SDL_SCANCODE_L) && debug)
-        {
-            LevelHandler::GetSingleton().NextLevel(false);
+            if (InputTask::KeyDown(SDL_SCANCODE_H))
+            {
+                LevelHandler::GetSingleton().NextLevel(true);
+            }
+            if (InputTask::KeyDown(SDL_SCANCODE_L))
+            {
+                LevelHandler::GetSingleton().NextLevel(false);
+            }
         }
         
         App::GetSingleton().graphicsTask->drawHUD=true;
