@@ -40,7 +40,6 @@ bool GameTask::Start()
         App::GetSingleton().graphicsTask->cams[i].ypos=60.0;
         App::GetSingleton().graphicsTask->cams[i].zpos=40.0;
         
-        
         App::GetSingleton().graphicsTask->cams[i].xfocus=30.0;
         App::GetSingleton().graphicsTask->cams[i].yfocus=0;
         App::GetSingleton().graphicsTask->cams[i].zfocus=40.0;
