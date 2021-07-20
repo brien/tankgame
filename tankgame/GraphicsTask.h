@@ -12,24 +12,8 @@
 #include "ITask.h"
 #include "igtl_qmesh.h"
 #include "Tank.h"
+#include "Camera.h"
 
-class Camera
-{
-public:
-    Camera();
-    ~Camera();
-    
-    float xpos;
-    float ypos;
-    float zpos;
-    
-    float xfocus;
-    float yfocus;
-    float zfocus;
-    
-    float xzdist;
-    float ydist;
-};
 
 #define TGA_RGB		2
 #define TGA_A		3
