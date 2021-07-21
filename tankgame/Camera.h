@@ -3,13 +3,19 @@
 
 class Camera
 {
+private:
+    float _xpos;
+    float _ypos;
+    float _zpos;
 public:
     Camera();
     ~Camera();
 
-    float xpos;
-    float ypos;
-    float zpos;
+    const float xpos() const { return _xpos; }
+    const float ypos() const { return _ypos; }
+    const float zpos() const { return _zpos; }
+
+    void SetPos(float x, float y, float z);
 
     float xfocus;
     float yfocus;
