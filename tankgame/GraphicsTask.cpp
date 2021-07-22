@@ -385,9 +385,11 @@ void GraphicsTask::Update()
                 TankHandler::GetSingleton().players[i].z - cams[i].xzdist * (float)sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)
             );
             
-            cams[i].xfocus=(TankHandler::GetSingleton().players[i].x + (float)cos((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
-            cams[i].yfocus=TankHandler::GetSingleton().players[i].y+.3;
-            cams[i].zfocus=(TankHandler::GetSingleton().players[i].z + (float)sin((TankHandler::GetSingleton().players[i].ry+TankHandler::GetSingleton().players[i].rty)*DTR));
+            cams[i].SetFocus(
+                TankHandler::GetSingleton().players[i].x + (float)cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR),
+                TankHandler::GetSingleton().players[i].y + .3,
+                TankHandler::GetSingleton().players[i].z + (float)sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)
+            );
         }
     }
     
@@ -397,7 +399,7 @@ void GraphicsTask::Update()
         //glScissor(0, 300, 800, 300);
         
         gluLookAt(cams[1].xpos(),cams[1].ypos(),cams[1].zpos(),
-                  cams[1].xfocus,cams[1].yfocus,cams[1].zfocus,
+                  cams[1].xfocus(),cams[1].yfocus(),cams[1].zfocus(),
                   0, 1, 0);
         
         LevelHandler::GetSingleton().DrawTerrain();
@@ -429,7 +431,7 @@ void GraphicsTask::Update()
     }
     
     gluLookAt(cams[0].xpos(),cams[0].ypos(),cams[0].zpos(),
-              cams[0].xfocus,cams[0].yfocus,cams[0].zfocus,
+              cams[0].xfocus(),cams[0].yfocus(),cams[0].zfocus(),
               0, 1, 0);
     
     if(LevelHandler::GetSingleton().levelNumber==48)

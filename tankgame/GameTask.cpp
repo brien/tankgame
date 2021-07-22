@@ -37,10 +37,7 @@ bool GameTask::Start()
     for(int i=0; i<4; i++)
     {
         App::GetSingleton().graphicsTask->cams[i].SetPos(40.0, 60.0, 40.0);
-        
-        App::GetSingleton().graphicsTask->cams[i].xfocus=30.0;
-        App::GetSingleton().graphicsTask->cams[i].yfocus=0;
-        App::GetSingleton().graphicsTask->cams[i].zfocus=40.0;
+        App::GetSingleton().graphicsTask->cams[i].SetFocus(30.0, 0.0, 40.0);
     }
     App::GetSingleton().graphicsTask->drawHUD=false;
     
