@@ -24,6 +24,9 @@ GameTask::GameTask()
     versus=false;
     gameOver=false;
     menuState=0;
+    timer = 0;
+    paused = false;
+    debug = false;
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
