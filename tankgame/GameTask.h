@@ -32,11 +32,7 @@ public:
     
     int menuState;
     bool versus;
-    
-    int lastcolor;
-    int thiscolor;
-    
-    float startTime;
+        
     int timer;
     
     bool gameOver;
