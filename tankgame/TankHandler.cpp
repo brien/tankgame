@@ -578,10 +578,7 @@ void TankHandler::DrawTanks()
             
             glFrontFace(GL_CCW);
             
-            
             glCallList(App::GetSingleton().graphicsTask->bodylist);
-            
-            
             
             glTranslatef(0, .10, 0);
             
