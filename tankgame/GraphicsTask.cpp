@@ -37,11 +37,12 @@ GraphicsTask::GraphicsTask() : alphalist{ 0 }
     drawHUD=true;
     drawMenu=false;
     cubelist1=1;
+    defaultFont = TTF_OpenFont("arial.ttf", 25);
 }
 
 GraphicsTask::~GraphicsTask()
 {
-    
+    TTF_CloseFont(defaultFont);
 }
 
 void GraphicsTask::TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap)
