@@ -1285,8 +1285,6 @@ void GraphicsTask::DrawHUD(Tank& player)
 
 void GraphicsTask::DrawMenu(int option)
 {
-    
-    
     glPushMatrix();
     
     glDisable(GL_LIGHTING);
