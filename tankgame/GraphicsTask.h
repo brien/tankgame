@@ -100,6 +100,7 @@ public:
     void DrawHUD(Tank& player);
     void DrawMenu(int option);
     void DrawSky();
+    void RenderText(const TTF_Font* Font, const unsigned char& R, const unsigned char& G, const unsigned char& B, const double& X, const double& Y, const double& Z, const char* Text);
     
     bool Start();
     void Update();
@@ -107,7 +108,6 @@ public:
     
     bool drawHUD;
     bool drawMenu;
-    
 private:
     igtl_QGLMesh bodymesh;
     igtl_QGLMesh turretmesh;
