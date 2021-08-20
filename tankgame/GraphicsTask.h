@@ -7,6 +7,15 @@
 #ifndef GraphicsTask_h
 #define GraphicsTask_h
 
+#ifdef _WIN32
+// If building in windows:
+#include <windows.h>
+#include <GL/gl.h>
+#else
+//if not:
+#include <OpenGL/gl.h>
+#endif
+
 #include <SDL2_ttf/SDL_ttf.h>
 
 #include "ITask.h"
