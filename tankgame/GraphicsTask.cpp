@@ -1433,7 +1433,7 @@ void GraphicsTask::DrawMenu(int option)
     
 }
 
-void GraphicsTask::RenderText(const TTF_Font* Font, const unsigned char& R, const unsigned char& G, const unsigned char& B, const double& X, const double& Y, const double& Z, const char* Text)
+void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text)
 {
     /*Create some variables.*/
     SDL_Color Color = { R, G, B };
