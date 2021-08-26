@@ -37,7 +37,9 @@ GraphicsTask::GraphicsTask() : alphalist{ 0 }
     drawHUD=true;
     drawMenu=false;
     cubelist1=1;
-    defaultFont = TTF_OpenFont("arial.ttf", 25);
+    TTF_Init();
+    defaultFont = TTF_OpenFont("./arial.ttf", 256);
+    if (!defaultFont) { printf("Unable to open font");exit(1); } //The program exits here
 }
 
 GraphicsTask::~GraphicsTask()
@@ -418,8 +420,6 @@ void GraphicsTask::Update()
             DrawHUD(TankHandler::GetSingleton().players[1]);
         }
         
-        
-        
         //glEnable(GL_SCISSOR_TEST);
         
         glViewport(0, 300, VideoTask::scrWidth, VideoTask::scrHeight/2);
@@ -483,26 +483,28 @@ void GraphicsTask::Update()
     if(drawHUD)
     {
         DrawHUD(TankHandler::GetSingleton().players[0]);
+        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "TEST TEXT");
     }
     
     if(drawMenu)
     {
+        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "CALL");
         DrawMenu(App::GetSingleton().gameTask->menuState);
     }
     
-    /*glBegin(GL_QUADS);
-     glTexCoord2i(1, 1);
-     glVertex3f(0,0,0);
-     
-     glTexCoord2i(1, 0);
-     glVertex3f(TankHandler::GetSingleton().player.x,0,0);
-     
-     glTexCoord2i(0, 0);
-     glVertex3f(TankHandler::GetSingleton().player.x,0,1);
-     
-     glTexCoord2i(0, 1);
-     glVertex3f(0,0,TankHandler::GetSingleton().player.x);
-     glEnd();*/
+     //glBegin(GL_QUADS);
+     //glTexCoord2i(1, 1);
+     //glVertex3f(0,0,0);
+     //
+     //glTexCoord2i(1, 0);
+     //glVertex3f(TankHandler::GetSingleton().players[0].x,0,0);
+     //
+     //glTexCoord2i(0, 0);
+     //glVertex3f(TankHandler::GetSingleton().players[0].x,0,1);
+     //
+     //glTexCoord2i(0, 1);
+     //glVertex3f(0,0,TankHandler::GetSingleton().players[0].x);
+     //glEnd();
     
 }
 
@@ -1435,21 +1437,89 @@ void GraphicsTask::DrawMenu(int option)
 
 void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text)
 {
+    GLenum error = glGetError();
+    while (error != GL_NO_ERROR)
+        error = glGetError();
+
+    glPushMatrix();
+
+    glDisable(GL_LIGHTING);
+    
+
+    glLoadIdentity();
+    glEnable(GL_TEXTURE_2D);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glDisable(GL_DEPTH_TEST);
+    //Treat 3D like 2D
+    glTranslated(0, 0, -1);
+
+    glColor3f(1.0, 1.0, 1.0);
+    //-----------
     /*Create some variables.*/
-    SDL_Color Color = { R, G, B };
-    SDL_Surface* Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(Font), Text, Color);
+    SDL_Color Color = { 255, 0, 0 };
+    SDL_Surface* Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(defaultFont), "SUPER", Color);
     unsigned Texture = 0;
 
-    /*Generate an OpenGL 2D texture from the SDL_Surface*.*/ glGenTextures(1, &Texture); glBindTexture(GL_TEXTURE_2D, Texture);
+    Uint8 colors = Message->format->BytesPerPixel;
+    Uint8 texture_format;
+    if (colors == 4) {   // alpha
+        if (Message->format->Rmask == 0x000000ff)
+            texture_format = GL_RGBA;
+        else
+            texture_format = GL_BGRA_EXT;
+    }
+    else {             // no alpha
+        if (Message->format->Rmask == 0x000000ff)
+            texture_format = GL_RGB;
+        else
+            texture_format = GL_BGR_EXT;
+    }
 
-    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glGenTextures(1, &Texture);
+    glBindTexture(GL_TEXTURE_2D, Texture); //textureArray[12]);
+    //glBindTexture(GL_TEXTURE_2D, textureArray[12]);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,
+        GL_RGBA, GL_UNSIGNED_BYTE, Message->pixels);
 
-    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0, GL_BGRA, GL_UNSIGNED_BYTE, Message->pixels);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0, 0, GL_UNSIGNED_BYTE, Message->pixels);
+    error = glGetError();
+    if (error == GL_INVALID_ENUM)
+    {
+        printf("Invalid Enum");exit(1);
+    }
 
-    /*Draw this texture on a quad with the given xyz coordinates.*/ glBegin(GL_QUADS); glTexCoord2d(0, 0); glVertex3d(X, Y, Z); glTexCoord2d(1, 0); glVertex3d(X + Message->w, Y, Z); glTexCoord2d(1, 1); glVertex3d(X + Message->w, Y + Message->h, Z); glTexCoord2d(0, 1); glVertex3d(X, Y + Message->h, Z); glEnd();
+    /*Generate an OpenGL 2D texture from the SDL_Surface*.*/
+    //glGenTextures(1, &Texture);
+    //glBindTexture(GL_TEXTURE_2D, Texture);
 
-    /*Clean up.*/ glDeleteTextures(1, &Texture); SDL_FreeSurface(Message);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    error = glGetError();
+    while (error != GL_NO_ERROR)
+        error = glGetError();
+
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0, GL_BGR_EXT, GL_UNSIGNED_BYTE, Message->pixels);
+    //glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0, 0, GL_UNSIGNED_BYTE, Message->pixels);
+
+    /*Draw this texture on a quad with the given xyz coordinates.*/
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex3f(0.03f - 0.55f, -0.06f - 0.13f, 0);
+    glTexCoord2d(1, 0);
+    glVertex3f(0.35f - 0.55f, -0.06f - 0.13f, 0);
+    glTexCoord2d(1, 1);
+    glVertex3f(0.35f - 0.55f, -0.15f - 0.13f, 0);
+    glTexCoord2d(0, 1);
+    glVertex3f(0.03f - 0.55f, -0.15f - 0.13f, 0);
+    glEnd();
+
+    /*Clean up.*/
+    glDeleteTextures(1, &Texture);
+    SDL_FreeSurface(Message);
+    //-----------
+    glPopMatrix();
 }
 
 void GraphicsTask::BuildDisplayLists()
