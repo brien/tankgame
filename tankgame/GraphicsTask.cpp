@@ -1384,8 +1384,6 @@ void GraphicsTask::DrawMenu(int option)
                 
             }
     
-    
-    
     /*
      glEnable(GL_BLEND);
      glBlendFunc(GL_ONE, GL_ONE);
