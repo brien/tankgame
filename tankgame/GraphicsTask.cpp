@@ -901,7 +901,6 @@ void GraphicsTask::DrawHUD(Tank& player)
     float spec=TankHandler::GetSingleton().special[(-1*player.id)-1];
     spec=spec/100;
     
-    //if(test>1)test=1;
     glColor4f(0.5f,spec,1.0f,0.02f);
     
     glVertex3f(0.52f,-0.37f,0);
@@ -1429,7 +1428,6 @@ void GraphicsTask::DrawMenu(int option)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glDisable(GL_BLEND);
-    
     
 }
 
