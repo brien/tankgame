@@ -924,13 +924,10 @@ void GraphicsTask::DrawHUD(Tank& player)
         glVertex3f(0.52f+0.01f,-0.37f+costspec*i,0);
     }
     
-    
     glVertex3f(0.52f,-0.37f,0);
     glVertex3f(0.52f+0.01f,-0.37f,0);
     
     glEnd();
-    
-    
     
     /*
      
