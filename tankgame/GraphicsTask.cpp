@@ -483,15 +483,17 @@ void GraphicsTask::Update()
     if(drawHUD)
     {
         DrawHUD(TankHandler::GetSingleton().players[0]);
-        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "TEST TEXT");
     }
     
     if(drawMenu)
     {
-        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "CALL");
         DrawMenu(App::GetSingleton().gameTask->menuState);
     }
     
+    if (App::GetSingleton().gameTask->debug)
+    {
+        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug Mode");
+    }
      //glBegin(GL_QUADS);
      //glTexCoord2i(1, 1);
      //glVertex3f(0,0,0);
@@ -867,10 +869,10 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     if(App::GetSingleton().gameTask->debug)
     {
+        //RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug Mode");
         float test=(2*(float)GlobalTimer::dT);
         //if(test>1)test=1;
         glColor3f(1.0f,test,1.0f);
-        
         glVertex3f(0.50f,-0.30f,0);
         glVertex3f(0.50f,-0.30f+test,0);
         glVertex3f(0.50f+0.01f,-0.30f+test,0);
@@ -1452,7 +1454,7 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
     //-----------
     /*Create some variables.*/
     SDL_Color Color = { 255, 0, 0 };
-    SDL_Surface* Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(defaultFont), "SUPER", Color);
+    SDL_Surface* Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(defaultFont), Text, Color);
     unsigned Texture = 0;
 
     Uint8 colors = Message->format->BytesPerPixel;
