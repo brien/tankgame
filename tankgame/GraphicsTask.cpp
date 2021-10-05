@@ -779,7 +779,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     //Armor
     //Reload
     
-	   glColor3f(1.0f,0.8f,0.8f);
+    glColor3f(1.0f,0.8f,0.8f);
     //glCallList(cubelist1);
     glVertex3f(-0.51f,0.37f,0);
     glVertex3f(-0.51f+0.29f,0.37f,0);
