@@ -38,8 +38,14 @@ GraphicsTask::GraphicsTask() : alphalist{ 0 }
     drawMenu=false;
     cubelist1=1;
     TTF_Init();
-    defaultFont = TTF_OpenFont("./fonts/DroidSansMono.ttf", 256);
-    if (!defaultFont) { printf("Unable to open font");exit(1); } //The program exits here
+    const char* fontFilePath = "./fonts/DroidSansMono.ttf";
+    defaultFont = TTF_OpenFont(fontFilePath, 256);
+    if (!defaultFont)
+    {
+        printf("Unable to open font");
+        Logger::Get().Write("GraphicsTask: failed loading file: %s", fontFilePath);
+        exit(1);
+    } //The program exits here
 }
 
 GraphicsTask::~GraphicsTask()
@@ -492,7 +498,7 @@ void GraphicsTask::Update()
     
     if (App::GetSingleton().gameTask->debug)
     {
-        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug Mode");
+        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug mode.");
     }
      //glBegin(GL_QUADS);
      //glTexCoord2i(1, 1);
