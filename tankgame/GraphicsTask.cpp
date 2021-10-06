@@ -38,7 +38,7 @@ GraphicsTask::GraphicsTask() : alphalist{ 0 }
     drawMenu=false;
     cubelist1=1;
     TTF_Init();
-    defaultFont = TTF_OpenFont("./arial.ttf", 256);
+    defaultFont = TTF_OpenFont("./fonts/DroidSansMono.ttf", 256);
     if (!defaultFont) { printf("Unable to open font");exit(1); } //The program exits here
 }
 
