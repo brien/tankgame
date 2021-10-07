@@ -498,7 +498,10 @@ void GraphicsTask::Update()
     
     if (App::GetSingleton().gameTask->debug)
     {
-        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug mode.");
+        char buffer[32];
+        float framesPerSecond = 1.0f / GlobalTimer::dT;
+        sprintf(buffer, "%f", framesPerSecond);
+        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, buffer);
     }
      //glBegin(GL_QUADS);
      //glTexCoord2i(1, 1);
@@ -1459,7 +1462,7 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
     glColor3f(1.0, 1.0, 1.0);
     //-----------
     /*Create some variables.*/
-    SDL_Color Color = { 255, 0, 0 };
+    SDL_Color Color = { 255, 255, 0 };
     SDL_Surface* Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(defaultFont), Text, Color);
     unsigned Texture = 0;
 
