@@ -1510,13 +1510,13 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
     /*Draw this texture on a quad with the given xyz coordinates.*/
     glBegin(GL_QUADS);
     glTexCoord2d(0, 0);
-    glVertex3f(0.03f - 0.55f, -0.06f - 0.13f, 0);
+    glVertex3f(0.40f, 0.37f, 0);
     glTexCoord2d(1, 0);
-    glVertex3f(0.35f - 0.55f, -0.06f - 0.13f, 0);
+    glVertex3f(0.40f + 0.29f, 0.37f, 0);
     glTexCoord2d(1, 1);
-    glVertex3f(0.35f - 0.55f, -0.15f - 0.13f, 0);
+    glVertex3f(0.40f + 0.29f, 0.30f, 0);
     glTexCoord2d(0, 1);
-    glVertex3f(0.03f - 0.55f, -0.15f - 0.13f, 0);
+    glVertex3f(0.40f, 0.30f, 0);
     glEnd();
 
     /*Clean up.*/
