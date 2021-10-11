@@ -23,6 +23,7 @@ enum FxType
     TYPE_SMALL_SQUARE,
     TYPE_STAR,
     TYPE_DEATH,
+    TYPE_SMALL_RECTANGLE,
     FX_TYPE_COUNT
 };
 

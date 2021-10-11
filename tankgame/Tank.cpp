@@ -1272,6 +1272,11 @@ bool Tank::Move(bool forb)
         z -= vz;
     }
     moved=true;
+
+    float treadPointX = 0.1 * (float)cos(90+ry * DTR);
+    float treadPointZ = 0.1 * (float)sin(ry * DTR);
+
+    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
     
     if(LevelHandler::GetSingleton().PointCollision(x,y,z)
        ||LevelHandler::GetSingleton().PointCollision(x+collisionPoints[0],y,z+collisionPoints[2])
@@ -1284,7 +1289,6 @@ bool Tank::Move(bool forb)
             vx=-1*vx;
             vz=-1*vz;
         }
-        
         
         int kx=0;
         int kz=2;

@@ -187,6 +187,12 @@ void FX::Draw()
 		glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
 
+	if (type == TYPE_SMALL_RECTANGLE)
+	{
+		glScalef(0.02, 1, 0.2);
+		glCallList(App::GetSingleton().graphicsTask->squarelist2);
+	}
+
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
 	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
