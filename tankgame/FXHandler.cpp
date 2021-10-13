@@ -47,6 +47,10 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _
 	{
 		maxTime = 0.2;
 	}
+	else if (_type == TYPE_SMALL_RECTANGLE)
+	{
+		maxTime = 10;
+	}
 	else
 	{
 		maxTime = 0.3;
@@ -79,6 +83,10 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _
 	else if (type == 6)
 	{
 		maxTime = .4;
+	}
+	else if (_type == TYPE_SMALL_RECTANGLE)
+	{
+		maxTime = 10;
 	}
 	else
 	{
@@ -189,6 +197,7 @@ void FX::Draw()
 
 	if (type == TYPE_SMALL_RECTANGLE)
 	{
+		//a = time / maxTime;
 		glScalef(0.02, 1, 0.2);
 		glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
