@@ -1273,8 +1273,23 @@ bool Tank::Move(bool forb)
     }
     moved=true;
 
-    float treadPointX = 0.1 * (float)cos(90+ry * DTR);
-    float treadPointZ = 0.1 * (float)sin(ry * DTR);
+    float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
+    float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
+
+    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+
+    treadPointX = 0.25 * (float)cos((ry + 135) * DTR);
+    treadPointZ = 0.25 * (float)sin((ry + 135) * DTR);
+
+    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+
+    treadPointX = 0.25 * (float)cos((ry + 225) * DTR);
+    treadPointZ = 0.25 * (float)sin((ry + 225) * DTR);
+
+    FXHandler::GetSingleton().CreateFX(TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+
+    treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
+    treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
 
     FXHandler::GetSingleton().CreateFX(TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
     
