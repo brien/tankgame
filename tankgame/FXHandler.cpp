@@ -197,7 +197,6 @@ void FX::Draw()
 
 	if (type == TYPE_SMALL_RECTANGLE)
 	{
-		//a = time / maxTime;
 		glScalef(0.02, 1, 0.2);
 		glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
