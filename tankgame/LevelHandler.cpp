@@ -355,7 +355,7 @@ void LevelHandler::ItemCollision()
              
                 j->alive=false;
                 
-                FXHandler::GetSingleton().CreateFX(TYPE_THREE, j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1);
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1);
                 
                 App::GetSingleton().soundTask->PlayChannel(3);
                 return;
