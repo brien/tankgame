@@ -131,7 +131,6 @@ float rx, float ry, float rz)
 
 void Bullet::NextFrame()
 {
-    
     dT+=GlobalTimer::dT;
     
     if(type1==TYPE_PURPLE && spec)
@@ -144,7 +143,6 @@ void Bullet::NextFrame()
         {
             dty+=1000*GlobalTimer::dT;
         }
-        
     }
     
     ry+=GlobalTimer::dT*dty;
