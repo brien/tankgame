@@ -120,7 +120,6 @@ void FX::Update()
 		rz += 150.0 * GlobalTimer::dT;
 	}
 
-
 	if (type == FxType::TYPE_THREE)
 		rz += 300 * GlobalTimer::dT;
 
