@@ -136,7 +136,6 @@ void FX::Update()
 
 void FX::Draw()
 {
-
 	glColor3f(r, g, b);
 
 	glPushMatrix();
