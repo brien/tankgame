@@ -1273,18 +1273,23 @@ bool Tank::Move(bool forb)
     }
     moved=true;
 
+    //TODO: Use rotated points (calculated here for the points at which treadmark FX should be spawned) for collision instead of world-aligned points.
+    // These are four points .25 units away from the center of the tank, at 90 degrees
+    // Point one:
+    //float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
+    //float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
+    // Point two:
+    //treadPointX = 0.25 * (float)cos((ry + 135) * DTR);
+    //treadPointZ = 0.25 * (float)sin((ry + 135) * DTR);
+    // Point three:
+    //treadPointX = 0.25 * (float)cos((ry + 225) * DTR);
+    //treadPointZ = 0.25 * (float)sin((ry + 225) * DTR);
+    // Point four:
+    //treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
+    //treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
+
     float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
     float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
-
-    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
-
-    treadPointX = 0.25 * (float)cos((ry + 135) * DTR);
-    treadPointZ = 0.25 * (float)sin((ry + 135) * DTR);
-
-    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
-
-    treadPointX = 0.25 * (float)cos((ry + 225) * DTR);
-    treadPointZ = 0.25 * (float)sin((ry + 225) * DTR);
 
     FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
 
