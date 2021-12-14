@@ -1288,15 +1288,18 @@ bool Tank::Move(bool forb)
     //treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
     //treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
 
-    float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
-    float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
+    if (grounded)
+    {
+        float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
+        float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
 
-    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
 
-    treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
-    treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
+        treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
+        treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
 
-    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.2, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+    }
     
     if(LevelHandler::GetSingleton().PointCollision(x,y,z)
        ||LevelHandler::GetSingleton().PointCollision(x+collisionPoints[0],y,z+collisionPoints[2])
