@@ -86,7 +86,7 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _
 	}
 	else if (_type == FxType::TYPE_SMALL_RECTANGLE)
 	{
-		maxTime = 10;
+		maxTime = 5.0;
 	}
 	else
 	{
@@ -102,8 +102,16 @@ FX::~FX()
 
 void FX::Update()
 {
-	a -= 2 * GlobalTimer::dT;
 	time += GlobalTimer::dT;
+
+	if (type == FxType::TYPE_SMALL_RECTANGLE)
+	{
+		a -= 0.1 * GlobalTimer::dT;
+	}
+	else
+	{
+		a -= 2 * GlobalTimer::dT;
+	}
 
 	x += dx * GlobalTimer::dT;
 	y += dy;
@@ -196,7 +204,7 @@ void FX::Draw()
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
 		glScalef(0.02, 1, 0.2);
-		glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
 
 	glEnable(GL_BLEND);
@@ -264,7 +272,10 @@ void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, 
 	fx.push_back(temp);
 }
 
-
+void FXHandler::ClearFx()
+{
+	fx.clear();
+}
 
 void FXHandler::Draw()
 {
