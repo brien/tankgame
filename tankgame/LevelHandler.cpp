@@ -215,7 +215,8 @@ bool LevelHandler::Load(const char filePath[])
 
 void LevelHandler::NextLevel(bool forb)
 {
-    
+    FXHandler::GetSingleton().ClearFX();
+
     items.clear();
     
     levelNumber=fileName[12];
