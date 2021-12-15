@@ -272,7 +272,7 @@ void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, 
 	fx.push_back(temp);
 }
 
-void FXHandler::ClearFx()
+void FXHandler::ClearFX()
 {
 	fx.clear();
 }
