@@ -38,13 +38,14 @@ public:
     
     vector<Bullet> bullets;
     queue<Bullet> bulletq;
+
+    bool isPlayer;
     
     bool turbo;
     bool recharge;
     float charge;
     float maxCharge;
     float chargeRegen;
-    
     
     float fireCost;
     float jumpCost;

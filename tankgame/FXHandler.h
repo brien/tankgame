@@ -14,16 +14,17 @@ using namespace std;
 //5 = Star
 //6 = Death
 
-enum FxType
+enum class FxType
 {
-    TYPE_ZERO= 0,
-    TYPE_JUMP,
-    TYPE_SMOKE,
-    TYPE_THREE,
-    TYPE_SMALL_SQUARE,
-    TYPE_STAR,
-    TYPE_DEATH,
-    FX_TYPE_COUNT
+    TYPE_ZERO = 0,
+    TYPE_JUMP = 1,
+    TYPE_SMOKE = 2,
+    TYPE_THREE = 3,
+    TYPE_SMALL_SQUARE = 4,
+    TYPE_STAR = 5,
+    TYPE_DEATH = 6,
+    TYPE_SMALL_RECTANGLE = 7,
+    FX_TYPE_COUNT = 8
 };
 
 class FX
@@ -33,13 +34,14 @@ public:
     FX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     FX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     ~FX();
+    void SetMaxTime();
     void Update();
     void Draw();
     
     
     bool alive;
     
-    int type;
+    FxType type;
     
     float r, g, b, a;
     float x, y, z;
@@ -64,6 +66,8 @@ public:
     
     void CreateFX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     void CreateFX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
+
+    void ClearFX();
 };
 
 #endif

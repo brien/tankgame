@@ -107,7 +107,8 @@ void TankHandler::Init()
     for(int j=0; j<numPlayers; j++)
     {
         players[j].Init();
-        
+        players[j].isPlayer = true;
+
         if(App::GetSingleton().gameTask->versus)
         {
             players[j].x=LevelHandler::GetSingleton().enemy[8][0];

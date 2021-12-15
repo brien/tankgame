@@ -22,7 +22,7 @@ FX::FX()
 	time = 0;
 	maxTime = 10;
 	alive = true;
-	type = 0;
+	type = FxType::TYPE_ZERO;
 }
 
 
@@ -43,14 +43,7 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _
 
 	alive = true;
 	time = 0;
-	if (type == 4)
-	{
-		maxTime = 0.2;
-	}
-	else
-	{
-		maxTime = 0.3;
-	}
+	SetMaxTime();
 }
 
 FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
@@ -72,17 +65,26 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _
 
 	alive = true;
 	time = 0;
-	if (type == 4)
+	SetMaxTime();
+}
+
+void FX::SetMaxTime()
+{
+	if (type == FxType::TYPE_SMALL_SQUARE)
 	{
-		maxTime = .2;
+		maxTime = 0.2;
 	}
-	else if (type == 6)
+	else if (type == FxType::TYPE_DEATH)
 	{
-		maxTime = .4;
+		maxTime = 0.4;
+	}
+	else if (type == FxType::TYPE_SMALL_RECTANGLE)
+	{
+		maxTime = 2.5;
 	}
 	else
 	{
-		maxTime = .3;
+		maxTime = 0.3;
 	}
 }
 
@@ -94,14 +96,22 @@ FX::~FX()
 
 void FX::Update()
 {
-	a -= 2 * GlobalTimer::dT;
 	time += GlobalTimer::dT;
+
+	if (type == FxType::TYPE_SMALL_RECTANGLE)
+	{
+		a -= 0.2 * GlobalTimer::dT;
+	}
+	else
+	{
+		a -= 2 * GlobalTimer::dT;
+	}
 
 	x += dx * GlobalTimer::dT;
 	y += dy;
 	z += dz * GlobalTimer::dT;
 
-	if (type == TYPE_DEATH)
+	if (type == FxType::TYPE_DEATH)
 	{
 		if ((int)ry % 2 == 0)
 		{
@@ -112,11 +122,10 @@ void FX::Update()
 		rz += 150.0 * GlobalTimer::dT;
 	}
 
-
-	if (type == TYPE_THREE)
+	if (type == FxType::TYPE_THREE)
 		rz += 300 * GlobalTimer::dT;
 
-	if (type == TYPE_JUMP && !LevelHandler::GetSingleton().PointCollision(x, y, z))
+	if (type == FxType::TYPE_JUMP && !LevelHandler::GetSingleton().PointCollision(x, y, z))
 	{
 		y -= 5 * GlobalTimer::dT;
 		r -= .5 * GlobalTimer::dT;
@@ -129,7 +138,6 @@ void FX::Update()
 
 void FX::Draw()
 {
-
 	glColor3f(r, g, b);
 
 	glPushMatrix();
@@ -139,12 +147,12 @@ void FX::Draw()
 	glRotatef(-ry, 0, 1, 0);
 	glRotatef(rz, 0, 0, 1);
 
-	if (type == TYPE_THREE)
+	if (type == FxType::TYPE_THREE)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[16]);
 	}
-	if (type == TYPE_STAR)
+	if (type == FxType::TYPE_STAR)
 	{
 		glEnable(GL_TEXTURE_2D);
 		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[19]);
@@ -152,44 +160,49 @@ void FX::Draw()
 
 	glDisable(GL_CULL_FACE);
 
-	if (type == TYPE_ZERO)
+	if (type == FxType::TYPE_ZERO)
 	{
 		glScalef(5 * time / maxTime, 1, 5 * time / maxTime);
 	}
 
-	if (type == TYPE_JUMP)
+	if (type == FxType::TYPE_JUMP)
 	{
 		glScalef(1 * time / maxTime, 1, 1 * time / maxTime);
 	}
 
-	if (type == TYPE_SMOKE)
+	if (type == FxType::TYPE_SMOKE)
 	{
 		glScalef(.25 * time / maxTime, .25, .25 * time / maxTime);
 	}
 
-	if (type == TYPE_SMALL_SQUARE)
+	if (type == FxType::TYPE_SMALL_SQUARE)
 	{
 		glScalef(.5 * time / maxTime, .5, .5 * time / maxTime);
 	}
 
-	if (type == TYPE_STAR)
+	if (type == FxType::TYPE_STAR)
 	{
 		glScalef(.3 * time / maxTime, .3, .3 * time / maxTime);
 	}
 
-	if (type == TYPE_DEATH)
+	if (type == FxType::TYPE_DEATH)
 	{
 		glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
 
-	if (type == TYPE_ZERO)
+	if (type == FxType::TYPE_ZERO)
 	{
 		glCallList(App::GetSingleton().graphicsTask->squarelist2);
+	}
+
+	if (type == FxType::TYPE_SMALL_RECTANGLE)
+	{
+		glScalef(0.02, 1, 0.2);
+		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
 
 	glEnable(GL_BLEND);
 	glEnable(GL_DEPTH_TEST);
-	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
 	glDepthMask(GL_FALSE);
 
@@ -253,7 +266,10 @@ void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, 
 	fx.push_back(temp);
 }
 
-
+void FXHandler::ClearFX()
+{
+	fx.clear();
+}
 
 void FXHandler::Draw()
 {
