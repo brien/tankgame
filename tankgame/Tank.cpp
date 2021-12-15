@@ -1288,7 +1288,7 @@ bool Tank::Move(bool forb)
     //treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
     //treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
 
-    if (grounded)
+    if (isPlayer && grounded)
     {
         float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
         float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
