@@ -34,6 +34,7 @@ public:
     FX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     FX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     ~FX();
+    void SetMaxTime();
     void Update();
     void Draw();
     

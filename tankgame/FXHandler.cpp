@@ -43,18 +43,7 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _
 
 	alive = true;
 	time = 0;
-	if (type == FxType::TYPE_SMALL_SQUARE)
-	{
-		maxTime = 0.2;
-	}
-	else if (_type == FxType::TYPE_SMALL_RECTANGLE)
-	{
-		maxTime = 10;
-	}
-	else
-	{
-		maxTime = 0.3;
-	}
+	SetMaxTime();
 }
 
 FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
@@ -76,21 +65,26 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _
 
 	alive = true;
 	time = 0;
+	SetMaxTime();
+}
+
+void FX::SetMaxTime()
+{
 	if (type == FxType::TYPE_SMALL_SQUARE)
 	{
-		maxTime = .2;
+		maxTime = 0.2;
 	}
 	else if (type == FxType::TYPE_DEATH)
 	{
-		maxTime = .4;
+		maxTime = 0.4;
 	}
-	else if (_type == FxType::TYPE_SMALL_RECTANGLE)
+	else if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
-		maxTime = 5.0;
+		maxTime = 2.5;
 	}
 	else
 	{
-		maxTime = .3;
+		maxTime = 0.3;
 	}
 }
 
@@ -106,7 +100,7 @@ void FX::Update()
 
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
-		a -= 0.1 * GlobalTimer::dT;
+		a -= 0.2 * GlobalTimer::dT;
 	}
 	else
 	{
