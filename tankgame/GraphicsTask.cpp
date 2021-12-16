@@ -43,7 +43,7 @@ GraphicsTask::GraphicsTask() : alphalist{ 0 }
     if (!defaultFont)
     {
         printf("Unable to open font");
-        Logger::Get().Write("GraphicsTask: failed loading file: %s", fontFilePath);
+        Logger::Get().Write("GraphicsTask: failed loading file: %s  \n", fontFilePath);
         exit(1);
     } //The program exits here
 }
@@ -319,6 +319,7 @@ bool GraphicsTask::Start()
     TGA_Texture(textureArray, "texture/bank.tga", TEXTURE_BANKSHOT, true);
     TGA_Texture(textureArray, "texture/multi.tga", TEXTURE_MULTISHOT, true);
     TGA_Texture(textureArray, "texture/score.tga", TEXTURE_SCORE, true);
+    TGA_Texture(textureArray, "texture/enemy.tga", TEXTURE_ENEMY, true);
     
     TGA_Texture(textureArray, "texture/0.tga", TEXTURE_ZERO, true);
     TGA_Texture(textureArray, "texture/1.tga", TEXTURE_ONE, true);
@@ -372,7 +373,6 @@ void GraphicsTask::Update()
         float ratio = (float) (VideoTask::scrWidth) / (float) (VideoTask::scrHeight/2);
         gluPerspective( 45.0, ratio, 0.1, 1024.0 );
     }
-    
     
     
     glMatrixMode( GL_MODELVIEW );
@@ -500,7 +500,8 @@ void GraphicsTask::Update()
     {
         char buffer[32];
         float framesPerSecond = 1.0f / GlobalTimer::dT;
-        sprintf(buffer, "%f", framesPerSecond);
+
+        sprintf(buffer, "FPS: %.2f", framesPerSecond);
         RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, buffer);
     }
      //glBegin(GL_QUADS);
@@ -1248,7 +1249,10 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glColor3f(1.0,1.0,1.0);
     glEnable(GL_TEXTURE_2D);
-    
+
+    // Ones of enemy tanks left:
+    glTranslatef(-0.04, 0.0, 0.0);
+
     glBindTexture(GL_TEXTURE_2D, textureArray[TankHandler::GetSingleton().tanks.size()%10]);
     
     glBegin(GL_QUADS);
@@ -1265,6 +1269,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glVertex3f((float)0,(float)0,(float)0);
     glEnd();
     
+    // Tens of enemy tanks left:
     glTranslatef(-0.04,0.0,0.0);
     
     glBindTexture(GL_TEXTURE_2D, textureArray[(int)TankHandler::GetSingleton().tanks.size()/10 ]);
@@ -1282,7 +1287,45 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glTexCoord2f(0, 0);
     glVertex3f((float)0,(float)0,(float)0);
-	   glEnd();
+    glEnd();
+
+    // X:
+    glTranslatef(-0.04, 0.0, 0.0);
+
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_X]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 1);
+    glVertex3f((float)0, (float).04, (float)0);
+
+    glTexCoord2f(1, 1);
+    glVertex3f((float).04, (float).04, (float)0);
+
+    glTexCoord2f(1, 0);
+    glVertex3f((float).04, (float)0, (float)0);
+
+    glTexCoord2f(0, 0);
+    glVertex3f((float)0, (float)0, (float)0);
+    glEnd();
+
+    // EnemyTank Icon:
+    glTranslatef(-0.07, -0.02, 0.0);
+
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_ENEMY]);
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0, 1);
+    glVertex3f((float)0, (float).07, (float)0);
+
+    glTexCoord2f(1, 1);
+    glVertex3f((float).07, (float).07, (float)0);
+
+    glTexCoord2f(1, 0);
+    glVertex3f((float).07, (float)0, (float)0);
+
+    glTexCoord2f(0, 0);
+    glVertex3f((float)0, (float)0, (float)0);
+    glEnd();
     
     glPopMatrix();
     
