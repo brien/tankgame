@@ -28,7 +28,7 @@ bool VideoTask::Start()
     
     if(-1==SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK))
     {
-        Logger::Get().Write("VideoTask::Start Failed: ", SDL_GetError());
+        Logger::Get().Write("VideoTask::Start Failed:\n", SDL_GetError());
         std::cerr << "VideoTask::Start: SDL_InitSubSystem failed." << std::endl;
         return false;
     }
@@ -77,7 +77,6 @@ bool VideoTask::Start()
         else
         {
             flags = SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN;
-            //hide the mouse cursor
         }
 
         SDL_ShowCursor(SDL_DISABLE);
