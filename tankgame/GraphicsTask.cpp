@@ -255,7 +255,8 @@ tImageTGA *GraphicsTask::Load_TGA(const char *strfilename)
 
 bool GraphicsTask::Start()
 {
-    
+    Logger::Get().Write("GraphicsTask::Starting\n");
+
     //glShadeModel( GL_SMOOTH );
     glClearColor( 0, 0, 0.0f, 0.0f );
     
@@ -339,6 +340,8 @@ bool GraphicsTask::Start()
     PrepareMesh(itemmesh, "body.gsm");
     
     BuildDisplayLists();
+
+    Logger::Get().Write("GraphicsTask::Started\n");
     
     return true;
 }
