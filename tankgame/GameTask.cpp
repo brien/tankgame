@@ -137,29 +137,29 @@ void GameTask::Update()
         
         if(menuState==0)
         {
-            if(InputTask::KeyDown(SDL_SCANCODE_RIGHT) || InputTask::GetAxis(0, 0) > 5000 )
+            if(InputTask::KeyDown(SDL_SCANCODE_RIGHT) || InputTask::KeyDown(SDL_SCANCODE_D) || InputTask::GetAxis(0, 0) > 5000 )
             {
                 menuState=1;
             }
         }
         if(menuState==1)
         {
-            if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::GetAxis(0, 0) < -5000)
+            if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::KeyDown(SDL_SCANCODE_A) || InputTask::GetAxis(0, 0) < -5000)
             {
                 menuState=0;
             }
-            if(InputTask::KeyDown(SDL_SCANCODE_DOWN) || InputTask::GetAxis(0,1) > 5000)
+            if(InputTask::KeyDown(SDL_SCANCODE_DOWN) || InputTask::KeyDown(SDL_SCANCODE_S) || InputTask::GetAxis(0,1) > 5000)
             {
                 menuState=2;
             }
         }
         if(menuState==2)
         {
-            if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::GetAxis(0, 0) < -5000 )
+            if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::KeyDown(SDL_SCANCODE_A) || InputTask::GetAxis(0, 0) < -5000 )
             {
                 menuState=0;
             }
-            if(InputTask::KeyDown(SDL_SCANCODE_UP) || InputTask::GetAxis(0,1) < -5000 )
+            if(InputTask::KeyDown(SDL_SCANCODE_UP) || InputTask::KeyDown(SDL_SCANCODE_W) || InputTask::GetAxis(0,1) < -5000 )
             {
                 menuState=1;
             }
