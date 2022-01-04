@@ -59,9 +59,7 @@ float rx, float ry, float rz)
     this->dT=0;
     this->maxdT=100;
     
-    
     this->tid=tid;
-    
     
     this->x = x;
     this->y = y;
