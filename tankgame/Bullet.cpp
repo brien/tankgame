@@ -31,7 +31,8 @@ Bullet::Bullet()
     alive=true;
     spec=false;
     id=0;
-    numbounces=0;
+    numbounces = 0;
+    maxbounces = 0;
     r=g=b=.5;
     r2=g2=b2=.5;
     dty=0;
