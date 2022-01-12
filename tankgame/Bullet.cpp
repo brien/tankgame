@@ -177,9 +177,11 @@ void Bullet::NextFrame()
             {
                 ry=-ry+180;
             }
-            //else
-            if((int)(z+zpp)!=(int)z && (int)(x+xpp)==(int)x)
-                ry=-ry;
+
+            if ((int)(z + zpp) != (int)z && (int)(x + xpp) == (int)x)
+            {
+                ry = -ry;
+            }
             
             if((int)(x+xpp)!=(int)x && (int)(z+zpp)!=(int)z)
             {
