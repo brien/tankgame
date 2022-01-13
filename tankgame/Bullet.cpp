@@ -396,7 +396,7 @@ void Bullet::NextFrame()
             {
                 FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
             }
-            //else
+
             if((int)(z+zpp)!=(int)z && (int)(x+xpp)==(int)x)
             {
                 FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
