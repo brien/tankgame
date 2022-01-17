@@ -51,6 +51,7 @@ private:
     int numbounces;
     int maxbounces;
     
+    void HandleLevelCollision(float xpp, float zpp, float ory);
 };
 
 
