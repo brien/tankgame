@@ -169,254 +169,7 @@ void Bullet::NextFrame()
     
     if(LevelHandler::GetSingleton().PointCollision(x,y,z))
     {
-        x -= xpp;
-        z -= zpp;
-        if(numbounces<maxbounces)
-        {
-            if((int)(x+xpp)!=(int)x && (int)(z+zpp)==(int)z)
-            {
-                ry=-ry+180;
-            }
-
-            if ((int)(z + zpp) != (int)z && (int)(x + xpp) == (int)x)
-            {
-                ry = -ry;
-            }
-            
-            if((int)(x+xpp)!=(int)x && (int)(z+zpp)!=(int)z)
-            {
-                if(LevelHandler::GetSingleton().PointCollision((x+xpp),y,z) && !LevelHandler::GetSingleton().PointCollision(x,y,z+zpp))
-                {
-                    ry=-ry+180;
-                }
-                else
-                {
-                    ry=-ry;
-                }
-            }
-            
-            int dist=(int)sqrt((x-TankHandler::GetSingleton().players[0].x)*(x-TankHandler::GetSingleton().players[0].x)+(z-TankHandler::GetSingleton().players[0].z)*(z-TankHandler::GetSingleton().players[0].z));
-             
-            if(dist>128)
-            {
-                 dist=128;
-            }
-            Mix_Volume(9, 128-dist);
-                         
-            App::GetSingleton().soundTask->PlayChannel(9);
-            
-            if(numbounces<1)
-            {
-                if(type1==TYPE_YELLOW && type2==TYPE_YELLOW)
-                {
-                    power*=2.0;
-                }
-                else
-                {
-                    power*=1.5;
-                }
-            }
-            
-            if(tid<0 && spec && type1==TYPE_YELLOW)
-            {
-                if(type2==TYPE_RED)
-                {
-                    for(int i=0; i<20; i++)
-                    {
-                        
-                        Bullet temp;
-                        
-                        temp.tid=tid;
-                        
-                        temp.x=x;
-                        temp.y=y;
-                        temp.z=z;
-                        
-                        temp.rx=rx;
-                        temp.ry=i*(360/20);
-                        temp.rz=rz;
-                        
-                        temp.power=power;
-                        
-                        temp.r=1;
-                        temp.b=0;
-                        temp.g=0;
-                        
-                        temp.r2=1;
-                        temp.b2=0;
-                        temp.g2=0;
-                        
-                        temp.maxbounces=0;
-                        temp.numbounces=0;
-                        
-                        temp.type1=type2;
-                        temp.type2=type2;
-                        
-                        
-                        temp.id=1;
-                        temp.alive=true;
-                        
-                        TankHandler::GetSingleton().players[(-1*tid)-1].bulletq.push(temp);
-                    }
-                }
-                else
-                    if(type2==TYPE_BLUE)
-                    {
-                        for(int i=0; i<2; i++)
-                        {
-                            
-                            Bullet temp;
-                            
-                            temp.tid=tid;
-                            
-                            
-                            temp.rx=rx;
-                            temp.ry=ry;
-                            temp.rz=rz;
-                            
-                            temp.x= x + (.2 + i*.2+numbounces*.2) * (float)cos((ry+90)*DTR);
-                            temp.y=y;
-                            temp.z= z + (.2 + i*.2+numbounces*.2) *(float)sin((ry+90)*DTR);
-                            
-                            temp.power=power;
-                            
-                            temp.r=r;
-                            temp.b=b;
-                            temp.g=g;
-                            
-                            temp.r2=r2;
-                            temp.b2=b2;
-                            temp.g2=g2;
-                            
-                            temp.maxbounces=4;
-                            
-                            temp.type1=type1;
-                            temp.type2=type2;
-                            
-                            
-                            temp.id=1;
-                            temp.alive=true;
-                            
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bulletq.push(temp);
-                        }
-                    }
-                    else
-                        if(type2==TYPE_YELLOW || type2==TYPE_GREY)
-                        {
-                            
-                            Bullet temp;
-                            
-                            temp.tid=tid;
-                            
-                            temp.x=x;
-                            temp.y=y;
-                            temp.z=z;
-                            
-                            temp.rx=rx;
-                            temp.ry=-ory;
-                            temp.rz=rz;
-                            
-                            temp.power=power*2;
-                            
-                            temp.r=r;
-                            temp.b=b;
-                            temp.g=g;
-                            
-                            temp.r2=r2;
-                            temp.b2=b2;
-                            temp.g2=g2;
-                            
-                            temp.maxbounces=4;
-                            
-                            temp.type1=type1;
-                            temp.type2=type2;
-                            
-                            
-                            temp.id=1;
-                            temp.alive=true;
-                            
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bulletq.push(temp);
-                        }
-                        else
-                            if(type2==TYPE_PURPLE)
-                            {
-                                
-                                Bullet temp;
-                                
-                                temp.tid=tid;
-                                
-                                temp.x=x;
-                                temp.y=y;
-                                temp.z=z;
-                                
-                                temp.rx=rx;
-                                temp.ry=ry;
-                                temp.rz=rz;
-                                
-                                temp.power=power*2;
-                                
-                                temp.dty = 10.0f;
-                                
-                                temp.r=r;
-                                temp.b=b;
-                                temp.g=g;
-                                
-                                temp.r2=r2;
-                                temp.b2=b2;
-                                temp.g2=g2;
-                                
-                                temp.maxbounces=16;
-                                
-                                temp.type1=type1;
-                                temp.type2=type2;
-                                
-                                
-                                temp.id=1;
-                                temp.alive=true;
-                                
-                                TankHandler::GetSingleton().players[(-1*tid)-1].bulletq.push(temp);
-                            }
-                
-            }
-            
-            numbounces++;
-            
-        }
-        else
-        {
-            alive=false;
-            
-            if(tid<0)
-            {
-                TankHandler::GetSingleton().hitCombo[(-1*tid)-1]=0;
-            }
-            
-            
-            if((int)(x+xpp)!=(int)x && (int)(z+zpp)==(int)z)
-            {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
-            }
-
-            if((int)(z+zpp)!=(int)z && (int)(x+xpp)==(int)x)
-            {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
-            }
-            
-            if((int)(x+xpp)!=(int)x && (int)(z+zpp)!=(int)z)
-            {
-                if(LevelHandler::GetSingleton().PointCollision((x+xpp),y,z) && !LevelHandler::GetSingleton().PointCollision(x,y,z+zpp))
-                {
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
-                }
-                else
-                {
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
-                }
-            }
-            
-            
-        }
-        
+        HandleLevelCollision(xpp, zpp, ory);
     }
     
     for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
@@ -578,6 +331,257 @@ void Bullet::NextFrame()
         }
     }
     
+}
+
+void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
+{
+    x -= xpp;
+    z -= zpp;
+    if (numbounces < maxbounces)
+    {
+        if ((int)(x + xpp) != (int)x && (int)(z + zpp) == (int)z)
+        {
+            ry = -ry + 180;
+        }
+
+        if ((int)(z + zpp) != (int)z && (int)(x + xpp) == (int)x)
+        {
+            ry = -ry;
+        }
+
+        if ((int)(x + xpp) != (int)x && (int)(z + zpp) != (int)z)
+        {
+            if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
+            {
+                ry = -ry + 180;
+            }
+            else
+            {
+                ry = -ry;
+            }
+        }
+
+        int dist = (int)sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
+
+        if (dist > 128)
+        {
+            dist = 128;
+        }
+        Mix_Volume(9, 128 - dist);
+
+        App::GetSingleton().soundTask->PlayChannel(9);
+
+        if (numbounces < 1)
+        {
+            if (type1 == TYPE_YELLOW && type2 == TYPE_YELLOW)
+            {
+                power *= 2.0;
+            }
+            else
+            {
+                power *= 1.5;
+            }
+        }
+
+        if (tid < 0 && spec && type1 == TYPE_YELLOW)
+        {
+            if (type2 == TYPE_RED)
+            {
+                for (int i = 0; i < 20; i++)
+                {
+
+                    Bullet temp;
+
+                    temp.tid = tid;
+
+                    temp.x = x;
+                    temp.y = y;
+                    temp.z = z;
+
+                    temp.rx = rx;
+                    temp.ry = i * (360 / 20);
+                    temp.rz = rz;
+
+                    temp.power = power;
+
+                    temp.r = 1;
+                    temp.b = 0;
+                    temp.g = 0;
+
+                    temp.r2 = 1;
+                    temp.b2 = 0;
+                    temp.g2 = 0;
+
+                    temp.maxbounces = 0;
+                    temp.numbounces = 0;
+
+                    temp.type1 = type2;
+                    temp.type2 = type2;
+
+
+                    temp.id = 1;
+                    temp.alive = true;
+
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bulletq.push(temp);
+                }
+            }
+            else
+                if (type2 == TYPE_BLUE)
+                {
+                    for (int i = 0; i < 2; i++)
+                    {
+
+                        Bullet temp;
+
+                        temp.tid = tid;
+
+
+                        temp.rx = rx;
+                        temp.ry = ry;
+                        temp.rz = rz;
+
+                        temp.x = x + (.2 + i * .2 + numbounces * .2) * (float)cos((ry + 90) * DTR);
+                        temp.y = y;
+                        temp.z = z + (.2 + i * .2 + numbounces * .2) * (float)sin((ry + 90) * DTR);
+
+                        temp.power = power;
+
+                        temp.r = r;
+                        temp.b = b;
+                        temp.g = g;
+
+                        temp.r2 = r2;
+                        temp.b2 = b2;
+                        temp.g2 = g2;
+
+                        temp.maxbounces = 4;
+
+                        temp.type1 = type1;
+                        temp.type2 = type2;
+
+
+                        temp.id = 1;
+                        temp.alive = true;
+
+                        TankHandler::GetSingleton().players[(-1 * tid) - 1].bulletq.push(temp);
+                    }
+                }
+                else
+                    if (type2 == TYPE_YELLOW || type2 == TYPE_GREY)
+                    {
+
+                        Bullet temp;
+
+                        temp.tid = tid;
+
+                        temp.x = x;
+                        temp.y = y;
+                        temp.z = z;
+
+                        temp.rx = rx;
+                        temp.ry = -ory;
+                        temp.rz = rz;
+
+                        temp.power = power * 2;
+
+                        temp.r = r;
+                        temp.b = b;
+                        temp.g = g;
+
+                        temp.r2 = r2;
+                        temp.b2 = b2;
+                        temp.g2 = g2;
+
+                        temp.maxbounces = 4;
+
+                        temp.type1 = type1;
+                        temp.type2 = type2;
+
+
+                        temp.id = 1;
+                        temp.alive = true;
+
+                        TankHandler::GetSingleton().players[(-1 * tid) - 1].bulletq.push(temp);
+                    }
+                    else
+                        if (type2 == TYPE_PURPLE)
+                        {
+
+                            Bullet temp;
+
+                            temp.tid = tid;
+
+                            temp.x = x;
+                            temp.y = y;
+                            temp.z = z;
+
+                            temp.rx = rx;
+                            temp.ry = ry;
+                            temp.rz = rz;
+
+                            temp.power = power * 2;
+
+                            temp.dty = 10.0f;
+
+                            temp.r = r;
+                            temp.b = b;
+                            temp.g = g;
+
+                            temp.r2 = r2;
+                            temp.b2 = b2;
+                            temp.g2 = g2;
+
+                            temp.maxbounces = 16;
+
+                            temp.type1 = type1;
+                            temp.type2 = type2;
+
+
+                            temp.id = 1;
+                            temp.alive = true;
+
+                            TankHandler::GetSingleton().players[(-1 * tid) - 1].bulletq.push(temp);
+                        }
+
+        }
+
+        numbounces++;
+
+    }
+    else
+    {
+        alive = false;
+
+        if (tid < 0)
+        {
+            TankHandler::GetSingleton().hitCombo[(-1 * tid) - 1] = 0;
+        }
+
+
+        if ((int)(x + xpp) != (int)x && (int)(z + zpp) == (int)z)
+        {
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+        }
+
+        if ((int)(z + zpp) != (int)z && (int)(x + xpp) == (int)x)
+        {
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+        }
+
+        if ((int)(x + xpp) != (int)x && (int)(z + zpp) != (int)z)
+        {
+            if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+            }
+            else
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+            }
+        }
+
+
+    }
 }
 
 void Bullet::Draw()
