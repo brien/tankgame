@@ -20,6 +20,7 @@
 #include "math.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
+#include "Tank.h"
 #include "FXHandler.h"
 #include "App.h"
 
@@ -174,59 +175,11 @@ void Bullet::NextFrame()
     
     for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
     {
-        
         if(TankHandler::GetSingleton().players[i].PointCollision(x,y,z))
         {
-            if(tid!=TankHandler::GetSingleton().players[i].id )
-            {
-                if(tid<0 && !App::GetSingleton().gameTask->versus)
-                {
-                    App::GetSingleton().soundTask->PlayChannel(3);
-                    if(TankHandler::GetSingleton().players[i].energy<TankHandler::GetSingleton().players[i].maxEnergy*2)
-                    {
-                        TankHandler::GetSingleton().players[i].energy+=power/2;
-                    }
-                    else
-                        if(TankHandler::GetSingleton().players[i].charge<TankHandler::GetSingleton().players[i].maxCharge*2)
-                        {
-                            TankHandler::GetSingleton().players[i].charge+=power/8;
-                        }
-                    alive=false;
-                    
-                }
-                else
-                {
-                    TankHandler::GetSingleton().players[i].energy-=power;
-                    alive=false;
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_STAR, x, y, z, 0, .01, 0, 0, TankHandler::GetSingleton().players[i].ry, 90, r, g, b, 1);
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_STAR, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
-                    App::GetSingleton().soundTask->PlayChannel(8);
-                    
-                    TankHandler::GetSingleton().hitCombo[(-1*tid)-1]++;
-                    TankHandler::GetSingleton().combo[(-1*tid)-1]+=(float)TankHandler::GetSingleton().hitCombo[(-1*tid)-1]/10;
-                }
-                
-            }
-            else
-            {
-                if(dT>0.5)
-                {
-                    App::GetSingleton().soundTask->PlayChannel(3);
-                    if(TankHandler::GetSingleton().players[i].energy<TankHandler::GetSingleton().players[i].maxEnergy)
-                    {
-                        TankHandler::GetSingleton().players[i].energy+=power/2;
-                    }
-                    else
-                        if(TankHandler::GetSingleton().players[i].charge<TankHandler::GetSingleton().players[i].maxCharge)
-                        {
-                            TankHandler::GetSingleton().players[i].charge+=power/8;
-                        }
-                    alive=false;
-                }
-            }
+            HandlePlayerCollision(TankHandler::GetSingleton().players[i]);
         }
     }
-    
     
     for(vector<Tank>::iterator it = TankHandler::GetSingleton().tanks.begin(); it!=TankHandler::GetSingleton().tanks.end(); ++it)
     {
@@ -331,6 +284,57 @@ void Bullet::NextFrame()
         }
     }
     
+}
+
+void Bullet::HandlePlayerCollision(Tank& playerTank)
+{
+    if (tid != playerTank.id)
+    {
+        if (tid < 0 && !App::GetSingleton().gameTask->versus)
+        {
+            App::GetSingleton().soundTask->PlayChannel(3);
+            if (playerTank.energy < playerTank.maxEnergy * 2)
+            {
+                playerTank.energy += power / 2;
+            }
+            else
+                if (playerTank.charge < playerTank.maxCharge * 2)
+                {
+                    playerTank.charge += power / 8;
+                }
+            alive = false;
+
+        }
+        else
+        {
+            playerTank.energy -= power;
+            alive = false;
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_STAR, x, y, z, 0, .01, 0, 0, playerTank.ry, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_STAR, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+            App::GetSingleton().soundTask->PlayChannel(8);
+
+            TankHandler::GetSingleton().hitCombo[(-1 * tid) - 1]++;
+            TankHandler::GetSingleton().combo[(-1 * tid) - 1] += (float)TankHandler::GetSingleton().hitCombo[(-1 * tid) - 1] / 10;
+        }
+
+    }
+    else
+    {
+        if (dT > 0.5)
+        {
+            App::GetSingleton().soundTask->PlayChannel(3);
+            if (playerTank.energy < playerTank.maxEnergy)
+            {
+                playerTank.energy += power / 2;
+            }
+            else
+                if (playerTank.charge < playerTank.maxCharge)
+                {
+                    playerTank.charge += power / 8;
+                }
+            alive = false;
+        }
+    }
 }
 
 void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)

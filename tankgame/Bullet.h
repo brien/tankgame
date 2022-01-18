@@ -7,6 +7,8 @@
 #ifndef Bullet_h
 #define Bullet_h
 
+class Tank;
+
 class Bullet
 {
 
@@ -52,6 +54,7 @@ private:
     int maxbounces;
     
     void HandleLevelCollision(float xpp, float zpp, float ory);
+    void HandlePlayerCollision(Tank& playerTank);
 };
 
 
