@@ -55,6 +55,7 @@ private:
     
     void HandleLevelCollision(float xpp, float zpp, float ory);
     void HandlePlayerCollision(Tank& playerTank);
+    void HandleTankCollision(Tank& playerTank);
 };
 
 

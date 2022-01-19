@@ -183,90 +183,12 @@ void Bullet::NextFrame()
     
     for(vector<Tank>::iterator it = TankHandler::GetSingleton().tanks.begin(); it!=TankHandler::GetSingleton().tanks.end(); ++it)
     {
-        if((*it).PointCollision(x,y,z) || (*it).PointCollision(x-xpp/2,y,z-zpp/2))
+        if ((*it).PointCollision(x, y, z) || (*it).PointCollision(x - xpp / 2, y, z - zpp / 2))
         {
-            if((*it).id!=tid )
-            {
-
-                if((*it).energy>0)
-                {
-                    (*it).energy-=power;
-                    TankHandler::GetSingleton().hitCombo[(-1*tid)-1]++;
-                    TankHandler::GetSingleton().combo[(-1*tid)-1]+=(float)TankHandler::GetSingleton().hitCombo[(-1*tid)-1]/10;
-                    
-                    if(tid<0 && (*it).energy<=0)
-                    {
-                        float distx=x-TankHandler::GetSingleton().players[(-1*tid)-1].x;
-                        float distz=z-TankHandler::GetSingleton().players[(-1*tid)-1].z;
-                        
-                        float dist=sqrt(distx*distx + distz*distz );
-                        
-                        if(TankHandler::GetSingleton().hitCombo[(-1*tid)-1]>9)
-                        {
-                            TankHandler::GetSingleton().combo[(-1*tid)-1]+=TankHandler::GetSingleton().comboNum[(-1*tid)-1]/2;
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bonus=23;
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bonusTime=0;
-                            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
-                        }
-                        
-                        
-                        
-                        if(dist>20)
-                        {
-                            TankHandler::GetSingleton().combo[(-1*tid)-1]+=dist/10;
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bonus=21;
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bonusTime=0;
-                            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0, 1, 1, 1);
-                        }
-                        
-                        if(numbounces>0 && dT<10.0f)
-                        {
-                            TankHandler::GetSingleton().combo[(-1*tid)-1]+=(1+dT/2);
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bonus=22;
-                            TankHandler::GetSingleton().players[(-1*tid)-1].bonusTime=0;
-                            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1*tid)-1].x, TankHandler::GetSingleton().players[(-1*tid)-1].y, TankHandler::GetSingleton().players[(-1*tid)-1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
-                        }
-                        
-                        
-                        TankHandler::GetSingleton().combo[(-1*tid)-1]+=(10/(TankHandler::GetSingleton().combo[(-1*tid)-1]/10+1));
-                        
-                        if(TankHandler::GetSingleton().combo[(-1*tid)-1]>TankHandler::GetSingleton().special[(-1*tid)-1])
-                        {
-                            TankHandler::GetSingleton().special[(-1*tid)-1]=TankHandler::GetSingleton().combo[(-1*tid)-1];
-                        }
-                        
-                        TankHandler::GetSingleton().comboNum[(-1*tid)-1]++;
-                    }
-                    
-                    if(tid<0 && spec && type1==TYPE_BLUE)
-                    {
-                        alive=true;
-                        power+=100;
-                    }
-                    else
-                        alive=false;
-                    
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, .01, 0, 0, (*it).ry, 90, r, g, b, 1);
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
-                }
-                
-            }
-            else
-            {
-                if(dT>.5)
-                {
-                    if((*it).energy<(*it).maxEnergy*2)
-                    {
-                        (*it).energy+=power/2;
-                        alive=false;
-                    }
-                }
-                
-            }
-            
+            HandleTankCollision(*it);
         }
-        
     }
+
     if(x>=LevelHandler::GetSingleton().sizeX || x <=0 ||  z>=LevelHandler::GetSingleton().sizeZ || z <=0)
     {
         alive=false;
@@ -284,6 +206,85 @@ void Bullet::NextFrame()
         }
     }
     
+}
+
+void Bullet::HandleTankCollision(Tank& tank)
+{
+    if (tank.id != tid)
+    {
+        if (tank.energy > 0)
+        {
+            tank.energy -= power;
+            TankHandler::GetSingleton().hitCombo[(-1 * tid) - 1]++;
+            TankHandler::GetSingleton().combo[(-1 * tid) - 1] += (float)TankHandler::GetSingleton().hitCombo[(-1 * tid) - 1] / 10;
+
+            if (tid < 0 && tank.energy <= 0)
+            {
+                float distx = x - TankHandler::GetSingleton().players[(-1 * tid) - 1].x;
+                float distz = z - TankHandler::GetSingleton().players[(-1 * tid) - 1].z;
+
+                float dist = sqrt(distx * distx + distz * distz);
+
+                if (TankHandler::GetSingleton().hitCombo[(-1 * tid) - 1] > 9)
+                {
+                    TankHandler::GetSingleton().combo[(-1 * tid) - 1] += TankHandler::GetSingleton().comboNum[(-1 * tid) - 1] / 2;
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bonus = 23;
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bonusTime = 0;
+                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1 * tid) - 1].x, TankHandler::GetSingleton().players[(-1 * tid) - 1].y, TankHandler::GetSingleton().players[(-1 * tid) - 1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
+                }
+
+                if (dist > 20)
+                {
+                    TankHandler::GetSingleton().combo[(-1 * tid) - 1] += dist / 10;
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bonus = 21;
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bonusTime = 0;
+                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1 * tid) - 1].x, TankHandler::GetSingleton().players[(-1 * tid) - 1].y, TankHandler::GetSingleton().players[(-1 * tid) - 1].z, 0, .01, 0, 0, 0, 90, 0, 1, 1, 1);
+                }
+
+                if (numbounces > 0 && dT < 10.0f)
+                {
+                    TankHandler::GetSingleton().combo[(-1 * tid) - 1] += (1 + dT / 2);
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bonus = 22;
+                    TankHandler::GetSingleton().players[(-1 * tid) - 1].bonusTime = 0;
+                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1 * tid) - 1].x, TankHandler::GetSingleton().players[(-1 * tid) - 1].y, TankHandler::GetSingleton().players[(-1 * tid) - 1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
+                }
+
+
+                TankHandler::GetSingleton().combo[(-1 * tid) - 1] += (10 / (TankHandler::GetSingleton().combo[(-1 * tid) - 1] / 10 + 1));
+
+                if (TankHandler::GetSingleton().combo[(-1 * tid) - 1] > TankHandler::GetSingleton().special[(-1 * tid) - 1])
+                {
+                    TankHandler::GetSingleton().special[(-1 * tid) - 1] = TankHandler::GetSingleton().combo[(-1 * tid) - 1];
+                }
+
+                TankHandler::GetSingleton().comboNum[(-1 * tid) - 1]++;
+            }
+
+            if (tid < 0 && spec && type1 == TYPE_BLUE)
+            {
+                alive = true;
+                power += 100;
+            }
+            else
+                alive = false;
+
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, .01, 0, 0, tank.ry, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+        }
+
+    }
+    else
+    {
+        if (dT > .5)
+        {
+            if (tank.energy < tank.maxEnergy * 2)
+            {
+                tank.energy += power / 2;
+                alive = false;
+            }
+        }
+
+    }
 }
 
 void Bullet::HandlePlayerCollision(Tank& playerTank)
