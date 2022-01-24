@@ -747,6 +747,13 @@ void GraphicsTask::DrawHUD(Tank& player)
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
     glBlendFunc(GL_ONE, GL_ONE);
+
+    char buffer[32];
+    float framesPerSecond = 1.0f / GlobalTimer::dT;
+
+    sprintf(buffer, "FPS: %.2f", framesPerSecond);
+
+    textRenderer.drawString(buffer, 0, 0, 7);
     
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_HEART]);
     glColor4f(1.0f,0.6,0.6f,1.0f);
