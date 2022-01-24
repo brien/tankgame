@@ -452,33 +452,6 @@ void GraphicsTask::Update()
     
     
     LevelHandler::GetSingleton().DrawTerrain();
-    /*
-     glTranslatef(0,0,127);
-     glRotatef(90, 1, 0, 0);
-     
-     glTranslatef(0,0,-1);
-     
-     LevelHandler::GetSingleton().DrawTerrain();
-     
-     glTranslatef(0,0,1);
-     
-     glRotatef(-90, 1, 0, 0);
-     
-     glTranslatef(0,0,-127);
-     
-     
-     //glTranslatef(-127,0,0);
-     glRotatef(90, 0, 0, 1);
-     
-     glTranslatef(-127,-1,0);
-     
-     LevelHandler::GetSingleton().DrawTerrain();
-     
-     glTranslatef(127,1,0);
-     
-     glRotatef(-90, 0, 0, 1);
-     
-     //glTranslatef(127,0,0);*/
     
     TankHandler::GetSingleton().DrawBullets();
     
