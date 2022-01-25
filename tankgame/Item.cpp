@@ -26,35 +26,37 @@ Item::Item(float nx, float ny, float nz, TankType ntype)
     type=ntype;
     alive=true;
     
-    if(ntype==TYPE_GREY)
+    switch (ntype)
     {
-        r=.5;
-        g=.5;
-        b=.5;
-    }
-    else if(ntype==TYPE_RED)
-    {
-        r=1;
-        g=0;
-        b=0;
-    }
-    else if(ntype==TYPE_BLUE)
-    {
-        r=0;
-        g=0;
-        b=1;
-    }
-    else if(ntype==TYPE_YELLOW)
-    {
-        r=1;
-        g=1;
-        b=0;
-    }
-    else if(ntype==TYPE_PURPLE)
-    {
-        r=1;
-        g=0;
-        b=1;
+        case TankType::TYPE_GREY:
+            r = .5;
+            g = .5;
+            b = .5;
+            break;
+        case TankType::TYPE_RED:
+            r = 1;
+            g = 0;
+            b = 0;
+            break;
+        case TankType::TYPE_BLUE:
+            r = 0;
+            g = 0;
+            b = 1;
+            break;
+        case TankType::TYPE_YELLOW:
+            r = 1;
+            g = 1;
+            b = 0;
+            break;
+        case TankType::TYPE_PURPLE:
+            r = 1;
+            g = 0;
+            b = 1;
+            break;
+        default:
+            r = .5;
+            g = .5;
+            b = .5;
     }
     
 }
