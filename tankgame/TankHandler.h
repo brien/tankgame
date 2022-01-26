@@ -38,10 +38,6 @@ public:
     int numPlayers;
     int attackingTanks;
     
-    igtl_QGLMesh bodymesh;
-    igtl_QGLMesh turretmesh;
-    igtl_QGLMesh cannonmesh;
-    
 };
 
 #endif
