@@ -187,12 +187,14 @@ void FX::Draw()
 
 	if (type == FxType::TYPE_DEATH)
 	{
-		glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		App::GetSingleton().graphicsTask->squarelist2.Call(0);
 	}
 
 	if (type == FxType::TYPE_ZERO)
 	{
-		glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		App::GetSingleton().graphicsTask->squarelist2.Call(0);
 	}
 
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
@@ -208,7 +210,8 @@ void FX::Draw()
 
 	glColor4f(r, g, b, a);
 
-	glCallList(App::GetSingleton().graphicsTask->squarelist);
+	//glCallList(App::GetSingleton().graphicsTask->squarelist);
+	App::GetSingleton().graphicsTask->squarelist.Call(0);
 
 	glDisable(GL_BLEND);
 	glDisable(GL_TEXTURE_2D);

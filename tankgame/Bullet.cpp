@@ -611,8 +611,9 @@ void Bullet::Draw()
         
         glScalef(1, 1, 0.15);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist2);
-        
+        //glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        App::GetSingleton().graphicsTask->squarelist2.Call(0);
+
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
         //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -621,7 +622,8 @@ void Bullet::Draw()
         
         glColor4f(r2, g2, b2, 0.1f + power/500);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist);
+        App::GetSingleton().graphicsTask->squarelist.Call(0);
         
         glDisable(GL_BLEND);
         glDepthMask(GL_TRUE);
@@ -644,7 +646,8 @@ void Bullet::Draw()
         
         glScalef(1, 1, 0.2);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        App::GetSingleton().graphicsTask->squarelist2.Call(0);
         
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
@@ -654,7 +657,8 @@ void Bullet::Draw()
         
         glColor4f(r2, g2, b2, 0.1f + power/500);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist);
+        App::GetSingleton().graphicsTask->squarelist.Call(0);
         
         
         
@@ -680,7 +684,8 @@ void Bullet::Draw()
         
         glScalef(1, 1, 0.2);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        App::GetSingleton().graphicsTask->squarelist2.Call(0);
         
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
@@ -690,7 +695,8 @@ void Bullet::Draw()
         
         glColor4f(r2, g2, b2, 0.1f + power/500);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist);
+        App::GetSingleton().graphicsTask->squarelist.Call(0);
         
         
         
@@ -713,7 +719,8 @@ void Bullet::Draw()
                 
         glScalef(1, 1, 0.2);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist2);
+        App::GetSingleton().graphicsTask->squarelist2.Call(0);
         
         
         glEnable(GL_BLEND);
@@ -724,7 +731,8 @@ void Bullet::Draw()
         
         glColor4f(r2, g2, b2, 0.1f + power/1000);
         
-        glCallList(App::GetSingleton().graphicsTask->squarelist);
+        //glCallList(App::GetSingleton().graphicsTask->squarelist);
+        App::GetSingleton().graphicsTask->squarelist.Call(0);
         
         
         glDisable(GL_BLEND);

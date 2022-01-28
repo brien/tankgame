@@ -616,7 +616,8 @@ void LevelHandler::DrawTerrain()
                 
                 glTranslatef(q+.5, f[q][w]-.5, w+.5);
                 
-                glCallList(App::GetSingleton().graphicsTask->cubelist1);
+                //App::GetSingleton().graphicsTask->cubelist1.Call(0);
+                App::GetSingleton().graphicsTask->cubelist1.Call(0);
                 glPopMatrix();
             }
         }

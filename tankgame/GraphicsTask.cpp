@@ -32,7 +32,7 @@ typedef unsigned short WORD;
 typedef unsigned char byte;
 
 
-GraphicsTask::GraphicsTask() : alphalist{ 0 }
+GraphicsTask::GraphicsTask()
 {
     drawHUD=true;
     drawMenu=false;
@@ -46,6 +46,8 @@ GraphicsTask::GraphicsTask() : alphalist{ 0 }
         Logger::Get().Write("GraphicsTask: failed loading file: %s  \n", fontFilePath);
         exit(1);
     } //The program exits here
+
+    textRenderer.init();
 }
 
 GraphicsTask::~GraphicsTask()
@@ -357,7 +359,7 @@ void GraphicsTask::FixMesh(igtl_QGLMesh& mesh)
 
 void GraphicsTask::Stop()
 {
-    
+    textRenderer.close();
 }
 
 
@@ -471,6 +473,8 @@ void GraphicsTask::Update()
     {
         DrawMenu(App::GetSingleton().gameTask->menuState);
     }
+
+    //DrawTextTest();
     
     if (App::GetSingleton().gameTask->debug)
     {
@@ -550,14 +554,14 @@ void GraphicsTask::DrawSky()
     glTranslatef(400, rot/2 - 50, 400);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(400, 10, 200);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -565,14 +569,14 @@ void GraphicsTask::DrawSky()
     glRotatef(TankHandler::GetSingleton().closest, 0, 0, 1);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-200, 40, 600);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WHITE_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -580,7 +584,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(-100, 40, -500);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -589,7 +593,7 @@ void GraphicsTask::DrawSky()
     glRotatef(TankHandler::GetSingleton().closest, 0, 1, 0);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -598,7 +602,7 @@ void GraphicsTask::DrawSky()
     glRotatef(TankHandler::GetSingleton().closest, 0, 1, 0);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -607,7 +611,7 @@ void GraphicsTask::DrawSky()
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -616,7 +620,7 @@ void GraphicsTask::DrawSky()
     glRotatef(TankHandler::GetSingleton().closest, 0, 0, 0);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -625,7 +629,7 @@ void GraphicsTask::DrawSky()
     glRotatef(rot, 1, 0, 0);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -634,7 +638,7 @@ void GraphicsTask::DrawSky()
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
@@ -643,7 +647,7 @@ void GraphicsTask::DrawSky()
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     
@@ -653,7 +657,7 @@ void GraphicsTask::DrawSky()
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
-    glCallList(cubelist1);
+    cubelist1.Call(0);
     glPopMatrix();
     
     /*
@@ -1318,6 +1322,46 @@ void GraphicsTask::DrawHUD(Tank& player)
     glDisable(GL_BLEND);
 }
 
+void GraphicsTask::DrawTextTest()
+{
+    glPushMatrix();
+    glDisable(GL_LIGHTING);
+    glDisable(GL_TEXTURE_2D);
+
+    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    //Treat 3D like 2D
+    glTranslated(0, 0, -1);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
+
+    char buffer[32];
+    float framesPerSecond = 20.20f; // 1.0f / GlobalTimer::dT;
+
+    sprintf(buffer, "F: %s", "string");
+    //RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, buffer);
+
+    textRenderer.drawString(buffer, 0, 0, 0.20f);
+
+    glBegin(GL_QUADS);
+    glTexCoord2d(0, 0);
+    glVertex3f(0.40f, 0.37f, 0);
+    glTexCoord2d(1, 0);
+    glVertex3f(0.40f + 0.29f, 0.37f, 0);
+    glTexCoord2d(1, 1);
+    glVertex3f(0.40f + 0.29f, 0.30f, 0);
+    glTexCoord2d(0, 1);
+    glVertex3f(0.40f, 0.30f, 0);
+    glEnd();
+
+
+    glPopMatrix();
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_LIGHTING);
+    glDisable(GL_BLEND);
+}
+
 void GraphicsTask::DrawMenu(int option)
 {
     glPushMatrix();
@@ -1554,9 +1598,12 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
 
 void GraphicsTask::BuildDisplayLists()
 {
-    cubelist1=glGenLists(32);
+    //cubelist1=glGenLists(32);
+    //cubelist1 = 1;
+    cubelist1 = DisplayList(1);
     
-    glNewList(cubelist1,GL_COMPILE);
+    //glNewList(cubelist1,GL_COMPILE);
+    cubelist1.BeginNewList();
     
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.5f, -0.5f);	// Top Left Of The Texture and Quad
@@ -1590,15 +1637,18 @@ void GraphicsTask::BuildDisplayLists()
     glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.5f,  0.5f, -0.5f);	// Top Left Of The Texture and Quad
     glEnd();
     
-    glEndList();
+    //glEndList();
+    cubelist1.EndNewList();
     
-    cubelist2=cubelist1+1;
+    //cubelist2 = 2;
+    cubelist2 = DisplayList(1);
     
     float x=40;
     float y=1;
     float z=20;
     
-    glNewList(cubelist1+1,GL_COMPILE);
+    cubelist2.BeginNewList();
+    //glNewList(cubelist2,GL_COMPILE);
     
     glBegin(GL_QUADS);
     glTexCoord2f(0.0f, 1.0f); glVertex3f(-1*x,  y, -1*z);	// Top Left Of The Texture and Quad
@@ -1632,11 +1682,13 @@ void GraphicsTask::BuildDisplayLists()
     glTexCoord2f(0.0f, 1.0f); glVertex3f(-1*x,  y, -1*z);	// Top Left Of The Texture and Quad
     glEnd();
     
-    glEndList();
+    //glEndList();
+    cubelist2.EndNewList();
     
-    bulletlist=cubelist2+1;
+    bulletlist = DisplayList(1);
+    bulletlist.BeginNewList();
     
-    glNewList(cubelist1+2,GL_COMPILE);
+    //glNewList(cubelist1+2,GL_COMPILE);
     
     //LevelHandler::GetSingleton().DrawTerrain();
     
@@ -1677,83 +1729,112 @@ void GraphicsTask::BuildDisplayLists()
     glEnd();
     
     
-    glEndList();
+    //glEndList();
+    bulletlist.EndNewList();
     
-    bodylistEx=cubelist1+3;
     
-    glNewList(cubelist1+3, GL_COMPILE);
+    //bodylistEx=cubelist1+3;
+    bodylistEx = DisplayList(1);
     
+    //glNewList(cubelist1+3, GL_COMPILE);
+    bodylistEx.BeginNewList();
+
     bodymesh.DrawTrianglesExtruded(.01);
     
-    glEndList();
+    //glEndList();
+    bodylistEx.EndNewList();
     
-    turretlistEx=cubelist1+4;
+    //turretlistEx=cubelist1+4;
+    turretlistEx = DisplayList(1);
     
-    glNewList(cubelist1+4, GL_COMPILE);
+    //glNewList(cubelist1+4, GL_COMPILE);
+    turretlistEx.BeginNewList();
     
     turretmesh.DrawTrianglesExtruded(.01);
     
-    glEndList();
+    //glEndList();
+    turretlistEx.EndNewList();
     
-    cannonlistEx=cubelist1+5;
+    //cannonlistEx=cubelist1+5;
+    cannonlistEx = DisplayList(1);
     
-    glNewList(cubelist1+5, GL_COMPILE);
+    //glNewList(cubelist1+5, GL_COMPILE);
+    cannonlistEx.BeginNewList();
     
     cannonmesh.DrawTrianglesExtruded(.01);
     
-    glEndList();
+    //glEndList();
+    cannonlistEx.EndNewList();
     
-    bodylist=cubelist1+6;
+    //bodylist=cubelist1+6;
+    bodylist = DisplayList(1);
     
-    glNewList(cubelist1+6, GL_COMPILE);
+    //glNewList(cubelist1+6, GL_COMPILE);
+    bodylist.BeginNewList();
     
     bodymesh.DrawTriangles();
     
-    glEndList();
+    //glEndList();
+    bodylist.EndNewList();
     
-    turretlist=cubelist1+7;
+    //turretlist=cubelist1+7;
+    turretlist = DisplayList(1);
     
-    glNewList(cubelist1+7, GL_COMPILE);
+    //glNewList(cubelist1+7, GL_COMPILE);
+    turretlist.BeginNewList();
     
     turretmesh.DrawTriangles();
     
-    glEndList();
+    //glEndList();
+    turretlist.EndNewList();
     
-    cannonlist=cubelist1+8;
+    //cannonlist=cubelist1+8;
     
-    glNewList(cubelist1+8, GL_COMPILE);
+    //glNewList(cubelist1+8, GL_COMPILE);
+    cannonlist.BeginNewList();
     
     cannonmesh.DrawTriangles();
     
-    glEndList();
+    //glEndList();
+    cannonlist.EndNewList();
     
-    bodylistEx2=cubelist1+9;
+    //bodylistEx2=cubelist1+9;
     
-    glNewList(cubelist1+9, GL_COMPILE);
+    //glNewList(cubelist1+9, GL_COMPILE);
+    bodylistEx2.BeginNewList();
     
     bodymesh.DrawEdgesExtruded(.01);
     
-    glEndList();
+    //glEndList();
+    bodylistEx2.EndNewList();
     
-    turretlistEx2=cubelist1+10;
+    //turretlistEx2=cubelist1+10;
     
-    glNewList(cubelist1+10, GL_COMPILE);
+    //glNewList(cubelist1+10, GL_COMPILE);
+    turretlistEx2.BeginNewList();
     
     turretmesh.DrawEdgesExtruded(.01);
     
-    glEndList();
+    //glEndList();
+    turretlistEx2.EndNewList();
     
-    cannonlistEx2=cubelist1+11;
+    //cannonlistEx2=cubelist1+11;
+    cannonlistEx2 = DisplayList(1);
     
-    glNewList(cubelist1+11, GL_COMPILE);
+    //glNewList(cubelist1+11, GL_COMPILE);
+
+    cannonlistEx2.BeginNewList();
     
     cannonmesh.DrawEdgesExtruded(.01);
     
-    glEndList();
+    //glEndList();
+    cannonlistEx2.EndNewList();
     
-    squarelist=cubelist1+12;
-    
-    glNewList(cubelist1+12, GL_COMPILE);
+    //squarelist=cubelist1+12;
+    squarelist = DisplayList(1);
+
+    //glNewList(cubelist1+12, GL_COMPILE);
+    squarelist.BeginNewList();
     
     glBegin(GL_QUADS);
     
@@ -1764,11 +1845,14 @@ void GraphicsTask::BuildDisplayLists()
     
     glEnd();
     
-    glEndList();
+    //glEndList();
+    squarelist.EndNewList();
     
-    squarelist2=cubelist1+13;
+    //squarelist2=cubelist1+13;
+    squarelist2 = DisplayList(1);
     
-    glNewList(cubelist1+13, GL_COMPILE);
+    //glNewList(cubelist1+13, GL_COMPILE);
+    squarelist2.BeginNewList();
     
     glBegin(GL_LINE_LOOP);
     
@@ -1779,82 +1863,26 @@ void GraphicsTask::BuildDisplayLists()
     
     glEnd();
     
-    glEndList();
+    //glEndList();
+    squarelist2.EndNewList();
+     
+    itemlist = DisplayList(1);
+    itemlist.BeginNewList();
     
-    itemlist=cubelist1+14;
+    //itemlist=cubelist1+14;
     
-    glNewList(cubelist1+14, GL_COMPILE);
+    //glNewList(cubelist1+14, GL_COMPILE);
     
     //glBegin(GL_LINE_LOOP);
     
     itemmesh.DrawTrianglesExtruded(.01);
     //itemmesh.DrawEdges();
-    
-    //glEnd();
-    
-    glEndList();
-    
-    
-    alphalist[0]=glGenLists(32);
-    
-    glNewList(alphalist[0], GL_COMPILE);
-    
-    //glPushMatrix();
-    
-    
-    glBegin(GL_LINE_LOOP); //top
-    
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.50f, 0.25f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.50f, 0.25f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.50f, 0.50f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.50f, 0.50f, 0.0f);
-    
-    glEnd();
-    
-    
-    glBegin(GL_LINE_LOOP); //bottom
-    
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.50f, -0.25f, 0.0f);	// Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex3f( 0.50f, -0.25f, 0.0f);	// Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f); glVertex3f( 0.50f,  0.00f, 0.0f);	// Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.50f,  0.00f, 0.0f);	// Bottom Right Of The Texture and Quad
-    
-    glEnd();
-    
-    
-    
-    
-    
-    glBegin(GL_LINE_LOOP); //left
-    
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(-0.50f, -0.50f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(-0.50f,  0.50f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(-0.25f,  0.50f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(-0.25f, -0.50f, 0.0f);
-    
-    glEnd();
-    
-    
-    glBegin(GL_LINE_LOOP); //right
-    
-    glTexCoord2f(1.0f, 1.0f); glVertex3f(0.50f, -0.50f, 0.0f);
-    glTexCoord2f(0.0f, 1.0f); glVertex3f(0.50f,  0.50f, 0.0f);
-    glTexCoord2f(0.0f, 0.0f); glVertex3f(0.25f,  0.50f, 0.0f);
-    glTexCoord2f(1.0f, 0.0f); glVertex3f(0.25f, -0.50f, 0.0f);
-    
-    glEnd();
-    
-    glEndList();
-    
-    
-    glNewList(alphalist[1], GL_COMPILE);
-    
-    
-    glEndList();
-    
-    
-    
-    
+    //
+    ////glEnd();
+    //
+    //glEndList();
+    itemlist.EndNewList();
+
     return;
 }
 

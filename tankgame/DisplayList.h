@@ -3,7 +3,7 @@
 
 class DisplayList {
 public:
-    DisplayList(int num);
+    DisplayList(int num = 0);
     void BeginNewList();
     void NextNewList();
     void EndNewList();

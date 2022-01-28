@@ -22,6 +22,8 @@
 #include "igtl_qmesh.h"
 #include "Tank.h"
 #include "Camera.h"
+#include "DisplayList.h"
+#include "TextRenderer.h"
 
 
 #define TGA_RGB		2
@@ -85,31 +87,30 @@ public:
     
     Camera cams[4];
     
-    int alphalist[26];
+    DisplayList cubelist1;
+    DisplayList cubelist2;
+    DisplayList bulletlist;
+    DisplayList bodylist;
+    DisplayList turretlist;
+    DisplayList cannonlist;
     
-    int cubelist1;
-    int cubelist2;
-    int bulletlist;
-    int bodylist;
-    int turretlist;
-    int cannonlist;
+    DisplayList itemlist;
     
-    int itemlist;
+    DisplayList squarelist;
+    DisplayList squarelist2;
     
-    int squarelist;
-    int squarelist2;
+    DisplayList bodylistEx;
+    DisplayList turretlistEx;
+    DisplayList cannonlistEx;
     
-    int bodylistEx;
-    int turretlistEx;
-    int cannonlistEx;
-    
-    int bodylistEx2;
-    int turretlistEx2;
-    int cannonlistEx2;
+    DisplayList bodylistEx2;
+    DisplayList turretlistEx2;
+    DisplayList cannonlistEx2;
     
     void DrawHUD(Tank& player);
     void DrawMenu(int option);
     void DrawSky();
+    void DrawTextTest();
     void RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text);
     
     bool Start();
@@ -123,6 +124,8 @@ private:
     igtl_QGLMesh turretmesh;
     igtl_QGLMesh cannonmesh;
     igtl_QGLMesh itemmesh;
+
+    TextRenderer textRenderer;
 
     void FixMesh(igtl_QGLMesh& mesh);
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);

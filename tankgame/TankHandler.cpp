@@ -468,7 +468,7 @@ void TankHandler::DrawTanks()
      
      glColor4f(player.r, player.g, player.b, player.energy/2000);
      
-     glCallList(App::GetSingleton().graphicsTask->cubelist1);
+     App::GetSingleton().graphicsTask->cubelist1.Call(0);
      
      glDisable(GL_BLEND);
      glDepthMask(GL_TRUE);
@@ -513,7 +513,8 @@ void TankHandler::DrawTanks()
             glFrontFace(GL_CCW);
             glColor3f(players[k].r2, players[k].g2, players[k].b2);
             
-            glCallList(App::GetSingleton().graphicsTask->bodylist);
+            //glCallList(App::GetSingleton().graphicsTask->bodylist);
+            App::GetSingleton().graphicsTask->bodylist.Call(0);
             
             
             
@@ -525,7 +526,8 @@ void TankHandler::DrawTanks()
             
             glColor3f(players[k].r, players[k].g, players[k].b);
             
-            glCallList(App::GetSingleton().graphicsTask->turretlist);
+            //glCallList(App::GetSingleton().graphicsTask->turretlist);
+            App::GetSingleton().graphicsTask->turretlist.Call(0);
             
             
             glFrontFace(GL_CW);
@@ -579,7 +581,8 @@ void TankHandler::DrawTanks()
             
             glFrontFace(GL_CCW);
             
-            glCallList(App::GetSingleton().graphicsTask->bodylist);
+            //glCallList(App::GetSingleton().graphicsTask->bodylist);
+            App::GetSingleton().graphicsTask->bodylist.Call(0);
             
             glTranslatef(0, .10, 0);
             
@@ -591,7 +594,8 @@ void TankHandler::DrawTanks()
             
             if(special[k]>=players[k].fireCost/5)
             {
-                glCallList(App::GetSingleton().graphicsTask->turretlist);
+                //glCallList(App::GetSingleton().graphicsTask->turretlist);
+                App::GetSingleton().graphicsTask->turretlist.Call(0);
             }
             
             
@@ -627,7 +631,8 @@ void TankHandler::DrawTanks()
             
             glColor4f(1.0f,players[k].dist/50.0f,0.1f,1.0);
             
-            glCallList(App::GetSingleton().graphicsTask->squarelist);
+            //glCallList(App::GetSingleton().graphicsTask->squarelist);
+            App::GetSingleton().graphicsTask->squarelist.Call(0);
             
             
             if(players[k].fireTimer>players[k].fireRate && players[k].fireCost<players[k].charge)
@@ -641,7 +646,8 @@ void TankHandler::DrawTanks()
                 
                 glScalef(0.2, 0.2, 0.2);
                 
-                glCallList(App::GetSingleton().graphicsTask->squarelist);
+                //glCallList(App::GetSingleton().graphicsTask->squarelist);
+                App::GetSingleton().graphicsTask->squarelist.Call(0);
                 
                 glScalef(5.0, 5.0, 5.0);
                 
