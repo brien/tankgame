@@ -45,7 +45,7 @@ GraphicsTask::GraphicsTask()
         printf("Unable to open font");
         Logger::Get().Write("GraphicsTask: failed loading file: %s  \n", fontFilePath);
         exit(1);
-    } //The program exits here
+    }
 
     textRenderer.init();
 }
