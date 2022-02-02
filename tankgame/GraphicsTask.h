@@ -83,8 +83,6 @@ public:
     void TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap);
     tImageTGA *Load_TGA(const char *strfilename);
     
-    void BuildDisplayLists();
-    
     Camera cams[4];
     
     DisplayList cubelist1;
@@ -127,6 +125,7 @@ private:
 
     TextRenderer textRenderer;
 
+    void BuildDisplayLists();
     void FixMesh(igtl_QGLMesh& mesh);
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
 };
