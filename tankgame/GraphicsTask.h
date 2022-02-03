@@ -80,9 +80,6 @@ public:
     unsigned int textureArray[32];
     TTF_Font *defaultFont;
     
-    void TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap);
-    tImageTGA *Load_TGA(const char *strfilename);
-    
     Camera cams[4];
     
     DisplayList cubelist1;
@@ -128,5 +125,8 @@ private:
     void BuildDisplayLists();
     void FixMesh(igtl_QGLMesh& mesh);
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
+
+    void TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap);
+    tImageTGA* Load_TGA(const char* strfilename);
 };
 #endif /* GraphicsTask_h */
