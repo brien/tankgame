@@ -600,7 +600,7 @@ void Tank::Special(float dTpressed)
 bool Tank::PointCollision(float cx, float cy, float cz)
 {
     bool result=false;
-    if((cy-y)<.3 && (y-cy)<0)
+    if((cy-y) < 0.3f && (y-cy) < 0)
     {
         if(sqrt((cx-x)*(cx-x)+(cz-z)*(cz-z))<size*2)
         {
@@ -608,7 +608,6 @@ bool Tank::PointCollision(float cx, float cy, float cz)
         }
     }
     return result;
-    
 }
 
 void Tank::Fall()
