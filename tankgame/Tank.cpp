@@ -539,7 +539,6 @@ void Tank::Special(float dTpressed)
             }
 
             bullets.push_back(temp);
-
         }
 
         if(type1==TYPE_PURPLE)
