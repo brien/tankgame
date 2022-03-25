@@ -422,8 +422,6 @@ void Tank::Special(float dTpressed)
 
     if(TankHandler::GetSingleton().special[(-1*id)-1]>=fireCost/5 && fireTimer>fireRate)
     {
-
-
         float ratio = (z-TankHandler::GetSingleton().players[0].z)/(x-TankHandler::GetSingleton().players[0].x);
         float ryp=toDegrees(atan(ratio));
 
