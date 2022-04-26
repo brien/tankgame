@@ -337,7 +337,6 @@ void Tank::Die()
     
     if(deadtime < 0.01)
     {
-        
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, 1);
         
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z+.5,    0, .05, 0, 0, ry, 0, r, g, b, .15);
@@ -365,8 +364,6 @@ void Tank::Die()
          
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x+.5, y, z-.5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x+.5, y, z-.5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1);
-        
-        
     }
     if( TankHandler::GetSingleton().tanks.size()==1 && id>=0)
     {
