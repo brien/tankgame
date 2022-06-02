@@ -104,7 +104,7 @@ void Tank::SetType(TankType t1, TankType t2)
         if(type2==TYPE_RED)
         {
             attack=750;
-            fireCost=maxCharge/1.5;
+            fireCost=maxCharge/1.5f;
             
         }
         
