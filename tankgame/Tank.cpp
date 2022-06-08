@@ -609,14 +609,14 @@ void Tank::Fall()
         
     float dy=vy*GlobalTimer::dT;
     
-    if(dy>10.0*GlobalTimer::dT)
+    if(dy>10.0f*GlobalTimer::dT)
     {
-        dy=10.0*GlobalTimer::dT;
+        dy=10.0f*GlobalTimer::dT;
     }
     
-    if(dy<-15.0*GlobalTimer::dT)
+    if(dy<-15.0f*GlobalTimer::dT)
     {
-        dy=-15.0*GlobalTimer::dT;
+        dy=-15.0f*GlobalTimer::dT;
     }
         
     y+=dy;
