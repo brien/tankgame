@@ -804,7 +804,7 @@ Tank::Tank()
     energyRegen = 0.0f;
     energy = 0.0f;
     dist = 0.0f;
-    control = 0.0f;
+    control = 0;
     chargeRegen = 0.0f;
     chargeCost = 0.0f;
     charge = 0.0f;
