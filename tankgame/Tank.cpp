@@ -773,7 +773,7 @@ Tank::Tank()
     g2 = 0.0f;
     
     jid = 0;
-    inputmode = 0;
+    inputMode = 0;
     id = 0;
     hitNum = 0;
     hitAlpha = 0.0f;
@@ -817,7 +817,7 @@ Tank::Tank()
 
 void Tank::Init()
 {
-    inputmode=0;
+    inputMode=0;
     
     deadtime=0.0f;
     
@@ -1383,7 +1383,7 @@ bool Tank::Move(bool forb)
 
 void Tank::HandleInput()
 {
-    if(inputmode==0)
+    if(inputMode==0)
     {
         RotTurret(InputTask::dX*2);
         
@@ -1536,7 +1536,7 @@ void Tank::HandleInput()
         
         
     }
-    else if(inputmode>0 && inputmode<4) //Jay's flight stick + PS2, P880 stupid mode
+    else if(inputMode>0 && inputMode<4) //Jay's flight stick + PS2, P880 stupid mode
     {
         if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && (InputTask::GetButton(jid,0) || InputTask::GetButton(jid,3) || InputTask::GetButton(jid,7)) )
         {
@@ -1604,7 +1604,7 @@ void Tank::HandleInput()
                 Jump();
             }
         }
-        if(inputmode==1)
+        if(inputMode==1)
         {
             if( InputTask::GetAxis(jid,2) < -6000 )
             {
@@ -1688,7 +1688,7 @@ void Tank::HandleInput()
                     }
         
     }
-    /*   else if(inputmode==1) //Gravis Differential Drive
+    /*   else if(inputMode==1) //Gravis Differential Drive
      {
      
      if( InputTask::GetButton(jid,7) )//|| InputTask::GetButton(jid,0))
@@ -1820,7 +1820,7 @@ void Tank::HandleInput()
      }
      
      }
-     else if(inputmode==2) //Gravis Stupid
+     else if(inputMode==2) //Gravis Stupid
      {
      
      if(  InputTask::GetButton(jid,7) )//|| InputTask::GetButton(jid,0))
@@ -1893,7 +1893,7 @@ void Tank::HandleInput()
      }
      }
      }
-     else if(inputmode==3) //Broken Differential drive PS2
+     else if(inputMode==3) //Broken Differential drive PS2
      {
      
      if( InputTask::GetButton(jid,7) )//|| InputTask::GetButton(jid,0))
@@ -2041,7 +2041,7 @@ void Tank::HandleInput()
      }
      
      }*/
-    else if(inputmode==4) //NGC
+    else if(inputMode==4) //NGC
     {
         if( InputTask::GetButton(jid,0) || InputTask::GetButton(jid,7) || InputTask::GetAxis(jid,3) > -5000 )
         {
@@ -2192,9 +2192,9 @@ void Tank::HandleInput()
         charge=maxCharge;
     }
     
-    if( InputTask::KeyDown(SDL_SCANCODE_K) && inputmode!=0)
+    if( InputTask::KeyDown(SDL_SCANCODE_K) && inputMode!=0)
     {
-        inputmode=0;
+        inputMode=0;
     }
     
     

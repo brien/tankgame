@@ -75,7 +75,7 @@ public:
     float size;
     
     int control;
-    unsigned int inputmode;
+    unsigned int inputMode;
     unsigned int jid;
     
     float rx, ry, rz, rr, rrl;
