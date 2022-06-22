@@ -813,6 +813,7 @@ Tank::Tank()
     b2 = 0.0f;
     attack = 0.0f;
     alive = true;
+    isPlayer = false;
 }
 
 void Tank::Init()
