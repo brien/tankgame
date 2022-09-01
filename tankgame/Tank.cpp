@@ -781,9 +781,9 @@ Tank::Tank()
     type1=TYPE_RED;
     type2=TYPE_BLUE;
     bonus=0;
-    bonusTime=0.0f;
-    deadtime=0.0f;
-    jumpTime=0.0f;
+    bonusTime = 0.0f;
+    deadtime = 0.0f;
+    jumpTime = 0.0f;
     turbo = false;
     recharge = false;
     jumping = false;
