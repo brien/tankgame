@@ -778,9 +778,9 @@ Tank::Tank()
     hitNum = 0;
     hitAlpha = 0.0f;
 
-    type1=TYPE_RED;
-    type2=TYPE_BLUE;
-    bonus=0;
+    type1 = TYPE_RED;
+    type2 = TYPE_BLUE;
+    bonus = 0;
     bonusTime = 0.0f;
     deadtime = 0.0f;
     jumpTime = 0.0f;
