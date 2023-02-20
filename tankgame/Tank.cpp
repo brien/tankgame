@@ -641,11 +641,6 @@ void Tank::Fall()
     
     int highest=-1;
     
-    /*  if(LevelHandler::GetSingleton().f[(int)x, (int)z]>0)
-     {
-     highest=(float)LevelHandler::GetSingleton().f[(int)x, (int)z];
-     }*/
-    
     if(LevelHandler::GetSingleton().FloatCollision(x, y, z)
        ||LevelHandler::GetSingleton().FloatCollision(x+collisionPoints[0],y,z+collisionPoints[2])
        ||LevelHandler::GetSingleton().FloatCollision(x+collisionPoints[3],y,z+collisionPoints[5])
