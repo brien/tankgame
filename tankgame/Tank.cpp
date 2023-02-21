@@ -695,7 +695,6 @@ void Tank::Fall()
            ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[6],y,z+collisionPoints[8])
            ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[9],y,z+collisionPoints[11]))
         {
-            //y-= vy;//(fallRate*GlobalTimer::dT);
             
             //Time to find the height of the highest collision point
             highest=LevelHandler::GetSingleton().GetTerrainHeight((int)x, (int)z);
