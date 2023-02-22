@@ -696,7 +696,7 @@ void Tank::Fall()
            ||LevelHandler::GetSingleton().FallCollision(x+collisionPoints[9],y,z+collisionPoints[11]))
         {
             
-            //Time to find the height of the highest collision point
+            //Find the height of the highest collision point
             highest=LevelHandler::GetSingleton().GetTerrainHeight((int)x, (int)z);
             
             if (highest < LevelHandler::GetSingleton().GetTerrainHeight( (int)(x + collisionPoints[0]), (int)(z + collisionPoints[2]) ) )
@@ -808,6 +808,8 @@ Tank::Tank()
     attack = 0.0f;
     alive = true;
     isPlayer = false;
+
+    collisionPoints[21] = {0};
 }
 
 void Tank::Init()
