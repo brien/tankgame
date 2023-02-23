@@ -719,7 +719,6 @@ void Bullet::Draw()
                 
         glScalef(1, 1, 0.2);
         
-        //glCallList(App::GetSingleton().graphicsTask->squarelist2);
         App::GetSingleton().graphicsTask->squarelist2.Call(0);
         
         
