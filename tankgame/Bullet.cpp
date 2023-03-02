@@ -621,7 +621,6 @@ void Bullet::Draw()
         
         glColor4f(r2, g2, b2, 0.1f + power/500);
         
-        //glCallList(App::GetSingleton().graphicsTask->squarelist);
         App::GetSingleton().graphicsTask->squarelist.Call(0);
         
         glDisable(GL_BLEND);
