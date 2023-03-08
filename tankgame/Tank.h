@@ -29,6 +29,16 @@ enum TankType
     TANK_TYPE_COUNT
 };
 
+enum InputMode
+{
+    MODE_KEYBOARD_MOUSE = 0,
+    MODE_JOYSTICK_GENERIC,
+    MODE_EXTREME_3D,
+    MODE_OTHER,
+    MODE_NINTENDO_GC,
+    INPUT_MODE_COUNT
+};
+
 class Tank
 {
 public:
@@ -75,7 +85,7 @@ public:
     float size;
     
     int control;
-    unsigned int inputMode;
+    InputMode inputMode;
     unsigned int jid;
     
     float rx, ry, rz, rr, rrl;

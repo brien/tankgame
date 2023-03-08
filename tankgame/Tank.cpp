@@ -767,7 +767,7 @@ Tank::Tank()
     g2 = 0.0f;
     
     jid = 0;
-    inputMode = 0;
+    inputMode = InputMode::MODE_KEYBOARD_MOUSE;
     id = 0;
     hitNum = 0;
     hitAlpha = 0.0f;
@@ -814,7 +814,7 @@ Tank::Tank()
 
 void Tank::Init()
 {
-    inputMode=0;
+    inputMode = InputMode::MODE_KEYBOARD_MOUSE;
     
     deadtime=0.0f;
     
@@ -1380,7 +1380,7 @@ bool Tank::Move(bool forb)
 
 void Tank::HandleInput()
 {
-    if(inputMode==0)
+    if(inputMode == InputMode::MODE_KEYBOARD_MOUSE)
     {
         RotTurret(InputTask::dX*2);
         
@@ -1465,19 +1465,19 @@ void Tank::HandleInput()
         }
         if( InputTask::KeyStillDown(SDL_SCANCODE_LEFT) )
         {
-            RotTurret(-1);
+            RotTurret(-200.0f * GlobalTimer::dT);
             if(turbo)
             {
-                RotTurret(-1);
+                RotTurret(-300.0f * GlobalTimer::dT);
                 charge-=jumpCost*GlobalTimer::dT;
             }
         }
         if( InputTask::KeyStillDown(SDL_SCANCODE_RIGHT))
         {
-            RotTurret(1);
+            RotTurret(200.0f * GlobalTimer::dT);
             if(turbo)
             {
-                RotTurret(1);
+                RotTurret(300.0f * GlobalTimer::dT);
                 charge-=jumpCost*GlobalTimer::dT;
             }
         }
@@ -2191,7 +2191,7 @@ void Tank::HandleInput()
     
     if( InputTask::KeyDown(SDL_SCANCODE_K) && inputMode!=0)
     {
-        inputMode=0;
+        inputMode = InputMode::MODE_KEYBOARD_MOUSE;
     }
     
     
