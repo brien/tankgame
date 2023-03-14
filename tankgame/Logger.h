@@ -13,6 +13,10 @@
 
 class Logger
 {
+
+private:
+    const char* logFilename = "applog.txt";
+
 protected:
     Logger();
     

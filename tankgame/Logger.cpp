@@ -24,7 +24,7 @@ Logger &Logger::Get()
 
 bool Logger::Init()
 {
-    appLog.open("applog.txt");
+    appLog.open(logFilename);
     
     return true;
 }
@@ -35,6 +35,7 @@ void Logger::Write(const char* msg, ...)
     char szBuf[1024];
     vsprintf(szBuf,msg,args);
     appLog << szBuf;
+    std::cout << szBuf;
 #ifdef DEBUG
     appLog.flush();
 #endif
