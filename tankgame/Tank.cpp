@@ -27,7 +27,7 @@ void Tank::SetType(TankType t1, TankType t2)
     fallRate=16.0f;
 
     
-    if(type1==TYPE_GREY)
+    if (type1 == TankType::TYPE_GREY)
     {
         fireRate=.5;
         
@@ -41,7 +41,7 @@ void Tank::SetType(TankType t1, TankType t2)
         chargeCost=200;
     }
     
-    if(type1==TYPE_RED)
+    if (type1 == TankType::TYPE_RED)
     {
         fireRate=.05;
         
@@ -56,21 +56,21 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=0;
         
-        if(type2==TYPE_GREY)
+        if (type2 == TankType::TYPE_GREY)
         {
             fireRate=.05;
             attack=attack/2;
             fireCost*=2;
         }
         
-        if(type2==TYPE_BLUE)
+        if (type2 == TankType::TYPE_BLUE)
         {
             attack=200;
             fireCost=maxCharge/5;
             fireRate=.1;
         }
         
-        if(type2==TYPE_YELLOW)
+        if (type2 == TankType::TYPE_YELLOW)
         {
             attack=120;
             fireCost=maxCharge/8;
@@ -78,7 +78,7 @@ void Tank::SetType(TankType t1, TankType t2)
             bounces=2;
         }
         
-        if(type2==TYPE_PURPLE)
+        if (type2 == TankType::TYPE_PURPLE)
         {
             attack=200;
             fireCost=maxCharge/8;
@@ -86,7 +86,7 @@ void Tank::SetType(TankType t1, TankType t2)
         }
     }
     
-    if(type1==TYPE_BLUE)
+    if (type1 == TankType::TYPE_BLUE)
     {
         fireRate=0.05;
         
@@ -101,21 +101,21 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=0;
         
-        if(type2==TYPE_RED)
+        if (type2 == TankType::TYPE_RED)
         {
             attack=750;
             fireCost=maxCharge/1.5f;
             
         }
         
-        if(type2==TYPE_YELLOW)
+        if (type2 == TankType::TYPE_YELLOW)
         {
             attack=800;
             fireCost=maxCharge/1.5f;
             bounces=1;
         }
         
-        if(type2==TYPE_PURPLE)
+        if (type2 == TankType::TYPE_PURPLE)
         {
             attack=500;
             fireCost=maxCharge/1.5f;
@@ -123,7 +123,7 @@ void Tank::SetType(TankType t1, TankType t2)
         
     }
     
-    if(type1==TYPE_YELLOW)
+    if (type1 == TankType::TYPE_YELLOW)
     {
         fireRate=.5;
         
@@ -138,7 +138,7 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=8000;
         
-        if(type2==TYPE_RED)
+        if (type2 == TankType::TYPE_RED)
         {
             fireRate=.25;
             attack=150;
@@ -146,7 +146,7 @@ void Tank::SetType(TankType t1, TankType t2)
             bounces=64;
         }
         
-        if(type2==TYPE_BLUE)
+        if (type2 == TankType::TYPE_BLUE)
         {
             fireRate=.8;
             attack=400;
@@ -154,7 +154,7 @@ void Tank::SetType(TankType t1, TankType t2)
             bounces=32;
         }
         
-        if(type2==TYPE_PURPLE)
+        if (type2 == TankType::TYPE_PURPLE)
         {
             fireRate=.8;
             attack=500;
@@ -163,7 +163,7 @@ void Tank::SetType(TankType t1, TankType t2)
         }
     }
     
-    if(type1==TYPE_PURPLE)
+    if (type1 == TankType::TYPE_PURPLE)
     {
         fireRate=.5;
         
@@ -178,28 +178,28 @@ void Tank::SetType(TankType t1, TankType t2)
         
         bounces=0;
         
-        if(type2==TYPE_GREY)
+        if (type2 == TankType::TYPE_GREY)
         {
             fireRate=.25;
             attack=150;
             fireCost=maxCharge/4;
         }
         
-        if(type2==TYPE_RED)
+        if (type2 == TankType::TYPE_RED)
         {
             fireRate=.25;
             attack=150;
             fireCost=maxCharge/4;
         }
         
-        if(type2==TYPE_BLUE)
+        if (type2 == TankType::TYPE_BLUE)
         {
             fireRate=.8;
             attack=500;
             fireCost=maxCharge/2;
         }
         
-        if(type2==TYPE_YELLOW)
+        if (type2 == TankType::TYPE_YELLOW)
         {
             fireRate=.8;
             attack=500;
@@ -212,105 +212,73 @@ void Tank::SetType(TankType t1, TankType t2)
     
     
     
-    if(type1==TYPE_GREY)
+    if (type1 == TankType::TYPE_GREY)
     {
         r=.5;
         g=.5;
         b=.5;
     }
-    else if(type1==TYPE_RED)
+    else if (type1 == TankType::TYPE_RED)
     {
         r=1;
         g=0;
         b=0;
     }
-    else if(type1==TYPE_BLUE)
+    else if (type1 == TankType::TYPE_BLUE)
     {
         r=0;
         g=0;
         b=1;
     }
-    else if(type1==TYPE_YELLOW)
+    else if (type1 == TankType::TYPE_YELLOW)
     {
         r=1;
         g=1;
         b=0;
     }
-    else if(type1==TYPE_PURPLE)
+    else if (type1 == TankType::TYPE_PURPLE)
     {
         r=1;
         g=0;
         b=1;
     }
-    else if(type1==5)
+    else if (type1 == TankType::TANK_TYPE_COUNT)
     {
         r=0;
         g=1;
         b=0;
     }
-    else if(type1==6)
-    {
-        r=.5;
-        g=1;
-        b=1;
-    }
-    else if(type1==7)
-    {
-        r=1;
-        g=0;
-        b=1;
-    }
     
-    
-    if(type2==TYPE_GREY)
+    if (type2 == TankType::TYPE_GREY)
     {
         r2=.5;
         g2=.5;
         b2=.5;
     }
-    else if(type2==TYPE_RED)
+    else if (type2 == TankType::TYPE_RED)
     {
         r2=1;
         g2=0;
         b2=0;
     }
-    else if(type2==TYPE_BLUE)
+    else if (type2 == TankType::TYPE_BLUE)
     {
         r2=0;
         g2=0;
         b2=1;
     }
-    else if(type2==TYPE_YELLOW)
+    else if (type2 == TankType::TYPE_YELLOW)
     {
         r2=1;
         g2=1;
         b2=0;
     }
-    else if(type2==TYPE_PURPLE)
+    else if (type2 == TankType::TYPE_PURPLE)
     {
         r2=1;
         g2=0;
         b2=1;
     }
-    else if(type2==5)
-    {
-        r2=0;
-        g2=1;
-        b2=0;
-    }
-    else if(type2==6)
-    {
-        r2=.5;
-        g2=1;
-        b2=1;
-    }
-    else if(type2==7)
-    {
-        r2=1;
-        g2=0;
-        b2=1;
-    }
-    
 }
 
 void Tank::Die()
@@ -444,7 +412,7 @@ void Tank::Special(float dTpressed)
                     z + (GlobalTimer::dT*bulletMovRate) * (float)sin((rty+ry)*DTR),
                     rtx+rx, rty+ry, rtz+rz);
 
-        if(type1==TYPE_RED)
+        if(type1==TankType::TYPE_RED)
         {
             for(int i=0; i<10; i++)
             {
@@ -484,10 +452,10 @@ void Tank::Special(float dTpressed)
 
             bullets.push_back(temp2);
         }
-        if(type1==TYPE_BLUE)
+        if(type1==TankType::TYPE_BLUE)
         {
 
-            if(type2!=TYPE_RED)
+            if(type2!=TankType::TYPE_RED)
             {
                 Bullet temp(id, attack, type1, type2, bounces,
                             dTpressed,
@@ -515,9 +483,9 @@ void Tank::Special(float dTpressed)
 
         }
 
-        if(type1==TYPE_YELLOW)
+        if (type1 == TankType::TYPE_YELLOW)
         {
-            if(type2!=TYPE_YELLOW)
+            if (type2 != TankType::TYPE_YELLOW)
             {
                 Bullet temp(id, attack, type1, type2, 4,
                             dTpressed,
@@ -534,7 +502,7 @@ void Tank::Special(float dTpressed)
             bullets.push_back(temp);
         }
 
-        if(type1==TYPE_PURPLE)
+        if (type1 == TankType::TYPE_PURPLE)
         {
             Bullet temp(id, attack, type1, type2, bounces,
                         dTpressed,
@@ -772,8 +740,8 @@ Tank::Tank()
     hitNum = 0;
     hitAlpha = 0.0f;
 
-    type1 = TYPE_RED;
-    type2 = TYPE_BLUE;
+    type1 = TankType::TYPE_RED;
+    type2 = TankType::TYPE_BLUE;
     bonus = 0;
     bonusTime = 0.0f;
     deadtime = 0.0f;
@@ -1384,7 +1352,7 @@ void Tank::HandleInput()
     {
         RotTurret(InputTask::dX*2);
         
-        if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::MouseStillDown(1))
+        if ((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(1))
         {
             Fire(InputTask::dX*GlobalTimer::dT);
         }
@@ -1393,7 +1361,7 @@ void Tank::HandleInput()
             Fire(1);
         }
         
-        if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && InputTask::MouseStillDown(3))
+        if((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(3))
         {
             Special(InputTask::dX*GlobalTimer::dT);
         }
@@ -1535,7 +1503,7 @@ void Tank::HandleInput()
     }
     else if(inputMode>0 && inputMode<4) //Jay's flight stick + PS2, P880 stupid mode
     {
-        if((type1==TYPE_PURPLE || type2==TYPE_PURPLE) && (InputTask::GetButton(jid,0) || InputTask::GetButton(jid,3) || InputTask::GetButton(jid,7)) )
+        if((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && (InputTask::GetButton(jid,0) || InputTask::GetButton(jid,3) || InputTask::GetButton(jid,7)) )
         {
             Fire((float)InputTask::GetAxis(jid,3)/(float)3200);
         }
@@ -1545,7 +1513,7 @@ void Tank::HandleInput()
                 Fire(1);
             }
         
-        if((type1==4 || type2==4) && (InputTask::GetButton(jid,5) || InputTask::GetButton(jid,11)) )
+        if((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && (InputTask::GetButton(jid,5) || InputTask::GetButton(jid,11)) )
         {
             Special((float)InputTask::GetAxis(jid,3)/(float)3200);
             /*if( InputTask::MouseStillDown(1))
@@ -2042,7 +2010,7 @@ void Tank::HandleInput()
     {
         if( InputTask::GetButton(jid,0) || InputTask::GetButton(jid,7) || InputTask::GetAxis(jid,3) > -5000 )
         {
-            if(type1==4 || type2==4)
+            if(type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE)
             {
                 Fire((float)InputTask::GetAxis(jid,2)/(float)6400);
             }
@@ -2054,7 +2022,7 @@ void Tank::HandleInput()
         
         if(InputTask::GetButton(jid,5) || InputTask::GetButton(jid,6))
         {
-            if(type1==4 || type2==4)
+            if(type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE)
             {
                 Special((float)InputTask::GetAxis(jid,2)/(float)6000);
             }

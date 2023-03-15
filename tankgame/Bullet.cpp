@@ -43,7 +43,7 @@ Bullet::Bullet()
 }
 
 Bullet::Bullet(int tid, float power,
-int type1, int type2,
+TankType type1, TankType type2,
 int maxbounces,
 float dTpressed,
 float r, float g, float b,
@@ -73,7 +73,7 @@ float rx, float ry, float rz)
     
     this->power=power;
     
-    if(type1==TYPE_PURPLE)
+    if(type1==TankType::TYPE_PURPLE)
     {
         this->dty=320*dTpressed;
         if(dTpressed<0)
@@ -92,7 +92,7 @@ float rx, float ry, float rz)
         }
     }
     else
-    if(type2==TYPE_PURPLE)
+    if(type2==TankType::TYPE_PURPLE)
     {
         this->power*=0.5f;
         this->dty=160*dTpressed;
@@ -133,7 +133,7 @@ void Bullet::NextFrame()
 {
     dT+=GlobalTimer::dT;
     
-    if(type1==TYPE_PURPLE && spec)
+    if(type1==TankType::TYPE_PURPLE && spec)
     {
         if(dty<0)
         {
@@ -260,7 +260,7 @@ void Bullet::HandleTankCollision(Tank& tank)
                 TankHandler::GetSingleton().comboNum[(-1 * tid) - 1]++;
             }
 
-            if (tid < 0 && spec && type1 == TYPE_BLUE)
+            if (tid < 0 && spec && type1 == TankType::TYPE_BLUE)
             {
                 alive = true;
                 power += 100;
@@ -378,7 +378,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
         if (numbounces < 1)
         {
-            if (type1 == TYPE_YELLOW && type2 == TYPE_YELLOW)
+            if (type1 == TankType::TYPE_YELLOW && type2 == TankType::TYPE_YELLOW)
             {
                 power *= 2.0;
             }
@@ -388,9 +388,9 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             }
         }
 
-        if (tid < 0 && spec && type1 == TYPE_YELLOW)
+        if (tid < 0 && spec && type1 == TankType::TYPE_YELLOW)
         {
-            if (type2 == TYPE_RED)
+            if (type2 == TankType::TYPE_RED)
             {
                 for (int i = 0; i < 20; i++)
                 {
@@ -431,7 +431,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 }
             }
             else
-                if (type2 == TYPE_BLUE)
+                if (type2 == TankType::TYPE_BLUE)
                 {
                     for (int i = 0; i < 2; i++)
                     {
@@ -472,7 +472,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     }
                 }
                 else
-                    if (type2 == TYPE_YELLOW || type2 == TYPE_GREY)
+                    if (type2 == TankType::TYPE_YELLOW || type2 == TankType::TYPE_GREY)
                     {
 
                         Bullet temp;
@@ -509,7 +509,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                         TankHandler::GetSingleton().players[(-1 * tid) - 1].bulletq.push(temp);
                     }
                     else
-                        if (type2 == TYPE_PURPLE)
+                        if (type2 == TankType::TYPE_PURPLE)
                         {
 
                             Bullet temp;
@@ -595,7 +595,7 @@ void Bullet::Draw()
     glColor3f(r, g, b);
     
     
-    if(type1==TYPE_BLUE)
+    if(type1==TankType::TYPE_BLUE)
     {
         
         glPushMatrix();

@@ -19,7 +19,7 @@ enum EnemyState
     ENEMY_STATE_COUNT
 };
 
-enum TankType
+enum class TankType
 {
     TYPE_GREY = 0,
     TYPE_RED,

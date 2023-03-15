@@ -8,6 +8,7 @@
 #define Bullet_h
 
 class Tank;
+enum class TankType;
 
 class Bullet
 {
@@ -15,7 +16,7 @@ class Bullet
 public:
     Bullet();
     Bullet(int tid, float power,
-           int type1, int type2,
+           TankType type1, TankType type2,
            int maxbounces,
            float dTpressed,
            float r, float g, float b,
@@ -43,8 +44,8 @@ private:
     int id;
     int tid;
     
-    int type1;
-    int type2;
+    TankType type1;
+    TankType type2;
     
     float dT;
     

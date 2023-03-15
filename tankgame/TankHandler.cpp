@@ -265,23 +265,19 @@ void TankHandler::Init()
             temp.z=LevelHandler::GetSingleton().enemy[i%16][1]+i%2;
         }
         
-        
-        
-        
-        
         temp.y=LevelHandler::GetSingleton().GetTerrainHeight((int)temp.x, (int)temp.z);
         temp.ry=i*45;
         temp.id=i;
         
         
-        if((LevelHandler::GetSingleton().levelNumber-48)==0)
+        if((LevelHandler::GetSingleton().levelNumber-48) == 0)
         {
-            temp.SetType(static_cast<TankType>(1+i%3), TYPE_GREY);
-            if(temp.type1==TYPE_BLUE)
-                temp.SetType(TYPE_YELLOW, TYPE_GREY);
-            if(temp.id==4)
+            temp.SetType(static_cast<TankType>(1+i%3), TankType::TYPE_GREY);
+            if(temp.type1 == TankType::TYPE_BLUE)
+                temp.SetType(TankType::TYPE_YELLOW, TankType::TYPE_GREY);
+            if(temp.id == 4)
             {
-                temp.SetType(TYPE_BLUE,TYPE_GREY);
+                temp.SetType(TankType::TYPE_BLUE, TankType::TYPE_GREY);
                 temp.attack=temp.attack/3;
             }
         }
