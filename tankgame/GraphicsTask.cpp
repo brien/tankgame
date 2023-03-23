@@ -410,7 +410,6 @@ void GraphicsTask::Update()
     if(TankHandler::GetSingleton().numPlayers>1)
     {
         glViewport(0, 0, VideoTask::scrWidth, VideoTask::scrHeight/2);
-        //glScissor(0, 300, 800, 300);
         
         gluLookAt(cams[1].xpos(),cams[1].ypos(),cams[1].zpos(),
                   cams[1].xfocus(),cams[1].yfocus(),cams[1].zfocus(),
