@@ -430,10 +430,7 @@ void GraphicsTask::Update()
             DrawHUD(TankHandler::GetSingleton().players[1]);
         }
         
-        //glEnable(GL_SCISSOR_TEST);
-        
         glViewport(0, 300, VideoTask::scrWidth, VideoTask::scrHeight/2);
-        //glScissor(0, 0, 800, 300);
         
         glLoadIdentity();
         
