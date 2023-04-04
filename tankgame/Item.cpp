@@ -77,7 +77,6 @@ void Item::Draw()
     
     glFrontFace(GL_CCW);
     
-    //glCallList(App::GetSingleton().graphicsTask->itemlist);
     App::GetSingleton().graphicsTask->itemlist.Call(0);
     
     glFrontFace(GL_CW);
