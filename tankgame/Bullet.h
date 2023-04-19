@@ -39,7 +39,7 @@ private:
     float movRate;
     float power;
     
-    bool spec;
+    bool isSpecial;
     
     int id;
     int tid;

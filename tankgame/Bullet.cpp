@@ -30,7 +30,7 @@ Bullet::Bullet()
 {
     movRate=33;
     alive=true;
-    spec=false;
+    isSpecial=false;
     id=0;
     numbounces = 0;
     maxbounces = 0;
@@ -53,7 +53,7 @@ float rx, float ry, float rz)
 {
     this->movRate=33;
     this->alive=true;
-    this->spec=false;
+    this->isSpecial=false;
     this->id=0;
     this->numbounces=0;
     this->dty=0;
@@ -133,7 +133,7 @@ void Bullet::NextFrame()
 {
     dT+=GlobalTimer::dT;
     
-    if(type1==TankType::TYPE_PURPLE && spec)
+    if(type1==TankType::TYPE_PURPLE && isSpecial)
     {
         if(dty<0)
         {
@@ -260,7 +260,7 @@ void Bullet::HandleTankCollision(Tank& tank)
                 TankHandler::GetSingleton().comboNum[(-1 * tid) - 1]++;
             }
 
-            if (tid < 0 && spec && type1 == TankType::TYPE_BLUE)
+            if (tid < 0 && isSpecial && type1 == TankType::TYPE_BLUE)
             {
                 alive = true;
                 power += 100;
@@ -388,7 +388,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             }
         }
 
-        if (tid < 0 && spec && type1 == TankType::TYPE_YELLOW)
+        if (tid < 0 && isSpecial && type1 == TankType::TYPE_YELLOW)
         {
             if (type2 == TankType::TYPE_RED)
             {
