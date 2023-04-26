@@ -649,7 +649,7 @@ void Tank::Fall()
                 App::GetSingleton().soundTask->PlayChannel(5);
             }
         }
-        jumping=false;
+        isJumping=false;
         grounded=true;
         jumpTime=0.0f;
         
@@ -709,7 +709,7 @@ void Tank::Fall()
                     charge+=maxCharge/3;
                 }
             }
-            jumping=false;
+            isJumping=false;
             grounded=true;
             jumpTime=0.0f;
         }
@@ -748,7 +748,7 @@ Tank::Tank()
     jumpTime = 0.0f;
     turbo = false;
     recharge = false;
-    jumping = false;
+    isJumping = false;
     grounded = false;
 
     size = 0.0f;
@@ -786,7 +786,7 @@ void Tank::Init()
     
     deadtime=0.0f;
     
-    jumping=false;
+    isJumping=false;
     grounded=false;
     
     fireTimer=0;
@@ -953,11 +953,11 @@ void Tank::Jump()
         //Jump damn it
         
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_JUMP, x, y-.2, z, 0, .5*vy*GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1);
-        if(!jumping && id<0)
+        if(!isJumping && id<0)
         {
             App::GetSingleton().soundTask->PlayChannel(4);
         }
-        jumping=true;
+        isJumping=true;
     }
     
     //}
@@ -981,7 +981,7 @@ void Tank::NextFrame()
      if(ry<0)
      ry=360;*/
     
-    if(!jumping)
+    if(!isJumping)
     {
         jumpTime=0.0f;
     }
@@ -1429,7 +1429,7 @@ void Tank::HandleInput()
         }
         else
         {
-            jumping=false;
+            isJumping=false;
         }
         if( InputTask::KeyStillDown(SDL_SCANCODE_LEFT) )
         {

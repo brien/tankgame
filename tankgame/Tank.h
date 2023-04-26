@@ -127,7 +127,7 @@ public:
     
     float dist;
     
-    bool jumping;
+    bool isJumping;
     bool grounded;
     float jumpTime;
     
