@@ -42,7 +42,6 @@ bool InputTask::Start()
             for(int j=0; j<4; j++)
             {
                 jdA[i][j] = 0;
-                //joynames[i]=SDL_JoystickInstanceID(i);
             }
         }
     }
