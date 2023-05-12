@@ -73,9 +73,6 @@ void InputTask::Update()
             }
         }
     }
-    
-    
-    //number_of_buttons = SDL_JoystickNumButtons(joystick);
 }
 
 int InputTask::GetAxis(int jid, int axis)
