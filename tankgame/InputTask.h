@@ -15,6 +15,9 @@ using namespace std;
 
 class InputTask : public ITask
 {
+private:
+    const static int MAX_JOYSTICKS = 4;
+    const static int MAX_JOYSTICK_AXES = 4;
 public:
     InputTask();
     virtual ~InputTask();
@@ -23,9 +26,9 @@ public:
     void Update();
     void Stop();
     
-    static SDL_Joystick *joysticks[4];
+    static SDL_Joystick *joysticks[MAX_JOYSTICKS];
     static string joynames[2];
-    static int jdA[4][4];
+    static int jdA[MAX_JOYSTICKS][MAX_JOYSTICK_AXES];
     
     static Uint8 *keys;
     static Uint8 *oldKeys;
@@ -54,7 +57,6 @@ public:
     static bool inline MouseStillDown(int button)	{ return ( CurMouse(button))&&( OldMouse(button)); }
     static bool inline MouseUp(int button)		{ return (!CurMouse(button))&&( OldMouse(button)); }
     static bool inline MouseStillUp(int button)	{ return (!CurMouse(button))&&(!OldMouse(button)); }
-    
 };
 
 #endif /* InputTask_h */

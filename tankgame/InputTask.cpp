@@ -8,7 +8,7 @@
 
 #include <SDL2/SDL.h>
 
-SDL_Joystick *InputTask::joysticks[4]={NULL};
+SDL_Joystick *InputTask::joysticks[MAX_JOYSTICKS]={NULL};
 string InputTask::joynames[2]={"NULL"};
 unsigned char *InputTask::keys=0;
 unsigned char *InputTask::oldKeys=0;
@@ -16,7 +16,7 @@ int InputTask::keyCount=0;
 int InputTask::dX=0;
 int InputTask::dY=0;
 
-int InputTask::jdA[4][4]={0};
+int InputTask::jdA[MAX_JOYSTICKS][MAX_JOYSTICKS]={0};
 
 unsigned int InputTask::buttons=0;
 unsigned int InputTask::oldButtons=0;
@@ -36,7 +36,7 @@ bool InputTask::Start()
 {
     for(int i=0; i<SDL_NumJoysticks(); i++)
     {
-        if(i<4)
+        if(i < MAX_JOYSTICKS)
         {
             joysticks[i] = SDL_JoystickOpen(i);
             for(int j=0; j<4; j++)
@@ -65,7 +65,7 @@ void InputTask::Update()
     
     for(int i=0; i<SDL_NumJoysticks(); i++)
     {
-        if(i<4)
+        if(i < MAX_JOYSTICKS)
         {
             for(int j=0; j<SDL_JoystickNumAxes(joysticks[i]); j++)
             {
@@ -78,7 +78,7 @@ void InputTask::Update()
 int InputTask::GetAxis(int jid, int axis)
 {
     int ret;
-    if(jid<0 || jid>3 || joysticks[jid]==NULL)
+    if(jid < 0 || jid >= MAX_JOYSTICKS || joysticks[jid]==NULL)
     {
         ret=-1;
     }
@@ -93,7 +93,7 @@ int InputTask::GetAxis(int jid, int axis)
 unsigned char InputTask::GetButton(int jid, int bid)
 {
     unsigned char ret;
-    if(jid<0 || jid>3 || joysticks[jid]==NULL)
+    if(jid < 0 || jid >= MAX_JOYSTICKS || joysticks[jid]==NULL)
     {
         ret=0;
     }
