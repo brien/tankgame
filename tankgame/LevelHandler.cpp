@@ -129,10 +129,6 @@ bool LevelHandler::Load(const char filePath[])
             sizeX=128;
             sizeZ=128;
             
-            //			TankHandler::GetSingleton().numberTanks=sizeX/16;
-            
-            
-            
             /*
              
              t = new int*[sizeX];
