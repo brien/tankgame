@@ -39,7 +39,7 @@ int LevelHandler::Strlen(const char * stringy)
     return cp;
 }
 
-LevelHandler::LevelHandler()
+LevelHandler::LevelHandler() : enemy{0}, fileName{""}, levelNumber(48)
 {
     levelNumber=48;
     colorNumber2=colorNumber=0;
@@ -147,11 +147,11 @@ bool LevelHandler::Load(const char filePath[])
             int cdepth=sizeZ;
             char* oneline = new char[cdepth];	//Storage per line
             
-            for(int i=0; i<sizeX; i++)
+            for(unsigned int i=0; i<sizeX; i++)
             {
                 //Get next line
                 fgets(oneline, cdepth, filein);
-                for(int j=0; j<sizeZ; j++)
+                for(unsigned int j=0; j<sizeZ; j++)
                 {
                     t[i][j]=oneline[j];
                     
