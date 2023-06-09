@@ -41,7 +41,6 @@ int LevelHandler::Strlen(const char * stringy)
 
 LevelHandler::LevelHandler() : enemy{0}, fileName{""}, levelNumber(48)
 {
-    levelNumber=48;
     colorNumber2=colorNumber=0;
     drawFloor=true;
     drawWalls=false;
