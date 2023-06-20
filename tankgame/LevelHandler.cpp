@@ -39,12 +39,9 @@ int LevelHandler::Strlen(const char * stringy)
     return cp;
 }
 
-LevelHandler::LevelHandler() : enemy{0}, fileName{""}, levelNumber(48)
+LevelHandler::LevelHandler() : enemy{0}, fileName{""}, levelNumber(48), colorNumber(0), colorNumber2(0), drawFloor(true), drawTop(false)
 {
-    colorNumber2=colorNumber=0;
-    drawFloor=true;
-    drawWalls=false;
-    drawTop=false;
+
 }
 
 void LevelHandler::Init()
