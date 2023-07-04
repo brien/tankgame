@@ -42,7 +42,7 @@ private:
     bool isSpecial;
     
     int id;
-    int tid;
+    int tankId;
     
     TankType type1;
     TankType type2;
