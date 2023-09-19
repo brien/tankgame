@@ -32,61 +32,6 @@ TankHandler::TankHandler()
     
     wins[0]=0;
     wins[1]=0;
-    
-    /*FILE* tload = fopen("body.gsm","rb");
-     
-     if(tload!=NULL)
-     {
-     bodymesh.LoadGSM(tload);
-     fclose(tload);
-     }
-     
-     bodymesh.SafetyCheck();
-     bodymesh.Unitize(.5);
-     bodymesh.ScaleVerticies(1, 1.5, 1);
-     bodymesh.GenerateFacets();
-     bodymesh.MergeVerticies();
-     bodymesh.GenerateEdges();
-     
-     
-     
-     tload = fopen("turret.gsm","rb");
-     
-     if(tload!=NULL)
-     {
-     turretmesh.LoadGSM(tload);
-     fclose(tload);
-     }
-     
-     turretmesh.SafetyCheck();
-     turretmesh.Unitize(.3);
-     turretmesh.GenerateFacets();
-     turretmesh.MergeVerticies();
-     turretmesh.GenerateEdges();
-     
-     tload = fopen("turret.gsm","w+b");
-     
-     if(tload!=NULL)
-     {
-     turretmesh.SaveGSM(tload);
-     fclose(tload);
-     }
-     
-     
-     tload = fopen("cannon.gsm","rb");
-     
-     if(tload!=NULL)
-     {
-     cannonmesh.LoadGSM(tload);
-     fclose(tload);
-     }
-     
-     cannonmesh.SafetyCheck();
-     cannonmesh.Unitize(.3);
-     cannonmesh.GenerateFacets();
-     cannonmesh.MergeVerticies();
-     cannonmesh.GenerateEdges();*/
-    
 }
 
 TankHandler::~TankHandler()
