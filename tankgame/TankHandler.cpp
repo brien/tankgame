@@ -44,8 +44,8 @@ void TankHandler::Init()
 {
     combo[0]=0;
     combo[1]=0;
-    special[0]+=(float)comboNum[0];
-    special[1]+=(float)comboNum[1];
+    special[0] += (float)comboNum[0];
+    special[1] += (float)comboNum[1];
     comboNum[0]=0;
     comboNum[1]=0;
     
