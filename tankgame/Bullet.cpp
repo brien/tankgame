@@ -28,7 +28,7 @@
 
 Bullet::Bullet()
 {
-    movRate=33;
+    moveRate=33;
     alive=true;
     isSpecial=false;
     id=0;
@@ -51,7 +51,7 @@ float r2, float g2, float b2,
 float x, float y, float z,
 float rx, float ry, float rz)
 {
-    this->movRate=33;
+    this->moveRate=33;
     this->alive=true;
     this->isSpecial=false;
     this->id=0;
@@ -160,8 +160,8 @@ void Bullet::NextFrame()
         rz-=360;
     }
     
-    float xpp=(GlobalTimer::dT*movRate) * (float)cos(ry*DTR);
-    float zpp=(GlobalTimer::dT*movRate) * (float)sin(ry*DTR);
+    float xpp=(GlobalTimer::dT*moveRate) * (float)cos(ry*DTR);
+    float zpp=(GlobalTimer::dT*moveRate) * (float)sin(ry*DTR);
     
     x += xpp;
     z += zpp;

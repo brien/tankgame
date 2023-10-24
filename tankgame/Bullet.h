@@ -36,7 +36,7 @@ private:
     float r, g, b;
     float r2, g2, b2;
     
-    float movRate;
+    float moveRate;
     float power;
     
     bool isSpecial;
