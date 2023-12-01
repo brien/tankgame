@@ -28,18 +28,18 @@
 
 Bullet::Bullet()
 {
-    moveRate=33;
-    alive=true;
-    isSpecial=false;
-    id=0;
+    moveRate = 33;
+    alive = true;
+    isSpecial = false;
+    id  =0;
     numbounces = 0;
     maxbounces = 0;
-    r=g=b=.5;
-    r2=g2=b2=.5;
-    dty=0;
+    r=g=b = .5;
+    r2=g2=b2 = .5;
+    dty = 0;
     
-    dT=0;
-    maxdT=100;
+    dT = 0;
+    maxdT = 100;
 }
 
 Bullet::Bullet(int tid, float power,
