@@ -51,25 +51,25 @@ float r2, float g2, float b2,
 float x, float y, float z,
 float rx, float ry, float rz)
 {
-    this->moveRate=33;
-    this->alive=true;
-    this->isSpecial=false;
-    this->id=0;
-    this->numbounces=0;
-    this->dty=0;
+    this->moveRate = 33;
+    this->alive = true;
+    this->isSpecial = false;
+    this->id = 0;
+    this->numbounces = 0;
+    this->dty = 0;
     
-    this->dT=0;
-    this->maxdT=100;
+    this->dT = 0;
+    this->maxdT = 100;
     
-    this->tankId=tid;
+    this->tankId = tid;
     
     this->x = x;
     this->y = y;
     this->z = z;
     
-    this->rx=rx;
-    this->ry=ry;
-    this->rz=rz;
+    this->rx = rx;
+    this->ry = ry;
+    this->rz = rz;
     
     this->power=power;
     
