@@ -57,76 +57,76 @@ float rx, float ry, float rz)
     this->id = 0;
     this->numbounces = 0;
     this->dty = 0;
-    
+
     this->dT = 0;
     this->maxdT = 100;
-    
+
     this->tankId = tid;
-    
+
     this->x = x;
     this->y = y;
     this->z = z;
-    
+
     this->rx = rx;
     this->ry = ry;
     this->rz = rz;
-    
-    this->power=power;
-    
-    if(type1==TankType::TYPE_PURPLE)
+
+    this->power = power;
+
+    if (type1 == TankType::TYPE_PURPLE)
     {
-        this->dty=320*dTpressed;
-        if(dTpressed<0)
+        this->dty = 320 * dTpressed;
+        if (dTpressed < 0)
         {
-            dTpressed*=-1;
+            dTpressed *= -1;
         }
-        this->power*=dTpressed;
-        if(this->power>1000)
+        this->power *= dTpressed;
+        if (this->power > 1000)
         {
-            this->power=1000;
+            this->power = 1000;
         }
-        
-        if(this->power<100)
+
+        if (this->power < 100)
         {
-            this->power=100;
+            this->power = 100;
         }
     }
     else
-    if(type2==TankType::TYPE_PURPLE)
-    {
-        this->power*=0.5f;
-        this->dty=160*dTpressed;
-        if(dTpressed<0)
+        if (type2 == TankType::TYPE_PURPLE)
         {
-            dTpressed*=-1;
+            this->power *= 0.5f;
+            this->dty = 160 * dTpressed;
+            if (dTpressed < 0)
+            {
+                dTpressed *= -1;
+            }
+            this->power += this->power * dTpressed / 2;
+            if (this->power > 1000)
+            {
+                this->power = 1000;
+            }
+            if (this->power < 100)
+            {
+                this->power = 100;
+            }
         }
-        this->power+=this->power*dTpressed/2;
-        if(this->power>1000)
-        {
-            this->power=1000;
-        }
-        if(this->power<100)
-        {
-            this->power=100;
-        }
-    }
-    
-    this->r=r;
-    this->b=b;
-    this->g=g;
-    
-    this->r2=r2;
-    this->b2=b2;
-    this->g2=g2;
-    
-    this->maxbounces=maxbounces;
-    
-    this->type1=type1;
-    this->type2=type2;
-    
-    
-    this->id=1;
-    this->alive=true;
+
+    this->r = r;
+    this->b = b;
+    this->g = g;
+
+    this->r2 = r2;
+    this->b2 = b2;
+    this->g2 = g2;
+
+    this->maxbounces = maxbounces;
+
+    this->type1 = type1;
+    this->type2 = type2;
+
+
+    this->id = 1;
+    this->alive = true;
 }
 
 void Bullet::NextFrame()
