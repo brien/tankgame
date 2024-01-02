@@ -75,31 +75,31 @@ void InputTask::Update()
     }
 }
 
-int InputTask::GetAxis(int jid, int axis)
+int InputTask::GetAxis(int joystickId, int axis)
 {
     int ret;
-    if(jid < 0 || jid >= MAX_JOYSTICKS || joysticks[jid]==NULL)
+    if(joystickId < 0 || joystickId >= MAX_JOYSTICKS || joysticks[joystickId]==NULL)
     {
         ret=-1;
     }
     else
     {
-        ret = SDL_JoystickGetAxis(joysticks[jid], axis);
+        ret = SDL_JoystickGetAxis(joysticks[joystickId], axis);
     }
     
     return ret;
 }
 
-unsigned char InputTask::GetButton(int jid, int bid)
+unsigned char InputTask::GetButton(int joystickId, int bid)
 {
     unsigned char ret;
-    if(jid < 0 || jid >= MAX_JOYSTICKS || joysticks[jid]==NULL)
+    if(joystickId < 0 || joystickId >= MAX_JOYSTICKS || joysticks[joystickId]==NULL)
     {
         ret=0;
     }
     else
     {
-        ret = SDL_JoystickGetButton(joysticks[jid], bid);
+        ret = SDL_JoystickGetButton(joysticks[joystickId], bid);
     }
     
     return ret;

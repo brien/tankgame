@@ -34,8 +34,8 @@ public:
     static Uint8 *oldKeys;
     static int keyCount;
     
-    static int GetAxis(int jid, int axis);
-    static unsigned char GetButton(int jid, int bid);
+    static int GetAxis(int joystickId, int axis);
+    static unsigned char GetButton(int joystickId, int bid);
     
     static int dX,dY;
     static unsigned int buttons;
