@@ -42,7 +42,7 @@ GraphicsTask::GraphicsTask()
     defaultFont = TTF_OpenFont(fontFilePath, 256);
     if (!defaultFont)
     {
-        printf("Unable to open font");
+        printf("Unable to open font \n");
         Logger::Get().Write("GraphicsTask: failed loading file: %s  \n", fontFilePath);
         exit(1);
     }
@@ -51,205 +51,6 @@ GraphicsTask::GraphicsTask()
 GraphicsTask::~GraphicsTask()
 {
     TTF_CloseFont(defaultFont);
-}
-
-void GraphicsTask::TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap)
-{
-    if(!strFileName)
-    {
-        return;
-    }
-    
-    tImageTGA *pBitMap = Load_TGA(strFileName);
-    
-    if(pBitMap == NULL)	return;
-    
-    glGenTextures(1, &textureArray[ID]);
-    glBindTexture(GL_TEXTURE_2D, textureArray[ID]);
-    int textureType = GL_RGB;
-    if(pBitMap->channels == 4)	textureType = GL_RGBA;
-    gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    if(!wrap)
-    {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
-    }
-    else
-    {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    }
-    
-    
-    if (pBitMap)
-    {
-        if (pBitMap->data)
-        {
-            free(pBitMap->data);
-        }
-        free(pBitMap);
-    }
-}
-
-
-tImageTGA *GraphicsTask::Load_TGA(const char *strfilename)
-{
-    tImageTGA *pImgData	= NULL;
-    FILE *pFile			= NULL;
-    WORD width			= 0;
-    WORD height			= 0;
-    byte length			= 0;
-    byte imgType		= 0;
-    byte bits			= 0;
-    int channels		= 0;
-    int stride			= 0;
-    int i				= 0;
-    
-    
-    if((pFile = fopen(strfilename, "rb")) == NULL)
-    {
-        std::cerr << "GraphicsTask:Load_TGA: Failed to open " << strfilename << std::endl;
-        //GuiTask::RenderSpacedBitmapString(30,30,10,(void *)GuiTask::font,"ERROR");
-        return NULL;
-    }
-    
-    
-    pImgData = (tImageTGA*)malloc(sizeof(tImageTGA));
-    
-    fread(&length, sizeof(byte), 1, pFile);
-    
-    fseek(pFile,1,SEEK_CUR);
-    
-    fread(&imgType, sizeof(byte), 1, pFile);
-    
-    fseek(pFile, 9, SEEK_CUR);
-    
-    fread(&width,  sizeof(WORD), 1, pFile);
-    fread(&height, sizeof(WORD), 1, pFile);
-    fread(&bits,   sizeof(byte), 1, pFile);
-    
-    fseek(pFile, length + 1, SEEK_CUR);
-    
-    if(imgType != TGA_RLE)
-    {
-        // Check for 24 or 32 Bit
-        if(bits == 24 || bits == 32)
-        {
-            
-            channels = bits / 8;
-            stride = channels * width;
-            pImgData->data = new unsigned char[stride * height];
-            
-            for(int y = 0; y < height; y++)
-            {
-                unsigned char *pLine = &(pImgData->data[stride * y]);
-                
-                fread(pLine, stride, 1, pFile);
-                
-                for(i = 0; i < stride; i += channels)
-                {
-                    int temp     = pLine[i];
-                    pLine[i]     = pLine[i + 2];
-                    pLine[i + 2] = temp;
-                }
-            }
-        }
-        
-        // Check for 16 Bit
-        else if(bits == 16)
-        {
-            unsigned short pixels = 0;
-            int r=0, g=0, b=0;
-            
-            channels = 3;
-            stride = channels * width;
-            pImgData->data = new unsigned char[stride * height];
-            
-            for(int i = 0; i < width*height; i++)
-            {
-                fread(&pixels, sizeof(unsigned short), 1, pFile);
-                
-                b = (pixels & 0x1f) << 3;
-                g = ((pixels >> 5) & 0x1f) << 3;
-                r = ((pixels >> 10) & 0x1f) << 3;
-                
-                pImgData->data[i * 3 + 0] = r;
-                pImgData->data[i * 3 + 1] = g;
-                pImgData->data[i * 3 + 2] = b;
-            }
-        }
-        else
-        {
-            return NULL;
-        }
-    }
-    else
-    {
-        byte rleID = 0;
-        int colorsRead = 0;
-        channels = bits / 8;
-        stride = channels * width;
-        
-        pImgData->data = new unsigned char[stride * height];
-        byte *pColors = new byte [channels];
-        
-        while(i < width*height)
-        {
-            
-            fread(&rleID, sizeof(byte), 1, pFile);
-            
-            
-            if(rleID < 128)
-            {
-                rleID++;
-                
-                while(rleID)
-                {
-                    fread(pColors, sizeof(byte) * channels, 1, pFile);
-                    
-                    pImgData->data[colorsRead + 0] = pColors[2];
-                    pImgData->data[colorsRead + 1] = pColors[1];
-                    pImgData->data[colorsRead + 2] = pColors[0];
-                    
-                    if(bits == 32)	pImgData->data[colorsRead + 3] = pColors[3];
-                    
-                    i++;
-                    rleID--;
-                    colorsRead += channels;
-                }
-            }
-            else
-            {
-                rleID -= 127;
-                
-                fread(pColors, sizeof(byte) * channels, 1, pFile);
-                
-                while(rleID)
-                {
-                    pImgData->data[colorsRead + 0] = pColors[2];
-                    pImgData->data[colorsRead + 1] = pColors[1];
-                    pImgData->data[colorsRead + 2] = pColors[0];
-                    
-                    if(bits == 32)	pImgData->data[colorsRead + 3] = pColors[3];
-                    
-                    i++;
-                    rleID--;
-                    colorsRead += channels;
-                }
-            }
-        }
-    }
-    
-    fclose(pFile);
-    
-    
-    pImgData->channels  = channels;
-    pImgData->size_x    = width;
-    pImgData->size_y    = height;
-    
-    return pImgData;
 }
 
 
@@ -305,34 +106,7 @@ bool GraphicsTask::Start()
     
     glEnable(GL_TEXTURE_2D);
     
-    TGA_Texture(textureArray, "texture/cube1.tga", TEXTURE_WHITE_CUBE, true);
-    TGA_Texture(textureArray, "texture/cube2.tga", TEXTURE_BLACK_CUBE, true);
-    TGA_Texture(textureArray, "texture/trail.tga", TEXTURE_EXIT, false);
-    TGA_Texture(textureArray, "texture/bang.tga", TEXTURE_BANG, true);
-    TGA_Texture(textureArray, "texture/x.tga", TEXTURE_X, true);
-    TGA_Texture(textureArray, "texture/cube12.tga", TEXTURE_CHECKER, true);
-    TGA_Texture(textureArray, "texture/heart.tga", TEXTURE_HEART, true);
-    TGA_Texture(textureArray, "texture/p_itemstar.tga", TEXTURE_DIAMOND, true);
-    TGA_Texture(textureArray, "texture/p.tga", TEXTURE_P, true);
-    TGA_Texture(textureArray, "texture/star.tga", TEXTURE_STAR, true);
-    TGA_Texture(textureArray, "texture/ring.tga", TEXTURE_RING, true);
-    TGA_Texture(textureArray, "texture/long.tga", TEXTURE_LONGSHOT, true);
-    TGA_Texture(textureArray, "texture/bank.tga", TEXTURE_BANKSHOT, true);
-    TGA_Texture(textureArray, "texture/multi.tga", TEXTURE_MULTISHOT, true);
-    TGA_Texture(textureArray, "texture/score.tga", TEXTURE_SCORE, true);
-    TGA_Texture(textureArray, "texture/enemy.tga", TEXTURE_ENEMY, true);
-    
-    TGA_Texture(textureArray, "texture/0.tga", TEXTURE_ZERO, true);
-    TGA_Texture(textureArray, "texture/1.tga", TEXTURE_ONE, true);
-    TGA_Texture(textureArray, "texture/2.tga", TEXTURE_TWO, true);
-    TGA_Texture(textureArray, "texture/3.tga", TEXTURE_THREE, true);
-    TGA_Texture(textureArray, "texture/4.tga", TEXTURE_FOUR, true);
-    TGA_Texture(textureArray, "texture/5.tga", TEXTURE_FIVE, true);
-    TGA_Texture(textureArray, "texture/6.tga", TEXTURE_SIX, true);
-    TGA_Texture(textureArray, "texture/7.tga", TEXTURE_SEVEN, true);
-    TGA_Texture(textureArray, "texture/8.tga", TEXTURE_EIGHT, true);
-    TGA_Texture(textureArray, "texture/9.tga", TEXTURE_NINE, true);
-    
+    textureHandler.LoadTextures();
     
     PrepareMesh(bodymesh, "nowbody.gsm");
     PrepareMesh(turretmesh, "nowturret.gsm");
@@ -547,14 +321,14 @@ void GraphicsTask::DrawSky()
     glPushMatrix();
     glTranslatef(400, rot/2 - 50, 400);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(400, 10, 200);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -562,14 +336,14 @@ void GraphicsTask::DrawSky()
     glTranslatef(-400, 50, -500);
     glRotatef(TankHandler::GetSingleton().closest, 0, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
     glPushMatrix();
     glTranslatef(-200, 40, 600);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WHITE_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_WHITE_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -577,7 +351,7 @@ void GraphicsTask::DrawSky()
     
     glTranslatef(-100, 40, -500);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -586,7 +360,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(300, rot/2 - 50, -500);
     glRotatef(TankHandler::GetSingleton().closest, 0, 1, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -595,7 +369,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(64, 30, -500);
     glRotatef(TankHandler::GetSingleton().closest, 0, 1, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -604,7 +378,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(800, 30, 90);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -613,7 +387,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(-80, 2, -900);
     glRotatef(TankHandler::GetSingleton().closest, 0, 0, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -622,7 +396,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(80, -20, 450);
     glRotatef(rot, 1, 0, 0);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -631,7 +405,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(900, 20, 600);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -640,7 +414,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(-900, 30, 60);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -650,7 +424,7 @@ void GraphicsTask::DrawSky()
     glTranslatef(80, 15, -600);
     glRotatef(rot, 1, 0, 1);
     glScalef(50,50,50);
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK_CUBE]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BLACK_CUBE]);
     cubelist1.Call(0);
     glPopMatrix();
     
@@ -724,7 +498,7 @@ void GraphicsTask::DrawHUD(Tank& player)
 
     sprintf(buffer, "FPS: %.2f", framesPerSecond);
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_HEART]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_HEART]);
     glColor4f(1.0f,0.6,0.6f,1.0f);
     
     //Armor
@@ -743,7 +517,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glVertex3f(-0.55f,0.34f,(float)0);
     glEnd();
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BANG]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BANG]);
     
     glColor4f(0.6f,0.6,1.0f,1.0f);
     
@@ -988,7 +762,7 @@ void GraphicsTask::DrawHUD(Tank& player)
         glColor3f(1.0,1.0,1.0);
         glEnable(GL_TEXTURE_2D);
         
-        glBindTexture(GL_TEXTURE_2D, textureArray[player.bonus]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[player.bonus]);
         
         glEnable(GL_BLEND);
         
@@ -1021,7 +795,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glEnable(GL_BLEND);
     
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[TankHandler::GetSingleton().hitCombo[(-1*player.id)-1]%10 ]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().hitCombo[(-1*player.id)-1]%10 ]);
     
     
     glBegin(GL_QUADS);
@@ -1044,7 +818,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     //{
     glTranslatef(-0.04,0.0,0.0);
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[(int)TankHandler::GetSingleton().hitCombo[(-1*player.id)-1]/10 ]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().hitCombo[(-1*player.id)-1]/10 ]);
     
     glBegin(GL_QUADS);
     
@@ -1136,7 +910,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     {
         glPushMatrix();
         glLoadIdentity();
-        glBindTexture(GL_TEXTURE_2D, textureArray[18]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[18]);
         glTranslatef(-0.3,-0.1,-1.0);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 1);
@@ -1158,7 +932,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     {
         glPushMatrix();
         glLoadIdentity();
-        glBindTexture(GL_TEXTURE_2D, textureArray[24]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[24]);
         glTranslatef(0.0,0.2,-1.0);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 1);
@@ -1176,7 +950,7 @@ void GraphicsTask::DrawHUD(Tank& player)
         
         glTranslatef(0.08,-0.05, 0.0);
         
-        glBindTexture(GL_TEXTURE_2D, textureArray[TankHandler::GetSingleton().wins[(-1*player.id)-1]%10 ]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().wins[(-1*player.id)-1]%10 ]);
         
         
         glBegin(GL_QUADS);
@@ -1197,7 +971,7 @@ void GraphicsTask::DrawHUD(Tank& player)
         //---------
         glTranslatef(-0.08,0.0,0.0);
         
-        glBindTexture(GL_TEXTURE_2D, textureArray[(int)TankHandler::GetSingleton().wins[(-1*player.id)-1]/10 ]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().wins[(-1*player.id)-1]/10 ]);
         
         glBegin(GL_QUADS);
         
@@ -1232,7 +1006,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     // Ones of enemy tanks left:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureArray[TankHandler::GetSingleton().tanks.size()%10]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().tanks.size()%10]);
     
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -1251,7 +1025,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     // Tens of enemy tanks left:
     glTranslatef(-0.04,0.0,0.0);
     
-    glBindTexture(GL_TEXTURE_2D, textureArray[(int)TankHandler::GetSingleton().tanks.size()/10 ]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().tanks.size()/10 ]);
     
     glBegin(GL_QUADS);
     
@@ -1271,7 +1045,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     // X:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_X]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_X]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -1290,7 +1064,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     // EnemyTank Icon:
     glTranslatef(-0.07, -0.02, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_ENEMY]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_ENEMY]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -1542,8 +1316,8 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
     }
 
     glGenTextures(1, &Texture);
-    glBindTexture(GL_TEXTURE_2D, Texture); //textureArray[12]);
-    //glBindTexture(GL_TEXTURE_2D, textureArray[12]);
+    glBindTexture(GL_TEXTURE_2D, Texture); //textureHandler.GetTextureArray()[12]);
+    //glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[12]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,
         GL_RGBA, GL_UNSIGNED_BYTE, Message->pixels);
 

@@ -502,7 +502,7 @@ void TankHandler::DrawTanks()
             glMatrixMode(GL_MODELVIEW);
             
             
-            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[17]);
+            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
             
             //players[k].r=players[k].g=players[k].b=players[k].r=players[k].g2=players[k].b2=1;
             glColor3f(players[k].r, players[k].g, players[k].b);
@@ -563,7 +563,7 @@ void TankHandler::DrawTanks()
             glRotatef(-players[k].rrl, 0, 1, 0);
             
             glEnable(GL_TEXTURE_2D);
-            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[20]);
+            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
             glEnable(GL_BLEND);
             glEnable(GL_DEPTH_TEST);
             //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -581,7 +581,7 @@ void TankHandler::DrawTanks()
                 glTranslatef(0, +0.018f, 0);
                 glRotatef(100*drift, 0, 1, 0);
                 
-                glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[17]);
+                glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
                 
                 glColor4f(1.0f,1.0f,1.0f,1.0f);
                 
@@ -736,7 +736,7 @@ void TankHandler::DrawTanks()
          glMatrixMode(GL_MODELVIEW);
          
          
-         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[17]);
+         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
          
          //i->r=i->g=i->b=i->r=i->g2=i->b2=1;
          glColor3f(i->r, i->g, i->b);

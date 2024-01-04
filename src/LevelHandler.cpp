@@ -594,7 +594,7 @@ void LevelHandler::DrawTerrain()
     
     glFrontFace(GL_CCW);
     
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[11]);
     
     for(int q=0; q<128; q++)
     {
@@ -633,17 +633,17 @@ void LevelHandler::DrawTerrain()
     
     if(levelNumber==50 || levelNumber==56 || levelNumber==57 || levelNumber==58 )
     {
-        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[15]);
+        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[15]);
     }
     else
     {
         if(levelNumber==48 || levelNumber==70 || levelNumber==69)
         {
-            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
+            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[10]);
         }
         else
         {
-            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[11]);
+            glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[11]);
         }
     }
     
@@ -665,9 +665,9 @@ void LevelHandler::DrawTerrain()
                 if(levelNumber==48 || levelNumber==70 || levelNumber==69)
                 {
                     if(Y==0)
-                        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[11]);
+                        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[11]);
                     else
-                        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
+                        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[10]);
                 }
                 
                 if(Y==0)
@@ -728,7 +728,7 @@ void LevelHandler::DrawTerrain()
         }
     }
     
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[11]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[11]);
     
     for(int ix=0; ix<=sx; ix++)
     {
@@ -786,7 +786,7 @@ void LevelHandler::DrawTerrain()
         }
     }
     
-    //glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
+    //glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[10]);
     
     for(int ix=sx; ix>0; ix--)
     {
@@ -1096,7 +1096,7 @@ void LevelHandler::DrawTerrain()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     
     glDepthMask(GL_FALSE);
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[12]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[12]);
     
     glColor4fv(colors[colorNumber+1]);
     
@@ -1273,7 +1273,7 @@ void LevelHandler::DrawTerrain_OLD()
     flash=!flash;
     
     
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[flash+10]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[flash+10]);
     
     glNormal3f(0,1,0);
     
@@ -1498,7 +1498,7 @@ void LevelHandler::DrawTerrain_OLD()
     
     if(levelNumber==48)
     {
-        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[10]);
+        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[10]);
     }
     
     if(drawWalls)
@@ -1599,7 +1599,7 @@ void LevelHandler::DrawTerrain_OLD()
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
     
     glDepthMask(GL_FALSE);
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[12]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[12]);
     
     if(levelNumber==48) glColor4f(0,1,0,1);
     else if(levelNumber==49) glColor4f(1,0,0,1);

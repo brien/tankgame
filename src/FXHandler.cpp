@@ -150,12 +150,12 @@ void FX::Draw()
 	if (type == FxType::TYPE_THREE)
 	{
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[16]);
+		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[16]);
 	}
 	if (type == FxType::TYPE_STAR)
 	{
 		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureArray[19]);
+		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[19]);
 	}
 
 	glDisable(GL_CULL_FACE);
