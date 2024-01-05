@@ -19,33 +19,7 @@
 
 TextureHandler::TextureHandler()
 {
-    TGA_Texture(textureArray, "texture/cube1.tga", TEXTURE_WHITE_CUBE, true);
-    TGA_Texture(textureArray, "texture/cube2.tga", TEXTURE_BLACK_CUBE, true);
-    TGA_Texture(textureArray, "texture/trail.tga", TEXTURE_EXIT, false);
-    TGA_Texture(textureArray, "texture/bang.tga", TEXTURE_BANG, true);
-    TGA_Texture(textureArray, "texture/x.tga", TEXTURE_X, true);
-    TGA_Texture(textureArray, "texture/cube12.tga", TEXTURE_CHECKER, true);
-    TGA_Texture(textureArray, "texture/heart.tga", TEXTURE_HEART, true);
-    TGA_Texture(textureArray, "texture/p_itemstar.tga", TEXTURE_DIAMOND, true);
-    TGA_Texture(textureArray, "texture/p.tga", TEXTURE_P, true);
-    TGA_Texture(textureArray, "texture/star.tga", TEXTURE_STAR, true);
-    TGA_Texture(textureArray, "texture/ring.tga", TEXTURE_RING, true);
-    TGA_Texture(textureArray, "texture/long.tga", TEXTURE_LONGSHOT, true);
-    TGA_Texture(textureArray, "texture/bank.tga", TEXTURE_BANKSHOT, true);
-    TGA_Texture(textureArray, "texture/multi.tga", TEXTURE_MULTISHOT, true);
-    TGA_Texture(textureArray, "texture/score.tga", TEXTURE_SCORE, true);
-    TGA_Texture(textureArray, "texture/enemy.tga", TEXTURE_ENEMY, true);
 
-    TGA_Texture(textureArray, "texture/0.tga", TEXTURE_ZERO, true);
-    TGA_Texture(textureArray, "texture/1.tga", TEXTURE_ONE, true);
-    TGA_Texture(textureArray, "texture/2.tga", TEXTURE_TWO, true);
-    TGA_Texture(textureArray, "texture/3.tga", TEXTURE_THREE, true);
-    TGA_Texture(textureArray, "texture/4.tga", TEXTURE_FOUR, true);
-    TGA_Texture(textureArray, "texture/5.tga", TEXTURE_FIVE, true);
-    TGA_Texture(textureArray, "texture/6.tga", TEXTURE_SIX, true);
-    TGA_Texture(textureArray, "texture/7.tga", TEXTURE_SEVEN, true);
-    TGA_Texture(textureArray, "texture/8.tga", TEXTURE_EIGHT, true);
-    TGA_Texture(textureArray, "texture/9.tga", TEXTURE_NINE, true);
 }
 
 TextureHandler::~TextureHandler()
