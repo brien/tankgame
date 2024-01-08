@@ -20,10 +20,10 @@ void GameTask::SetUpGame()
 
 GameTask::GameTask()
 {
-    gameStarted=false;
-    versus=false;
-    gameOver=false;
-    menuState=0;
+    gameStarted = false;
+    versus = false;
+    gameOver = false;
+    menuState = 0;
     timer = 0;
     paused = false;
     debug = false;
