@@ -42,7 +42,7 @@ bool GameTask::Start()
         App::GetSingleton().graphicsTask->cams[i].SetPos(40.0, 60.0, 40.0);
         App::GetSingleton().graphicsTask->cams[i].SetFocus(30.0, 0.0, 40.0);
     }
-    App::GetSingleton().graphicsTask->drawHUD=false;
+    App::GetSingleton().graphicsTask->drawHUD = false;
     
     LevelHandler::GetSingleton().Load("./levels/title@@.txt");
     
