@@ -173,7 +173,7 @@ void GraphicsTask::Update()
             
             cams[i].SetFocus(
                 TankHandler::GetSingleton().players[i].x + (float)cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR),
-                TankHandler::GetSingleton().players[i].y + .3,
+                TankHandler::GetSingleton().players[i].y + 0.3f,
                 TankHandler::GetSingleton().players[i].z + (float)sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)
             );
         }
