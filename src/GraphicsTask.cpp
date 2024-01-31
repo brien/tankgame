@@ -150,8 +150,8 @@ void GraphicsTask::Update()
         float ratio = (float) (VideoTask::scrWidth) / (float) (VideoTask::scrHeight/2);
         gluPerspective( 45.0, ratio, 0.1, 1024.0 );
     }
-    
-    
+
+
     glMatrixMode( GL_MODELVIEW );
     glLoadIdentity( );
     
@@ -214,7 +214,7 @@ void GraphicsTask::Update()
               cams[0].xfocus(),cams[0].yfocus(),cams[0].zfocus(),
               0, 1, 0);
     
-    if(LevelHandler::GetSingleton().levelNumber==48)
+    if(LevelHandler::GetSingleton().levelNumber == 48)
     {
         DrawSky();
     }
