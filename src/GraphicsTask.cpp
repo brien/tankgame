@@ -34,9 +34,6 @@ typedef unsigned char byte;
 
 GraphicsTask::GraphicsTask()
 {
-    drawHUD=true;
-    drawMenu=false;
-    cubelist1=1;
     TTF_Init();
     const char* fontFilePath = "./fonts/DroidSansMono.ttf";
     defaultFont = TTF_OpenFont(fontFilePath, 256);
@@ -47,6 +44,7 @@ GraphicsTask::GraphicsTask()
         exit(1);
     }
 }
+
 
 GraphicsTask::~GraphicsTask()
 {

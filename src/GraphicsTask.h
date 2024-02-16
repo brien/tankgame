@@ -36,7 +36,7 @@ public:
     
     Camera cams[4];
     
-    DisplayList cubelist1;
+    DisplayList cubelist1 = 1;
     DisplayList cubelist2;
     DisplayList bulletlist;
     DisplayList bodylist;
@@ -66,8 +66,8 @@ public:
     void Update();
     void Stop();
     
-    bool drawHUD;
-    bool drawMenu;
+    bool drawHUD = true;
+    bool drawMenu = false;
 private:
     igtl_QGLMesh bodymesh;
     igtl_QGLMesh turretmesh;
