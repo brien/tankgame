@@ -90,8 +90,8 @@ bool GraphicsTask::Start()
     glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
     
     glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
-    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1);
-    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05);
+    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
+    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
     
     glEnable(GL_LIGHT0);
     glEnable(GL_LIGHTING);
