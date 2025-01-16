@@ -6,11 +6,14 @@
 
 #ifdef _WIN32
     // If building in windows:
-    #include <windows.h>
-    #include <GL/gl.h>
+#include <windows.h>
+#include <GL/gl.h>
+#elif __APPLE__
+    // If building on macOS:
+#include <OpenGL/gl.h>
 #else
-    //if not:
-    #include <OpenGL/gl.h>
+    // If building on Linux:
+#include <GL/gl.h>
 #endif
 
 #include "Bullet.h"

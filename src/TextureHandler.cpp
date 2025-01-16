@@ -4,10 +4,14 @@
     #include <windows.h>
     #include <GL/gl.h>
     #include <GL/glu.h>
-#else
-    //if not:
+#elif __APPLE__
+    // If building on macOS:
     #include <OpenGL/gl.h>
     #include <OpenGL/glu.h>
+#else
+    // If building on Linux:
+    #include <GL/gl.h>
+    #include <GL/glu.h>
 #endif
 
 #include "TextureHandler.h"

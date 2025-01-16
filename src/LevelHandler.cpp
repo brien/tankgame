@@ -1,12 +1,14 @@
 #ifdef _WIN32
     // If building in windows:
-    #pragma warning(disable : 4996)
     #include <windows.h>
     #include <GL/gl.h>
-#else
-    //if not:
+#elif __APPLE__
+    // If building on macOS:
     #include <OpenGL/gl.h>
     #include <mach-o/dyld.h>
+#else
+    // If building on Linux:
+    #include <GL/gl.h>
 #endif
 
 #include "LevelHandler.h"

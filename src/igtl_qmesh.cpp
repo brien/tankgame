@@ -12,9 +12,12 @@
     // If building in windows:
     #include <windows.h>
     #include <GL/gl.h>
-#else
-    //if not:
+#elif __APPLE__
+    // If building on macOS:
     #include <OpenGL/gl.h>
+#else
+    // If building on Linux:
+    #include <GL/gl.h>
 #endif
 
 #include "igtl_qmesh.h"
