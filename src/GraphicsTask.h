@@ -19,7 +19,7 @@
 #include <GL/gl.h>
 #endif
 
-#include <SDL2_ttf/SDL_ttf.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "ITask.h"
 #include "igtl_qmesh.h"

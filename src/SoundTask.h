@@ -5,7 +5,7 @@
 #ifndef SOUND_TASK_H
 #define SOUND_TASK_H
 
-#include <SDL2_mixer/SDL_mixer.h>
+#include <SDL2/SDL_mixer.h>
 #include "ITask.h"
 
 class SoundTask : public ITask
