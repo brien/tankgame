@@ -18,6 +18,8 @@
 #else
     // If building on Linux:
     #include <GL/gl.h>
+    #include <cstdio>
+    #include <string.h>
 #endif
 
 #include "igtl_qmesh.h"
