@@ -88,7 +88,6 @@ void App::Run(int argc, char *argv[])
     delete FXHandler::GetSingletonPtr();
     
     delete TaskHandler::GetSingletonPtr();
-    
 }
 
 
