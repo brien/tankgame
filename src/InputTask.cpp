@@ -50,6 +50,7 @@ bool InputTask::Start()
     memcpy(keys,tempKeys,sizeof(Uint8)*keyCount);
     oldKeys=new Uint8 [keyCount];
     dX=dY=0;
+    SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_PumpEvents(); SDL_PumpEvents();
     return true;
 }

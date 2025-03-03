@@ -5,7 +5,7 @@
 
 #include "SoundTask.h"
 #include <iostream>
-#include <SDL2/sdl.h>
+#include <SDL2/SDL.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

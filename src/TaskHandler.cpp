@@ -5,6 +5,7 @@
 //
 
 #include "TaskHandler.h"
+#include <algorithm>
 
 TaskHandler::TaskHandler()
 {

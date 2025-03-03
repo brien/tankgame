@@ -18,6 +18,7 @@
 
 #include "math.h"			//Needed for sqrt, sin, cos
 
+#include <cstdio>
 #include <vector>			//Vectors are very nice to use
 using std::vector;//but std is a pain.
 

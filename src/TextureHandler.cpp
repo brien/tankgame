@@ -16,10 +16,12 @@
 
 #include "TextureHandler.h"
 #include <stdlib.h>
-#include <sys/types.h>
+#include <cstdint>
 #include <iostream>
 
 #include "App.h"
+
+typedef uint16_t WORD;  // WORD is typically a 16-bit unsigned integer
 
 TextureHandler::TextureHandler()
 {
@@ -107,11 +109,12 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
 {
     tImageTGA* pImgData = NULL;
     FILE* pFile = NULL;
+
     WORD width = 0;
     WORD height = 0;
-    byte length = 0;
-    byte imgType = 0;
-    byte bits = 0;
+    unsigned char length = 0;
+    unsigned char imgType = 0;
+    unsigned char bits = 0;
     int channels = 0;
     int stride = 0;
     int i = 0;
@@ -127,17 +130,17 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
 
     pImgData = (tImageTGA*)malloc(sizeof(tImageTGA));
 
-    fread(&length, sizeof(byte), 1, pFile);
+    fread(&length, sizeof(unsigned char), 1, pFile);
 
     fseek(pFile, 1, SEEK_CUR);
 
-    fread(&imgType, sizeof(byte), 1, pFile);
+    fread(&imgType, sizeof(unsigned char), 1, pFile);
 
     fseek(pFile, 9, SEEK_CUR);
 
     fread(&width, sizeof(WORD), 1, pFile);
     fread(&height, sizeof(WORD), 1, pFile);
-    fread(&bits, sizeof(byte), 1, pFile);
+    fread(&bits, sizeof(unsigned char), 1, pFile);
 
     fseek(pFile, length + 1, SEEK_CUR);
 
@@ -196,18 +199,18 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
     }
     else
     {
-        byte rleID = 0;
+        unsigned char rleID = 0;
         int colorsRead = 0;
         channels = bits / 8;
         stride = channels * width;
 
         pImgData->data = new unsigned char[stride * height];
-        byte* pColors = new byte[channels];
+        unsigned char* pColors = new unsigned char[channels];
 
         while (i < width * height)
         {
 
-            fread(&rleID, sizeof(byte), 1, pFile);
+            fread(&rleID, sizeof(unsigned char), 1, pFile);
 
 
             if (rleID < 128)
@@ -216,7 +219,7 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
 
                 while (rleID)
                 {
-                    fread(pColors, sizeof(byte) * channels, 1, pFile);
+                    fread(pColors, sizeof(unsigned char) * channels, 1, pFile);
 
                     pImgData->data[colorsRead + 0] = pColors[2];
                     pImgData->data[colorsRead + 1] = pColors[1];
@@ -233,7 +236,7 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
             {
                 rleID -= 127;
 
-                fread(pColors, sizeof(byte) * channels, 1, pFile);
+                fread(pColors, sizeof(unsigned char) * channels, 1, pFile);
 
                 while (rleID)
                 {
