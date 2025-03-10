@@ -25,6 +25,10 @@
 #include <sys/types.h>
 #include <iostream>
 
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
 #include "App.h"
 #include "TankHandler.h"
 #include "LevelHandler.h"
@@ -117,6 +121,10 @@ bool GraphicsTask::Start()
     BuildDisplayLists();
 
     Logger::Get().Write("GraphicsTask::Started\n");
+
+    bodymesh.ConvertToOBJ("converted_nowbody.obj");
+    turretmesh.ConvertToOBJ("converted_nowturret.obj");
+    itemmesh.ConvertToOBJ("converted_body.obj");
     
     return true;
 }

@@ -22,6 +22,9 @@
     #include <string.h>
 #endif
 
+#include <iostream>
+#include <fstream>
+
 #include "igtl_qmesh.h"
 
 igtl_QGLMesh::igtl_QGLMesh(){
@@ -1380,5 +1383,37 @@ void igtl_QGLMesh::DrawEdgesColoredExtruded(float f){
     
     glEnd();
 }
+
+bool igtl_QGLMesh::ConvertToOBJ(const std::string& objFile) {
+    std::ofstream outFile(objFile);
+    if (!outFile) {
+        std::cerr << "Error: Could not create " << objFile << "\n";
+        return false;
+    }
+
+    // Write OBJ header
+    outFile << "# Converted from GSM to OBJ\n";
+
+    // Write vertices and normals
+    for (size_t i = 0; i < GetNumVerticies(); ++i) {
+        igtl_QGLVertex v = GetVertex(i);
+        outFile << "v " << v.m_x << " " << v.m_y << " " << v.m_z << "\n";
+        outFile << "vn " << v.m_nx << " " << v.m_ny << " " << v.m_nz << "\n";
+    }
+
+    // Write faces
+    for (size_t i = 0; i < GetNumTriangles(); ++i) {
+        igtl_QGLTriangle t = GetTriangle(i);
+        outFile << "f "
+                << (t.m_v1 + 1) << "//" << (t.m_v1 + 1) << " "
+                << (t.m_v2 + 1) << "//" << (t.m_v2 + 1) << " "
+                << (t.m_v3 + 1) << "//" << (t.m_v3 + 1) << "\n";
+    }
+
+    outFile.close();
+    std::cout << "Successfully converted to " << objFile << "\n";
+    return true;
+}
+
 
 #endif //IGTL_3D_GENERIC_QUICK_MESH_CPP

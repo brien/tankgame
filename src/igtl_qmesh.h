@@ -19,6 +19,7 @@
 #include "math.h"			//Needed for sqrt, sin, cos
 
 #include <cstdio>
+#include <string>
 #include <vector>			//Vectors are very nice to use
 using std::vector;//but std is a pain.
 
@@ -127,6 +128,8 @@ public:
     
     void Clear();//Remove all Data
     
+    bool ConvertToOBJ(const std::string& objFile);
+
     //This is a convenience feature that way you don't need to contruct these as temporary variables.
     //In fact, they play no part in this class except as temps.
     //IE use Get Vertex with class.m_dv = GetVertex(4);
