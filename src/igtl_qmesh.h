@@ -26,7 +26,7 @@ using std::vector;//but std is a pain.
 //Vertex (Point in space)
 class igtl_QGLVertex{
 public:
-    float m_x,m_y,m_z;
+    float m_x,m_y,m_z; 
     float m_nx,m_ny,m_nz;
     float m_u,m_v;
 };
@@ -111,6 +111,9 @@ public:
     //
     bool SaveGSM(FILE * chunk);//Save to a gsm file
     bool LoadGSM(FILE * chunk);//Load from a gsm file
+
+    bool SaveAsGSM(const std::string& gsmFile);
+    bool SaveGSM_CPP(const std::string& filePath)
     
     //Define this to enable automatic simple OpenGLdrawing
     //#ifdef IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL

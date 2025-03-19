@@ -1455,4 +1455,59 @@ bool igtl_QGLMesh::SaveAsGSM(const std::string& gsmFile) {
     return true;
 }
 
+bool igtl_QGLMesh::SaveGSM_CPP(const std::string& filePath) {
+    std::ofstream outFile(filePath, std::ios::binary);
+    if (!outFile) {
+        std::cerr << "Error: Could not create " << filePath << "\n";
+        return false;
+    }
+
+    // Write header
+    const std::string header = "IGTL_GSMV1.0\n";
+    outFile.write(header.c_str(), header.size());
+
+    // Write number of vertices
+    unsigned int vertexCount = static_cast<unsigned int>(m_verticies.size());
+    outFile.write(reinterpret_cast<const char*>(&vertexCount), sizeof(unsigned int));
+
+    // Write all vertices
+    for (const auto& vertex : m_verticies) {
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_x), sizeof(vertex.m_x));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_y), sizeof(vertex.m_y));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_z), sizeof(vertex.m_z));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_nx), sizeof(vertex.m_nx));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_ny), sizeof(vertex.m_ny));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_nz), sizeof(vertex.m_nz));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_u), sizeof(vertex.m_u));
+        outFile.write(reinterpret_cast<const char*>(&vertex.m_v), sizeof(vertex.m_v));
+    }
+
+    // Write number of edges
+    unsigned int edgeCount = static_cast<unsigned int>(m_edges.size());
+    outFile.write(reinterpret_cast<const char*>(&edgeCount), sizeof(unsigned int));
+
+    // Write all edges
+    for (const auto& edge : m_edges) {
+        outFile.write(reinterpret_cast<const char*>(&edge.m_v1), sizeof(edge.m_v1));
+        outFile.write(reinterpret_cast<const char*>(&edge.m_v2), sizeof(edge.m_v2));
+        outFile.write(reinterpret_cast<const char*>(&edge.m_nx), sizeof(edge.m_nx));
+        outFile.write(reinterpret_cast<const char*>(&edge.m_ny), sizeof(edge.m_ny));
+        outFile.write(reinterpret_cast<const char*>(&edge.m_nz), sizeof(edge.m_nz));
+    }
+
+    // Write number of triangles
+    unsigned int triangleCount = static_cast<unsigned int>(m_triangles.size());
+    outFile.write(reinterpret_cast<const char*>(&triangleCount), sizeof(unsigned int));
+
+    // Write all triangles
+    for (const auto& triangle : m_triangles) {
+        outFile.write(reinterpret_cast<const char*>(&triangle.m_v1), sizeof(triangle.m_v1));
+        outFile.write(reinterpret_cast<const char*>(&triangle.m_v2), sizeof(triangle.m_v2));
+        outFile.write(reinterpret_cast<const char*>(&triangle.m_v3), sizeof(triangle.m_v3));
+    }
+
+    outFile.close();
+    return true;
+}
+
 #endif //IGTL_3D_GENERIC_QUICK_MESH_CPP
