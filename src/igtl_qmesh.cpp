@@ -1415,5 +1415,44 @@ bool igtl_QGLMesh::ConvertToOBJ(const std::string& objFile) {
     return true;
 }
 
+bool igtl_QGLMesh::SaveAsGSM(const std::string& gsmFile) {
+    std::ofstream outFile(gsmFile, std::ios::binary);
+    if (!outFile) {
+        std::cerr << "Error: Could not create " << gsmFile << "\n";
+        return false;
+    }
+
+    // Write GSM header (example header, adjust as needed)
+    uint32_t numVertices = static_cast<uint32_t>(GetNumVerticies());
+    uint32_t numEdges = static_cast<uint32_t>(GetNumEdges());
+    outFile.write(reinterpret_cast<const char*>(&numVertices), sizeof(numVertices));
+    outFile.write(reinterpret_cast<const char*>(&numEdges), sizeof(numEdges));
+
+    // Write vertices
+    for (size_t i = 0; i < GetNumVerticies(); ++i) {
+        igtl_QGLVertex v = GetVertex(i);
+        outFile.write(reinterpret_cast<const char*>(&v.m_x), sizeof(v.m_x));
+        outFile.write(reinterpret_cast<const char*>(&v.m_y), sizeof(v.m_y));
+        outFile.write(reinterpret_cast<const char*>(&v.m_z), sizeof(v.m_z));
+        outFile.write(reinterpret_cast<const char*>(&v.m_nx), sizeof(v.m_nx));
+        outFile.write(reinterpret_cast<const char*>(&v.m_ny), sizeof(v.m_ny));
+        outFile.write(reinterpret_cast<const char*>(&v.m_nz), sizeof(v.m_nz));
+        outFile.write(reinterpret_cast<const char*>(&v.m_u), sizeof(v.m_u));
+        outFile.write(reinterpret_cast<const char*>(&v.m_v), sizeof(v.m_v));
+    }
+
+    // Write edges
+    for (size_t i = 0; i < GetNumEdges(); ++i) {
+        igtl_QGLEdge e = GetEdge(i);
+        outFile.write(reinterpret_cast<const char*>(&e.m_v1), sizeof(e.m_v1));
+        outFile.write(reinterpret_cast<const char*>(&e.m_v2), sizeof(e.m_v2));
+        outFile.write(reinterpret_cast<const char*>(&e.m_nx), sizeof(e.m_nx));
+        outFile.write(reinterpret_cast<const char*>(&e.m_ny), sizeof(e.m_ny));
+        outFile.write(reinterpret_cast<const char*>(&e.m_nz), sizeof(e.m_nz));
+    }
+
+    outFile.close();
+    return true;
+}
 
 #endif //IGTL_3D_GENERIC_QUICK_MESH_CPP
