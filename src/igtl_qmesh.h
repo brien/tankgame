@@ -23,6 +23,14 @@
 #include <vector>			//Vectors are very nice to use
 using std::vector;//but std is a pain.
 
+struct Vec3 {
+    float x, y, z;
+};
+
+struct Vec2 {
+    float x, y;
+};
+
 //Vertex (Point in space)
 class igtl_QGLVertex{
 public:
@@ -113,6 +121,7 @@ public:
     bool LoadGSM(FILE * chunk);//Load from a gsm file
 
     bool SaveOBJ(const std::string& objFile);
+    bool LoadOBJ(const std::string& objFile);
 
     bool SaveAsGSM(const std::string& gsmFile);
     bool SaveGSM_CPP(const std::string& filePath);

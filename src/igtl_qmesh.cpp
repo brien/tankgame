@@ -24,6 +24,7 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 
 #include "igtl_qmesh.h"
 
@@ -1394,24 +1395,124 @@ bool igtl_QGLMesh::SaveOBJ(const std::string& objFile) {
     // Write OBJ header
     outFile << "# Converted from GSM to OBJ\n";
 
-    // Write vertices and normals
+    // Write vertices, normals, and texture coordinates
     for (size_t i = 0; i < GetNumVerticies(); ++i) {
         igtl_QGLVertex v = GetVertex(i);
+
+        // Write vertex position
         outFile << "v " << v.m_x << " " << v.m_y << " " << v.m_z << "\n";
+
+        // Write vertex normal
         outFile << "vn " << v.m_nx << " " << v.m_ny << " " << v.m_nz << "\n";
+
+        // Write texture coordinates
+        outFile << "vt " << v.m_u << " " << v.m_v << "\n";
     }
 
     // Write faces
     for (size_t i = 0; i < GetNumTriangles(); ++i) {
         igtl_QGLTriangle t = GetTriangle(i);
+
+        // Write face with vertex, texture, and normal indices
         outFile << "f "
-                << (t.m_v1 + 1) << "//" << (t.m_v1 + 1) << " "
-                << (t.m_v2 + 1) << "//" << (t.m_v2 + 1) << " "
-                << (t.m_v3 + 1) << "//" << (t.m_v3 + 1) << "\n";
+                << (t.m_v1 + 1) << "/" << (t.m_v1 + 1) << "/" << (t.m_v1 + 1) << " "
+                << (t.m_v2 + 1) << "/" << (t.m_v2 + 1) << "/" << (t.m_v2 + 1) << " "
+                << (t.m_v3 + 1) << "/" << (t.m_v3 + 1) << "/" << (t.m_v3 + 1) << "\n";
     }
 
     outFile.close();
     std::cout << "Successfully converted to " << objFile << "\n";
+    return true;
+}
+
+bool igtl_QGLMesh::LoadOBJ(const std::string& objFile) {
+    std::ifstream inFile(objFile);
+    if (!inFile) {
+        std::cerr << "Error: Could not open " << objFile << "\n";
+        return false;
+    }
+
+    // Clear existing mesh data
+    Clear();
+
+    std::vector<Vec3> tempVertices;  // Temporary storage for vertices
+    std::vector<Vec3> tempNormals;   // Temporary storage for normals
+    std::vector<Vec2> tempTexCoords; // Temporary storage for texture coordinates
+
+    std::string line;
+    while (std::getline(inFile, line)) {
+        std::istringstream iss(line);
+        std::string prefix;
+        iss >> prefix;
+
+        if (prefix == "v") {
+            // Vertex position
+            Vec3 vertex;
+            iss >> vertex.x >> vertex.y >> vertex.z;
+            tempVertices.push_back(vertex);
+        } else if (prefix == "vn") {
+            // Vertex normal
+            Vec3 normal;
+            iss >> normal.x >> normal.y >> normal.z;
+            tempNormals.push_back(normal);
+        } else if (prefix == "vt") {
+            // Vertex texture coordinate
+            Vec2 texCoord;
+            iss >> texCoord.x >> texCoord.y;
+            tempTexCoords.push_back(texCoord);
+        } else if (prefix == "f") {
+            // Face definition
+            std::vector<int> vertexIndices, normalIndices, texCoordIndices;
+            std::string vertexData;
+            while (iss >> vertexData) {
+                std::istringstream vertexStream(vertexData);
+                std::string v, vt, vn;
+                std::getline(vertexStream, v, '/');
+                std::getline(vertexStream, vt, '/');
+                std::getline(vertexStream, vn, '/');
+
+                vertexIndices.push_back(std::stoi(v) - 1);
+                if (!vt.empty()) texCoordIndices.push_back(std::stoi(vt) - 1);
+                if (!vn.empty()) normalIndices.push_back(std::stoi(vn) - 1);
+            }
+
+            // Create triangles from face data
+            for (size_t i = 1; i < vertexIndices.size() - 1; ++i) {
+                igtl_QGLTriangle triangle;
+                triangle.m_v1 = vertexIndices[0];
+                triangle.m_v2 = vertexIndices[i];
+                triangle.m_v3 = vertexIndices[i + 1];
+                m_triangles.push_back(triangle);
+            }
+        }
+    }
+
+    // Map temporary data to GSM mesh structure
+    for (size_t i = 0; i < tempVertices.size(); ++i) {
+        igtl_QGLVertex vertex;
+        vertex.m_x = tempVertices[i].x;
+        vertex.m_y = tempVertices[i].y;
+        vertex.m_z = tempVertices[i].z;
+
+        if (i < tempNormals.size()) {
+            vertex.m_nx = tempNormals[i].x;
+            vertex.m_ny = tempNormals[i].y;
+            vertex.m_nz = tempNormals[i].z;
+        } else {
+            vertex.m_nx = vertex.m_ny = vertex.m_nz = 0.0f;
+        }
+
+        if (i < tempTexCoords.size()) {
+            vertex.m_u = tempTexCoords[i].x;
+            vertex.m_v = tempTexCoords[i].y;
+        } else {
+            vertex.m_u = vertex.m_v = 0.0f;
+        }
+
+        m_verticies.push_back(vertex);
+    }
+
+    inFile.close();
     return true;
 }
 

@@ -118,7 +118,7 @@ bool GraphicsTask::Start()
     PrepareMesh(cannonmesh, "cannon.gsm");
     PrepareMesh(itemmesh, "body.gsm");
     
-    BuildDisplayLists();
+    //BuildDisplayLists();
 
     Logger::Get().Write("GraphicsTask::Started\n");
 
@@ -126,6 +126,20 @@ bool GraphicsTask::Start()
     turretmesh.SaveOBJ("converted_nowturret.obj");
     itemmesh.SaveOBJ("converted_body.obj");
     
+    if (bodymesh.LoadOBJ("converted_nowbody.obj")) {
+    std::cout << "converted_nowbody OBJ file loaded successfully.\n";
+    } else {
+        std::cerr << "Failed to load OBJ file.\n";
+    }
+
+    if (bodymesh.SaveOBJ("converted_nowbody_testsave.obj")) {
+    std::cout << "converted_nowbody_testsave OBJ file saved successfully.\n";
+    } else {
+        std::cerr << "Failed to save OBJ file.\n";
+    }
+
+    BuildDisplayLists();
+
     return true;
 }
 
