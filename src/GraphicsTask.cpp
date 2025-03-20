@@ -122,9 +122,9 @@ bool GraphicsTask::Start()
 
     Logger::Get().Write("GraphicsTask::Started\n");
 
-    bodymesh.ConvertToOBJ("converted_nowbody.obj");
-    turretmesh.ConvertToOBJ("converted_nowturret.obj");
-    itemmesh.ConvertToOBJ("converted_body.obj");
+    bodymesh.SaveOBJ("converted_nowbody.obj");
+    turretmesh.SaveOBJ("converted_nowturret.obj");
+    itemmesh.SaveOBJ("converted_body.obj");
     
     return true;
 }

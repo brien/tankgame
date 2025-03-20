@@ -112,8 +112,10 @@ public:
     bool SaveGSM(FILE * chunk);//Save to a gsm file
     bool LoadGSM(FILE * chunk);//Load from a gsm file
 
+    bool SaveOBJ(const std::string& objFile);
+
     bool SaveAsGSM(const std::string& gsmFile);
-    bool SaveGSM_CPP(const std::string& filePath)
+    bool SaveGSM_CPP(const std::string& filePath);
     
     //Define this to enable automatic simple OpenGLdrawing
     //#ifdef IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
@@ -130,8 +132,6 @@ public:
     //#endif //IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
     
     void Clear();//Remove all Data
-    
-    bool ConvertToOBJ(const std::string& objFile);
 
     //This is a convenience feature that way you don't need to contruct these as temporary variables.
     //In fact, they play no part in this class except as temps.

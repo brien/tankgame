@@ -1384,7 +1384,7 @@ void igtl_QGLMesh::DrawEdgesColoredExtruded(float f){
     glEnd();
 }
 
-bool igtl_QGLMesh::ConvertToOBJ(const std::string& objFile) {
+bool igtl_QGLMesh::SaveOBJ(const std::string& objFile) {
     std::ofstream outFile(objFile);
     if (!outFile) {
         std::cerr << "Error: Could not create " << objFile << "\n";
