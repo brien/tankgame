@@ -388,40 +388,6 @@ void TankHandler::NextFrame()
 
 void TankHandler::DrawTanks()
 {
-    /*glColor3f(player.r, player.g, player.b);
-     
-     
-     glPushMatrix();
-     
-     glTranslatef(player.x, player.y+.2, player.z);
-     glRotatef(player.rx, 1, 0, 0);
-     glRotatef(-player.ry, 0, 1, 0);
-     glRotatef(player.rz, 0, 0, 1);
-     
-     glDisable(GL_TEXTURE_2D);
-     
-     
-     glScalef(.5, 1, 0.4);
-     glCallList(App::GetSingleton().graphicsTask->squarelist2);
-     
-     glEnable(GL_BLEND);
-     glEnable(GL_DEPTH_TEST);
-     //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-     glDepthMask(GL_FALSE);
-     
-     glColor4f(player.r, player.g, player.b, player.energy/2000);
-     
-     App::GetSingleton().graphicsTask->cubelist1.Call(0);
-     
-     glDisable(GL_BLEND);
-     glDepthMask(GL_TRUE);
-     glEnable(GL_CULL_FACE);
-     
-     glPopMatrix();*/
-    
-    //TankHandler::GetSingleton().player.Draw();
-    
     static float drift=0;
     
     for(int k=0; k<numPlayers; k++)
