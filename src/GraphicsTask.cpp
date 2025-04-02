@@ -1324,7 +1324,7 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
     unsigned Texture = 0;
 
     Uint8 colors = Message->format->BytesPerPixel;
-    Uint8 texture_format;
+    GLenum texture_format;
     if (colors == 4) {   // alpha
         if (Message->format->Rmask == 0x000000ff)
             texture_format = GL_RGBA;
