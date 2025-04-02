@@ -32,7 +32,7 @@ int LevelHandler::Strlen(const char * stringy)
         {
             cp++;
             //Check for null terminator
-            if(stringy[cp]==NULL || stringy[cp]=='\n')
+            if(stringy[cp] =='\0' || stringy[cp] == '\n')
             {
                 cpdone=true;
             }
@@ -82,7 +82,7 @@ bool LevelHandler::Load(const char filePath[])
         enemy[e][1]=64;
     }
     
-    if(filePath[0]!=NULL)
+    if(filePath != NULL)
     {
         FILE *filein;
         int errnum;
