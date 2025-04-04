@@ -29,9 +29,9 @@ enum class TankType
     TANK_TYPE_COUNT
 };
 
-enum InputMode
+enum class InputMode
 {
-    MODE_KEYBOARD_MOUSE = 0,
+    MODE_KEYBOARD_MOUSE,
     MODE_JOYSTICK_GENERIC,
     MODE_EXTREME_3D,
     MODE_OTHER,

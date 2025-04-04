@@ -1504,7 +1504,7 @@ void Tank::HandleInput()
         
         
     }
-    else if(inputMode>0 && inputMode<4) //Jay's flight stick + PS2, P880 stupid mode
+    else if(inputMode == InputMode::MODE_JOYSTICK_GENERIC || inputMode == InputMode::MODE_EXTREME_3D || inputMode == InputMode::MODE_OTHER) //Jay's flight stick + PS2, P880 stupid mode
     {
         if((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && (InputTask::GetButton(jid,0) || InputTask::GetButton(jid,3) || InputTask::GetButton(jid,7)) )
         {
@@ -1572,7 +1572,7 @@ void Tank::HandleInput()
                 Jump();
             }
         }
-        if(inputMode==1)
+        if(inputMode == InputMode::MODE_JOYSTICK_GENERIC)
         {
             if( InputTask::GetAxis(jid,2) < -6000 )
             {
@@ -2009,7 +2009,7 @@ void Tank::HandleInput()
      }
      
      }*/
-    else if(inputMode==4) //NGC
+    else if(inputMode == InputMode::MODE_NINTENDO_GC) //NGC
     {
         if( InputTask::GetButton(jid,0) || InputTask::GetButton(jid,7) || InputTask::GetAxis(jid,3) > -5000 )
         {
@@ -2160,12 +2160,10 @@ void Tank::HandleInput()
         charge=maxCharge;
     }
     
-    if( InputTask::KeyDown(SDL_SCANCODE_K) && inputMode!=0)
+    if( InputTask::KeyDown(SDL_SCANCODE_K) && inputMode != InputMode::MODE_KEYBOARD_MOUSE)
     {
         inputMode = InputMode::MODE_KEYBOARD_MOUSE;
     }
-    
-    
 }
 
 void Tank::AI()
