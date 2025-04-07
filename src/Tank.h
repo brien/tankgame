@@ -8,7 +8,7 @@
 using namespace std;
 #include "Bullet.h"
 
-enum EnemyState
+enum class EnemyState
 {
     STATE_WANDER = 0,
     STATE_FEAR,
