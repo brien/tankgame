@@ -40,7 +40,6 @@ TankHandler::TankHandler()
 TankHandler::~TankHandler()
 {
     tanks.clear();
-    
 }
 
 void TankHandler::Init()
@@ -152,45 +151,7 @@ void TankHandler::Init()
                 else
                     if(InputTask::joynames[0].find("NGC")!=string::npos || InputTask::joynames[0].find("GameCube")!=string::npos)
                         players[0].inputMode = InputMode::MODE_NINTENDO_GC;
-            //players[0].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
         }
-    
-    
-    /*if(twop)
-     {
-     
-     player2.Init();
-     
-     player2.id=-2;
-     
-     player2.r=1;
-     player2.g=0;
-     player2.b=0;
-     
-     player2.r2=1;
-     player2.g2=1;
-     player2.b2=1;
-     
-     
-     player2.inputMode = InputMode::MODE_JOYSTICK_GENERIC;
-     
-     
-     player2.SetType(player2.type1, player2.type2);
-     
-     player2.rotRate*=2;
-     player2.energyRegen*=1.5;
-     player2.maxEnergy*=1.5;
-     }*/
-    
-    //player.energy=999999;
-    //player.charge=999999;
-    //player.chargeRegen=50;
-    //  player.energyRegen=2000;
-    
-    
-    //tanks.reserve(6);
-    
-    //tanks.bullets.clear();
     tanks.clear();
     
     int enemyCount = 5+3*(LevelHandler::GetSingleton().levelNumber-48);
@@ -407,7 +368,7 @@ void TankHandler::DrawTanks()
             glDepthFunc(GL_LESS);		//This is the key
             
             //players[k].Draw();
-            //glCallList(App::GetSingleton().graphicsTask->bodylist);
+            //glCallList(App::GetSingleton().graphicsTask ->bodylist);
             
             //-------------
             glPushMatrix();
