@@ -524,8 +524,6 @@ void TankHandler::DrawTanks()
                 
             }
             
-            
-            
             glDisable(GL_BLEND);
             glDisable(GL_TEXTURE_2D);
             glDepthMask(GL_TRUE);
@@ -537,44 +535,7 @@ void TankHandler::DrawTanks()
             
             glTranslatef( -players[k].x,  -players[k].y+.25,  -players[k].z);
         }
-        
-        
-        //glDisable(GL_LIGHTING);
-        /*
-         glTranslatef(players[k].x, players[k].y+.01, players[k].z);
-         glRotatef(players[k].rx, 1, 0, 0);
-         glRotatef(-players[k].ry, 0, 1, 0);
-         glRotatef(players[k].rz, 0, 0, 1);
-         
-         glFrontFace(GL_CCW);
-         glColor3f(players[k].r2, players[k].g2, players[k].b2);
-         
-         glCallList(App::GetSingleton().graphicsTask->bodylist);
-         
-         glEnable(GL_LIGHTING);
-         
-         glColor3f(players[k].r*(players[k].energy/players[k].maxEnergy), players[k].g*(players[k].energy/players[k].maxEnergy), players[k].b*(players[k].energy/players[k].maxEnergy));
-         glCallList(App::GetSingleton().graphicsTask->bodylistEx);
-         
-         glTranslatef(0, .15, 0);
-         
-         glRotatef(players[k].rtx, 1, 0, 0);
-         glRotatef(-players[k].rty, 0, 1, 0);
-         glRotatef(players[k].rtz, 0, 0, 1);
-         
-         glDisable(GL_LIGHTING);
-         
-         //glFrontFace(GL_CW);
-         glCallList(App::GetSingleton().graphicsTask->turretlistEx);
-         glCallList(App::GetSingleton().graphicsTask->cannonlistEx);
-         
-         glColor3f(players[k].r2, players[k].g2, players[k].b2);
-         
-         glCallList(App::GetSingleton().graphicsTask->turretlist);
-         glCallList(App::GetSingleton().graphicsTask->cannonlist);
-         
-         glFrontFace(GL_CW); */
-        
+
         glPopMatrix();
     }
     
