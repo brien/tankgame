@@ -165,8 +165,8 @@ void TankHandler::Init()
         
         if(i<16)
         {
-            temp.x=LevelHandler::GetSingleton().enemy[i][0];//60+i%2;
-            temp.z=LevelHandler::GetSingleton().enemy[i][1];//60+i%2;
+            temp.x=LevelHandler::GetSingleton().enemy[i][0];
+            temp.z=LevelHandler::GetSingleton().enemy[i][1];
         }
         else
         {
@@ -276,7 +276,7 @@ void TankHandler::NextFrame()
                     
                     float ratio = (double)(players[0].z-it->z)/(double)(players[0].x-it->x);
                     
-                    float rtyp=toDegrees(atan(ratio));// - players[0].ry;
+                    float rtyp=toDegrees(atan(ratio));
                     
                     if(it->x<players[0].x)
                     {
@@ -296,7 +296,7 @@ void TankHandler::NextFrame()
                     
                     float ratio = (double)(players[1].z-it->z)/(double)(players[1].x-it->x);
                     
-                    float rtyp=toDegrees(atan(ratio));// - players[0].ry;
+                    float rtyp=toDegrees(atan(ratio));
                     
                     if(it->x<players[0].x)
                     {
@@ -496,13 +496,12 @@ void TankHandler::DrawTanks()
             glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
             glEnable(GL_BLEND);
             glEnable(GL_DEPTH_TEST);
-            //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glDepthMask(GL_FALSE);
             
             glColor4f(1.0f,players[k].dist/50.0f,0.1f,1.0);
             
-            //glCallList(App::GetSingleton().graphicsTask->squarelist);
             App::GetSingleton().graphicsTask->squarelist.Call(0);
             
             
@@ -517,7 +516,6 @@ void TankHandler::DrawTanks()
                 
                 glScalef(0.2, 0.2, 0.2);
                 
-                //glCallList(App::GetSingleton().graphicsTask->squarelist);
                 App::GetSingleton().graphicsTask->squarelist.Call(0);
                 
                 glScalef(5.0, 5.0, 5.0);
@@ -546,182 +544,6 @@ void TankHandler::DrawTanks()
         glDisable(GL_BLEND);
         glDisable(GL_TEXTURE_2D);
         i->Draw();
-        /*
-         glPushMatrix();
-         
-         glDisable(GL_TEXTURE_2D);
-         
-         glEnable(GL_LIGHTING);
-         
-         //glEnable(GL_TEXTURE_2D);
-         glEnable(GL_DEPTH_TEST);
-         
-         glDepthMask(GL_TRUE);
-         glDepthFunc(GL_LESS);		//This is the key
-         
-         //i->Draw();
-         //glCallList(App::GetSingleton().graphicsTask->bodylist);
-         
-         //-------------
-         glPushMatrix();
-         
-         //glDisable(GL_TEXTURE_2D);
-         //glDisable(GL_LIGHTING);
-         
-         glTranslatef(i->x, i->y+.05, i->z);
-         glRotatef(i->rx, 1, 0, 0);
-         glRotatef(-i->ry, 0, 1, 0);
-         glRotatef(i->rz, 0, 0, 1);
-         
-         glFrontFace(GL_CCW);
-         glColor3f(i->r2, i->g2, i->b2);
-         
-         //glCallList(App::GetSingleton().graphicsTask->bodylist);
-         
-         
-         glCallList(App::GetSingleton().graphicsTask->itemlist);
-         
-         
-         
-         
-         
-         glTranslatef(0, .15, 0);
-         
-         glRotatef(i->rtx, 1, 0, 0);
-         glRotatef(-i->rty+90, 0, 1, 0);
-         glRotatef(i->rtz, 0, 0, 1);
-         
-         glColor3f(i->r, i->g, i->b);
-         
-         glCallList(App::GetSingleton().graphicsTask->turretlist);
-         
-         
-         glFrontFace(GL_CW);
-         
-         glPopMatrix();
-         //-----
-         
-         glEnable(GL_TEXTURE_2D);
-         glEnable(GL_DEPTH_TEST);
-         
-         glDepthMask(GL_FALSE);				//Allow depth testing to be performed
-         glDepthFunc(GL_LEQUAL);	//
-         
-         glEnable(GL_BLEND);					//Blend em'
-         glBlendFunc(GL_SRC_ALPHA,GL_ONE);
-         
-         static float drift=0;
-         
-         drift+=GlobalTimer::dT;
-         
-         if(drift>1)
-         drift=0;
-         
-         //Awesome effects are performed using the texture matrix stack. (depth = 2)
-         glMatrixMode(GL_TEXTURE);
-         
-         glPushMatrix();
-         //glScalef(5,5,5);
-         glTranslatef(100*drift,0,0);
-         //glRotatef(i->rty+i->ry,0,0,1);
-         glMatrixMode(GL_MODELVIEW);
-         
-         
-         glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
-         
-         //i->r=i->g=i->b=i->r=i->g2=i->b2=1;
-         glColor3f(i->r, i->g, i->b);
-         //i->Draw2();
-         //glCallList(App::GetSingleton().graphicsTask->bodylist);
-         
-         //-------------
-         glPushMatrix();
-         
-         //glDisable(GL_TEXTURE_2D);
-         glDisable(GL_LIGHTING);
-         
-         glTranslatef(i->x, i->y+.05, i->z);
-         glRotatef(i->rx, 1, 0, 0);
-         glRotatef(-i->ry, 0, 1, 0);
-         glRotatef(i->rz, 0, 0, 1);
-         
-         glFrontFace(GL_CCW);
-         
-         
-         //glCallList(App::GetSingleton().graphicsTask->bodylist);
-         
-         glCallList(App::GetSingleton().graphicsTask->itemlist);
-         
-         
-         
-         
-         glTranslatef(0, .10, 0);
-         
-         glRotatef(i->rtx, 1, 0, 0);
-         glRotatef(-i->rty+180, 0, 1, 0);
-         glRotatef(i->rtz, 0, 0, 1);
-         
-         glColor3f(i->r2, i->g2, i->b2);
-         
-         glCallList(App::GetSingleton().graphicsTask->turretlist);
-         
-         
-         glFrontFace(GL_CW);
-         
-         glPopMatrix();
-         //-----
-         
-         
-         
-         glMatrixMode(GL_TEXTURE);//Set matrix mode to projection		
-         
-         glPopMatrix();
-         glMatrixMode(GL_MODELVIEW);	//Select modelview matrix	
-         
-         glDepthMask(GL_TRUE);
-         
-         glPopMatrix();
-         */
-        
-        
-        /* glPushMatrix();
-         glDisable(GL_TEXTURE_2D);
-         
-         glTranslatef(i->x, i->y, i->z);
-         glRotatef(i->rx, 1, 0, 0);
-         glRotatef(-i->ry, 0, 1, 0);
-         glRotatef(i->rz, 0, 0, 1);
-         
-         glFrontFace(GL_CCW);
-         glColor3f(i->r2, i->g2, i->b2);
-         glCallList(App::GetSingleton().graphicsTask->bodylist);
-         glDisable(GL_LIGHTING);
-         
-         glColor3f(i->r*(i->energy/i->maxEnergy), i->g*(i->energy/i->maxEnergy), i->b*(i->energy/i->maxEnergy));
-         glCallList(App::GetSingleton().graphicsTask->bodylistEx);
-         
-         glTranslatef(0, .15, 0);
-         
-         glRotatef(i->rtx, 1, 0, 0);
-         glRotatef(-i->rty, 0, 1, 0);
-         glRotatef(i->rtz, 0, 0, 1);
-         
-         
-         glCallList(App::GetSingleton().graphicsTask->turretlistEx);
-         
-         glCallList(App::GetSingleton().graphicsTask->cannonlistEx);
-         
-         
-         glEnable(GL_LIGHTING);
-         
-         glColor3f(i->r2, i->g2, i->b2);
-         glCallList(App::GetSingleton().graphicsTask->turretlist);
-         
-         glCallList(App::GetSingleton().graphicsTask->cannonlist);
-         
-         glFrontFace(GL_CW);
-         
-         glPopMatrix();*/
     }
     
 }
