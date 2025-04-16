@@ -153,60 +153,62 @@ void TankHandler::Init()
                         players[0].inputMode = InputMode::MODE_NINTENDO_GC;
         }
     tanks.clear();
-    
+
+    InitializeEnemyTanks();
+}
+
+void TankHandler::InitializeEnemyTanks()
+{
     int enemyCount = 5+3*(LevelHandler::GetSingleton().levelNumber-48);
-    
-    
+
     for(int i = 0; i<enemyCount; ++i)
     {
-        Tank temp;
+        Tank tempTank;
         
-        temp.Init();
+        tempTank.Init();
         
         if(i<16)
         {
-            temp.x=LevelHandler::GetSingleton().enemy[i][0];
-            temp.z=LevelHandler::GetSingleton().enemy[i][1];
+            tempTank.x=LevelHandler::GetSingleton().enemy[i][0];
+            tempTank.z=LevelHandler::GetSingleton().enemy[i][1];
         }
         else
         {
-            temp.x=LevelHandler::GetSingleton().enemy[i%16][0]+i%2;
-            temp.z=LevelHandler::GetSingleton().enemy[i%16][1]+i%2;
+            tempTank.x=LevelHandler::GetSingleton().enemy[i%16][0]+i%2;
+            tempTank.z=LevelHandler::GetSingleton().enemy[i%16][1]+i%2;
         }
         
-        temp.y=LevelHandler::GetSingleton().GetTerrainHeight((int)temp.x, (int)temp.z);
-        temp.ry=i*45;
-        temp.id=i;
-        
+        tempTank.y=LevelHandler::GetSingleton().GetTerrainHeight((int)tempTank.x, (int)tempTank.z);
+        tempTank.ry=i*45;
+        tempTank.id=i;
         
         if((LevelHandler::GetSingleton().levelNumber-48) == 0)
         {
-            temp.SetType(static_cast<TankType>(1+i%3), TankType::TYPE_GREY);
-            if(temp.type1 == TankType::TYPE_BLUE)
-                temp.SetType(TankType::TYPE_YELLOW, TankType::TYPE_GREY);
-            if(temp.id == 4)
+            tempTank.SetType(static_cast<TankType>(1+i%3), TankType::TYPE_GREY);
+            if(tempTank.type1 == TankType::TYPE_BLUE)
+                tempTank.SetType(TankType::TYPE_YELLOW, TankType::TYPE_GREY);
+            if(tempTank.id == 4)
             {
-                temp.SetType(TankType::TYPE_BLUE, TankType::TYPE_GREY);
-                temp.attack=temp.attack/3;
+                tempTank.SetType(TankType::TYPE_BLUE, TankType::TYPE_GREY);
+                tempTank.attack=tempTank.attack/3;
             }
         }
-        
         else
+        {
             if((LevelHandler::GetSingleton().levelNumber-48)==2 ||  (LevelHandler::GetSingleton().levelNumber-48)==5 || (LevelHandler::GetSingleton().levelNumber-48)==12 )
             {
-                temp.SetType(static_cast<TankType>(i%4+1), static_cast<TankType>(i%3+1));
+                tempTank.SetType(static_cast<TankType>(i%4+1), static_cast<TankType>(i%3+1));
             }
             else
-                temp.SetType(static_cast<TankType>(1+i%3), static_cast<TankType>(i%3));
+            {
+                tempTank.SetType(static_cast<TankType>(1+i%3), static_cast<TankType>(i%3));
+            }
+        }
+        tempTank.jumpCost=0;
         
-        temp.jumpCost=0;
-        
-        tanks.push_back(temp);
+        tanks.push_back(tempTank);
     }
-    
 }
-
-
 
 void TankHandler::NextFrame()
 {
@@ -250,8 +252,6 @@ void TankHandler::NextFrame()
         }
         
     }
-    
-    
     
     float dist;
     players[0].dist=2024;

@@ -37,7 +37,8 @@ public:
     
     int numPlayers;
     int attackingTanks;
-    
+private:
+    void InitializeEnemyTanks();
 };
 
 #endif
