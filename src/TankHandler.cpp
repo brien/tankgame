@@ -22,7 +22,7 @@
 TankHandler::TankHandler()
 {
     numPlayers=1;
-    attackingTanks=0;
+    numAttackingTanks=0;
     isInputJoy=false;
     
     combo[0]=0;
@@ -43,6 +43,13 @@ TankHandler::~TankHandler()
 }
 
 void TankHandler::Init()
+{
+    InitializePlayerTanks();
+    InitializePlayerControls();
+    InitializeEnemyTanks();
+}
+
+void TankHandler::InitializePlayerTanks()
 {
     combo[0]=0;
     combo[1]=0;
@@ -99,6 +106,10 @@ void TankHandler::Init()
         players[j].rotRate*=2;
         
     }
+}
+
+void TankHandler::InitializePlayerControls()
+{
     if(numPlayers>1)
     {
         if(SDL_NumJoysticks()==1)
@@ -152,13 +163,12 @@ void TankHandler::Init()
                     if(InputTask::joynames[0].find("NGC")!=string::npos || InputTask::joynames[0].find("GameCube")!=string::npos)
                         players[0].inputMode = InputMode::MODE_NINTENDO_GC;
         }
-    tanks.clear();
-
-    InitializeEnemyTanks();
 }
 
 void TankHandler::InitializeEnemyTanks()
 {
+    tanks.clear();
+
     int enemyCount = 5+3*(LevelHandler::GetSingleton().levelNumber-48);
 
     for(int i = 0; i<enemyCount; ++i)
@@ -167,7 +177,7 @@ void TankHandler::InitializeEnemyTanks()
         
         tempTank.Init();
         
-        if(i<16)
+        if(i < 16)
         {
             tempTank.x=LevelHandler::GetSingleton().enemy[i][0];
             tempTank.z=LevelHandler::GetSingleton().enemy[i][1];
@@ -178,9 +188,9 @@ void TankHandler::InitializeEnemyTanks()
             tempTank.z=LevelHandler::GetSingleton().enemy[i%16][1]+i%2;
         }
         
-        tempTank.y=LevelHandler::GetSingleton().GetTerrainHeight((int)tempTank.x, (int)tempTank.z);
-        tempTank.ry=i*45;
-        tempTank.id=i;
+        tempTank.y = LevelHandler::GetSingleton().GetTerrainHeight((int)tempTank.x, (int)tempTank.z);
+        tempTank.ry = i*45;
+        tempTank.id = i;
         
         if((LevelHandler::GetSingleton().levelNumber-48) == 0)
         {
@@ -204,7 +214,7 @@ void TankHandler::InitializeEnemyTanks()
                 tempTank.SetType(static_cast<TankType>(1+i%3), static_cast<TankType>(i%3));
             }
         }
-        tempTank.jumpCost=0;
+        tempTank.jumpCost = 0;
         
         tanks.push_back(tempTank);
     }

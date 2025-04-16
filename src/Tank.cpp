@@ -299,7 +299,7 @@ void Tank::Die()
         }
     }
     
-    TankHandler::GetSingleton().attackingTanks--;
+    TankHandler::GetSingleton().numAttackingTanks--;
     
     if(TankHandler::GetSingleton().tanks.size()!=1 && id>=0)
     {
@@ -2212,10 +2212,10 @@ void Tank::AI()
         }
     }
     
-    if(TankHandler::GetSingleton().tanks.size()==1 || (TankHandler::GetSingleton().attackingTanks < (LevelHandler::GetSingleton().levelNumber-47) && !App::GetSingleton().gameTask->versus) )
+    if(TankHandler::GetSingleton().tanks.size()==1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber-47) && !App::GetSingleton().gameTask->versus) )
     {
         state = EnemyState:: STATE_HUNT;
-        TankHandler::GetSingleton().attackingTanks++;
+        TankHandler::GetSingleton().numAttackingTanks++;
     }
     
     

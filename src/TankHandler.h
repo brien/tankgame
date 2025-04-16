@@ -36,9 +36,12 @@ public:
     int diff;
     
     int numPlayers;
-    int attackingTanks;
+    int numAttackingTanks;
+
 private:
     void InitializeEnemyTanks();
+    void InitializePlayerTanks();
+    void InitializePlayerControls();
 };
 
 #endif
