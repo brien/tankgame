@@ -10,7 +10,7 @@ using namespace std;
 
 enum class EnemyState
 {
-    STATE_WANDER = 0,
+    STATE_WANDER,
     STATE_FEAR,
     STATE_TURN,
     STATE_BLANK,
@@ -21,7 +21,7 @@ enum class EnemyState
 
 enum class TankType
 {
-    TYPE_GREY = 0,
+    TYPE_GREY,
     TYPE_RED,
     TYPE_BLUE,
     TYPE_YELLOW,
