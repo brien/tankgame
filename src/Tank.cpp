@@ -2092,11 +2092,6 @@ void Tank::HandleInput()
             RotTurret((float)InputTask::GetAxis(jid,2)/(float)2500);
         }
         
-        /* if( InputTask::GetAxis(jid,3) > -5000 )
-         {
-         Fire(1);
-         //RotTurret((float)InputTask::GetAxis(jid,3)/(float)3200);
-         }*/
         if( InputTask::GetAxis(jid,4) > 5000)
         {
             Jump();
