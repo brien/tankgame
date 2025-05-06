@@ -1,4 +1,7 @@
- #!/bin/bash
-g++ -o tankgame-linux *.cpp -lSDL2 -lSDL2_mixer -lSDL2_ttf -lGL -lGLU -ldl -lassimp
-mv ./tankgame-linux ../runtime/
-echo "Build complete! Executable in ../runtime/"
+#!/bin/bash
+
+EXECUTABLE_NAME="tankgame-linux"
+
+g++ -o $EXECUTABLE_NAME *.cpp -lSDL2 -lSDL2_mixer -lSDL2_ttf -lGL -lGLU -ldl -lassimp
+mv ./$EXECUTABLE_NAME ../runtime/
+echo "Build complete! Executable: ../runtime/$EXECUTABLE_NAME"
