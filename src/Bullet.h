@@ -32,32 +32,31 @@ private:
     float vx, vy, vz;
     float rx, ry, rz;
     float dty;
-    
+
     float r, g, b;
     float r2, g2, b2;
-    
+
     float moveRate;
     float power;
-    
+
     bool isSpecial;
-    
+
     int id;
     int tankId;
-    
+
     TankType type1;
     TankType type2;
-    
+
     float dT;
-    
+
     float maxdT;
-    
+
     int numbounces;
     int maxbounces;
-    
-    void HandleLevelCollision(float xpp, float zpp, float ory);
-    void HandlePlayerCollision(Tank& playerTank);
-    void HandleTankCollision(Tank& playerTank);
-};
 
+    void HandleLevelCollision(float xpp, float zpp, float ory);
+    void HandlePlayerCollision(Tank &playerTank);
+    void HandleTankCollision(Tank &playerTank);
+};
 
 #endif /* Bullet_h */

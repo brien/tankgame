@@ -5,14 +5,14 @@
 //
 
 #ifdef _WIN32
-    // If building in windows:
+// If building in windows:
 #include <windows.h>
 #include <GL/gl.h>
 #elif __APPLE__
-    // If building on macOS:
+// If building on macOS:
 #include <OpenGL/gl.h>
 #else
-    // If building on Linux:
+// If building on Linux:
 #include <GL/gl.h>
 #endif
 
@@ -27,32 +27,30 @@
 #include "FXHandler.h"
 #include "App.h"
 
-
-
 Bullet::Bullet()
 {
     moveRate = 33;
     alive = true;
     isSpecial = false;
-    id  =0;
+    id = 0;
     numbounces = 0;
     maxbounces = 0;
-    r=g=b = .5;
-    r2=g2=b2 = .5;
+    r = g = b = .5;
+    r2 = g2 = b2 = .5;
     dty = 0;
-    
+
     dT = 0;
     maxdT = 100;
 }
 
 Bullet::Bullet(int tid, float power,
-TankType type1, TankType type2,
-int maxbounces,
-float dTpressed,
-float r, float g, float b,
-float r2, float g2, float b2,
-float x, float y, float z,
-float rx, float ry, float rz)
+               TankType type1, TankType type2,
+               int maxbounces,
+               float dTpressed,
+               float r, float g, float b,
+               float r2, float g2, float b2,
+               float x, float y, float z,
+               float rx, float ry, float rz)
 {
     this->moveRate = 33;
     this->alive = true;
@@ -94,25 +92,24 @@ float rx, float ry, float rz)
             this->power = 100;
         }
     }
-    else
-        if (type2 == TankType::TYPE_PURPLE)
+    else if (type2 == TankType::TYPE_PURPLE)
+    {
+        this->power *= 0.5f;
+        this->dty = 160 * dTpressed;
+        if (dTpressed < 0)
         {
-            this->power *= 0.5f;
-            this->dty = 160 * dTpressed;
-            if (dTpressed < 0)
-            {
-                dTpressed *= -1;
-            }
-            this->power += this->power * dTpressed / 2;
-            if (this->power > 1000)
-            {
-                this->power = 1000;
-            }
-            if (this->power < 100)
-            {
-                this->power = 100;
-            }
+            dTpressed *= -1;
         }
+        this->power += this->power * dTpressed / 2;
+        if (this->power > 1000)
+        {
+            this->power = 1000;
+        }
+        if (this->power < 100)
+        {
+            this->power = 100;
+        }
+    }
 
     this->r = r;
     this->b = b;
@@ -127,64 +124,63 @@ float rx, float ry, float rz)
     this->type1 = type1;
     this->type2 = type2;
 
-
     this->id = 1;
     this->alive = true;
 }
 
 void Bullet::NextFrame()
 {
-    dT+=GlobalTimer::dT;
-    
-    if(type1==TankType::TYPE_PURPLE && isSpecial)
+    dT += GlobalTimer::dT;
+
+    if (type1 == TankType::TYPE_PURPLE && isSpecial)
     {
-        if(dty<0)
+        if (dty < 0)
         {
-            dty-=1000*GlobalTimer::dT;
+            dty -= 1000 * GlobalTimer::dT;
         }
         else
         {
-            dty+=1000*GlobalTimer::dT;
+            dty += 1000 * GlobalTimer::dT;
         }
     }
-    
-    ry+=GlobalTimer::dT*dty;
-    
-    if(ry>360)
+
+    ry += GlobalTimer::dT * dty;
+
+    if (ry > 360)
     {
-        ry-=360;
+        ry -= 360;
     }
-    if(rx>360)
+    if (rx > 360)
     {
-        rz-=360;
+        rz -= 360;
     }
-    if(rz>360)
+    if (rz > 360)
     {
-        rz-=360;
+        rz -= 360;
     }
-    
-    float xpp=(GlobalTimer::dT*moveRate) * (float)cos(ry*DTR);
-    float zpp=(GlobalTimer::dT*moveRate) * (float)sin(ry*DTR);
-    
+
+    float xpp = (GlobalTimer::dT * moveRate) * (float)cos(ry * DTR);
+    float zpp = (GlobalTimer::dT * moveRate) * (float)sin(ry * DTR);
+
     x += xpp;
     z += zpp;
-    
-    float ory=ry;
-    
-    if(LevelHandler::GetSingleton().PointCollision(x,y,z))
+
+    float ory = ry;
+
+    if (LevelHandler::GetSingleton().PointCollision(x, y, z))
     {
         HandleLevelCollision(xpp, zpp, ory);
     }
-    
-    for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
+
+    for (int i = 0; i < TankHandler::GetSingleton().numPlayers; i++)
     {
-        if(TankHandler::GetSingleton().players[i].PointCollision(x,y,z))
+        if (TankHandler::GetSingleton().players[i].PointCollision(x, y, z))
         {
             HandlePlayerCollision(TankHandler::GetSingleton().players[i]);
         }
     }
-    
-    for(vector<Tank>::iterator it = TankHandler::GetSingleton().tanks.begin(); it!=TankHandler::GetSingleton().tanks.end(); ++it)
+
+    for (vector<Tank>::iterator it = TankHandler::GetSingleton().tanks.begin(); it != TankHandler::GetSingleton().tanks.end(); ++it)
     {
         if ((*it).PointCollision(x, y, z) || (*it).PointCollision(x - xpp / 2, y, z - zpp / 2))
         {
@@ -192,26 +188,25 @@ void Bullet::NextFrame()
         }
     }
 
-    if(x>=LevelHandler::GetSingleton().sizeX || x <=0 ||  z>=LevelHandler::GetSingleton().sizeZ || z <=0)
+    if (x >= LevelHandler::GetSingleton().sizeX || x <= 0 || z >= LevelHandler::GetSingleton().sizeZ || z <= 0)
     {
-        alive=false;
-        if(tankId<0)
+        alive = false;
+        if (tankId < 0)
         {
-            TankHandler::GetSingleton().hitCombo[(-1*tankId)-1]=0;
+            TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
         }
     }
-    if(dT>=maxdT)
+    if (dT >= maxdT)
     {
-        alive=false;
-        if(tankId<0)
+        alive = false;
+        if (tankId < 0)
         {
-            TankHandler::GetSingleton().hitCombo[(-1*tankId)-1]=0;
+            TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
         }
     }
-    
 }
 
-void Bullet::HandleTankCollision(Tank& tank)
+void Bullet::HandleTankCollision(Tank &tank)
 {
     if (tank.id != tankId)
     {
@@ -252,7 +247,6 @@ void Bullet::HandleTankCollision(Tank& tank)
                     FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, TankHandler::GetSingleton().players[(-1 * tankId) - 1].x, TankHandler::GetSingleton().players[(-1 * tankId) - 1].y, TankHandler::GetSingleton().players[(-1 * tankId) - 1].z, 0, .01, 0, 0, 0, 90, 0.5, 0.5, 0, 1);
                 }
 
-
                 TankHandler::GetSingleton().combo[(-1 * tankId) - 1] += (10 / (TankHandler::GetSingleton().combo[(-1 * tankId) - 1] / 10 + 1));
 
                 if (TankHandler::GetSingleton().combo[(-1 * tankId) - 1] > TankHandler::GetSingleton().special[(-1 * tankId) - 1])
@@ -274,7 +268,6 @@ void Bullet::HandleTankCollision(Tank& tank)
             FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, .01, 0, 0, tank.ry, 90, r, g, b, 1);
             FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, .01, 2, 0, ry, 90, r, g, b, 1);
         }
-
     }
     else
     {
@@ -286,11 +279,10 @@ void Bullet::HandleTankCollision(Tank& tank)
                 alive = false;
             }
         }
-
     }
 }
 
-void Bullet::HandlePlayerCollision(Tank& playerTank)
+void Bullet::HandlePlayerCollision(Tank &playerTank)
 {
     if (tankId != playerTank.id)
     {
@@ -301,13 +293,11 @@ void Bullet::HandlePlayerCollision(Tank& playerTank)
             {
                 playerTank.energy += power / 2;
             }
-            else
-                if (playerTank.charge < playerTank.maxCharge * 2)
-                {
-                    playerTank.charge += power / 8;
-                }
+            else if (playerTank.charge < playerTank.maxCharge * 2)
+            {
+                playerTank.charge += power / 8;
+            }
             alive = false;
-
         }
         else
         {
@@ -320,7 +310,6 @@ void Bullet::HandlePlayerCollision(Tank& playerTank)
             TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1]++;
             TankHandler::GetSingleton().combo[(-1 * tankId) - 1] += (float)TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] / 10;
         }
-
     }
     else
     {
@@ -331,11 +320,10 @@ void Bullet::HandlePlayerCollision(Tank& playerTank)
             {
                 playerTank.energy += power / 2;
             }
-            else
-                if (playerTank.charge < playerTank.maxCharge)
-                {
-                    playerTank.charge += power / 8;
-                }
+            else if (playerTank.charge < playerTank.maxCharge)
+            {
+                playerTank.charge += power / 8;
+            }
             alive = false;
         }
     }
@@ -426,6 +414,43 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     temp.type1 = type2;
                     temp.type2 = type2;
 
+                    temp.id = 1;
+                    temp.alive = true;
+
+                    TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                }
+            }
+            else if (type2 == TankType::TYPE_BLUE)
+            {
+                for (int i = 0; i < 2; i++)
+                {
+
+                    Bullet temp;
+
+                    temp.tankId = tankId;
+
+                    temp.rx = rx;
+                    temp.ry = ry;
+                    temp.rz = rz;
+
+                    temp.x = x + (.2 + i * .2 + numbounces * .2) * (float)cos((ry + 90) * DTR);
+                    temp.y = y;
+                    temp.z = z + (.2 + i * .2 + numbounces * .2) * (float)sin((ry + 90) * DTR);
+
+                    temp.power = power;
+
+                    temp.r = r;
+                    temp.b = b;
+                    temp.g = g;
+
+                    temp.r2 = r2;
+                    temp.b2 = b2;
+                    temp.g2 = g2;
+
+                    temp.maxbounces = 4;
+
+                    temp.type1 = type1;
+                    temp.type2 = type2;
 
                     temp.id = 1;
                     temp.alive = true;
@@ -433,128 +458,81 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
                 }
             }
-            else
-                if (type2 == TankType::TYPE_BLUE)
-                {
-                    for (int i = 0; i < 2; i++)
-                    {
+            else if (type2 == TankType::TYPE_YELLOW || type2 == TankType::TYPE_GREY)
+            {
 
-                        Bullet temp;
+                Bullet temp;
 
-                        temp.tankId = tankId;
+                temp.tankId = tankId;
 
+                temp.x = x;
+                temp.y = y;
+                temp.z = z;
 
-                        temp.rx = rx;
-                        temp.ry = ry;
-                        temp.rz = rz;
+                temp.rx = rx;
+                temp.ry = -ory;
+                temp.rz = rz;
 
-                        temp.x = x + (.2 + i * .2 + numbounces * .2) * (float)cos((ry + 90) * DTR);
-                        temp.y = y;
-                        temp.z = z + (.2 + i * .2 + numbounces * .2) * (float)sin((ry + 90) * DTR);
+                temp.power = power * 2;
 
-                        temp.power = power;
+                temp.r = r;
+                temp.b = b;
+                temp.g = g;
 
-                        temp.r = r;
-                        temp.b = b;
-                        temp.g = g;
+                temp.r2 = r2;
+                temp.b2 = b2;
+                temp.g2 = g2;
 
-                        temp.r2 = r2;
-                        temp.b2 = b2;
-                        temp.g2 = g2;
+                temp.maxbounces = 4;
 
-                        temp.maxbounces = 4;
+                temp.type1 = type1;
+                temp.type2 = type2;
 
-                        temp.type1 = type1;
-                        temp.type2 = type2;
+                temp.id = 1;
+                temp.alive = true;
 
+                TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+            }
+            else if (type2 == TankType::TYPE_PURPLE)
+            {
 
-                        temp.id = 1;
-                        temp.alive = true;
+                Bullet temp;
 
-                        TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
-                    }
-                }
-                else
-                    if (type2 == TankType::TYPE_YELLOW || type2 == TankType::TYPE_GREY)
-                    {
+                temp.tankId = tankId;
 
-                        Bullet temp;
+                temp.x = x;
+                temp.y = y;
+                temp.z = z;
 
-                        temp.tankId = tankId;
+                temp.rx = rx;
+                temp.ry = ry;
+                temp.rz = rz;
 
-                        temp.x = x;
-                        temp.y = y;
-                        temp.z = z;
+                temp.power = power * 2;
 
-                        temp.rx = rx;
-                        temp.ry = -ory;
-                        temp.rz = rz;
+                temp.dty = 10.0f;
 
-                        temp.power = power * 2;
+                temp.r = r;
+                temp.b = b;
+                temp.g = g;
 
-                        temp.r = r;
-                        temp.b = b;
-                        temp.g = g;
+                temp.r2 = r2;
+                temp.b2 = b2;
+                temp.g2 = g2;
 
-                        temp.r2 = r2;
-                        temp.b2 = b2;
-                        temp.g2 = g2;
+                temp.maxbounces = 16;
 
-                        temp.maxbounces = 4;
+                temp.type1 = type1;
+                temp.type2 = type2;
 
-                        temp.type1 = type1;
-                        temp.type2 = type2;
+                temp.id = 1;
+                temp.alive = true;
 
-
-                        temp.id = 1;
-                        temp.alive = true;
-
-                        TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
-                    }
-                    else
-                        if (type2 == TankType::TYPE_PURPLE)
-                        {
-
-                            Bullet temp;
-
-                            temp.tankId = tankId;
-
-                            temp.x = x;
-                            temp.y = y;
-                            temp.z = z;
-
-                            temp.rx = rx;
-                            temp.ry = ry;
-                            temp.rz = rz;
-
-                            temp.power = power * 2;
-
-                            temp.dty = 10.0f;
-
-                            temp.r = r;
-                            temp.b = b;
-                            temp.g = g;
-
-                            temp.r2 = r2;
-                            temp.b2 = b2;
-                            temp.g2 = g2;
-
-                            temp.maxbounces = 16;
-
-                            temp.type1 = type1;
-                            temp.type2 = type2;
-
-
-                            temp.id = 1;
-                            temp.alive = true;
-
-                            TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
-                        }
-
+                TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+            }
         }
 
         numbounces++;
-
     }
     else
     {
@@ -564,7 +542,6 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
         {
             TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
         }
-
 
         if ((int)(x + xpp) != (int)x && (int)(z + zpp) == (int)z)
         {
@@ -587,152 +564,143 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
             }
         }
-
-
     }
 }
 
 void Bullet::Draw()
 {
-    
+
     glColor3f(r, g, b);
-    
-    
-    if(type1==TankType::TYPE_BLUE)
+
+    if (type1 == TankType::TYPE_BLUE)
     {
-        
+
         glPushMatrix();
-        
-        glTranslatef(x, y-.07, z);
+
+        glTranslatef(x, y - .07, z);
         glRotatef(rx, 1, 0, 0);
         glRotatef(-ry, 0, 1, 0);
         glRotatef(rz, 0, 0, 1);
-        
+
         glDisable(GL_TEXTURE_2D);
-                
+
         glColor3f(r, g, b);
-        
+
         glScalef(1, 1, 0.15);
-        
+
         App::GetSingleton().graphicsTask->squarelist2.Call(0);
 
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         glDepthMask(GL_FALSE);
-        
-        glColor4f(r2, g2, b2, 0.1f + power/500);
-        
+
+        glColor4f(r2, g2, b2, 0.1f + power / 500);
+
         App::GetSingleton().graphicsTask->squarelist.Call(0);
-        
+
         glDisable(GL_BLEND);
         glDepthMask(GL_TRUE);
         glEnable(GL_CULL_FACE);
-        
+
         glPopMatrix();
-        
+
         glPushMatrix();
-        
-        glTranslatef(x, y+.03, z);
+
+        glTranslatef(x, y + .03, z);
         glRotatef(-ry, 0, 1, 0);
-        
+
         glTranslatef(0, 0, -0.06);
-        
+
         glRotatef(-60, 1, 0, 0);
-        
-        glDisable(GL_TEXTURE_2D);
-                
-        glColor3f(r, g, b);
-        
-        glScalef(1, 1, 0.2);
-        
-        App::GetSingleton().graphicsTask->squarelist2.Call(0);
-        
-        glEnable(GL_BLEND);
-        glEnable(GL_DEPTH_TEST);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-        glDepthMask(GL_FALSE);
-        
-        glColor4f(r2, g2, b2, 0.1f + power/500);
-        
-        App::GetSingleton().graphicsTask->squarelist.Call(0);
-        
-        glDisable(GL_BLEND);
-        glDepthMask(GL_TRUE);
-        glEnable(GL_CULL_FACE);
-        
-        glPopMatrix();
-        
-        glPushMatrix();
-        
-        glTranslatef(x, y+.03, z);
-        glRotatef(-ry, 0, 1, 0);
-        
-        glTranslatef(0, 0, 0.06);
-        
-        glRotatef(60, 1, 0, 0);
-        
+
         glDisable(GL_TEXTURE_2D);
 
-        
         glColor3f(r, g, b);
-        
+
         glScalef(1, 1, 0.2);
-        
+
         App::GetSingleton().graphicsTask->squarelist2.Call(0);
-        
+
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         glDepthMask(GL_FALSE);
-        
-        glColor4f(r2, g2, b2, 0.1f + power/500);
-        
+
+        glColor4f(r2, g2, b2, 0.1f + power / 500);
+
         App::GetSingleton().graphicsTask->squarelist.Call(0);
-        
-        
-        
+
         glDisable(GL_BLEND);
         glDepthMask(GL_TRUE);
         glEnable(GL_CULL_FACE);
-        
+
+        glPopMatrix();
+
+        glPushMatrix();
+
+        glTranslatef(x, y + .03, z);
+        glRotatef(-ry, 0, 1, 0);
+
+        glTranslatef(0, 0, 0.06);
+
+        glRotatef(60, 1, 0, 0);
+
+        glDisable(GL_TEXTURE_2D);
+
+        glColor3f(r, g, b);
+
+        glScalef(1, 1, 0.2);
+
+        App::GetSingleton().graphicsTask->squarelist2.Call(0);
+
+        glEnable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glDepthMask(GL_FALSE);
+
+        glColor4f(r2, g2, b2, 0.1f + power / 500);
+
+        App::GetSingleton().graphicsTask->squarelist.Call(0);
+
+        glDisable(GL_BLEND);
+        glDepthMask(GL_TRUE);
+        glEnable(GL_CULL_FACE);
+
         glPopMatrix();
     }
     else
     {
         glPushMatrix();
-        
-        glTranslatef(x, y-.05, z);
+
+        glTranslatef(x, y - .05, z);
         glRotatef(rx, 1, 0, 0);
         glRotatef(-ry, 0, 1, 0);
         glRotatef(rz, 0, 0, 1);
-        
+
         glDisable(GL_TEXTURE_2D);
-                
+
         glScalef(1, 1, 0.2);
-        
+
         App::GetSingleton().graphicsTask->squarelist2.Call(0);
-        
-        
+
         glEnable(GL_BLEND);
         glEnable(GL_DEPTH_TEST);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         glDepthMask(GL_FALSE);
-        
-        glColor4f(r2, g2, b2, 0.1f + power/1000);
-        
+
+        glColor4f(r2, g2, b2, 0.1f + power / 1000);
+
         App::GetSingleton().graphicsTask->squarelist.Call(0);
-        
-        
+
         glDisable(GL_BLEND);
         glDepthMask(GL_TRUE);
         glEnable(GL_CULL_FACE);
-        
+
         glPopMatrix();
     }
-    
 }
