@@ -1,20 +1,19 @@
 
 #ifdef _WIN32
-    // If building in windows:
+// If building in windows:
 #include <windows.h>
 #include <GL/gl.h>
 #elif __APPLE__
-    // If building on macOS:
+// If building on macOS:
 #include <OpenGL/gl.h>
 #else
-    // If building on Linux:
+// If building on Linux:
 #include <GL/gl.h>
 #endif
 
 #include "App.h"
 #include "FXHandler.h"
 #include "LevelHandler.h"
-
 
 FX::FX()
 {
@@ -27,7 +26,6 @@ FX::FX()
 	alive = true;
 	type = FxType::TYPE_ZERO;
 }
-
 
 FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
@@ -93,9 +91,7 @@ void FX::SetMaxTime()
 
 FX::~FX()
 {
-
 }
-
 
 void FX::Update()
 {
@@ -135,9 +131,7 @@ void FX::Update()
 		g -= .5 * GlobalTimer::dT;
 		b -= .5 * GlobalTimer::dT;
 	}
-
 }
-
 
 void FX::Draw()
 {
@@ -190,20 +184,20 @@ void FX::Draw()
 
 	if (type == FxType::TYPE_DEATH)
 	{
-		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		// glCallList(App::GetSingleton().graphicsTask->squarelist2);
 		App::GetSingleton().graphicsTask->squarelist2.Call(0);
 	}
 
 	if (type == FxType::TYPE_ZERO)
 	{
-		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		// glCallList(App::GetSingleton().graphicsTask->squarelist2);
 		App::GetSingleton().graphicsTask->squarelist2.Call(0);
 	}
 
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
 		glScalef(0.02, 1, 0.2);
-		//glCallList(App::GetSingleton().graphicsTask->squarelist2);
+		// glCallList(App::GetSingleton().graphicsTask->squarelist2);
 	}
 
 	glEnable(GL_BLEND);
@@ -213,7 +207,7 @@ void FX::Draw()
 
 	glColor4f(r, g, b, a);
 
-	//glCallList(App::GetSingleton().graphicsTask->squarelist);
+	// glCallList(App::GetSingleton().graphicsTask->squarelist);
 	App::GetSingleton().graphicsTask->squarelist.Call(0);
 
 	glDisable(GL_BLEND);
@@ -222,9 +216,7 @@ void FX::Draw()
 	glEnable(GL_CULL_FACE);
 
 	glPopMatrix();
-
 }
-
 
 FXHandler::FXHandler()
 {
@@ -235,7 +227,6 @@ FXHandler::~FXHandler()
 {
 	fx.clear();
 }
-
 
 void FXHandler::NextFrame()
 {
@@ -281,8 +272,8 @@ void FXHandler::Draw()
 {
 	if (!fx.empty())
 	{
-		vector< FX >::iterator it;
-		for (it = fx.begin();it != fx.end();)
+		vector<FX>::iterator it;
+		for (it = fx.begin(); it != fx.end();)
 		{
 			if (it->alive)
 			{
