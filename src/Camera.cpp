@@ -15,7 +15,6 @@ Camera::Camera()
 
 Camera::~Camera()
 {
-
 }
 
 void Camera::SetPos(float x, float y, float z)

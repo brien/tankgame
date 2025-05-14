@@ -1,7 +1,8 @@
 #ifndef DisplayList_h
 #define DisplayList_h
 
-class DisplayList {
+class DisplayList
+{
 public:
     DisplayList(int num = 0);
     void BeginNewList();

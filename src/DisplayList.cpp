@@ -1,15 +1,15 @@
 #ifdef _WIN32
-    // If building in windows:
+// If building in windows:
 #pragma warning(disable : 4996)
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #elif __APPLE__
-    // If building on macOS:
+// If building on macOS:
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
-    // If building on Linux:
+// If building on Linux:
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
@@ -35,7 +35,7 @@ void DisplayList::NextNewList()
     enumIdx++;
     if (enumIdx >= idx + num || enumIdx < idx)
     {
-        //Can't create new list. Index out of bound.
+        // Can't create new list. Index out of bound.
         return;
     }
     glNewList(enumIdx, GL_COMPILE);
