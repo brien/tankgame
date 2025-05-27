@@ -13,7 +13,6 @@
 
 Logger::Logger()
 {
-
 }
 
 Logger &Logger::Get()
@@ -25,19 +24,19 @@ Logger &Logger::Get()
 bool Logger::Init()
 {
     appLog.open(logFilename);
-    
+
     return true;
 }
 
-void Logger::Write(const char* msg, ...)
+void Logger::Write(const char *msg, ...)
 {
-    va_list args; va_start(args,msg);
+    va_list args;
+    va_start(args, msg);
     char szBuf[1024];
-    vsprintf(szBuf,msg,args);
+    vsprintf(szBuf, msg, args);
     appLog << szBuf;
     std::cout << szBuf;
 #ifdef DEBUG
     appLog.flush();
 #endif
 }
-
