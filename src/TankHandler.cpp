@@ -344,7 +344,7 @@ void TankHandler::DrawTanks()
 {
     static float drift = 0;
 
-    for (int k = 0; k < numPlayers; k++)
+    for (int k = 0; k < numPlayers; ++k)
     {
         if (players[k].alive)
         {
@@ -519,12 +519,13 @@ void TankHandler::DrawTanks()
         glPopMatrix();
     }
 
-    for (vector<Tank>::iterator i = tanks.begin(); i != tanks.end(); ++i)
+    // Draw AI tanks
+    glEnable(GL_LIGHTING);
+    glDisable(GL_BLEND);
+    glDisable(GL_TEXTURE_2D);
+    for (const Tank &tank : tanks)
     {
-        glEnable(GL_LIGHTING);
-        glDisable(GL_BLEND);
-        glDisable(GL_TEXTURE_2D);
-        i->Draw();
+        tank.Draw();
     }
 }
 
@@ -532,24 +533,24 @@ void TankHandler::DrawBullets()
 {
     glDisable(GL_TEXTURE_2D);
 
-    for (vector<Tank>::iterator i = tanks.begin(); i != tanks.end(); ++i)
+    for (Tank &tank : tanks)
     {
-        for (vector<Bullet>::iterator j = i->bullets.begin(); j != i->bullets.end(); ++j)
+        for (Bullet &bullet : tank.bullets)
         {
-            if (j->alive)
+            if (bullet.alive)
             {
-                j->Draw();
+                bullet.Draw();
             }
         }
     }
 
     for (int k = 0; k < numPlayers; k++)
     {
-        for (vector<Bullet>::iterator j = players[k].bullets.begin(); j != players[k].bullets.end(); ++j)
+        for (Bullet &bullet : players[k].bullets)
         {
-            if (j->alive)
+            if (bullet.alive)
             {
-                j->Draw();
+                bullet.Draw();
             }
         }
     }

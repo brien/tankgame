@@ -2323,7 +2323,7 @@ Tank::~Tank()
     }
 }
 
-void Tank::Draw()
+void Tank::Draw() const
 {
 
     if (alive)

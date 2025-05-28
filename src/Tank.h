@@ -133,7 +133,7 @@ public:
 
     void NextFrame();
 
-    void Draw();
+    void Draw() const;
     void Draw2();
 
     int bonus;
