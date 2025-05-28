@@ -1,9 +1,9 @@
 #ifndef TEXTUREHANDLER_H_INCLUDED
 #define TEXTUREHANDLER_H_INCLUDED
 
-#define TGA_RGB		2
-#define TGA_A		3
-#define TGA_RLE		10
+#define TGA_RGB 2
+#define TGA_A 3
+#define TGA_RLE 10
 
 enum TextureNames
 {
@@ -42,9 +42,8 @@ struct tImageTGA
     int channels;
     int size_x;
     int size_y;
-    unsigned char* data;
+    unsigned char *data;
 };
-
 
 class TextureHandler
 {
@@ -54,13 +53,13 @@ public:
 
     void LoadTextures();
 
-    unsigned int* GetTextureArray() { return textureArray; }
+    unsigned int *GetTextureArray() { return textureArray; }
 
 private:
     unsigned int textureArray[32];
 
-    void TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap);
-    tImageTGA* Load_TGA(const char* strfilename);
+    void TGA_Texture(unsigned int textureArray[], const char *strFileName, int ID, bool wrap);
+    tImageTGA *Load_TGA(const char *strfilename);
 };
 
 #endif

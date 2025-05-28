@@ -1,17 +1,17 @@
 #ifdef _WIN32
-    // If building in windows:
-    #pragma warning(disable : 4996)
-    #include <windows.h>
-    #include <GL/gl.h>
-    #include <GL/glu.h>
+// If building in windows:
+#pragma warning(disable : 4996)
+#include <windows.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
 #elif __APPLE__
-    // If building on macOS:
-    #include <OpenGL/gl.h>
-    #include <OpenGL/glu.h>
+// If building on macOS:
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
 #else
-    // If building on Linux:
-    #include <GL/gl.h>
-    #include <GL/glu.h>
+// If building on Linux:
+#include <GL/gl.h>
+#include <GL/glu.h>
 #endif
 
 #include "TextureHandler.h"
@@ -21,16 +21,14 @@
 
 #include "App.h"
 
-typedef uint16_t WORD;  // WORD is typically a 16-bit unsigned integer
+typedef uint16_t WORD; // WORD is typically a 16-bit unsigned integer
 
 TextureHandler::TextureHandler()
 {
-
 }
 
 TextureHandler::~TextureHandler()
 {
-
 }
 
 void TextureHandler::LoadTextures()
@@ -64,21 +62,23 @@ void TextureHandler::LoadTextures()
     TGA_Texture(textureArray, "texture/9.tga", TEXTURE_NINE, true);
 }
 
-void TextureHandler::TGA_Texture(unsigned int textureArray[], const char* strFileName, int ID, bool wrap)
+void TextureHandler::TGA_Texture(unsigned int textureArray[], const char *strFileName, int ID, bool wrap)
 {
     if (!strFileName)
     {
         return;
     }
 
-    tImageTGA* pBitMap = Load_TGA(strFileName);
+    tImageTGA *pBitMap = Load_TGA(strFileName);
 
-    if (pBitMap == NULL)	return;
+    if (pBitMap == NULL)
+        return;
 
     glGenTextures(1, &textureArray[ID]);
     glBindTexture(GL_TEXTURE_2D, textureArray[ID]);
     int textureType = GL_RGB;
-    if (pBitMap->channels == 4)	textureType = GL_RGBA;
+    if (pBitMap->channels == 4)
+        textureType = GL_RGBA;
     gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -93,7 +93,6 @@ void TextureHandler::TGA_Texture(unsigned int textureArray[], const char* strFil
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     }
 
-
     if (pBitMap)
     {
         if (pBitMap->data)
@@ -104,11 +103,10 @@ void TextureHandler::TGA_Texture(unsigned int textureArray[], const char* strFil
     }
 }
 
-
-tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
+tImageTGA *TextureHandler::Load_TGA(const char *strfilename)
 {
-    tImageTGA* pImgData = NULL;
-    FILE* pFile = NULL;
+    tImageTGA *pImgData = NULL;
+    FILE *pFile = NULL;
 
     WORD width = 0;
     WORD height = 0;
@@ -119,16 +117,14 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
     int stride = 0;
     int i = 0;
 
-
     if ((pFile = fopen(strfilename, "rb")) == NULL)
     {
         std::cerr << "GraphicsTask:Load_TGA: Failed to open " << strfilename << std::endl;
-        //GuiTask::RenderSpacedBitmapString(30,30,10,(void *)GuiTask::font,"ERROR");
+        // GuiTask::RenderSpacedBitmapString(30,30,10,(void *)GuiTask::font,"ERROR");
         return NULL;
     }
 
-
-    pImgData = (tImageTGA*)malloc(sizeof(tImageTGA));
+    pImgData = (tImageTGA *)malloc(sizeof(tImageTGA));
 
     fread(&length, sizeof(unsigned char), 1, pFile);
 
@@ -156,7 +152,7 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
 
             for (int y = 0; y < height; y++)
             {
-                unsigned char* pLine = &(pImgData->data[stride * y]);
+                unsigned char *pLine = &(pImgData->data[stride * y]);
 
                 fread(pLine, stride, 1, pFile);
 
@@ -205,13 +201,12 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
         stride = channels * width;
 
         pImgData->data = new unsigned char[stride * height];
-        unsigned char* pColors = new unsigned char[channels];
+        unsigned char *pColors = new unsigned char[channels];
 
         while (i < width * height)
         {
 
             fread(&rleID, sizeof(unsigned char), 1, pFile);
-
 
             if (rleID < 128)
             {
@@ -225,7 +220,8 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
                     pImgData->data[colorsRead + 1] = pColors[1];
                     pImgData->data[colorsRead + 2] = pColors[0];
 
-                    if (bits == 32)	pImgData->data[colorsRead + 3] = pColors[3];
+                    if (bits == 32)
+                        pImgData->data[colorsRead + 3] = pColors[3];
 
                     i++;
                     rleID--;
@@ -244,7 +240,8 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
                     pImgData->data[colorsRead + 1] = pColors[1];
                     pImgData->data[colorsRead + 2] = pColors[0];
 
-                    if (bits == 32)	pImgData->data[colorsRead + 3] = pColors[3];
+                    if (bits == 32)
+                        pImgData->data[colorsRead + 3] = pColors[3];
 
                     i++;
                     rleID--;
@@ -255,7 +252,6 @@ tImageTGA* TextureHandler::Load_TGA(const char* strfilename)
     }
 
     fclose(pFile);
-
 
     pImgData->channels = channels;
     pImgData->size_x = width;
