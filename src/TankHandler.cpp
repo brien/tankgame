@@ -254,6 +254,23 @@ void TankHandler::NextFrame()
 
     if (!tanks.empty())
     {
+        auto update_player_target = [](Tank &player, const Tank &tank)
+        {
+            float dist = sqrt((tank.x - player.x) * (tank.x - player.x) + (tank.z - player.z) * (tank.z - player.z));
+            if (dist < player.dist)
+            {
+                player.dist = dist;
+                float ratio = (double)(player.z - tank.z) / (double)(player.x - tank.x);
+                float rtyp = toDegrees(atan(ratio));
+                if (tank.x < player.x)
+                {
+                    rtyp += 180;
+                }
+                player.rr = rtyp;
+                player.rrl = player.rr;
+            }
+        };
+
         vector<Tank>::iterator it;
         for (it = tanks.begin(); it != tanks.end();)
         {
@@ -262,44 +279,9 @@ void TankHandler::NextFrame()
                 it->AI();
                 it->NextFrame();
 
-                dist = sqrt((it->x - players[0].x) * (it->x - players[0].x) + (it->z - players[0].z) * (it->z - players[0].z));
-
-                if (dist < players[0].dist)
+                for (int p = 0; p < 2; ++p)
                 {
-                    players[0].dist = dist;
-
-                    float ratio = (double)(players[0].z - it->z) / (double)(players[0].x - it->x);
-
-                    float rtyp = toDegrees(atan(ratio));
-
-                    if (it->x < players[0].x)
-                    {
-                        rtyp += 180;
-                    }
-
-                    players[0].rr = rtyp;
-
-                    players[0].rrl = players[0].rr;
-                }
-
-                dist = sqrt((it->x - players[1].x) * (it->x - players[1].x) + (it->z - players[1].z) * (it->z - players[1].z));
-
-                if (dist < players[1].dist)
-                {
-                    players[1].dist = dist;
-
-                    float ratio = (double)(players[1].z - it->z) / (double)(players[1].x - it->x);
-
-                    float rtyp = toDegrees(atan(ratio));
-
-                    if (it->x < players[0].x)
-                    {
-                        rtyp += 180;
-                    }
-
-                    players[1].rr = rtyp;
-
-                    players[1].rrl = players[1].rr;
+                    update_player_target(players[p], *it);
                 }
 
                 ++it;
