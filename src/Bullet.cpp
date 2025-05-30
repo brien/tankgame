@@ -28,19 +28,19 @@
 #include "App.h"
 
 Bullet::Bullet()
+    : x(0.0f), y(0.0f), z(0.0f),
+      vx(0.0f), vy(0.0f), vz(0.0f),
+      rx(0.0f), ry(0.0f), rz(0.0f),
+      dty(0.0f),
+      r(0.5f), g(0.5f), b(0.5f),
+      r2(0.5f), g2(0.5f), b2(0.5f),
+      moveRate(33.0f), power(0.0f),
+      isSpecial(false),
+      id(0), tankId(0),
+      dT(0.0f), maxdT(100.0f),
+      numbounces(0), maxbounces(0),
+      alive(true)
 {
-    moveRate = 33;
-    alive = true;
-    isSpecial = false;
-    id = 0;
-    numbounces = 0;
-    maxbounces = 0;
-    r = g = b = .5;
-    r2 = g2 = b2 = .5;
-    dty = 0;
-
-    dT = 0;
-    maxdT = 100;
 }
 
 Bullet::Bullet(int tid, float power,
@@ -51,81 +51,43 @@ Bullet::Bullet(int tid, float power,
                float r2, float g2, float b2,
                float x, float y, float z,
                float rx, float ry, float rz)
+    : x(x), y(y), z(z),
+      vx(0.0f), vy(0.0f), vz(0.0f),
+      rx(rx), ry(ry), rz(rz),
+      dty(0.0f),
+      r(r), g(g), b(b),
+      r2(r2), g2(g2), b2(b2),
+      moveRate(33.0f), power(power),
+      isSpecial(false),
+      id(1), tankId(tid),
+      type1(type1), type2(type2),
+      dT(0.0f), maxdT(100.0f),
+      numbounces(0), maxbounces(maxbounces),
+      alive(true)
 {
-    this->moveRate = 33;
-    this->alive = true;
-    this->isSpecial = false;
-    this->id = 0;
-    this->numbounces = 0;
-    this->dty = 0;
-
-    this->dT = 0;
-    this->maxdT = 100;
-
-    this->tankId = tid;
-
-    this->x = x;
-    this->y = y;
-    this->z = z;
-
-    this->rx = rx;
-    this->ry = ry;
-    this->rz = rz;
-
-    this->power = power;
-
     if (type1 == TankType::TYPE_PURPLE)
     {
-        this->dty = 320 * dTpressed;
+        dty = 320 * dTpressed;
         if (dTpressed < 0)
-        {
             dTpressed *= -1;
-        }
         this->power *= dTpressed;
         if (this->power > 1000)
-        {
             this->power = 1000;
-        }
-
         if (this->power < 100)
-        {
             this->power = 100;
-        }
     }
     else if (type2 == TankType::TYPE_PURPLE)
     {
         this->power *= 0.5f;
-        this->dty = 160 * dTpressed;
+        dty = 160 * dTpressed;
         if (dTpressed < 0)
-        {
             dTpressed *= -1;
-        }
         this->power += this->power * dTpressed / 2;
         if (this->power > 1000)
-        {
             this->power = 1000;
-        }
         if (this->power < 100)
-        {
             this->power = 100;
-        }
     }
-
-    this->r = r;
-    this->b = b;
-    this->g = g;
-
-    this->r2 = r2;
-    this->b2 = b2;
-    this->g2 = g2;
-
-    this->maxbounces = maxbounces;
-
-    this->type1 = type1;
-    this->type2 = type2;
-
-    this->id = 1;
-    this->alive = true;
 }
 
 void Bullet::NextFrame()

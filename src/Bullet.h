@@ -23,36 +23,36 @@ public:
            float r2, float g2, float b2,
            float x, float y, float z,
            float rx, float ry, float rz);
+    ~Bullet() = default;
     void NextFrame();
     void Draw() const;
-    bool alive;
+    bool alive = true;
 
 private:
-    float x, y, z;
-    float vx, vy, vz;
-    float rx, ry, rz;
-    float dty;
+    float x = 0.0f, y = 0.0f, z = 0.0f;
+    float vx = 0.0f, vy = 0.0f, vz = 0.0f;
+    float rx = 0.0f, ry = 0.0f, rz = 0.0f;
+    float dty = 0.0f;
 
-    float r, g, b;
-    float r2, g2, b2;
+    float r = 0.5f, g = 0.5f, b = 0.5f;
+    float r2 = 0.5f, g2 = 0.5f, b2 = 0.5f;
 
-    float moveRate;
-    float power;
+    float moveRate = 33.0f;
+    float power = 0.0f;
 
-    bool isSpecial;
+    bool isSpecial = false;
 
-    int id;
-    int tankId;
+    int id = 0;
+    int tankId = 0;
 
     TankType type1;
     TankType type2;
 
-    float dT;
+    float dT = 0.0f;
+    float maxdT = 100.0f;
 
-    float maxdT;
-
-    int numbounces;
-    int maxbounces;
+    int numbounces = 0;
+    int maxbounces = 0;
 
     void HandleLevelCollision(float xpp, float zpp, float ory);
     void HandlePlayerCollision(Tank &playerTank);
