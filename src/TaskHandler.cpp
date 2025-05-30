@@ -18,15 +18,15 @@ int TaskHandler::Execute()
 {
     while(!taskList.empty())
     {
-        for( std::list<ITask*>::iterator it = taskList.begin(); it != taskList.end(); it++)
+        for(auto* task : taskList)
         {
-            if(!(*it)->canKill)
+            if(!task->canKill)
             {
-                (*it)->Update();
+                task->Update();
             }
         }
         
-        for( std::list<ITask*>::iterator it = taskList.begin(); it != taskList.end();)
+        for(auto it = taskList.begin(); it != taskList.end();)
         {
             if((*it)->canKill)
             {
@@ -36,7 +36,7 @@ int TaskHandler::Execute()
             }
             else
             {
-                it++;
+                ++it;
             }
         }
     }

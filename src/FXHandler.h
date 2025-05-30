@@ -1,5 +1,4 @@
-#ifndef FXHANDLER_H_INCLUDED
-#define FXHANDLER_H_INCLUDED
+#pragma once
 
 #include <vector>
 using namespace std;
@@ -58,5 +57,3 @@ public:
 
     void ClearFX();
 };
-
-#endif

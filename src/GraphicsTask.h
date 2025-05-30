@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef GraphicsTask_h
-#define GraphicsTask_h
+#pragma once
 
 #ifdef _WIN32
     // If building in windows:
@@ -81,4 +80,3 @@ private:
     void FixMesh(igtl_QGLMesh& mesh);
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
 };
-#endif /* GraphicsTask_h */

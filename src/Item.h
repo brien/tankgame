@@ -1,5 +1,4 @@
-#ifndef ITEM_H_INCLUDED
-#define ITEM_H_INCLUDED
+#pragma once
 
 #include "Tank.h"
 
@@ -19,5 +18,3 @@ public:
 
     void Draw();
 };
-
-#endif

@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef BSM_ITask_h
-#define BSM_ITask_h
+#pragma once
 
 class ITask
 {
@@ -25,5 +24,3 @@ public:
     bool canKill;
     long priority;
 };
-
-#endif /* BSM_ITask_h */

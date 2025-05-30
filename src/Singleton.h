@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef BSM_Singleton_h
-#define BSM_Singleton_h
+#pragma once
 
 #include <cassert>
 
@@ -56,5 +55,3 @@ public:
 
 template <typename T>
 T *Singleton<T>::m_singleton = 0;
-
-#endif /* BSM_Singleton_h */

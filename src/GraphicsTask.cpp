@@ -65,7 +65,7 @@ bool GraphicsTask::Start()
     
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity( );
-    float ratio = (float) (VideoTask::scrWidth) / (float) (VideoTask::scrHeight);
+    float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
     gluPerspective( 45.0, ratio, 0.1, 1024.0 );
     
     glEnable(GL_DEPTH_TEST);

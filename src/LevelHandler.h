@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef LEVELHANDLER_H_INCLUDED
-#define LEVELHANDLER_H_INCLUDED
+#pragma once
 
 #include <vector>
 using namespace std;
@@ -68,5 +67,3 @@ private:
     int t[MAX_SIZE_X][MAX_SIZE_Z];
     int f[MAX_SIZE_X][MAX_SIZE_Z];
 };
-
-#endif

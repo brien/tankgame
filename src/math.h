@@ -1,5 +1,4 @@
-#ifndef MATH_H_INCLUDED
-#define MATH_H_INCLUDED
+#pragma once
 
 const float PI = 3.141592f;
 const float DTR = 0.017453f;
@@ -205,5 +204,3 @@ float inline toDegrees(float val)
 {
     return val / (PI / 180);
 }
-
-#endif

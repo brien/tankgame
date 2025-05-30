@@ -1,5 +1,4 @@
-#ifndef TANK_CLASS_H_INCLUDED
-#define TANK_CLASS_H_INCLUDED
+#pragma once
 
 #include "igtl_qmesh.h"
 
@@ -142,5 +141,3 @@ public:
     float hitAlpha;
     int hitNum;
 };
-
-#endif

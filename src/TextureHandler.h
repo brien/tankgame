@@ -1,5 +1,4 @@
-#ifndef TEXTUREHANDLER_H_INCLUDED
-#define TEXTUREHANDLER_H_INCLUDED
+#pragma once
 
 #define TGA_RGB 2
 #define TGA_A 3
@@ -61,5 +60,3 @@ private:
     void TGA_Texture(unsigned int textureArray[], const char *strFileName, int ID, bool wrap);
     tImageTGA *Load_TGA(const char *strfilename);
 };
-
-#endif

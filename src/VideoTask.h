@@ -1,5 +1,4 @@
-#ifndef VIDEO_TASK_H
-#define VIDEO_TASK_H
+#pragma once
 
 #include <SDL2/SDL.h>
 #include "ITask.h"
@@ -22,5 +21,3 @@ protected:
     SDL_Renderer *sdlRenderer;
     SDL_GLContext glContext;
 };
-
-#endif // VIDEO_H

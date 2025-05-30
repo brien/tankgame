@@ -1,9 +1,4 @@
-// GameTask.h: interface for the GameTask class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#ifndef GAME_TASK_H_
-#define GAME_TASK_H_
+#pragma once
 
 #include "ITask.h"
 
@@ -39,5 +34,3 @@ public:
     bool gameStarted;
     
 };
-
-#endif

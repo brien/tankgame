@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef InputTask_h
-#define InputTask_h
+#pragma once
 
 #include <string>
 using namespace std;
@@ -59,5 +58,3 @@ public:
     static bool inline MouseUp(int button) { return (!CurMouse(button)) && (OldMouse(button)); }
     static bool inline MouseStillUp(int button) { return (!CurMouse(button)) && (!OldMouse(button)); }
 };
-
-#endif /* InputTask_h */

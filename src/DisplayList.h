@@ -1,5 +1,4 @@
-#ifndef DisplayList_h
-#define DisplayList_h
+#pragma once
 
 class DisplayList
 {
@@ -19,5 +18,3 @@ private:
     int idx;
     int enumIdx;
 };
-
-#endif /* DisplayList_h */

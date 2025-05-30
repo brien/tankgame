@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef Bullet_h
-#define Bullet_h
+#pragma once
 
 class Tank;
 enum class TankType;
@@ -58,5 +57,3 @@ private:
     void HandlePlayerCollision(Tank &playerTank);
     void HandleTankCollision(Tank &playerTank);
 };
-
-#endif /* Bullet_h */

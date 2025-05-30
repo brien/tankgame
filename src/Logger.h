@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef Logger_h
-#define Logger_h
+#pragma once
 
 #include <iostream>
 #include <fstream>
@@ -30,5 +29,3 @@ public:
 
     void Write(const char *msg, ...);
 };
-
-#endif /* Logger_h */

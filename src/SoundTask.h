@@ -1,9 +1,4 @@
-// SoundTask.h: interface for the SoundTask class.
-//
-//////////////////////////////////////////////////////////////////////
-
-#ifndef SOUND_TASK_H
-#define SOUND_TASK_H
+#pragma once
 
 #include <SDL2/SDL_mixer.h>
 #include "ITask.h"
@@ -63,5 +58,3 @@ public:
 
     int musicID;
 };
-
-#endif

@@ -261,8 +261,7 @@ void TankHandler::NextFrame()
             }
         };
 
-        vector<Tank>::iterator it;
-        for (it = tanks.begin(); it != tanks.end();)
+        for (auto it = tanks.begin(); it != tanks.end();)
         {
             if (it->alive)
             {

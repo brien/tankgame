@@ -25,7 +25,7 @@ void GlobalTimer::Update()
 {
     lastFrameIndex = thisFrameIndex;
     thisFrameIndex = SDL_GetTicks();
-    dT = ((float)(thisFrameIndex - lastFrameIndex)) / 1000.0f;
+    dT = static_cast<float>(thisFrameIndex - lastFrameIndex) / 1000.0f;
     dT *= 1.0f;
 }
 

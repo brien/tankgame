@@ -121,8 +121,8 @@ void Bullet::NextFrame()
         rz -= 360;
     }
 
-    float xpp = (GlobalTimer::dT * moveRate) * (float)cos(ry * DTR);
-    float zpp = (GlobalTimer::dT * moveRate) * (float)sin(ry * DTR);
+    float xpp = (GlobalTimer::dT * moveRate) * static_cast<float>(cos(ry * DTR));
+    float zpp = (GlobalTimer::dT * moveRate) * static_cast<float>(sin(ry * DTR));
 
     x += xpp;
     z += zpp;
@@ -176,7 +176,7 @@ void Bullet::HandleTankCollision(Tank &tank)
         {
             tank.energy -= power;
             TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1]++;
-            TankHandler::GetSingleton().combo[(-1 * tankId) - 1] += (float)TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] / 10;
+            TankHandler::GetSingleton().combo[(-1 * tankId) - 1] += static_cast<float>(TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1]) / 10;
 
             if (tankId < 0 && tank.energy <= 0)
             {
@@ -270,7 +270,7 @@ void Bullet::HandlePlayerCollision(Tank &playerTank)
             App::GetSingleton().soundTask->PlayChannel(8);
 
             TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1]++;
-            TankHandler::GetSingleton().combo[(-1 * tankId) - 1] += (float)TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] / 10;
+            TankHandler::GetSingleton().combo[(-1 * tankId) - 1] += static_cast<float>(TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1]) / 10;
         }
     }
     else
@@ -297,17 +297,17 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
     z -= zpp;
     if (numbounces < maxbounces)
     {
-        if ((int)(x + xpp) != (int)x && (int)(z + zpp) == (int)z)
+        if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) == static_cast<int>(z))
         {
             ry = -ry + 180;
         }
 
-        if ((int)(z + zpp) != (int)z && (int)(x + xpp) == (int)x)
+        if (static_cast<int>(z + zpp) != static_cast<int>(z) && static_cast<int>(x + xpp) == static_cast<int>(x))
         {
             ry = -ry;
         }
 
-        if ((int)(x + xpp) != (int)x && (int)(z + zpp) != (int)z)
+        if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) != static_cast<int>(z))
         {
             if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
             {
@@ -319,7 +319,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             }
         }
 
-        int dist = (int)sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
+        int dist = static_cast<int>(sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z)));
 
         if (dist > 128)
         {
@@ -395,9 +395,9 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     temp.ry = ry;
                     temp.rz = rz;
 
-                    temp.x = x + (.2 + i * .2 + numbounces * .2) * (float)cos((ry + 90) * DTR);
+                    temp.x = x + (.2 + i * .2 + numbounces * .2) * static_cast<float>(cos((ry + 90) * DTR));
                     temp.y = y;
-                    temp.z = z + (.2 + i * .2 + numbounces * .2) * (float)sin((ry + 90) * DTR);
+                    temp.z = z + (.2 + i * .2 + numbounces * .2) * static_cast<float>(sin((ry + 90) * DTR));
 
                     temp.power = power;
 

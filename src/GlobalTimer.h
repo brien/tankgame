@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef GlobalTimer_h
-#define GlobalTimer_h
+#pragma once
 
 #include "ITask.h"
 
@@ -28,5 +27,3 @@ public:
     static inline unsigned long TimeToIndex(float t) { return (unsigned long)(t * 1000.0f); }
     static inline float IndexToTime(unsigned long i) { return ((float)i) / 1000.0f; }
 };
-
-#endif /* GlobalTimer_h */

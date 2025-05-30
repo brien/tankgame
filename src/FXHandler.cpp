@@ -220,7 +220,7 @@ FXHandler::FXHandler()
 
 void FXHandler::NextFrame()
 {
-	for (vector<FX>::iterator j = fx.begin(); j != fx.end();)
+	for (auto j = fx.begin(); j != fx.end();)
 	{
 		if (j->time > j->maxTime)
 		{
@@ -230,7 +230,7 @@ void FXHandler::NextFrame()
 		if (j->alive)
 		{
 			j->Update();
-			j++;
+			++j;
 		}
 		else
 		{

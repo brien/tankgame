@@ -1,5 +1,4 @@
-#ifndef Camera_h
-#define Camera_h
+#pragma once
 
 class Camera
 {
@@ -30,5 +29,3 @@ public:
     float xzdist;
     float ydist;
 };
-
-#endif /* Camera_h */

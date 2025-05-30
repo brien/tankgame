@@ -507,12 +507,12 @@ void LevelHandler::GenerateTerrain()
 
 void LevelHandler::DrawItems()
 {
-    for (vector<Item>::iterator j = items.begin(); j != items.end();)
+    for (auto j = items.begin(); j != items.end();)
     {
         if (j->alive)
         {
             j->Draw();
-            j++;
+            ++j;
         }
         else
         {

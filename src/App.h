@@ -4,8 +4,7 @@
 //
 //
 
-#ifndef App_h
-#define App_h
+#pragma once
 
 #include "Singleton.h"
 #include "InputTask.h"
@@ -35,5 +34,3 @@ public:
     
     void Run(int argc, char *argv[]);
 };
-
-#endif /* App_h */

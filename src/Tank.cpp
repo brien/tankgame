@@ -1029,12 +1029,12 @@ void Tank::NextFrame()
             bulletq.pop();
         }
 
-        for (vector<Bullet>::iterator j = bullets.begin(); j != bullets.end();)
+        for (auto j = bullets.begin(); j != bullets.end();)
         {
             if (j->alive)
             {
                 j->NextFrame();
-                j++;
+                ++j;
             }
             else
             {

@@ -1,11 +1,10 @@
 //
-//  TaskHandler.hpp
+//  TaskHandler.h
 //  tankgame
 //
 //
 
-#ifndef TaskHandler_h
-#define TaskHandler_h
+#pragma once
 
 #include <list>
 
@@ -31,5 +30,3 @@ protected:
     std::list< ITask* > taskList;
     std::list< ITask* > pausedTaskList;
 };
-
-#endif /* TaskHandler_hpp */

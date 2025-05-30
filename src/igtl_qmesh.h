@@ -5,8 +5,7 @@
 //Bullet Description: A Generalized 3D simple mesh class
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef IGTL_3D_GENERIC_QUICK_MESH_H
-#define IGTL_3D_GENERIC_QUICK_MESH_H
+#pragma once
 
 //Define this to enable automatic simple OpenGL drawing (Debug utility)
 //#define IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
@@ -163,5 +162,3 @@ private:
 
 
 //#endif //IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
-
-#endif //IGTL_3D_GENERIC_QUICK_MESH_H
