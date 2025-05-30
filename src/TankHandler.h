@@ -1,6 +1,7 @@
 #ifndef TANKHANDLER_H_INCLUDED
 #define TANKHANDLER_H_INCLUDED
 
+#include <array>
 #include "Tank.h"
 #include "Singleton.h"
 
@@ -12,12 +13,12 @@ public:
 
     void Init();
 
-    Tank players[4];
-    float combo[2];
-    float special[2];
-    int comboNum[2];
-    int hitCombo[2];
-    int wins[2];
+    std::array<Tank, 4> players;
+    std::array<float, 2> combo;
+    std::array<float, 2> special;
+    std::array<int, 2> comboNum;
+    std::array<int, 2> hitCombo;
+    std::array<int, 2> wins;
 
     vector<Tank> tanks;
 
@@ -33,7 +34,7 @@ public:
 
     bool isInputJoy;
 
-    int diff;
+    int difficultySetting;
 
     int numPlayers;
     int numAttackingTanks;

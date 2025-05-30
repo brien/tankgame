@@ -18,21 +18,16 @@
 #include <string>
 
 TankHandler::TankHandler()
+    : numPlayers(1),
+      numAttackingTanks(0),
+      combo{0, 0},
+      special{0, 0},
+      comboNum{0, 0},
+      hitCombo{0, 0},
+      wins{0, 0},
+      isInputJoy(false),
+      difficultySetting(0)
 {
-    numPlayers = 1;
-    numAttackingTanks = 0;
-    isInputJoy = false;
-
-    combo[0] = 0;
-    combo[1] = 0;
-    comboNum[0] = 0;
-    comboNum[1] = 0;
-
-    hitCombo[0] = 0;
-    hitCombo[1] = 0;
-
-    wins[0] = 0;
-    wins[1] = 0;
 }
 
 TankHandler::~TankHandler()
@@ -87,13 +82,13 @@ void TankHandler::InitializePlayerTanks()
 
         players[j].SetType(players[j].type1, players[j].type2);
 
-        if (diff == 0)
+        if (difficultySetting == 0)
         {
             players[j].energyRegen *= 2;
             players[j].maxEnergy *= 3;
             players[j].energy *= 3;
         }
-        else if (diff == 1)
+        else if (difficultySetting == 1)
         {
             players[j].energyRegen *= 1.5;
             players[j].maxEnergy *= 1.5;

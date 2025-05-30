@@ -58,7 +58,7 @@ bool VideoTask::Start()
         scrWidth = 1280;
         scrHeight = 720;
 
-        TankHandler::GetSingleton().diff = 0;
+        TankHandler::GetSingleton().difficultySetting = 0;
         App::GetSingleton().soundTask->disable = false;
     }
     else
@@ -107,7 +107,7 @@ bool VideoTask::Start()
         fgets(line, 64, filein);
         fgets(line, 64, filein);
 
-        TankHandler::GetSingleton().diff = (line[0] - 48);
+        TankHandler::GetSingleton().difficultySetting = (line[0] - 48);
 
         fgets(line, 64, filein);
         fgets(line, 64, filein);
