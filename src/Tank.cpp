@@ -330,7 +330,7 @@ void Tank::Die()
     }
     if (TankHandler::GetSingleton().tanks.size() == 1 && id >= 0)
     {
-        LevelHandler::GetSingleton().SetTerrainHeight((int)x, (int)z, -20);
+        LevelHandler::GetSingleton().SetTerrainHeight(static_cast<int>(x), static_cast<int>(z), -20);
     }
 }
 
@@ -351,7 +351,7 @@ void Tank::Fire(float dTpressed)
 
         float dist = sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
 
-        Mix_SetPosition(2, ryp, 10 * (int)dist);
+        Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
 
         App::GetSingleton().soundTask->PlayChannel(2);
 
@@ -361,9 +361,9 @@ void Tank::Fire(float dTpressed)
                     dTpressed,
                     r, g, b,
                     r2, g2, b2,
-                    x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                    x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                     y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                    z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                     rtx + rx, rty + ry, rtz + rz);
 
         bullets.push_back(temp);
@@ -391,7 +391,7 @@ void Tank::Special(float dTpressed)
 
         float dist = sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
 
-        Mix_SetPosition(2, ryp, 10 * (int)dist);
+        Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
 
         App::GetSingleton().soundTask->PlayChannel(2);
 
@@ -401,9 +401,9 @@ void Tank::Special(float dTpressed)
                     dTpressed,
                     r, g, b,
                     r2, g2, b2,
-                    x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                    x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                     y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                    z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                     rtx + rx, rty + ry, rtz + rz);
 
         if (type1 == TankType::TYPE_RED)
@@ -422,15 +422,13 @@ void Tank::Special(float dTpressed)
                 bullets.push_back(temp2);
             }
 
-            bullets.push_back(temp);
-
-            Bullet temp(id, attack, type1, type2, bounces,
+            bullets.push_back(temp);                Bullet temp(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
-                        x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                         rtx + rx, rty + ry - 10, rtz + rz);
 
             bullets.push_back(temp);
@@ -439,9 +437,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                          rtx + rx, rty + ry + 20, rtz + rz);
 
             bullets.push_back(temp2);
@@ -455,9 +453,9 @@ void Tank::Special(float dTpressed)
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
-                            x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                            x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                             y + .50,
-                            z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                            z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                             rtx + rx, rty + ry, rtz + rz);
 
                 bullets.push_back(temp);
@@ -467,9 +465,9 @@ void Tank::Special(float dTpressed)
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
-                        x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR) + .2 * (float)cos((rty + ry + 90) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)) + .2 * static_cast<float>(cos((rty + ry + 90) * DTR)),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR) + .2 * (float)sin((rty + ry + 90) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)) + .2 * static_cast<float>(sin((rty + ry + 90) * DTR)),
                         rtx + rx, rty + ry, rtz + rz);
 
             bullets.push_back(temp);
@@ -483,9 +481,9 @@ void Tank::Special(float dTpressed)
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
-                            x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                            x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                             y + .25,
-                            z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                            z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                             rtx + rx, rty + ry, rtz + rz);
 
                 bullets.push_back(temp);
@@ -500,9 +498,9 @@ void Tank::Special(float dTpressed)
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
-                        x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                         rtx + rx, rty + ry, rtz + rz);
 
             bullets.push_back(temp);
@@ -511,9 +509,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                          rtx + rx, rty + ry - 90, rtz + rz);
 
             bullets.push_back(temp1);
@@ -522,9 +520,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                          rtx + rx, rty + ry + 180, rtz + rz);
 
             bullets.push_back(temp2);
@@ -533,9 +531,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * (float)cos((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * (float)sin((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
                          rtx + rx, rty + ry + 90, rtz + rz);
 
             bullets.push_back(temp3);
@@ -587,7 +585,7 @@ void Tank::Fall()
 
     if (LevelHandler::GetSingleton().FloatCollision(x, y + .2, z) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[0], y + .2, z + collisionPoints[2]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[3], y + .2, z + collisionPoints[5]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[6], y + .2, z + collisionPoints[8]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[9], y + .2, z + collisionPoints[11]))
     {
-        y = (int)y + .8;
+        y = static_cast<int>(y) + .8;
         vy = 0;
     }
 
@@ -596,26 +594,26 @@ void Tank::Fall()
     if (LevelHandler::GetSingleton().FloatCollision(x, y, z) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
     {
 
-        highest = LevelHandler::GetSingleton().GetFloatHeight((int)x, (int)z);
+        highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x), static_cast<int>(z));
 
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[0]), (int)(z + collisionPoints[2])))
+        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2])))
         {
-            highest = LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[0]), (int)(z + collisionPoints[2]));
+            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2]));
         }
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[3]), (int)(z + collisionPoints[5])))
+        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5])))
         {
-            highest = LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[3]), (int)(z + collisionPoints[5]));
+            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5]));
         }
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[6]), (int)(z + collisionPoints[8])))
+        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8])))
         {
-            highest = LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[6]), (int)(z + collisionPoints[8]));
+            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8]));
         }
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[9]), (int)(z + collisionPoints[11])))
+        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11])))
         {
-            highest = LevelHandler::GetSingleton().GetFloatHeight((int)(x + collisionPoints[9]), (int)(z + collisionPoints[11]));
+            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11]));
         }
 
-        y = (float)highest;
+        y = static_cast<float>(highest);
 
         if (!grounded)
         {
@@ -638,26 +636,26 @@ void Tank::Fall()
     {
 
         // Find the height of the highest collision point
-        highest = LevelHandler::GetSingleton().GetTerrainHeight((int)x, (int)z);
+        highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x), static_cast<int>(z));
 
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[0]), (int)(z + collisionPoints[2])))
+        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2])))
         {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[0]), (int)(z + collisionPoints[2]));
+            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2]));
         }
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[3]), (int)(z + collisionPoints[5])))
+        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5])))
         {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[3]), (int)(z + collisionPoints[5]));
+            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5]));
         }
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[6]), (int)(z + collisionPoints[8])))
+        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8])))
         {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[6]), (int)(z + collisionPoints[8]));
+            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8]));
         }
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[9]), (int)(z + collisionPoints[11])))
+        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11])))
         {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight((int)(x + collisionPoints[9]), (int)(z + collisionPoints[11]));
+            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11]));
         }
 
-        y = (float)highest;
+        y = static_cast<float>(highest);
 
         if (highest < -10 && (id == -1 || id == -2))
         {
@@ -906,7 +904,7 @@ void Tank::Jump()
 
         if (LevelHandler::GetSingleton().FloatCollision(x, y + .2, z) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[0], y + .2, z + collisionPoints[2]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[3], y + .2, z + collisionPoints[5]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[6], y + .2, z + collisionPoints[8]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[9], y + .2, z + collisionPoints[11]))
         {
-            y = (int)y + .8;
+            y = static_cast<int>(y) + .8;
             vy = 0;
         }
 
@@ -1060,8 +1058,8 @@ bool Tank::Move(float rate)
 
     bool moved = true;
 
-    vx = rate * (GlobalTimer::dT * movRate) * (float)cos(ry * DTR);
-    vz = rate * (GlobalTimer::dT * movRate) * (float)sin(ry * DTR);
+    vx = rate * (GlobalTimer::dT * movRate) * static_cast<float>(cos(ry * DTR));
+    vz = rate * (GlobalTimer::dT * movRate) * static_cast<float>(sin(ry * DTR));
 
     x += vx;
     z += vz;
@@ -1107,19 +1105,19 @@ bool Tank::Move(float rate)
         x -= vx;
         z -= vz;
 
-        if ((int)(x + collisionPoints[kx] + vx) != (int)(x + collisionPoints[kx]) && (int)(z + collisionPoints[kz] + vz) == (int)(z + collisionPoints[kz]))
+        if (static_cast<int>(x + collisionPoints[kx] + vx) != static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) == static_cast<int>(z + collisionPoints[kz]))
         {
             z += vz / 2;
             done = true;
         }
         // else
-        if ((int)(x + collisionPoints[kx] + vx) == (int)(x + collisionPoints[kx]) && (int)(z + collisionPoints[kz] + vz) != (int)(z + collisionPoints[kz]))
+        if (static_cast<int>(x + collisionPoints[kx] + vx) == static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) != static_cast<int>(z + collisionPoints[kz]))
         {
             x += vx / 2;
             done = true;
         }
         // else
-        if ((int)(x + collisionPoints[kx] + vx) != (int)(x + collisionPoints[kx]) && (int)(z + collisionPoints[kz] + vz) != (int)(z + collisionPoints[kz]))
+        if (static_cast<int>(x + collisionPoints[kx] + vx) != static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) != static_cast<int>(z + collisionPoints[kz]))
         {
             if (LevelHandler::GetSingleton().PointCollision((x + vx + collisionPoints[kx]), y, z + collisionPoints[kz]) && !LevelHandler::GetSingleton().PointCollision(x + collisionPoints[kx], y, z + vz + collisionPoints[kz]))
             {
@@ -1157,8 +1155,8 @@ bool Tank::Move(bool forb)
 {
     bool moved;
 
-    vx = (GlobalTimer::dT * movRate) * (float)cos(ry * DTR);
-    vz = (GlobalTimer::dT * movRate) * (float)sin(ry * DTR);
+    vx = (GlobalTimer::dT * movRate) * static_cast<float>(cos(ry * DTR));
+    vz = (GlobalTimer::dT * movRate) * static_cast<float>(sin(ry * DTR));
 
     if (forb)
     {

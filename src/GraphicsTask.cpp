@@ -165,7 +165,7 @@ void GraphicsTask::Update()
     {
         glMatrixMode( GL_PROJECTION );
         glLoadIdentity( );
-        float ratio = (float) (VideoTask::scrWidth) / (float) (VideoTask::scrHeight/2);
+        float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight/2);
         gluPerspective( 45.0, ratio, 0.1, 1024.0 );
     }
 
@@ -184,15 +184,15 @@ void GraphicsTask::Update()
         for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
         {
             cams[i].SetPos(
-                TankHandler::GetSingleton().players[i].x - cams[i].xzdist * (float)cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR),
+                TankHandler::GetSingleton().players[i].x - cams[i].xzdist * static_cast<float>(cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)),
                 TankHandler::GetSingleton().players[i].y + cams[i].ydist,
-                TankHandler::GetSingleton().players[i].z - cams[i].xzdist * (float)sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)
+                TankHandler::GetSingleton().players[i].z - cams[i].xzdist * static_cast<float>(sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR))
             );
             
             cams[i].SetFocus(
-                TankHandler::GetSingleton().players[i].x + (float)cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR),
+                TankHandler::GetSingleton().players[i].x + static_cast<float>(cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)),
                 TankHandler::GetSingleton().players[i].y + 0.3f,
-                TankHandler::GetSingleton().players[i].z + (float)sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)
+                TankHandler::GetSingleton().players[i].z + static_cast<float>(sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR))
             );
         }
     }
@@ -489,7 +489,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glVertex3f(player.x,player.y+.1,player.z);
     glColor3f(0.0f,0.0f,0.0f);
-    glVertex3f(player.x + 32*(float)cos((player.ry+player.rty)*DTR),player.y+.1, player.z + 32*(float)sin((player.ry+player.rty)*DTR));
+    glVertex3f(player.x + 32*static_cast<float>(cos((player.ry+player.rty)*DTR)),player.y+.1, player.z + 32*static_cast<float>(sin((player.ry+player.rty)*DTR)));
     
     glEnd();
     
@@ -523,16 +523,16 @@ void GraphicsTask::DrawHUD(Tank& player)
     //Reload
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
-    glVertex3f(-0.55f,0.37f,(float)0);
+    glVertex3f(-0.55f,0.37f,static_cast<float>(0));
     
     glTexCoord2f(1, 1);
-    glVertex3f(-0.55f+0.03f,0.37f,(float)0);
+    glVertex3f(-0.55f+0.03f,0.37f,static_cast<float>(0));
 				
     glTexCoord2f(1, 0);
-    glVertex3f(-0.55f+0.03f,0.34f,(float)0);
+    glVertex3f(-0.55f+0.03f,0.34f,static_cast<float>(0));
     
     glTexCoord2f(0, 0);
-    glVertex3f(-0.55f,0.34f,(float)0);
+    glVertex3f(-0.55f,0.34f,static_cast<float>(0));
     glEnd();
     
     glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BANG]);
@@ -541,16 +541,16 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
-    glVertex3f(-0.55f,0.32f,(float)0);
+    glVertex3f(-0.55f,0.32f,static_cast<float>(0));
     
     glTexCoord2f(1, 1);
-    glVertex3f(-0.55f+0.03f,0.32f,(float)0);
+    glVertex3f(-0.55f+0.03f,0.32f,static_cast<float>(0));
 				
     glTexCoord2f(1, 0);
-    glVertex3f(-0.55f+0.03f,0.29f,(float)0);
+    glVertex3f(-0.55f+0.03f,0.29f,static_cast<float>(0));
     
     glTexCoord2f(0, 0);
-    glVertex3f(-0.55f,0.29f,(float)0);
+    glVertex3f(-0.55f,0.29f,static_cast<float>(0));
     glEnd();
     
     glDisable(GL_TEXTURE_2D);
@@ -612,7 +612,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     //Armor
     //Reload
-    float amer=((float)player.energy/player.maxEnergy);
+    float amer=(static_cast<float>(player.energy)/player.maxEnergy);
     if(amer>1)
     {
         amer=1;
@@ -636,7 +636,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glBegin(GL_QUADS);
     
     //Reload
-    float rper=((float)player.charge/player.maxCharge);
+    float rper=(static_cast<float>(player.charge)/player.maxCharge);
     
     if(rper>1)
         rper=1;
@@ -651,7 +651,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     if(App::GetSingleton().gameTask->debug)
     {
         //RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug Mode");
-        float test=(2*(float)GlobalTimer::dT);
+        float test=(2*static_cast<float>(GlobalTimer::dT));
         //if(test>1)test=1;
         glColor3f(1.0f,test,1.0f);
         glVertex3f(0.50f,-0.30f,0);
@@ -730,16 +730,16 @@ void GraphicsTask::DrawHUD(Tank& player)
      
      glBegin(GL_QUADS);
      glTexCoord2f(0, 1);
-     glVertex3f((float)0,(float).04,(float)0);
+     glVertex3f(static_cast<float>(0),static_cast<float>(.04),static_cast<float>(0));
      
      glTexCoord2f(1, 1);
-     glVertex3f((float).04,(float).04,(float)0);
+     glVertex3f(static_cast<float>(.04),static_cast<float>(.04),static_cast<float>(0));
      
      glTexCoord2f(1, 0);
-     glVertex3f((float).04,(float)0,(float)0);
+     glVertex3f(static_cast<float>(.04),static_cast<float>(0),static_cast<float>(0));
      
      glTexCoord2f(0, 0);
-     glVertex3f((float)0,(float)0,(float)0);
+     glVertex3f(static_cast<float>(0),static_cast<float>(0),static_cast<float>(0));
      
      glEnd();
      
