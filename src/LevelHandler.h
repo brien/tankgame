@@ -16,7 +16,7 @@ class LevelHandler : public Singleton<LevelHandler>
 {
 public:
     LevelHandler();
-    ~LevelHandler();
+    ~LevelHandler() = default;
 
     vector<Item> items;
 

@@ -43,7 +43,7 @@ class Tank
 {
 public:
     Tank();
-    ~Tank();
+    ~Tank() = default;
 
     vector<Bullet> bullets;
     queue<Bullet> bulletq;

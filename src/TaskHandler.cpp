@@ -13,11 +13,6 @@ TaskHandler::TaskHandler()
 
 }
 
-TaskHandler::~TaskHandler()
-{
-    
-}
-
 
 int TaskHandler::Execute()
 {

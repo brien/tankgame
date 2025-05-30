@@ -55,10 +55,6 @@ void LevelHandler::Init()
     drawTop = false;
 }
 
-LevelHandler::~LevelHandler()
-{
-}
-
 bool LevelHandler::Load(const char filePath[])
 {
 
@@ -1120,6 +1116,7 @@ void LevelHandler::DrawTerrain()
         {
             if (t[ix][iz] != lastY && ix != sx)
             {
+
                 if (t[ix][iz] < 0)
                 {
                     glBegin(GL_QUADS);
@@ -1593,6 +1590,7 @@ void LevelHandler::DrawTerrain_OLD()
         {
             if (t[ix][iz] != lastY && ix != sx)
             {
+
                 if (t[ix][iz] < 0)
                 {
                     glBegin(GL_QUADS);

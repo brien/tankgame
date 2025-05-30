@@ -8,7 +8,7 @@ class VideoTask : public ITask
 {
 public:
     VideoTask();
-    virtual ~VideoTask();
+    ~VideoTask() = default;
 
     static int scrWidth, scrHeight, scrBPP;
 

@@ -1,4 +1,3 @@
-
 #ifdef _WIN32
 // If building in windows:
 #include <windows.h>
@@ -87,10 +86,6 @@ void FX::SetMaxTime()
 	{
 		maxTime = 0.3;
 	}
-}
-
-FX::~FX()
-{
 }
 
 void FX::Update()
@@ -221,11 +216,6 @@ void FX::Draw()
 FXHandler::FXHandler()
 {
 	fx.reserve(128);
-}
-
-FXHandler::~FXHandler()
-{
-	fx.clear();
 }
 
 void FXHandler::NextFrame()

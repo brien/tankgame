@@ -13,10 +13,6 @@ Camera::Camera()
     xzdist = 2;
 }
 
-Camera::~Camera()
-{
-}
-
 void Camera::SetPos(float x, float y, float z)
 {
     _xpos = x;

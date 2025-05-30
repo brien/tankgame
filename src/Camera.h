@@ -14,7 +14,7 @@ private:
 
 public:
     Camera();
-    ~Camera();
+    ~Camera() = default;
 
     const float xpos() const { return _xpos; }
     const float ypos() const { return _ypos; }

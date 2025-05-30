@@ -21,7 +21,7 @@ private:
 
 public:
     InputTask();
-    virtual ~InputTask();
+    ~InputTask() = default;
 
     bool Start();
     void Update();

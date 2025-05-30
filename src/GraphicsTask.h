@@ -32,7 +32,7 @@ class GraphicsTask : public ITask
 {
 public:
     GraphicsTask();
-    virtual ~GraphicsTask();
+    ~GraphicsTask() = default;
 
     TextureHandler textureHandler;
     TTF_Font *defaultFont;

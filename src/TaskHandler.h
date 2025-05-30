@@ -17,7 +17,7 @@ class TaskHandler : public Singleton<TaskHandler>
 {
 public:
     TaskHandler();
-    virtual ~TaskHandler();
+    ~TaskHandler() = default;
     
     int Execute();
     

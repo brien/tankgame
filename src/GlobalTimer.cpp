@@ -15,10 +15,6 @@ GlobalTimer::GlobalTimer()
 {
 }
 
-GlobalTimer::~GlobalTimer()
-{
-}
-
 bool GlobalTimer::Start()
 {
     Reset();

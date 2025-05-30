@@ -53,12 +53,6 @@ GraphicsTask::GraphicsTask()
 }
 
 
-GraphicsTask::~GraphicsTask()
-{
-    TTF_CloseFont(defaultFont);
-}
-
-
 bool GraphicsTask::Start()
 {
     Logger::Get().Write("GraphicsTask::Starting\n");
@@ -154,7 +148,8 @@ void GraphicsTask::FixMesh(igtl_QGLMesh& mesh)
 
 void GraphicsTask::Stop()
 {
-
+    Logger::Get().Write("GraphicsTask: ClosingFont \n");
+    TTF_CloseFont(defaultFont);
 }
 
 

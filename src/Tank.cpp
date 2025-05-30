@@ -2308,21 +2308,6 @@ void Tank::Hunt(Tank &player)
     }
 }
 
-Tank::~Tank()
-{
-    /*	for(vector<Bullet*>::iterator j = bullets.begin(); j != bullets.end(); ++j)
-     {
-     delete (*j);
-     }
-     bullets.empty();*/
-    bullets.clear();
-    while (!bulletq.empty())
-    {
-        bullets.push_back(bulletq.front());
-        bulletq.pop();
-    }
-}
-
 void Tank::Draw() const
 {
 

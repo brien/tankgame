@@ -12,7 +12,7 @@ class SoundTask : public ITask
 {
 public:
     SoundTask();
-    virtual ~SoundTask();
+    ~SoundTask() = default;
 
     bool Start();
     void OnSuspend();

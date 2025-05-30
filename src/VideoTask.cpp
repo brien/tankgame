@@ -15,10 +15,6 @@ VideoTask::VideoTask()
 {
 }
 
-VideoTask::~VideoTask()
-{
-}
-
 bool VideoTask::Start()
 {
 

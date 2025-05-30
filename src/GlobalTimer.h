@@ -13,7 +13,7 @@ class GlobalTimer : public ITask
 {
 public:
     GlobalTimer();
-    virtual ~GlobalTimer();
+    ~GlobalTimer() = default;
 
     static float dT;
     static unsigned long lastFrameIndex;

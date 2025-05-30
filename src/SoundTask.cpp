@@ -17,10 +17,6 @@ SoundTask::SoundTask()
     disable = false;
 }
 
-SoundTask::~SoundTask()
-{
-}
-
 bool SoundTask::Start()
 {
     if (!disable)

@@ -25,10 +25,6 @@ InputTask::InputTask()
 {
 }
 
-InputTask::~InputTask()
-{
-}
-
 bool InputTask::Start()
 {
     for (int i = 0; i < SDL_NumJoysticks(); i++)
