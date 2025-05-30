@@ -326,7 +326,7 @@ void Bullet::HandlePlayerCollision(Tank &playerTank)
             }
             alive = false;
         }
-    }
+    }  
 }
 
 void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
@@ -567,7 +567,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
     }
 }
 
-void Bullet::Draw()
+void Bullet::Draw() const
 {
 
     glColor3f(r, g, b);

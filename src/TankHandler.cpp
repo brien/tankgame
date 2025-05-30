@@ -30,11 +30,6 @@ TankHandler::TankHandler()
 {
 }
 
-TankHandler::~TankHandler()
-{
-    tanks.clear();
-}
-
 void TankHandler::Init()
 {
     InitializePlayerTanks();
@@ -317,7 +312,7 @@ void TankHandler::NextFrame()
     LevelHandler::GetSingleton().ItemCollision();
 }
 
-void TankHandler::DrawTanks()
+void TankHandler::DrawTanks() const
 {
     static float drift = 0;
 
@@ -506,13 +501,13 @@ void TankHandler::DrawTanks()
     }
 }
 
-void TankHandler::DrawBullets()
+void TankHandler::DrawBullets() const
 {
     glDisable(GL_TEXTURE_2D);
 
-    for (Tank &tank : tanks)
+    for (const Tank &tank : tanks)
     {
-        for (Bullet &bullet : tank.bullets)
+        for (const Bullet &bullet : tank.bullets)
         {
             if (bullet.alive)
             {
@@ -523,7 +518,7 @@ void TankHandler::DrawBullets()
 
     for (int k = 0; k < numPlayers; k++)
     {
-        for (Bullet &bullet : players[k].bullets)
+        for (const Bullet &bullet : players[k].bullets)
         {
             if (bullet.alive)
             {

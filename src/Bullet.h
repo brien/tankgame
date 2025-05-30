@@ -24,7 +24,7 @@ public:
            float x, float y, float z,
            float rx, float ry, float rz);
     void NextFrame();
-    void Draw();
+    void Draw() const;
     bool alive;
 
 private:
