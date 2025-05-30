@@ -505,17 +505,17 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
         }
 
-        if ((int)(x + xpp) != (int)x && (int)(z + zpp) == (int)z)
+        if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) == static_cast<int>(z))
         {
             FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
         }
 
-        if ((int)(z + zpp) != (int)z && (int)(x + xpp) == (int)x)
+        if (static_cast<int>(z + zpp) != static_cast<int>(z) && static_cast<int>(x + xpp) == static_cast<int>(x))
         {
             FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
         }
 
-        if ((int)(x + xpp) != (int)x && (int)(z + zpp) != (int)z)
+        if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) != static_cast<int>(z))
         {
             if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
             {
