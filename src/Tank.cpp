@@ -361,9 +361,9 @@ void Tank::Fire(float dTpressed)
                     dTpressed,
                     r, g, b,
                     r2, g2, b2,
-                    x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                     y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                     rtx + rx, rty + ry, rtz + rz);
 
         bullets.push_back(temp);
@@ -401,9 +401,9 @@ void Tank::Special(float dTpressed)
                     dTpressed,
                     r, g, b,
                     r2, g2, b2,
-                    x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                     y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                     rtx + rx, rty + ry, rtz + rz);
 
         if (type1 == TankType::TYPE_RED)
@@ -426,9 +426,9 @@ void Tank::Special(float dTpressed)
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
-                        x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry - 10, rtz + rz);
 
             bullets.push_back(temp);
@@ -437,9 +437,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 20, rtz + rz);
 
             bullets.push_back(temp2);
@@ -453,9 +453,9 @@ void Tank::Special(float dTpressed)
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
-                            x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                            x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                             y + .50,
-                            z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                            z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
 
                 bullets.push_back(temp);
@@ -465,9 +465,9 @@ void Tank::Special(float dTpressed)
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
-                        x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)) + .2 * static_cast<float>(cos((rty + ry + 90) * DTR)),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR) + .2 * std::cosf((rty + ry + 90) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)) + .2 * static_cast<float>(sin((rty + ry + 90) * DTR)),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR) + .2 * std::sinf((rty + ry + 90) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
             bullets.push_back(temp);
@@ -481,9 +481,9 @@ void Tank::Special(float dTpressed)
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
-                            x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                            x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                             y + .25,
-                            z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                            z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
 
                 bullets.push_back(temp);
@@ -498,9 +498,9 @@ void Tank::Special(float dTpressed)
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
-                        x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
             bullets.push_back(temp);
@@ -509,9 +509,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry - 90, rtz + rz);
 
             bullets.push_back(temp1);
@@ -520,9 +520,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 180, rtz + rz);
 
             bullets.push_back(temp2);
@@ -531,9 +531,9 @@ void Tank::Special(float dTpressed)
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
-                         x + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(cos((rty + ry) * DTR)),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * static_cast<float>(sin((rty + ry) * DTR)),
+                         z + (GlobalTimer::dT * bulletMovRate) *std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 90, rtz + rz);
 
             bullets.push_back(temp3);
@@ -1042,8 +1042,8 @@ bool Tank::Move(float rate)
 
     bool moved = true;
 
-    vx = rate * (GlobalTimer::dT * movRate) * static_cast<float>(cos(ry * DTR));
-    vz = rate * (GlobalTimer::dT * movRate) * static_cast<float>(sin(ry * DTR));
+    vx = rate * (GlobalTimer::dT * movRate) * std::cosf(ry * DTR);
+    vz = rate * (GlobalTimer::dT * movRate) * std::sinf(ry * DTR);
 
     x += vx;
     z += vz;
@@ -1139,8 +1139,8 @@ bool Tank::Move(bool forb)
 {
     bool moved;
 
-    vx = (GlobalTimer::dT * movRate) * static_cast<float>(cos(ry * DTR));
-    vz = (GlobalTimer::dT * movRate) * static_cast<float>(sin(ry * DTR));
+    vx = (GlobalTimer::dT * movRate) * std::cosf(ry * DTR);
+    vz = (GlobalTimer::dT * movRate) * std::sinf(ry * DTR);
 
     if (forb)
     {
@@ -1157,27 +1157,27 @@ bool Tank::Move(bool forb)
     // TODO: Use rotated points (calculated here for the points at which treadmark FX should be spawned) for collision instead of world-aligned points.
     //  These are four points .25 units away from the center of the tank, at 90 degrees
     //  Point one:
-    // float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
+    // float treadPointX = 0.25 * (float)std::cosf((ry + 45) * DTR);
     // float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
     //  Point two:
-    // treadPointX = 0.25 * (float)cos((ry + 135) * DTR);
+    // treadPointX = 0.25 * (float)std::cosf((ry + 135) * DTR);
     // treadPointZ = 0.25 * (float)sin((ry + 135) * DTR);
     //  Point three:
-    // treadPointX = 0.25 * (float)cos((ry + 225) * DTR);
+    // treadPointX = 0.25 * (float)std::cosf((ry + 225) * DTR);
     // treadPointZ = 0.25 * (float)sin((ry + 225) * DTR);
     //  Point four:
-    // treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
+    // treadPointX = 0.25 * (float)std::cosf((ry + 315) * DTR);
     // treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
 
     if (isPlayer && grounded)
     {
-        float treadPointX = 0.25 * (float)cos((ry + 45) * DTR);
-        float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
+        float treadPointX = 0.25f * std::cosf((ry + 45) * DTR);
+        float treadPointZ = 0.25f * std::sinf((ry + 45) * DTR);
 
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
 
-        treadPointX = 0.25 * (float)cos((ry + 315) * DTR);
-        treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
+        treadPointX = 0.25f * std::cosf((ry + 315) * DTR);
+        treadPointZ = 0.25f * std::sinf((ry + 315) * DTR);
 
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
     }
@@ -1740,11 +1740,11 @@ void Tank::Wander()
 {
     float angle = 20;
     float frames = 15;
-    float xpp = x + (GlobalTimer::dT * frames * movRate) * (float)cos((ry - angle) * DTR);
-    float zpp = z + (GlobalTimer::dT * frames * movRate) * (float)sin((ry - angle) * DTR);
+    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry - angle) * DTR);
+    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry - angle) * DTR);
 
-    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * (float)cos((ry + angle) * DTR);
-    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * (float)sin((ry + angle) * DTR);
+    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry + angle) * DTR);
+    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry + angle) * DTR);
 
     Move(true);
 
@@ -1802,11 +1802,11 @@ void Tank::Fear()
 
     float angle = 30;
     float frames = 20;
-    float xpp = x + (GlobalTimer::dT * frames * movRate) * (float)cos((ry - angle) * DTR);
-    float zpp = z + (GlobalTimer::dT * frames * movRate) * (float)sin((ry - angle) * DTR);
+    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry - angle) * DTR);
+    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry - angle) * DTR);
 
-    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * (float)cos((ry + angle) * DTR);
-    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * (float)sin((ry + angle) * DTR);
+    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry + angle) * DTR);
+    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry + angle) * DTR);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
@@ -1866,8 +1866,8 @@ void Tank::Hunt(Tank &player)
 
     rty = rtyp;
 
-    xpp = x + (GlobalTimer::dT * 10 * movRate) * (float)cos(ry * DTR);
-    zpp = z + (GlobalTimer::dT * 10 * movRate) * (float)sin(ry * DTR);
+    xpp = x + (GlobalTimer::dT * 10 * movRate) * std::cosf(ry * DTR);
+    zpp = z + (GlobalTimer::dT * 10 * movRate) * std::sinf(ry * DTR);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp))
     {
