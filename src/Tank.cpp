@@ -1157,17 +1157,17 @@ bool Tank::Move(bool forb)
     // TODO: Use rotated points (calculated here for the points at which treadmark FX should be spawned) for collision instead of world-aligned points.
     //  These are four points .25 units away from the center of the tank, at 90 degrees
     //  Point one:
-    // float treadPointX = 0.25 * (float)std::cosf((ry + 45) * DTR);
-    // float treadPointZ = 0.25 * (float)sin((ry + 45) * DTR);
+    // float treadPointX = 0.25 * std::cosf((ry + 45) * DTR);
+    // float treadPointZ = 0.25 * std::sinf((ry + 45) * DTR);
     //  Point two:
-    // treadPointX = 0.25 * (float)std::cosf((ry + 135) * DTR);
-    // treadPointZ = 0.25 * (float)sin((ry + 135) * DTR);
+    // treadPointX = 0.25 * std::cosf((ry + 135) * DTR);
+    // treadPointZ = 0.25 *  std::sinf((ry + 135) * DTR);
     //  Point three:
-    // treadPointX = 0.25 * (float)std::cosf((ry + 225) * DTR);
-    // treadPointZ = 0.25 * (float)sin((ry + 225) * DTR);
+    // treadPointX = 0.25 * std::cosf((ry + 225) * DTR);
+    // treadPointZ = 0.25 *  std::sinf((ry + 225) * DTR);
     //  Point four:
-    // treadPointX = 0.25 * (float)std::cosf((ry + 315) * DTR);
-    // treadPointZ = 0.25 * (float)sin((ry + 315) * DTR);
+    // treadPointX = 0.25 * std::cosf((ry + 315) * DTR);
+    // treadPointZ = 0.25 *  std::sinf((ry + 315) * DTR);
 
     if (isPlayer && grounded)
     {
@@ -1416,7 +1416,7 @@ void Tank::HandleInput()
         }
         else if (InputTask::GetButton(jid, 3) || InputTask::GetButton(jid, 0) || InputTask::GetButton(jid, 7)) //|| InputTask::GetButton(jid,0))
         {
-            Fire(1);
+            Fire(1.0f);
         }
 
         if ((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && (InputTask::GetButton(jid, 5) || InputTask::GetButton(jid, 11)))
@@ -1425,7 +1425,7 @@ void Tank::HandleInput()
         }
         else if (InputTask::GetButton(jid, 5) || InputTask::GetButton(jid, 11))
         {
-            Special(1);
+            Special(1.0f);
         }
 
         if (InputTask::GetAxis(jid, 1) < -5000) // SDL_JoystickGetButton(App::GetSingleton().inputTask->joysticks[jid], 2) )//InputTask::GetAxis(jid,0)==0)//|| SDL_JoystickGetHat(App::GetSingleton().inputTask->joysticks[jid], 0) == SDL_HAT_UP)
