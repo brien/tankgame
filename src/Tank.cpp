@@ -18,6 +18,8 @@
 #include "TankHandler.h"
 #include "TankTypeManager.h"
 #include "TankRenderer.h"
+#include "InputHandler.h"
+#include "InputHandlerFactory.h"
 
 void Tank::SetType(TankType t1, TankType t2)
 {
@@ -89,6 +91,12 @@ void Tank::SetTankColors(TankType primary, TankType secondary)
 
     setColor(primary, r, g, b);
     setColor(secondary, r2, g2, b2);
+}
+
+void Tank::SetInputMode(InputMode mode)
+{
+    inputMode = mode;
+    inputHandler = InputHandlerFactory::CreateInputHandler(mode);
 }
 
 void Tank::Die()
@@ -563,11 +571,130 @@ Tank::Tank()
     isPlayer = false;
 
     collisionPoints[21] = {0};
+    
+    // Initialize input handler after setting inputMode
+    inputHandler = InputHandlerFactory::CreateInputHandler(inputMode);
+}
+
+Tank::~Tank()
+{
+    // Destructor implementation - required for proper destruction of unique_ptr<InputHandler>
+    // The InputHandler's destructor will be called automatically
+}
+
+Tank::Tank(Tank&& other) noexcept
+    : bullets(std::move(other.bullets)),
+      bulletq(std::move(other.bulletq)),
+      isPlayer(other.isPlayer),
+      turbo(other.turbo),
+      recharge(other.recharge),
+      charge(other.charge),
+      maxCharge(other.maxCharge),
+      chargeRegen(other.chargeRegen),
+      fireCost(other.fireCost),
+      jumpCost(other.jumpCost),
+      moveCost(other.moveCost),
+      chargeCost(other.chargeCost),
+      fireTimer(other.fireTimer),
+      fireRate(other.fireRate),
+      bounces(other.bounces),
+      attack(other.attack),
+      alive(other.alive),
+      energy(other.energy),
+      maxEnergy(other.maxEnergy),
+      energyRegen(other.energyRegen),
+      id(other.id),
+      x(other.x), y(other.y), z(other.z),
+      vx(other.vx), vy(other.vy), vz(other.vz),
+      size(other.size),
+      control(other.control),
+      inputMode(other.inputMode),
+      jid(other.jid),
+      inputHandler(std::move(other.inputHandler)),
+      rx(other.rx), ry(other.ry), rz(other.rz), rr(other.rr), rrl(other.rrl),
+      rtx(other.rtx), rty(other.rty), rtz(other.rtz),
+      rotRate(other.rotRate), movRate(other.movRate), jumpRate(other.jumpRate),
+      fallRate(other.fallRate),
+      type1(other.type1),
+      type2(other.type2),
+      r(other.r), g(other.g), b(other.b),
+      r2(other.r2), g2(other.g2), b2(other.b2),
+      dist(other.dist),
+      isJumping(other.isJumping),
+      grounded(other.grounded),
+      jumpTime(other.jumpTime),
+      bonus(other.bonus),
+      bonusTime(other.bonusTime),
+      deadtime(other.deadtime),
+      hitAlpha(other.hitAlpha),
+      hitNum(other.hitNum)
+{
+    // Copy collision points array
+    for (int i = 0; i < 21; ++i) {
+        collisionPoints[i] = other.collisionPoints[i];
+    }
+}
+
+Tank& Tank::operator=(Tank&& other) noexcept
+{
+    if (this != &other) {
+        bullets = std::move(other.bullets);
+        bulletq = std::move(other.bulletq);
+        isPlayer = other.isPlayer;
+        turbo = other.turbo;
+        recharge = other.recharge;
+        charge = other.charge;
+        maxCharge = other.maxCharge;
+        chargeRegen = other.chargeRegen;
+        fireCost = other.fireCost;
+        jumpCost = other.jumpCost;
+        moveCost = other.moveCost;
+        chargeCost = other.chargeCost;
+        fireTimer = other.fireTimer;
+        fireRate = other.fireRate;
+        bounces = other.bounces;
+        attack = other.attack;
+        alive = other.alive;
+        energy = other.energy;
+        maxEnergy = other.maxEnergy;
+        energyRegen = other.energyRegen;
+        id = other.id;
+        x = other.x; y = other.y; z = other.z;
+        vx = other.vx; vy = other.vy; vz = other.vz;
+        size = other.size;
+        control = other.control;
+        inputMode = other.inputMode;
+        jid = other.jid;
+        inputHandler = std::move(other.inputHandler);
+        rx = other.rx; ry = other.ry; rz = other.rz; rr = other.rr; rrl = other.rrl;
+        rtx = other.rtx; rty = other.rty; rtz = other.rtz;
+        rotRate = other.rotRate; movRate = other.movRate; jumpRate = other.jumpRate;
+        fallRate = other.fallRate;
+        type1 = other.type1;
+        type2 = other.type2;
+        r = other.r; g = other.g; b = other.b;
+        r2 = other.r2; g2 = other.g2; b2 = other.b2;
+        dist = other.dist;
+        isJumping = other.isJumping;
+        grounded = other.grounded;
+        jumpTime = other.jumpTime;
+        bonus = other.bonus;
+        bonusTime = other.bonusTime;
+        deadtime = other.deadtime;
+        hitAlpha = other.hitAlpha;
+        hitNum = other.hitNum;
+        
+        // Copy collision points array
+        for (int i = 0; i < 21; ++i) {
+            collisionPoints[i] = other.collisionPoints[i];
+        }
+    }
+    return *this;
 }
 
 void Tank::Init()
 {
-    inputMode = InputMode::MODE_KEYBOARD_MOUSE;
+    SetInputMode(InputMode::MODE_KEYBOARD_MOUSE);
 
     deadtime = 0.0f;
 
@@ -1079,384 +1206,16 @@ bool Tank::Move(bool forb)
 
 void Tank::HandleInput()
 {
-    if (inputMode == InputMode::MODE_KEYBOARD_MOUSE)
+    // Use the appropriate input handler based on current input mode
+    if (inputHandler)
     {
-        RotTurret(InputTask::dX * 2);
-
-        if ((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(1))
-        {
-            Fire(InputTask::dX * GlobalTimer::dT);
-        }
-        else if (InputTask::MouseStillDown(1))
-        {
-            Fire(1);
-        }
-
-        if ((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(3))
-        {
-            Special(InputTask::dX * GlobalTimer::dT);
-        }
-        else if (InputTask::MouseStillDown(3))
-        {
-            Special(1);
-        }
-        if (InputTask::KeyDown(SDL_SCANCODE_T))
-        {
-            float oldy;
-
-            oldy = y;
-
-            LevelHandler::GetSingleton().NextLevel(true);
-            x = LevelHandler::GetSingleton().start[0];
-            z = LevelHandler::GetSingleton().start[1];
-            y = oldy;
-        }
-
-        if (InputTask::KeyStillDown(SDL_SCANCODE_W))
-        {
-            Move(true);
-            if (turbo)
-            {
-                Move(true);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-        if (InputTask::KeyStillDown(SDL_SCANCODE_A))
-        {
-            RotBody(false);
-            if (turbo)
-            {
-                RotBody(false);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-        if (InputTask::KeyStillDown(SDL_SCANCODE_D))
-        {
-            RotBody(true);
-            if (turbo)
-            {
-                RotBody(true);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-        if (InputTask::KeyStillDown(SDL_SCANCODE_S))
-        {
-            Move(false);
-            if (turbo)
-            {
-                Move(false);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-
-        if (InputTask::KeyStillDown(SDL_SCANCODE_SPACE))
-        {
-            Jump();
-            if (turbo)
-            {
-                Jump();
-            }
-        }
-        else
-        {
-            isJumping = false;
-        }
-        if (InputTask::KeyStillDown(SDL_SCANCODE_LEFT))
-        {
-            RotTurret(-200.0f * GlobalTimer::dT);
-            if (turbo)
-            {
-                RotTurret(-300.0f * GlobalTimer::dT);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-        if (InputTask::KeyStillDown(SDL_SCANCODE_RIGHT))
-        {
-            RotTurret(200.0f * GlobalTimer::dT);
-            if (turbo)
-            {
-                RotTurret(300.0f * GlobalTimer::dT);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-
-        if (InputTask::CurKey(SDL_SCANCODE_LSHIFT) && charge > 0)
-        {
-            turbo = true;
-        }
-        else
-            turbo = false;
-
-        if (InputTask::KeyStillDown(SDL_SCANCODE_UP))
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist += 10 * GlobalTimer::dT;
-        }
-        if (InputTask::KeyStillDown(SDL_SCANCODE_DOWN))
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist -= 10 * GlobalTimer::dT;
-        }
-
-        if (InputTask::KeyDown(SDL_SCANCODE_C))
-        {
-            if (App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist > 20)
-            {
-                App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 0.1;
-            }
-            else if (App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist <= 0.1)
-            {
-                App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 1.5;
-            }
-            else if (App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist <= 1.5)
-            {
-                App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 2.0;
-            }
-            else if (App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist <= 2.0)
-            {
-                App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 4.0;
-            }
-            else if (App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist <= 4.0)
-            {
-                App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 8.0;
-            }
-            else if (App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist <= 8.0)
-            {
-                App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 20.2;
-            }
-        }
-    }
-    else if (inputMode == InputMode::MODE_JOYSTICK_GENERIC || inputMode == InputMode::MODE_EXTREME_3D || inputMode == InputMode::MODE_OTHER) // Jay's flight stick + PS2, P880 stupid mode
-    {
-        if ((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && (InputTask::GetButton(jid, 0) || InputTask::GetButton(jid, 3) || InputTask::GetButton(jid, 7)))
-        {
-            Fire((float)InputTask::GetAxis(jid, 3) / (float)3200);
-        }
-        else if (InputTask::GetButton(jid, 3) || InputTask::GetButton(jid, 0) || InputTask::GetButton(jid, 7)) //|| InputTask::GetButton(jid,0))
-        {
-            Fire(1.0f);
-        }
-
-        if ((type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE) && (InputTask::GetButton(jid, 5) || InputTask::GetButton(jid, 11)))
-        {
-            Special((float)InputTask::GetAxis(jid, 3) / (float)3200);
-        }
-        else if (InputTask::GetButton(jid, 5) || InputTask::GetButton(jid, 11))
-        {
-            Special(1.0f);
-        }
-
-        if (InputTask::GetAxis(jid, 1) < -5000) // SDL_JoystickGetButton(App::GetSingleton().inputTask->joysticks[jid], 2) )//InputTask::GetAxis(jid,0)==0)//|| SDL_JoystickGetHat(App::GetSingleton().inputTask->joysticks[jid], 0) == SDL_HAT_UP)
-        {
-            Move(-1.0f * (float)InputTask::GetAxis(jid, 1) / (float)20000); // true);
-            if (turbo && charge > 0)
-            {
-                Move(true);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-        if (InputTask::GetAxis(jid, 0) < -8000)
-        {
-            RotBody((float)InputTask::GetAxis(jid, 0) / (float)32000);
-        }
-        if (InputTask::GetAxis(jid, 0) > 8000)
-        {
-            RotBody((float)InputTask::GetAxis(jid, 0) / (float)32000);
-        }
-        if (InputTask::GetAxis(jid, 1) > 8000)
-        {
-            Move(false);
-            if (turbo && charge > 0)
-            {
-                Move(false);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-
-        if (InputTask::GetButton(jid, 1) || InputTask::GetButton(jid, 2) || InputTask::GetButton(jid, 6))
-        {
-            Jump();
-            if (turbo && charge > 0)
-            {
-                Jump();
-            }
-        }
-        if (inputMode == InputMode::MODE_JOYSTICK_GENERIC)
-        {
-            if (InputTask::GetAxis(jid, 2) < -6000)
-            {
-                RotTurret((float)InputTask::GetAxis(jid, 2) / (float)3200);
-            }
-            if (InputTask::GetAxis(jid, 2) > 6000)
-            {
-                RotTurret((float)InputTask::GetAxis(jid, 2) / (float)3200);
-            }
-        }
-        else
-        {
-            if (InputTask::GetAxis(jid, 3) < -5000)
-            {
-                RotTurret((float)InputTask::GetAxis(jid, 3) / (float)3200);
-            }
-            if (InputTask::GetAxis(jid, 3) > 5000)
-            {
-                RotTurret((float)InputTask::GetAxis(jid, 3) / (float)3200);
-            }
-        }
-
-        if (charge > 0 && (InputTask::GetButton(jid, 4) || InputTask::GetButton(jid, 10)))
-        {
-            turbo = true;
-        }
-        else
-        {
-            turbo = false;
-        }
-
-        if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_UP)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 0.8;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 1.0;
-        }
-        else if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_DOWN)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 1.2;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 2;
-        }
-        else if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_LEFT)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 3.2;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 2.2;
-        }
-        else if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_RIGHT)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 20.2;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 0.2;
-        }
-    }
-    else if (inputMode == InputMode::MODE_NINTENDO_GC) // NGC
-    {
-        if (InputTask::GetButton(jid, 0) || InputTask::GetButton(jid, 7) || InputTask::GetAxis(jid, 3) > -5000)
-        {
-            if (type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE)
-            {
-                Fire((float)InputTask::GetAxis(jid, 2) / (float)6400);
-            }
-            else
-            {
-                Fire(1);
-            }
-        }
-
-        if (InputTask::GetButton(jid, 5) || InputTask::GetButton(jid, 6))
-        {
-            if (type1 == TankType::TYPE_PURPLE || type2 == TankType::TYPE_PURPLE)
-            {
-                Special((float)InputTask::GetAxis(jid, 2) / (float)6000);
-            }
-            else
-            {
-                Special(1);
-            }
-
-            /*if( InputTask::MouseStillDown(1))
-             {
-             firePressed+=GlobalTimer::dT;
-             }
-             else if(InputTask::MouseUp(1) )
-             {
-             Fire(firePressed);
-             firePressed=0;
-             }*/
-        }
-
-        if (InputTask::GetAxis(jid, 1) < -4000) // SDL_JoystickGetButton(App::GetSingleton().inputTask->joysticks[jid], 2) )//InputTask::GetAxis(jid,0)==0)//|| SDL_JoystickGetHat(App::GetSingleton().inputTask->joysticks[jid], 0) == SDL_HAT_UP)
-        {
-            Move(-1.0f * (float)InputTask::GetAxis(jid, 1) / (float)18000); // true);
-            if (turbo)
-            {
-                Move(true);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-        if (InputTask::GetAxis(jid, 0) < -8000)
-        {
-            RotBody((float)InputTask::GetAxis(jid, 0) / (float)28000); // RotBody(false);
-        }
-        if (InputTask::GetAxis(jid, 0) > 8000)
-        {
-            RotBody((float)InputTask::GetAxis(jid, 0) / (float)28000); // RotBody(true);
-        }
-        if (InputTask::GetAxis(jid, 1) > 8000)
-        {
-            Move(false);
-            if (turbo)
-            {
-                Move(false);
-                charge -= jumpCost * GlobalTimer::dT;
-            }
-        }
-
-        if (InputTask::GetButton(jid, 1))
-        {
-            Jump();
-            if (turbo)
-            {
-                Jump();
-            }
-        }
-
-        if (InputTask::GetAxis(jid, 2) < -6000)
-        {
-            RotTurret((float)InputTask::GetAxis(jid, 2) / (float)2500);
-        }
-        if (InputTask::GetAxis(jid, 2) > 6000)
-        {
-            RotTurret((float)InputTask::GetAxis(jid, 2) / (float)2500);
-        }
-
-        if (InputTask::GetAxis(jid, 4) > 5000)
-        {
-            Jump();
-            if (turbo)
-            {
-                Jump();
-            }
-        }
-
-        if (charge > 0 && (InputTask::GetButton(jid, 3) || InputTask::GetButton(jid, 2)))
-        {
-            turbo = true;
-        }
-        else
-        {
-            turbo = false;
-        }
-
-        if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_UP)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 0.8;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 1.0;
-        }
-        else if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_DOWN)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 1.2;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 2;
-        }
-        else if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_LEFT)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 3.2;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 2.2;
-        }
-        else if (SDL_JoystickGetHat(InputTask::joysticks[jid], 0) == SDL_HAT_RIGHT)
-        {
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].ydist = 20.2;
-            App::GetSingleton().graphicsTask->cams[-1 * (id + 1)].xzdist = 0.2;
-        }
+        inputHandler->HandleInput(*this);
     }
 
+    // Common debug controls that apply to all input modes
     if (InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->debug)
     {
         TankHandler::GetSingleton().special[0] += 100;
-
         energy += maxEnergy * 20;
         charge += maxCharge * 20;
     }
@@ -1464,14 +1223,14 @@ void Tank::HandleInput()
     if (InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->debug)
     {
         TankHandler::GetSingleton().special[0] = 10;
-
         energy = maxEnergy;
         charge = maxCharge;
     }
 
+    // Allow switching to keyboard/mouse mode from other input modes
     if (InputTask::KeyDown(SDL_SCANCODE_K) && inputMode != InputMode::MODE_KEYBOARD_MOUSE)
     {
-        inputMode = InputMode::MODE_KEYBOARD_MOUSE;
+        SetInputMode(InputMode::MODE_KEYBOARD_MOUSE);
     }
 }
 

@@ -4,11 +4,13 @@
 
 #include <vector>
 #include <queue>
+#include <memory>
 using namespace std;
 #include "Bullet.h"
 
-// Forward declaration
+// Forward declarations
 class TankRenderer;
+class InputHandler;
 
 enum class EnemyState
 {
@@ -45,7 +47,15 @@ class Tank
 {
 public:
     Tank();
-    ~Tank() = default;
+    ~Tank();
+    
+    // Delete copy constructor and copy assignment operator
+    Tank(const Tank&) = delete;
+    Tank& operator=(const Tank&) = delete;
+    
+    // Move constructor and move assignment operator
+    Tank(Tank&&) noexcept;
+    Tank& operator=(Tank&&) noexcept;
 
     vector<Bullet> bullets;
     queue<Bullet> bulletq;
@@ -88,6 +98,7 @@ public:
     int control;
     InputMode inputMode;
     unsigned int jid;
+    std::unique_ptr<InputHandler> inputHandler;
 
     float rx, ry, rz, rr, rrl;
     float rtx, rty, rtz;
@@ -114,6 +125,7 @@ public:
 
     void SetType(TankType t1, TankType t2);
     void SetTankColors(TankType t1, TankType t2);
+    void SetInputMode(InputMode mode);
 
     TankType type1;
     TankType type2;

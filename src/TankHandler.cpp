@@ -17,6 +17,7 @@
 #include "math.h"
 #include "App.h"
 #include <string>
+#include <utility>
 
 TankHandler::TankHandler()
     : numPlayers(1),
@@ -75,7 +76,7 @@ void TankHandler::InitializePlayerTanks()
 
         players[j].jid = j;
 
-        players[j].inputMode = j == 0 ? InputMode::MODE_KEYBOARD_MOUSE : InputMode::MODE_JOYSTICK_GENERIC;
+        players[j].SetInputMode(j == 0 ? InputMode::MODE_KEYBOARD_MOUSE : InputMode::MODE_JOYSTICK_GENERIC);
 
         players[j].SetType(players[j].type1, players[j].type2);
 
@@ -104,42 +105,42 @@ void TankHandler::InitializePlayerControls()
         {
             players[1].jid = 0;
             if (InputTask::joynames[0].find("PS2") != string::npos || InputTask::joynames[0].find("MP-8866") != string::npos)
-                players[1].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
+                players[1].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
             else if (InputTask::joynames[0].find("Extreme 3D") != string::npos)
-                players[1].inputMode = InputMode::MODE_EXTREME_3D;
+                players[1].SetInputMode(InputMode::MODE_EXTREME_3D);
             else if (InputTask::joynames[0].find("NGC") != string::npos || InputTask::joynames[0].find("GameCube") != string::npos)
-                players[1].inputMode = InputMode::MODE_NINTENDO_GC;
+                players[1].SetInputMode(InputMode::MODE_NINTENDO_GC);
         }
         if (SDL_NumJoysticks() > 1)
         {
             players[0].jid = 1;
             players[1].jid = 0;
-            players[0].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
-            players[1].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
+            players[0].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
+            players[1].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
             if (InputTask::joynames[0].find("PlayStation") != string::npos || InputTask::joynames[0].find("Playstation") != string::npos || InputTask::joynames[1].find("PS2") != string::npos || InputTask::joynames[1].find("MP-8866") != string::npos)
-                players[0].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
+                players[0].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
             else if (InputTask::joynames[1].find("Extreme 3D") != string::npos)
-                players[0].inputMode = InputMode::MODE_EXTREME_3D;
+                players[0].SetInputMode(InputMode::MODE_EXTREME_3D);
             else if (InputTask::joynames[1].find("NGC") != string::npos || InputTask::joynames[1].find("GameCube") != string::npos)
-                players[0].inputMode = InputMode::MODE_NINTENDO_GC;
+                players[0].SetInputMode(InputMode::MODE_NINTENDO_GC);
 
             if (InputTask::joynames[0].find("PS2") != string::npos || InputTask::joynames[0].find("MP-8866") != string::npos)
-                players[1].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
+                players[1].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
             else if (InputTask::joynames[0].find("Extreme 3D") != string::npos)
-                players[1].inputMode = InputMode::MODE_EXTREME_3D;
+                players[1].SetInputMode(InputMode::MODE_EXTREME_3D);
             else if (InputTask::joynames[0].find("NGC") != string::npos || InputTask::joynames[0].find("GameCube") != string::npos)
-                players[1].inputMode = InputMode::MODE_NINTENDO_GC;
+                players[1].SetInputMode(InputMode::MODE_NINTENDO_GC);
         }
     }
     else if (SDL_NumJoysticks() > 0 && isInputJoy)
     {
-        players[0].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
+        players[0].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
         if (InputTask::joynames[0].find("PlayStation") != string::npos || InputTask::joynames[0].find("Playstation") != string::npos || InputTask::joynames[0].find("PS2") != string::npos || InputTask::joynames[0].find("MP-8866") != string::npos)
-            players[0].inputMode = InputMode::MODE_JOYSTICK_GENERIC;
+            players[0].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
         else if (InputTask::joynames[0].find("Extreme 3D") != string::npos)
-            players[0].inputMode = InputMode::MODE_EXTREME_3D;
+            players[0].SetInputMode(InputMode::MODE_EXTREME_3D);
         else if (InputTask::joynames[0].find("NGC") != string::npos || InputTask::joynames[0].find("GameCube") != string::npos)
-            players[0].inputMode = InputMode::MODE_NINTENDO_GC;
+            players[0].SetInputMode(InputMode::MODE_NINTENDO_GC);
     }
 }
 
@@ -194,7 +195,7 @@ void TankHandler::InitializeEnemyTanks()
         }
         tempTank.jumpCost = 0;
 
-        tanks.push_back(tempTank);
+        tanks.emplace_back(std::move(tempTank));
     }
 }
 
