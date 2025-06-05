@@ -7,6 +7,9 @@
 using namespace std;
 #include "Bullet.h"
 
+// Forward declaration
+class TankRenderer;
+
 enum class EnemyState
 {
     STATE_WANDER,
