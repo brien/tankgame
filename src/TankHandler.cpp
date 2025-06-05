@@ -11,6 +11,7 @@
 #endif
 
 #include "TankHandler.h"
+#include "TankTypeManager.h"
 #include "LevelHandler.h"
 #include "GlobalTimer.h"
 #include "math.h"
@@ -32,6 +33,7 @@ TankHandler::TankHandler()
 
 void TankHandler::Init()
 {
+    TankTypeManager::Initialize();
     InitializePlayerTanks();
     InitializePlayerControls();
     InitializeEnemyTanks();

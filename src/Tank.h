@@ -110,6 +110,7 @@ public:
     void Die();
 
     void SetType(TankType t1, TankType t2);
+    void SetTankColors(TankType t1, TankType t2);
 
     TankType type1;
     TankType type2;

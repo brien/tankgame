@@ -16,264 +16,78 @@
 #include "LevelHandler.h"
 #include "FXHandler.h"
 #include "TankHandler.h"
+#include "TankTypeManager.h"
 
 void Tank::SetType(TankType t1, TankType t2)
 {
     type1 = t1;
     type2 = t2;
 
+    // Common initialization
     movRate = 5;
     jumpCost = 250;
-
     jumpRate = 18.0f;
     fallRate = 16.0f;
 
-    if (type1 == TankType::TYPE_GREY)
+    // Apply type-specific configuration
+    auto config = TankTypeManager::GetConfig(t1, t2);
+    fireRate = config.fireRate;
+    attack = config.attack;
+    maxCharge = config.maxCharge;
+    chargeRegen = config.chargeRegen;
+    moveCost = config.moveCost;
+    fireCost = config.maxCharge / 10.0f;
+    chargeCost = config.chargeCost;
+    bounces = config.bounces;
+
+    // Set colors
+    SetTankColors(t1, t2);
+}
+
+void Tank::SetTankColors(TankType primary, TankType secondary)
+{
+    auto setColor = [](TankType type, float &r, float &g, float &b)
     {
-        fireRate = .5;
-
-        attack = 250;
-        maxCharge = 100;
-
-        chargeRegen = 50;
-
-        moveCost = 0;
-        fireCost = maxCharge / 4;
-        chargeCost = 200;
-    }
-
-    if (type1 == TankType::TYPE_RED)
-    {
-        fireRate = .05;
-
-        attack = 100;
-        maxCharge = 100;
-
-        chargeRegen = 60;
-
-        moveCost = 0;
-        fireCost = maxCharge / 10;
-        chargeCost = 200;
-
-        bounces = 0;
-
-        if (type2 == TankType::TYPE_GREY)
+        switch (type)
         {
-            fireRate = .05;
-            attack = attack / 2;
-            fireCost *= 2;
+        case TankType::TYPE_GREY:
+            r = 0.5f;
+            g = 0.5f;
+            b = 0.5f;
+            break;
+        case TankType::TYPE_RED:
+            r = 1.0f;
+            g = 0.0f;
+            b = 0.0f;
+            break;
+        case TankType::TYPE_BLUE:
+            r = 0.0f;
+            g = 0.0f;
+            b = 1.0f;
+            break;
+        case TankType::TYPE_YELLOW:
+            r = 1.0f;
+            g = 1.0f;
+            b = 0.0f;
+            break;
+        case TankType::TYPE_PURPLE:
+            r = 1.0f;
+            g = 0.0f;
+            b = 1.0f;
+            break;
+        case TankType::TANK_TYPE_COUNT:
+            r = 0.0f;
+            g = 1.0f;
+            b = 0.0f;
+            break;
+        default:
+            r = g = b = 1.0f;
+            break;
         }
+    };
 
-        if (type2 == TankType::TYPE_BLUE)
-        {
-            attack = 200;
-            fireCost = maxCharge / 5;
-            fireRate = .1;
-        }
-
-        if (type2 == TankType::TYPE_YELLOW)
-        {
-            attack = 120;
-            fireCost = maxCharge / 8;
-            fireRate = .075;
-            bounces = 2;
-        }
-
-        if (type2 == TankType::TYPE_PURPLE)
-        {
-            attack = 200;
-            fireCost = maxCharge / 8;
-            fireRate = .1;
-        }
-    }
-
-    if (type1 == TankType::TYPE_BLUE)
-    {
-        fireRate = 0.05;
-
-        attack = 1100;
-        maxCharge = 100;
-
-        chargeRegen = 50;
-
-        moveCost = 0;
-        fireCost = maxCharge;
-        chargeCost = 200;
-
-        bounces = 0;
-
-        if (type2 == TankType::TYPE_RED)
-        {
-            attack = 750;
-            fireCost = maxCharge / 1.5f;
-        }
-
-        if (type2 == TankType::TYPE_YELLOW)
-        {
-            attack = 800;
-            fireCost = maxCharge / 1.5f;
-            bounces = 1;
-        }
-
-        if (type2 == TankType::TYPE_PURPLE)
-        {
-            attack = 500;
-            fireCost = maxCharge / 1.5f;
-        }
-    }
-
-    if (type1 == TankType::TYPE_YELLOW)
-    {
-        fireRate = .5;
-
-        attack = 250;
-        maxCharge = 100;
-
-        chargeRegen = 50;
-
-        moveCost = 0;
-        fireCost = maxCharge / 2;
-        chargeCost = 200;
-
-        bounces = 8000;
-
-        if (type2 == TankType::TYPE_RED)
-        {
-            fireRate = .25;
-            attack = 150;
-            fireCost = maxCharge / 4;
-            bounces = 64;
-        }
-
-        if (type2 == TankType::TYPE_BLUE)
-        {
-            fireRate = .8;
-            attack = 400;
-            fireCost = maxCharge / 2;
-            bounces = 32;
-        }
-
-        if (type2 == TankType::TYPE_PURPLE)
-        {
-            fireRate = .8;
-            attack = 500;
-            fireCost = maxCharge / 2;
-            bounces = 64;
-        }
-    }
-
-    if (type1 == TankType::TYPE_PURPLE)
-    {
-        fireRate = .5;
-
-        attack = 200;
-        maxCharge = 100;
-
-        chargeRegen = 50;
-
-        moveCost = 0;
-        fireCost = maxCharge / 2;
-        chargeCost = 200;
-
-        bounces = 0;
-
-        if (type2 == TankType::TYPE_GREY)
-        {
-            fireRate = .25;
-            attack = 150;
-            fireCost = maxCharge / 4;
-        }
-
-        if (type2 == TankType::TYPE_RED)
-        {
-            fireRate = .25;
-            attack = 150;
-            fireCost = maxCharge / 4;
-        }
-
-        if (type2 == TankType::TYPE_BLUE)
-        {
-            fireRate = .8;
-            attack = 500;
-            fireCost = maxCharge / 2;
-        }
-
-        if (type2 == TankType::TYPE_YELLOW)
-        {
-            fireRate = .8;
-            attack = 500;
-            fireCost = maxCharge / 2;
-            bounces = 64;
-        }
-    }
-
-    if (type1 == TankType::TYPE_GREY)
-    {
-        r = .5;
-        g = .5;
-        b = .5;
-    }
-    else if (type1 == TankType::TYPE_RED)
-    {
-        r = 1;
-        g = 0;
-        b = 0;
-    }
-    else if (type1 == TankType::TYPE_BLUE)
-    {
-        r = 0;
-        g = 0;
-        b = 1;
-    }
-    else if (type1 == TankType::TYPE_YELLOW)
-    {
-        r = 1;
-        g = 1;
-        b = 0;
-    }
-    else if (type1 == TankType::TYPE_PURPLE)
-    {
-        r = 1;
-        g = 0;
-        b = 1;
-    }
-    else if (type1 == TankType::TANK_TYPE_COUNT)
-    {
-        r = 0;
-        g = 1;
-        b = 0;
-    }
-
-    if (type2 == TankType::TYPE_GREY)
-    {
-        r2 = .5;
-        g2 = .5;
-        b2 = .5;
-    }
-    else if (type2 == TankType::TYPE_RED)
-    {
-        r2 = 1;
-        g2 = 0;
-        b2 = 0;
-    }
-    else if (type2 == TankType::TYPE_BLUE)
-    {
-        r2 = 0;
-        g2 = 0;
-        b2 = 1;
-    }
-    else if (type2 == TankType::TYPE_YELLOW)
-    {
-        r2 = 1;
-        g2 = 1;
-        b2 = 0;
-    }
-    else if (type2 == TankType::TYPE_PURPLE)
-    {
-        r2 = 1;
-        g2 = 0;
-        b2 = 1;
-    }
+    setColor(primary, r, g, b);
+    setColor(secondary, r2, g2, b2);
 }
 
 void Tank::Die()
@@ -422,7 +236,8 @@ void Tank::Special(float dTpressed)
                 bullets.push_back(temp2);
             }
 
-            bullets.push_back(temp);                Bullet temp(id, attack, type1, type2, bounces,
+            bullets.push_back(temp);
+            Bullet temp(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -533,7 +348,7 @@ void Tank::Special(float dTpressed)
                          r2, g2, b2,
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) *std::sinf((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 90, rtz + rz);
 
             bullets.push_back(temp3);
