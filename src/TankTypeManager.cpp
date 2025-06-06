@@ -45,7 +45,7 @@ bool TankTypeManager::Initialize()
         .b = 0.0f};
 
     baseConfigs[TankType::TYPE_BLUE] = {
-        .fireRate = defaultFireRate / 10.0f,
+        .fireRate = defaultFireRate,
         .attack = defaultAttack * 11.0f,
         .maxCharge = defaultMaxCharge,
         .chargeRegen = defaultChargeRegen,

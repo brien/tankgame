@@ -19,6 +19,7 @@
 #include "TankTypeManager.h"
 #include "TankRenderer.h"
 #include "InputHandler.h"
+#include "TankCollisionHelper.h"
 #include "InputHandlerFactory.h"
 
 void Tank::SetType(TankType t1, TankType t2)
@@ -374,7 +375,7 @@ bool Tank::PointCollision(float cx, float cy, float cz)
     bool result = false;
     if ((cy - y) < 0.3f && (y - cy) < 0)
     {
-        if (sqrt((cx - x) * (cx - x) + (cz - z) * (cz - z)) < size * 2)
+        if (sqrt((cx - x) * (cx - x) + (cz - z) * (cz - z)) < collisionRadius * 2)
         {
             result = true;
         }
@@ -407,7 +408,8 @@ void Tank::Fall()
         vy = 0;
     }
 
-    if (LevelHandler::GetSingleton().FloatCollision(x, y + .2, z) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[0], y + .2, z + collisionPoints[2]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[3], y + .2, z + collisionPoints[5]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[6], y + .2, z + collisionPoints[8]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[9], y + .2, z + collisionPoints[11]))
+    // Check for float collision with upward offset
+    if (TankCollisionHelper::CheckFourPointFloatCollision(*this, 0.2f))
     {
         y = static_cast<int>(y) + .8;
         vy = 0;
@@ -415,28 +417,10 @@ void Tank::Fall()
 
     int highest = -1;
 
-    if (LevelHandler::GetSingleton().FloatCollision(x, y, z) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+    // Check for float collision at current position
+    if (TankCollisionHelper::CheckFourPointFloatCollision(*this))
     {
-
-        highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x), static_cast<int>(z));
-
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2])))
-        {
-            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2]));
-        }
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5])))
-        {
-            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5]));
-        }
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8])))
-        {
-            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8]));
-        }
-        if (highest < LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11])))
-        {
-            highest = LevelHandler::GetSingleton().GetFloatHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11]));
-        }
-
+        highest = TankCollisionHelper::FindHighestFloatHeight(*this);
         y = static_cast<float>(highest);
 
         if (!grounded)
@@ -456,29 +440,11 @@ void Tank::Fall()
 
         vy = 0;
     }
-    else if (LevelHandler::GetSingleton().FallCollision(x, y, z) || LevelHandler::GetSingleton().FallCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().FallCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().FallCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().FallCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+    // Check for fall collision (terrain collision)
+    else if (TankCollisionHelper::CheckFourPointFallCollision(*this))
     {
-
         // Find the height of the highest collision point
-        highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x), static_cast<int>(z));
-
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2])))
-        {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[0]), static_cast<int>(z + collisionPoints[2]));
-        }
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5])))
-        {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[3]), static_cast<int>(z + collisionPoints[5]));
-        }
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8])))
-        {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[6]), static_cast<int>(z + collisionPoints[8]));
-        }
-        if (highest < LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11])))
-        {
-            highest = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(x + collisionPoints[9]), static_cast<int>(z + collisionPoints[11]));
-        }
-
+        highest = TankCollisionHelper::FindHighestTerrainHeight(*this);
         y = static_cast<float>(highest);
 
         if (highest < -10 && (id == -1 || id == -2))
@@ -544,7 +510,7 @@ Tank::Tank()
     isJumping = false;
     grounded = false;
 
-    size = 0.0f;
+    collisionRadius = 0.0f;
     rotRate = 0.0f;
     movRate = 0.0f;
     moveCost = 0.0f;
@@ -606,7 +572,7 @@ Tank::Tank(Tank&& other) noexcept
       id(other.id),
       x(other.x), y(other.y), z(other.z),
       vx(other.vx), vy(other.vy), vz(other.vz),
-      size(other.size),
+      collisionRadius(other.collisionRadius),
       control(other.control),
       inputMode(other.inputMode),
       jid(other.jid),
@@ -661,7 +627,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         id = other.id;
         x = other.x; y = other.y; z = other.z;
         vx = other.vx; vy = other.vy; vz = other.vz;
-        size = other.size;
+        collisionRadius = other.collisionRadius;
         control = other.control;
         inputMode = other.inputMode;
         jid = other.jid;
@@ -722,23 +688,23 @@ void Tank::Init()
 
     bounces = 2;
 
-    size = 0.2;
+    collisionRadius = 0.2;
 
-    collisionPoints[0] = size;
+    collisionPoints[0] = collisionRadius;
     collisionPoints[1] = 0;
-    collisionPoints[2] = size;
+    collisionPoints[2] = collisionRadius;
 
-    collisionPoints[3] = -1 * size;
+    collisionPoints[3] = -1 * collisionRadius;
     collisionPoints[4] = 0;
-    collisionPoints[5] = -1 * size;
+    collisionPoints[5] = -1 * collisionRadius;
 
-    collisionPoints[6] = -1 * size;
+    collisionPoints[6] = -1 * collisionRadius;
     collisionPoints[7] = 0;
-    collisionPoints[8] = size;
+    collisionPoints[8] = collisionRadius;
 
-    collisionPoints[9] = size;
+    collisionPoints[9] = collisionRadius;
     collisionPoints[10] = 0;
-    collisionPoints[11] = -1 * size;
+    collisionPoints[11] = -1 * collisionRadius;
 
     collisionPoints[12] = 0;
     collisionPoints[13] = 0;
@@ -845,7 +811,8 @@ void Tank::Jump()
 
         // y += vy*GlobalTimer::dT;
 
-        if (LevelHandler::GetSingleton().FloatCollision(x, y + .2, z) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[0], y + .2, z + collisionPoints[2]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[3], y + .2, z + collisionPoints[5]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[6], y + .2, z + collisionPoints[8]) || LevelHandler::GetSingleton().FloatCollision(x + collisionPoints[9], y + .2, z + collisionPoints[11]))
+        // Check for float collision with upward offset during jump
+        if (TankCollisionHelper::CheckFourPointFloatCollision(*this, 0.2f))
         {
             y = static_cast<int>(y) + .8;
             vy = 0;
@@ -991,7 +958,8 @@ bool Tank::Move(float rate)
     x += vx;
     z += vz;
 
-    if (LevelHandler::GetSingleton().PointCollision(x, y, z) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+    // Check for collision using helper
+    if (TankCollisionHelper::CheckFourPointCollision(*this))
     {
         if (!forb)
         {
@@ -1004,26 +972,37 @@ bool Tank::Move(float rate)
 
         bool done = false;
 
-        int which = 0;
-        if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
+        // Find which specific collision point is colliding and create appropriate FX
+        int which = TankCollisionHelper::FindCollidingPoint(*this);
+        if (which >= 0 && which <= 3)
         {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1);
-            which = 0;
+            int xIndex = which * 3;
+            int zIndex = xIndex + 2;
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, r, g, b, 1);
         }
-        else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
+        else
         {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1);
-            which = 1;
-        }
-        else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
-        {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1);
-            which = 2;
-        }
-        else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
-        {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1);
-            which = 3;
+            // Fallback to manual checking if helper doesn't find the point
+            if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1);
+                which = 0;
+            }
+            else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1);
+                which = 1;
+            }
+            else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1);
+                which = 2;
+            }
+            else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1);
+                which = 3;
+            }
         }
 
         kx = which * 3;
@@ -1058,7 +1037,8 @@ bool Tank::Move(float rate)
             }
         }
 
-        if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+        // Final collision check using helper
+        if (TankCollisionHelper::CheckFourPointCollision(*this))
         {
             x -= vx;
             z -= vz;
@@ -1125,7 +1105,8 @@ bool Tank::Move(bool forb)
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
     }
 
-    if (LevelHandler::GetSingleton().PointCollision(x, y, z) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+    // Check for collision using helper (includes center point + four corner points)
+    if (LevelHandler::GetSingleton().PointCollision(x, y, z) || TankCollisionHelper::CheckFourPointCollision(*this))
     {
         if (!forb)
         {
@@ -1136,26 +1117,37 @@ bool Tank::Move(bool forb)
         int kx = 0;
         int kz = 2;
 
-        int which = 0;
-        if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
+        // Find which specific collision point is colliding and create appropriate FX
+        int which = TankCollisionHelper::FindCollidingPoint(*this);
+        if (which >= 0 && which <= 3)
         {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1);
-            which = 0;
+            int xIndex = which * 3;
+            int zIndex = xIndex + 2;
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, r, g, b, 1);
         }
-        else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
+        else
         {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1);
-            which = 1;
-        }
-        else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
-        {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1);
-            which = 2;
-        }
-        else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
-        {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1);
-            which = 3;
+            // Fallback to manual checking if helper doesn't find the point
+            if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1);
+                which = 0;
+            }
+            else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1);
+                which = 1;
+            }
+            else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1);
+                which = 2;
+            }
+            else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+            {
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1);
+                which = 3;
+            }
         }
 
         kx = which * 3;
@@ -1164,15 +1156,15 @@ bool Tank::Move(bool forb)
         x -= vx;
         z -= vz;
 
-        if ((int)(x + collisionPoints[kx] + vx) != (int)(x + collisionPoints[kx]) && (int)(z + collisionPoints[kz] + vz) == (int)(z + collisionPoints[kz]))
+        if (static_cast<int>(x + collisionPoints[kx] + vx) != static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) == static_cast<int>(z + collisionPoints[kz]))
         {
             z += vz / 2;
         }
-        if ((int)(x + collisionPoints[kx] + vx) == (int)(x + collisionPoints[kx]) && (int)(z + collisionPoints[kz] + vz) != (int)(z + collisionPoints[kz]))
+        if (static_cast<int>(x + collisionPoints[kx] + vx) == static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) != static_cast<int>(z + collisionPoints[kz]))
         {
             x += vx / 2;
         }
-        if ((int)(x + collisionPoints[kx] + vx) != (int)(x + collisionPoints[kx]) && (int)(z + collisionPoints[kz] + vz) != (int)(z + collisionPoints[kz]))
+        if (static_cast<int>(x + collisionPoints[kx] + vx) != static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) != static_cast<int>(z + collisionPoints[kz]))
         {
             if (LevelHandler::GetSingleton().PointCollision((x + vx + collisionPoints[kx]), y, z + collisionPoints[kz]) && !LevelHandler::GetSingleton().PointCollision(x + collisionPoints[kx], y, z + vz + collisionPoints[kz]))
             {
@@ -1184,7 +1176,8 @@ bool Tank::Move(bool forb)
             }
         }
 
-        if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]) || LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
+        // Final collision check using helper
+        if (TankCollisionHelper::CheckFourPointCollision(*this))
         {
             x -= vx;
             z -= vz;

@@ -43,8 +43,15 @@ enum class InputMode
     INPUT_MODE_COUNT
 };
 
+// Forward declaration for helper class
+class TankCollisionHelper;
+
 class Tank
 {
+    // Allow the collision helper to access private members
+    friend class TankCollisionHelper;
+    
+public:
 public:
     Tank();
     ~Tank();
@@ -93,7 +100,7 @@ public:
     void SetPosition(float _x, float _y, float _z);
 
     float collisionPoints[21];
-    float size;
+    float collisionRadius;
 
     int control;
     InputMode inputMode;
