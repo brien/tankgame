@@ -241,7 +241,6 @@ void TankHandler::NextFrame()
         }
     }
 
-    float dist;
     players[0].dist = 2024;
     players[1].dist = 2024;
 
