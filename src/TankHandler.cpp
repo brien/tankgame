@@ -510,7 +510,7 @@ void TankHandler::DrawBullets() const
     {
         for (const Bullet &bullet : tank.bullets)
         {
-            if (bullet.alive)
+            if (bullet.IsAlive())
             {
                 bullet.Draw();
             }
@@ -521,7 +521,7 @@ void TankHandler::DrawBullets() const
     {
         for (const Bullet &bullet : players[k].bullets)
         {
-            if (bullet.alive)
+            if (bullet.IsAlive())
             {
                 bullet.Draw();
             }

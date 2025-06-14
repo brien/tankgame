@@ -25,7 +25,10 @@ public:
     ~Bullet() = default;
     void NextFrame();
     void Draw() const;
-    bool alive = true;
+
+    // Accessor methods for alive member
+    bool IsAlive() const { return alive; }
+    void SetAlive(bool isAlive) { alive = isAlive; }
 
 private:
     float x = 0.0f, y = 0.0f, z = 0.0f;
@@ -52,6 +55,8 @@ private:
 
     int numbounces = 0;
     int maxbounces = 0;
+
+    bool alive = true;
 
     void HandleLevelCollision(float xpp, float zpp, float ory);
     void HandlePlayerCollision(Tank &playerTank);

@@ -37,6 +37,7 @@ Bullet::Bullet()
       moveRate(33.0f), power(0.0f),
       isSpecial(false),
       id(0), tankId(0),
+      type1(), type2(),
       dT(0.0f), maxdT(100.0f),
       numbounces(0), maxbounces(0),
       alive(true)

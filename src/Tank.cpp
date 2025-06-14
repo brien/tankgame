@@ -923,7 +923,7 @@ void Tank::NextFrame()
 
         for (auto j = bullets.begin(); j != bullets.end();)
         {
-            if (j->alive)
+            if (j->IsAlive())
             {
                 j->NextFrame();
                 ++j;
