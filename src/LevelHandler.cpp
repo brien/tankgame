@@ -16,6 +16,7 @@
 #include "FXHandler.h"
 #include "App.h"
 #include <iostream>
+#include <algorithm>
 
 // cheap strlen function, requires a NULL TERMINATED STRING be passed.
 // Returns the length of the passed string
@@ -1654,4 +1655,18 @@ void LevelHandler::DrawTerrain_OLD()
     glEnable(GL_CULL_FACE);
 
     glPopMatrix();
+}
+
+int LevelHandler::GetEnemyCountForLevel(int levelNumber) const
+{
+    // Constants for enemy count calculation
+    const int BASE_LEVEL = 48;      // Starting level number
+    const int BASE_ENEMIES = 5;     // Minimum number of enemies
+    const int ENEMIES_PER_LEVEL = 3; // Additional enemies per level
+
+    // Calculate enemy count based on level progression
+    int count = BASE_ENEMIES + ENEMIES_PER_LEVEL * (levelNumber - BASE_LEVEL);
+    
+    // Ensure we never have fewer than the base number of enemies
+    return std::max(count, BASE_ENEMIES);
 }

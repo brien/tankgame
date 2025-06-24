@@ -148,7 +148,7 @@ void TankHandler::InitializeEnemyTanks()
 {
     tanks.clear();
 
-    int enemyCount = 5 + 3 * (LevelHandler::GetSingleton().levelNumber - 48);
+    int enemyCount = LevelHandler::GetSingleton().GetEnemyCountForLevel(LevelHandler::GetSingleton().levelNumber);
 
     for (int i = 0; i < enemyCount; ++i)
     {

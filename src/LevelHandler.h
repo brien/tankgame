@@ -56,6 +56,9 @@ public:
 
     void NextLevel(bool forb);
 
+    // Enemy count calculation for level scaling
+    int GetEnemyCountForLevel(int levelNumber) const;
+
     int levelNumber;
     int colorNumber;
     int colorNumber2;
