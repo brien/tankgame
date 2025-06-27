@@ -103,6 +103,11 @@ bool TankTypeManager::Initialize()
         .bounces = 2,
     };
 
+    comboConfigs[{TankType::TYPE_BLUE, TankType::TYPE_GREY}] = {
+        .attack = 100.0f,
+        .fireCost = baseConfigs[TankType::TYPE_BLUE].maxCharge / 1.5f,
+    };
+
     comboConfigs[{TankType::TYPE_BLUE, TankType::TYPE_RED}] = {
         .attack = 200.0f,
         .fireCost = baseConfigs[TankType::TYPE_BLUE].maxCharge / 1.5f,
