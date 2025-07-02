@@ -56,11 +56,11 @@ void TankHandler::InitializePlayerTanks()
 
         if (App::GetSingleton().gameTask->versus)
         {
-            players[j].x = LevelHandler::GetSingleton().enemy[8][0];
-            players[j].z = LevelHandler::GetSingleton().enemy[8][1];
+            players[j].x = LevelHandler::GetSingleton().enemy[VERSUS_ENEMY_POSITION_1][0];
+            players[j].z = LevelHandler::GetSingleton().enemy[VERSUS_ENEMY_POSITION_1][1];
 
-            players[0].x = LevelHandler::GetSingleton().enemy[9][0];
-            players[0].z = LevelHandler::GetSingleton().enemy[9][1];
+            players[0].x = LevelHandler::GetSingleton().enemy[VERSUS_ENEMY_POSITION_2][0];
+            players[0].z = LevelHandler::GetSingleton().enemy[VERSUS_ENEMY_POSITION_2][1];
         }
         players[j].x += j;
 
@@ -82,18 +82,18 @@ void TankHandler::InitializePlayerTanks()
 
         if (difficultySetting == 0)
         {
-            players[j].energyRegen *= 2;
-            players[j].maxEnergy *= 3;
-            players[j].energy *= 3;
+            players[j].energyRegen *= EASY_REGEN_MULTIPLIER;
+            players[j].maxEnergy *= EASY_ENERGY_MULTIPLIER;
+            players[j].energy *= EASY_ENERGY_MULTIPLIER;
         }
         else if (difficultySetting == 1)
         {
-            players[j].energyRegen *= 1.5;
-            players[j].maxEnergy *= 1.5;
-            players[j].energy *= 1.5;
+            players[j].energyRegen *= NORMAL_REGEN_MULTIPLIER;
+            players[j].maxEnergy *= NORMAL_ENERGY_MULTIPLIER;
+            players[j].energy *= NORMAL_ENERGY_MULTIPLIER;
         }
 
-        players[j].rotRate *= 2;
+        players[j].rotRate *= ROTATION_RATE_MULTIPLIER;
     }
 }
 
@@ -156,19 +156,19 @@ void TankHandler::InitializeEnemyTanks()
 
         tempTank.Init();
 
-        if (i < 16)
+        if (i < MAX_ENEMY_SPAWN_POSITIONS)
         {
             tempTank.x = LevelHandler::GetSingleton().enemy[i][0];
             tempTank.z = LevelHandler::GetSingleton().enemy[i][1];
         }
         else
         {
-            tempTank.x = LevelHandler::GetSingleton().enemy[i % 16][0] + i % 2;
-            tempTank.z = LevelHandler::GetSingleton().enemy[i % 16][1] + i % 2;
+            tempTank.x = LevelHandler::GetSingleton().enemy[i % MAX_ENEMY_SPAWN_POSITIONS][0] + i % 2;
+            tempTank.z = LevelHandler::GetSingleton().enemy[i % MAX_ENEMY_SPAWN_POSITIONS][1] + i % 2;
         }
 
         tempTank.y = LevelHandler::GetSingleton().GetTerrainHeight((int)tempTank.x, (int)tempTank.z);
-        tempTank.ry = i * 45;
+        tempTank.ry = i * ROTATION_STEP_DEGREES;
         tempTank.id = i;
 
         if ((LevelHandler::GetSingleton().levelNumber - 48) == 0)
@@ -205,7 +205,7 @@ void TankHandler::NextFrame()
     {
         if (combo[i] > 0.0f)
         {
-            combo[i] -= 1.0f * GlobalTimer::dT;
+            combo[i] -= COMBO_DECAY_RATE * GlobalTimer::dT;
             if (combo[i] < 0.0f)
             {
                 combo[i] = 0.0f;
@@ -227,22 +227,22 @@ void TankHandler::NextFrame()
             players[i].Die();
             if (App::GetSingleton().gameTask->versus)
             {
-                if (players[i].deadtime > 1.5)
+                if (players[i].deadtime > VERSUS_RESPAWN_DELAY)
                 {
                     LevelHandler::GetSingleton().NextLevel(true);
                 }
             }
             else
             {
-                if (players[i].deadtime > 0.5)
+                if (players[i].deadtime > PLAYER_RESPAWN_DELAY)
                     LevelHandler::GetSingleton().NextLevel(false);
             }
             players[i].deadtime += GlobalTimer::dT;
         }
     }
 
-    players[0].dist = 2024;
-    players[1].dist = 2024;
+    players[0].dist = INITIAL_PLAYER_DISTANCE;
+    players[1].dist = INITIAL_PLAYER_DISTANCE;
 
     if (!tanks.empty())
     {
@@ -342,7 +342,7 @@ void TankHandler::DrawTanks() const
             // glDisable(GL_TEXTURE_2D);
             // glDisable(GL_LIGHTING);
 
-            glTranslatef(players[k].x, players[k].y + .05, players[k].z);
+            glTranslatef(players[k].x, players[k].y + TANK_HEIGHT_OFFSET, players[k].z);
             glRotatef(players[k].rx, 1, 0, 0);
             glRotatef(-players[k].ry - 90, 0, 1, 0);
             glRotatef(players[k].rz, 0, 0, 1);
@@ -353,7 +353,7 @@ void TankHandler::DrawTanks() const
             // glCallList(App::GetSingleton().graphicsTask->bodylist);
             App::GetSingleton().graphicsTask->bodylist.Call(0);
 
-            glTranslatef(0, .10, 0);
+            glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
 
             glRotatef(players[k].rtx, 1, 0, 0);
             glRotatef(-players[k].rty + 180, 0, 1, 0);
@@ -380,7 +380,7 @@ void TankHandler::DrawTanks() const
 
             drift += GlobalTimer::dT;
 
-            if (drift > 1)
+            if (drift > DRIFT_RESET_THRESHOLD)
                 drift = 0;
 
             // Awesome effects are performed using the texture matrix stack. (depth = 2)
@@ -388,7 +388,7 @@ void TankHandler::DrawTanks() const
 
             glPushMatrix();
             // glScalef(5,5,5);
-            glTranslatef(100 * drift, 0, 0);
+            glTranslatef(TEXTURE_DRIFT_SPEED * drift, 0, 0);
             // glRotatef(players[k].rty+players[k].ry,0,0,1);
             glMatrixMode(GL_MODELVIEW);
 
@@ -405,7 +405,7 @@ void TankHandler::DrawTanks() const
             // glDisable(GL_TEXTURE_2D);
             glDisable(GL_LIGHTING);
 
-            glTranslatef(players[k].x, players[k].y + .05, players[k].z);
+            glTranslatef(players[k].x, players[k].y + TANK_HEIGHT_OFFSET, players[k].z);
             glRotatef(players[k].rx, 1, 0, 0);
             glRotatef(-players[k].ry - 90, 0, 1, 0);
             glRotatef(players[k].rz, 0, 0, 1);
@@ -415,7 +415,7 @@ void TankHandler::DrawTanks() const
             // glCallList(App::GetSingleton().graphicsTask->bodylist);
             App::GetSingleton().graphicsTask->bodylist.Call(0);
 
-            glTranslatef(0, .10, 0);
+            glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
 
             glRotatef(players[k].rtx, 1, 0, 0);
             glRotatef(-players[k].rty + 180, 0, 1, 0);
@@ -423,7 +423,7 @@ void TankHandler::DrawTanks() const
 
             glColor3f(players[k].r2, players[k].g2, players[k].b2);
 
-            if (special[k] >= players[k].fireCost / 5)
+            if (special[k] >= players[k].fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
             {
                 // glCallList(App::GetSingleton().graphicsTask->turretlist);
                 App::GetSingleton().graphicsTask->turretlist.Call(0);
@@ -446,7 +446,7 @@ void TankHandler::DrawTanks() const
 
             glDisable(GL_LIGHTING);
 
-            glTranslatef(players[k].x, players[k].y + .25, players[k].z);
+            glTranslatef(players[k].x, players[k].y + TARGETING_HEIGHT_OFFSET, players[k].z);
             glRotatef(-players[k].rrl, 0, 1, 0);
 
             glEnable(GL_TEXTURE_2D);
@@ -457,24 +457,24 @@ void TankHandler::DrawTanks() const
             glBlendFunc(GL_SRC_ALPHA, GL_ONE);
             glDepthMask(GL_FALSE);
 
-            glColor4f(1.0f, players[k].dist / 50.0f, 0.1f, 1.0);
+            glColor4f(1.0f, players[k].dist / DISTANCE_COLOR_FACTOR, 0.1f, 1.0);
 
             App::GetSingleton().graphicsTask->squarelist.Call(0);
 
             if (players[k].fireTimer > players[k].fireRate && players[k].fireCost < players[k].charge)
             {
-                glTranslatef(0, +0.018f, 0);
-                glRotatef(100 * drift, 0, 1, 0);
+                glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
+                glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
 
                 glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
 
                 glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
-                glScalef(0.2, 0.2, 0.2);
+                glScalef(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
 
                 App::GetSingleton().graphicsTask->squarelist.Call(0);
 
-                glScalef(5.0, 5.0, 5.0);
+                glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
             }
 
             glDisable(GL_BLEND);
@@ -486,7 +486,7 @@ void TankHandler::DrawTanks() const
 
             glRotatef(players[k].rrl, 0, 1, 0);
 
-            glTranslatef(-players[k].x, -players[k].y + .25, -players[k].z);
+            glTranslatef(-players[k].x, -players[k].y + TARGETING_HEIGHT_OFFSET, -players[k].z);
         }
 
         glPopMatrix();

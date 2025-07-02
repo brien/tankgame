@@ -13,6 +13,37 @@ public:
 
     void Init();
 
+    // Constants to replace magic numbers
+    static constexpr int MAX_PLAYERS = 4;
+    static constexpr int MAX_ENEMY_SPAWN_POSITIONS = 16;
+    static constexpr float COMBO_DECAY_RATE = 1.0f;
+    static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
+    static constexpr float VERSUS_RESPAWN_DELAY = 1.5f;
+    static constexpr float INITIAL_PLAYER_DISTANCE = 2024.0f;
+    static constexpr float SPECIAL_CHARGE_THRESHOLD_DIVISOR = 5.0f; // fireCost / 5
+    static constexpr int ROTATION_STEP_DEGREES = 45;
+    static constexpr float TANK_HEIGHT_OFFSET = 0.05f;
+    static constexpr float TURRET_HEIGHT_OFFSET = 0.10f;
+    static constexpr float TARGETING_HEIGHT_OFFSET = 0.25f;
+    static constexpr float TARGETING_EFFECT_OFFSET = 0.018f;
+    static constexpr float DISTANCE_COLOR_FACTOR = 50.0f;
+    static constexpr float TEXTURE_DRIFT_SPEED = 100.0f;
+    static constexpr float DRIFT_RESET_THRESHOLD = 1.0f;
+    static constexpr float ROTATION_EFFECT_SPEED = 100.0f;
+    static constexpr float EFFECT_SCALE_FACTOR = 0.2f;
+    static constexpr float EFFECT_SCALE_RESTORE = 5.0f;
+    
+    // Player positioning constants
+    static constexpr int VERSUS_ENEMY_POSITION_1 = 8;
+    static constexpr int VERSUS_ENEMY_POSITION_2 = 9;
+    
+    // Difficulty multipliers
+    static constexpr float EASY_ENERGY_MULTIPLIER = 3.0f;
+    static constexpr float EASY_REGEN_MULTIPLIER = 2.0f;
+    static constexpr float NORMAL_ENERGY_MULTIPLIER = 1.5f;
+    static constexpr float NORMAL_REGEN_MULTIPLIER = 1.5f;
+    static constexpr float ROTATION_RATE_MULTIPLIER = 2.0f;
+
     std::array<Tank, 4> players{};
     std::array<float, 2> combo{};
     std::array<float, 2> special{};
