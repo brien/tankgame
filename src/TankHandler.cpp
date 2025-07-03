@@ -18,6 +18,8 @@
 #include "App.h"
 #include <string>
 #include <utility>
+#include <algorithm>
+#include <vector>
 
 TankHandler::TankHandler()
     : numPlayers(1),
@@ -38,6 +40,11 @@ void TankHandler::Init()
     InitializePlayerTanks();
     InitializePlayerControls();
     InitializeEnemyTanks();
+    
+    // Log controller setup for debugging (only in debug builds)
+    #ifdef DEBUG
+    LogControllerSetup();
+    #endif
 }
 
 void TankHandler::InitializePlayerTanks()
@@ -111,58 +118,173 @@ void TankHandler::ApplyDifficultySettings(Tank& player)
 
 void TankHandler::InitializePlayerControls()
 {
-    if (numPlayers > 1)
+    // Simplified controller initialization:
+    // 1. Set default controls for all players
+    // 2. Override with joystick controls if available and enabled
+    SetupDefaultPlayerControls();
+    
+    // Override with joystick controls if available and enabled
+    if (SDL_NumJoysticks() > 0 && isInputJoy)
     {
-        InitializeMultiPlayerControls();
+        if (numPlayers == 1)
+        {
+            InitializeSinglePlayerControls();
+        }
+        else
+        {
+            InitializeMultiPlayerControls();
+        }
     }
-    else
+}
+
+void TankHandler::SetupDefaultPlayerControls()
+{
+    // Player 1 always defaults to keyboard/mouse
+    players[PRIMARY_PLAYER_INDEX].jid = PRIMARY_PLAYER_INDEX;
+    players[PRIMARY_PLAYER_INDEX].SetInputMode(InputMode::MODE_KEYBOARD_MOUSE);
+    
+    // Additional players default to generic joystick
+    for (int i = 1; i < numPlayers; i++)
     {
-        InitializeSinglePlayerControls();
+        players[i].jid = i;
+        players[i].SetInputMode(InputMode::MODE_JOYSTICK_GENERIC);
     }
 }
 
 void TankHandler::InitializeSinglePlayerControls()
 {
-    if (SDL_NumJoysticks() > 0 && isInputJoy)
+    // For single player, if joystick is preferred and available, use it
+    if (IsControllerConnected(PRIMARY_PLAYER_INDEX))
     {
-        players[0].SetInputMode(DetectControllerType(0));
+        AssignControllerToPlayer(PRIMARY_PLAYER_INDEX, PRIMARY_PLAYER_INDEX);
     }
 }
 
 void TankHandler::InitializeMultiPlayerControls()
 {
-    if (SDL_NumJoysticks() == 1)
+    int availableJoysticks = SDL_NumJoysticks();
+    
+    // Assign controllers based on availability
+    if (availableJoysticks >= numPlayers)
     {
-        players[1].jid = 0;
-        players[1].SetInputMode(DetectControllerType(0));
+        // Enough controllers for all players
+        for (int i = 0; i < numPlayers; i++)
+        {
+            AssignControllerToPlayer(i, i);
+        }
     }
-    else if (SDL_NumJoysticks() > 1)
+    else if (availableJoysticks == MIN_JOYSTICKS_FOR_MULTIPLAYER && numPlayers == 2)
     {
-        players[0].jid = 1;
-        players[1].jid = 0;
-        players[0].SetInputMode(DetectControllerType(1));
-        players[1].SetInputMode(DetectControllerType(0));
+        // Special case: one controller for two players
+        // Player 1 keeps keyboard/mouse, Player 2 gets the controller
+        AssignControllerToPlayer(SECONDARY_PLAYER_INDEX, PRIMARY_PLAYER_INDEX);
     }
+    else if (availableJoysticks > MIN_JOYSTICKS_FOR_MULTIPLAYER)
+    {
+        // Some controllers available, assign what we can
+        for (int i = 0; i < std::min(numPlayers, availableJoysticks); i++)
+        {
+            AssignControllerToPlayer(i, i);
+        }
+    }
+}
+
+void TankHandler::AssignControllerToPlayer(int playerIndex, int joystickIndex)
+{
+    if (playerIndex >= 0 && playerIndex < MAX_PLAYERS && IsControllerConnected(joystickIndex))
+    {
+        players[playerIndex].jid = joystickIndex;
+        players[playerIndex].SetInputMode(DetectControllerType(joystickIndex));
+    }
+}
+
+bool TankHandler::IsControllerConnected(int joystickIndex)
+{
+    return joystickIndex >= 0 && joystickIndex < SDL_NumJoysticks();
+}
+
+void TankHandler::LogControllerSetup() const
+{
+    // Debug function to log current controller configuration
+    // Can be called after initialization to verify setup
+    for (int i = 0; i < numPlayers; i++)
+    {
+        const Tank& player = players[i];
+        std::string inputModeStr;
+        
+        switch (player.inputMode)
+        {
+            case InputMode::MODE_KEYBOARD_MOUSE:
+                inputModeStr = "Keyboard/Mouse";
+                break;
+            case InputMode::MODE_JOYSTICK_GENERIC:
+                inputModeStr = "Generic Joystick";
+                break;
+            case InputMode::MODE_NINTENDO_GC:
+                inputModeStr = "GameCube Controller";
+                break;
+            case InputMode::MODE_EXTREME_3D:
+                inputModeStr = "Extreme 3D Pro";
+                break;
+            default:
+                inputModeStr = "Unknown";
+                break;
+        }
+        
+        // Note: Actual logging would depend on your logging system
+        // This is a placeholder for debugging output
+        printf("Player %d: %s (JoyID: %d)\n", i + 1, inputModeStr.c_str(), player.jid);
+    }
+}
+
+void TankHandler::AddControllerMapping(const std::string& pattern, InputMode mode)
+{
+    // Future extensibility: Allow runtime addition of controller mappings
+    // This could be used to add support for new controllers without recompiling
+    // Implementation would extend the static mapping in DetectControllerType
+    // For now, this is a placeholder for future enhancement
 }
 
 InputMode TankHandler::DetectControllerType(int joyIndex)
 {
-    const std::string& joyName = InputTask::joynames[joyIndex];
-    
-    if (joyName.find("PS2") != string::npos || joyName.find("MP-8866") != string::npos ||
-        joyName.find("PlayStation") != string::npos || joyName.find("Playstation") != string::npos)
+    // Validate input
+    if (!IsControllerConnected(joyIndex))
     {
         return InputMode::MODE_JOYSTICK_GENERIC;
     }
-    else if (joyName.find("Extreme 3D") != string::npos)
+    
+    // Get controller name safely
+    const std::string& joyName = InputTask::joynames[joyIndex];
+    if (joyName.empty() || joyName == "NULL")
     {
-        return InputMode::MODE_EXTREME_3D;
-    }
-    else if (joyName.find("NGC") != string::npos || joyName.find("GameCube") != string::npos)
-    {
-        return InputMode::MODE_NINTENDO_GC;
+        return InputMode::MODE_JOYSTICK_GENERIC;
     }
     
+    // Organized controller type mapping for easier maintenance and extension
+    static const std::vector<std::pair<std::vector<std::string>, InputMode>> controllerMappings = {
+        // PlayStation controllers (all variants use generic joystick mode)
+        {{"PS2", "MP-8866", "PlayStation", "Playstation"}, InputMode::MODE_JOYSTICK_GENERIC},
+        
+        // GameCube controllers (have specific button layout)
+        {{"NGC", "GameCube"}, InputMode::MODE_NINTENDO_GC},
+        
+        // Logitech Extreme 3D Pro (flight stick with unique axis mapping)
+        {{"Extreme 3D"}, InputMode::MODE_EXTREME_3D}
+    };
+    
+    // Search for matching controller patterns
+    for (const auto& mapping : controllerMappings)
+    {
+        for (const auto& pattern : mapping.first)
+        {
+            if (joyName.find(pattern) != std::string::npos)
+            {
+                return mapping.second;
+            }
+        }
+    }
+    
+    // Default fallback for unknown controllers
     return InputMode::MODE_JOYSTICK_GENERIC;
 }
 

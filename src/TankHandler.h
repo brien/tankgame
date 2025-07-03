@@ -19,6 +19,11 @@ public:
     static constexpr float COMBO_DECAY_RATE = 1.0f;
     static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
     static constexpr float VERSUS_RESPAWN_DELAY = 1.5f;
+    
+    // Controller detection constants
+    static constexpr int PRIMARY_PLAYER_INDEX = 0;
+    static constexpr int SECONDARY_PLAYER_INDEX = 1;
+    static constexpr int MIN_JOYSTICKS_FOR_MULTIPLAYER = 1;
     static constexpr float INITIAL_PLAYER_DISTANCE = 2024.0f;
     static constexpr float SPECIAL_CHARGE_THRESHOLD_DIVISOR = 5.0f; // fireCost / 5
     static constexpr int ROTATION_STEP_DEGREES = 45;
@@ -45,7 +50,8 @@ public:
     static constexpr float ROTATION_RATE_MULTIPLIER = 2.0f;
 
     std::array<Tank, 4> players{};
-    std::array<float, 2> combo{};
+    std::array<float, 2> combo{};                                                                                                                                                                                                                                                                                                                                                               
+
     std::array<float, 2> special{};
     std::array<int, 2> comboNum{};
     std::array<int, 2> hitCombo{};
@@ -86,6 +92,15 @@ private:
     void InitializeSinglePlayerControls();
     void InitializeMultiPlayerControls();
     InputMode DetectControllerType(int joyIndex);
+    
+    // Simplified controller setup helpers
+    void AssignControllerToPlayer(int playerIndex, int joystickIndex);
+    bool IsControllerConnected(int joystickIndex);
+    void SetupDefaultPlayerControls();
+    void LogControllerSetup() const;
+    
+    // Future extensibility helper
+    void AddControllerMapping(const std::string& pattern, InputMode mode);
     
     // Game loop helpers
     void UpdatePlayerCombos();
