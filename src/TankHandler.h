@@ -68,7 +68,34 @@ public:
     int numAttackingTanks = 0;
 
 private:
+    // Main initialization functions
     void InitializeEnemyTanks();
     void InitializePlayerTanks();
     void InitializePlayerControls();
+    
+    // Helper functions for enemy tank creation
+    Tank CreateEnemyTank(int index);
+    void SetEnemyPosition(Tank& tank, int index);
+    void SetEnemyType(Tank& tank, int index);
+    
+    // Helper functions for player setup
+    void SetPlayerVersusPositions(Tank& player, int playerIndex);
+    void ApplyDifficultySettings(Tank& player);
+    
+    // Controller detection helpers
+    void InitializeSinglePlayerControls();
+    void InitializeMultiPlayerControls();
+    InputMode DetectControllerType(int joyIndex);
+    
+    // Game loop helpers
+    void UpdatePlayerCombos();
+    void UpdatePlayerStates();
+    void UpdateEnemyTanks();
+    void UpdateVersusMode();
+    void UpdatePlayerTargeting();
+    
+    // Rendering helpers
+    void DrawPlayerTank(int playerIndex, float drift) const;
+    void DrawPlayerEffects(int playerIndex, float drift) const;
+    void DrawTargetingUI(int playerIndex, float drift) const;
 };
