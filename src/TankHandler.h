@@ -64,6 +64,7 @@ public:
 
     void NextFrame();
 
+    // Rendering methods - now delegated to TankRenderingManager
     void DrawTanks() const;
     void DrawBullets() const;
 
@@ -108,9 +109,4 @@ private:
     void UpdateEnemyTanks();
     void UpdateVersusMode();
     void UpdatePlayerTargeting();
-    
-    // Rendering helpers
-    void DrawPlayerTank(int playerIndex, float drift) const;
-    void DrawPlayerEffects(int playerIndex, float drift) const;
-    void DrawTargetingUI(int playerIndex, float drift) const;
 };
