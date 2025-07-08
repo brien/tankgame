@@ -231,10 +231,9 @@ void TankHandler::LogControllerSetup() const
                 inputModeStr = "Unknown";
                 break;
         }
-        
-        // Note: Actual logging would depend on your logging system
-        // This is a placeholder for debugging output
+           
         printf("Player %d: %s (JoyID: %d)\n", i + 1, inputModeStr.c_str(), player.jid);
+        Logger::Get().Write("Player %d: %s (JoyID: %d)\n", i + 1, inputModeStr.c_str(), player.jid);
     }
 }
 
