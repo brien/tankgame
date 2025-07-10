@@ -2,9 +2,10 @@
 #include "Tank.h"
 #include "App.h"
 #include "GlobalTimer.h"
+#include "TankHandler.h"
 
-void PlayerTankRenderer::DrawPlayerTanks(const std::array<Tank, 4>& players,
-                                        const std::array<float, 2>& special,
+void PlayerTankRenderer::DrawPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
+                                        const std::array<float, TankHandler::MAX_PLAYERS>& special,
                                         int numPlayers,
                                         bool hasEnemyTargets)
 {

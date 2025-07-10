@@ -1,9 +1,10 @@
 #include "BulletRenderer.h"
 #include "Tank.h"
+#include "TankHandler.h"
 #include "Bullet.h"
 
 void BulletRenderer::DrawAllBullets(const std::vector<Tank>& enemyTanks,
-                                   const std::array<Tank, 4>& players,
+                                   const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                                    int numPlayers)
 {
     SetupBulletRenderState();
@@ -22,7 +23,7 @@ void BulletRenderer::DrawEnemyBullets(const std::vector<Tank>& enemyTanks)
     }
 }
 
-void BulletRenderer::DrawPlayerBullets(const std::array<Tank, 4>& players, int numPlayers)
+void BulletRenderer::DrawPlayerBullets(const std::array<Tank, TankHandler::MAX_PLAYERS>& players, int numPlayers)
 {
     for (int k = 0; k < numPlayers; k++)
     {

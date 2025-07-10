@@ -3,8 +3,9 @@
 #include "EnemyTankRenderer.h"
 #include "BulletRenderer.h"
 #include "Tank.h"
+#include "TankHandler.h"
 
-void TankRenderingManager::RenderAllTanks(const std::array<Tank, 4>& players,
+void TankRenderingManager::RenderAllTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                                          const std::vector<Tank>& enemyTanks,
                                          const std::array<float, 2>& special,
                                          int numPlayers)
@@ -18,15 +19,15 @@ void TankRenderingManager::RenderAllTanks(const std::array<Tank, 4>& players,
     RenderEnemyTanks(enemyTanks);
 }
 
-void TankRenderingManager::RenderAllBullets(const std::array<Tank, 4>& players,
+void TankRenderingManager::RenderAllBullets(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                                            const std::vector<Tank>& enemyTanks,
                                            int numPlayers)
 {
     BulletRenderer::DrawAllBullets(enemyTanks, players, numPlayers);
 }
 
-void TankRenderingManager::RenderPlayerTanks(const std::array<Tank, 4>& players,
-                                            const std::array<float, 2>& special,
+void TankRenderingManager::RenderPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
+                                            const std::array<float, TankHandler::MAX_PLAYERS>& special,
                                             int numPlayers,
                                             bool hasEnemyTargets)
 {

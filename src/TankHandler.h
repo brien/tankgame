@@ -14,7 +14,7 @@ public:
     void Init();
 
     // Constants to replace magic numbers
-    static constexpr int MAX_PLAYERS = 4;
+    static constexpr int MAX_PLAYERS = 2;
     static constexpr int MAX_ENEMY_SPAWN_POSITIONS = 16;
     static constexpr float COMBO_DECAY_RATE = 1.0f;
     static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
@@ -49,13 +49,13 @@ public:
     static constexpr float NORMAL_REGEN_MULTIPLIER = 1.5f;
     static constexpr float ROTATION_RATE_MULTIPLIER = 2.0f;
 
-    std::array<Tank, 4> players{};
-    std::array<float, 2> combo{};                                                                                                                                                                                                                                                                                                                                                               
+    std::array<Tank, MAX_PLAYERS> players{};
+    std::array<float, MAX_PLAYERS> combo{};                                                                                                                                                                                                                                                                                                                                                               
 
-    std::array<float, 2> special{};
-    std::array<int, 2> comboNum{};
-    std::array<int, 2> hitCombo{};
-    std::array<int, 2> wins{};
+    std::array<float, MAX_PLAYERS> special{};
+    std::array<int, MAX_PLAYERS> comboNum{};
+    std::array<int, MAX_PLAYERS> hitCombo{};
+    std::array<int, MAX_PLAYERS> wins{};
 
     std::vector<Tank> tanks;
 

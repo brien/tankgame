@@ -28,12 +28,12 @@ class BulletRenderer
 public:
     // Main rendering method
     static void DrawAllBullets(const std::vector<Tank>& enemyTanks,
-                              const std::array<Tank, 4>& players,
+                              const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                               int numPlayers);
     
     // Individual rendering methods for different bullet sources
     static void DrawEnemyBullets(const std::vector<Tank>& enemyTanks);
-    static void DrawPlayerBullets(const std::array<Tank, 4>& players, int numPlayers);
+    static void DrawPlayerBullets(const std::array<Tank, TankHandler::MAX_PLAYERS>& players, int numPlayers);
     
 private:
     // Helper methods

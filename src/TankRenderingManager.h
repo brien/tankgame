@@ -2,6 +2,7 @@
 
 #include <array>
 #include <vector>
+#include "TankHandler.h"
 
 // Forward declarations
 class Tank;
@@ -18,18 +19,18 @@ class TankRenderingManager
 {
 public:
     // Main rendering interface - replaces TankHandler::DrawTanks() and DrawBullets()
-    static void RenderAllTanks(const std::array<Tank, 4>& players,
+    static void RenderAllTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                               const std::vector<Tank>& enemyTanks,
-                              const std::array<float, 2>& special,
+                              const std::array<float, TankHandler::MAX_PLAYERS>& special,
                               int numPlayers);
     
-    static void RenderAllBullets(const std::array<Tank, 4>& players,
+    static void RenderAllBullets(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                                 const std::vector<Tank>& enemyTanks,
                                 int numPlayers);
     
     // Individual rendering operations (for more fine-grained control if needed)
-    static void RenderPlayerTanks(const std::array<Tank, 4>& players,
-                                 const std::array<float, 2>& special,
+    static void RenderPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
+                                 const std::array<float, TankHandler::MAX_PLAYERS>& special,
                                  int numPlayers,
                                  bool hasEnemyTargets);
                                  
