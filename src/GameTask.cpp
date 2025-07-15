@@ -1,4 +1,3 @@
-
 #include <iostream>
 #include "App.h"
 #include "GameTask.h"
@@ -212,6 +211,7 @@ void GameTask::Update()
         
         FXHandler::GetSingleton().NextFrame();
         TankHandler::GetSingleton().NextFrame();
+        BulletHandler::GetSingleton().NextFrame();
     }
     
     if(gameOver)

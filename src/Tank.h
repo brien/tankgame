@@ -1,6 +1,7 @@
 #pragma once
 
 #include "igtl_qmesh.h"
+#include "BulletHandler.h"
 
 #include <vector>
 #include <queue>
@@ -63,9 +64,6 @@ public:
     // Move constructor and move assignment operator
     Tank(Tank&&) noexcept;
     Tank& operator=(Tank&&) noexcept;
-
-    vector<Bullet> bullets;
-    queue<Bullet> bulletq;
 
     bool isPlayer;
 

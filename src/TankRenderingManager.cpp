@@ -1,7 +1,7 @@
 #include "TankRenderingManager.h"
 #include "PlayerTankRenderer.h"
 #include "EnemyTankRenderer.h"
-#include "BulletRenderer.h"
+#include "BulletHandler.h"
 #include "Tank.h"
 #include "TankHandler.h"
 
@@ -23,7 +23,7 @@ void TankRenderingManager::RenderAllBullets(const std::array<Tank, TankHandler::
                                            const std::vector<Tank>& enemyTanks,
                                            int numPlayers)
 {
-    BulletRenderer::DrawAllBullets(enemyTanks, players, numPlayers);
+    BulletHandler::GetSingleton().DrawBullets();
 }
 
 void TankRenderingManager::RenderPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,

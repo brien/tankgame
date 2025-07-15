@@ -21,6 +21,7 @@
 #include "InputHandler.h"
 #include "TankCollisionHelper.h"
 #include "InputHandlerFactory.h"
+#include "BulletHandler.h"
 
 void Tank::SetType(TankType t1, TankType t2)
 {
@@ -190,7 +191,7 @@ void Tank::Fire(float dTpressed)
                     z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                     rtx + rx, rty + ry, rtz + rz);
 
-        bullets.push_back(temp);
+        BulletHandler::GetSingleton().AddBullet(temp);
 
         fireTimer = 0;
 
@@ -243,10 +244,10 @@ void Tank::Special(float dTpressed)
                              z,
                              rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
 
-                bullets.push_back(temp2);
+                BulletHandler::GetSingleton().AddBullet(temp2);
             }
 
-            bullets.push_back(temp);
+            BulletHandler::GetSingleton().AddBullet(temp);
             Bullet temp(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
@@ -256,7 +257,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry - 10, rtz + rz);
 
-            bullets.push_back(temp);
+            BulletHandler::GetSingleton().AddBullet(temp);
 
             Bullet temp2(id, attack, type1, type2, bounces,
                          dTpressed,
@@ -267,7 +268,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 20, rtz + rz);
 
-            bullets.push_back(temp2);
+            BulletHandler::GetSingleton().AddBullet(temp2);
         }
         if (type1 == TankType::TYPE_BLUE)
         {
@@ -283,7 +284,7 @@ void Tank::Special(float dTpressed)
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
 
-                bullets.push_back(temp);
+                BulletHandler::GetSingleton().AddBullet(temp);
             }
 
             Bullet temp(id, attack, type1, type2, bounces,
@@ -295,7 +296,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR) + .2 * std::sinf((rty + ry + 90) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
-            bullets.push_back(temp);
+            BulletHandler::GetSingleton().AddBullet(temp);
         }
 
         if (type1 == TankType::TYPE_YELLOW)
@@ -311,10 +312,10 @@ void Tank::Special(float dTpressed)
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
 
-                bullets.push_back(temp);
+                BulletHandler::GetSingleton().AddBullet(temp);
             }
 
-            bullets.push_back(temp);
+            BulletHandler::GetSingleton().AddBullet(temp);
         }
 
         if (type1 == TankType::TYPE_PURPLE)
@@ -328,7 +329,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
-            bullets.push_back(temp);
+            BulletHandler::GetSingleton().AddBullet(temp);
 
             Bullet temp1(id, attack, type1, type2, bounces,
                          dTpressed,
@@ -339,7 +340,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry - 90, rtz + rz);
 
-            bullets.push_back(temp1);
+            BulletHandler::GetSingleton().AddBullet(temp1);
 
             Bullet temp2(id, attack, type1, type2, bounces,
                          dTpressed,
@@ -350,7 +351,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 180, rtz + rz);
 
-            bullets.push_back(temp2);
+            BulletHandler::GetSingleton().AddBullet(temp2);
 
             Bullet temp3(id, attack, type1, type2, bounces,
                          dTpressed,
@@ -361,7 +362,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 90, rtz + rz);
 
-            bullets.push_back(temp3);
+            BulletHandler::GetSingleton().AddBullet(temp3);
         }
 
         fireTimer = 0;
@@ -549,9 +550,7 @@ Tank::~Tank()
 }
 
 Tank::Tank(Tank&& other) noexcept
-    : bullets(std::move(other.bullets)),
-      bulletq(std::move(other.bulletq)),
-      isPlayer(other.isPlayer),
+    : isPlayer(other.isPlayer),
       turbo(other.turbo),
       recharge(other.recharge),
       charge(other.charge),
@@ -604,8 +603,6 @@ Tank::Tank(Tank&& other) noexcept
 Tank& Tank::operator=(Tank&& other) noexcept
 {
     if (this != &other) {
-        bullets = std::move(other.bullets);
-        bulletq = std::move(other.bulletq);
         isPlayer = other.isPlayer;
         turbo = other.turbo;
         recharge = other.recharge;
@@ -717,13 +714,6 @@ void Tank::Init()
     collisionPoints[18] = 0;
     collisionPoints[19] = 0;
     collisionPoints[20] = 0;
-
-    bullets.clear();
-    while (!bulletq.empty())
-    {
-        bullets.push_back(bulletq.front());
-        bulletq.pop();
-    }
 
     x = LevelHandler::GetSingleton().start[0];
     y = 24;
@@ -913,25 +903,6 @@ void Tank::NextFrame()
         if (charge < maxCharge)
         {
             charge += chargeRegen / 2 * GlobalTimer::dT;
-        }
-
-        while (!bulletq.empty())
-        {
-            bullets.push_back(bulletq.front());
-            bulletq.pop();
-        }
-
-        for (auto j = bullets.begin(); j != bullets.end();)
-        {
-            if (j->IsAlive())
-            {
-                j->NextFrame();
-                ++j;
-            }
-            else
-            {
-                j = bullets.erase(j);
-            }
         }
     }
 }
@@ -1418,9 +1389,7 @@ void Tank::Hunt(Tank &player)
     else
     {
         if (ryp > (ry + 5))
-        {
             RotBody(true);
-        }
     }
 
     ratio = (double)(z - player.z) / (double)(x - player.x);

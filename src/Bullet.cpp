@@ -379,8 +379,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                     temp.id = 1;
                     temp.alive = true;
-
-                    TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                    //TODO: Special handling needs to be reimplemented after the bullet refactor
+                    //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
                 }
             }
             else if (type2 == TankType::TYPE_BLUE)
@@ -418,7 +418,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     temp.id = 1;
                     temp.alive = true;
 
-                    TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                    //TODO: Special handling needs to be reimplemented after the bullet refactor
+                    //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
                 }
             }
             else if (type2 == TankType::TYPE_YELLOW || type2 == TankType::TYPE_GREY)
@@ -454,7 +455,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 temp.id = 1;
                 temp.alive = true;
 
-                TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                //TODO: Special handling needs to be reimplemented after the bullet refactor
+                //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
             }
             else if (type2 == TankType::TYPE_PURPLE)
             {
@@ -490,8 +492,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                 temp.id = 1;
                 temp.alive = true;
-
-                TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                //TODO: Special handling needs to be reimplemented after the bullet refactor
+                //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
             }
         }
 

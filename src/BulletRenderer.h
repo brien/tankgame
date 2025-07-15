@@ -11,33 +11,22 @@
 
 #include <vector>
 #include <array>
-
-// Forward declarations
-class Tank;
-class Bullet;
+#include "Bullet.h"
 
 /**
  * @brief Handles rendering of all bullets in the game
  * 
- * This class is responsible for rendering bullets from both player tanks
+ * This class is responsible for rende ring bullets from both player tanks
  * and enemy tanks. Separated from TankHandler to improve code organization
  * and provide a focused interface for bullet rendering operations.
  */
 class BulletRenderer 
 {
 public:
-    // Main rendering method
-    static void DrawAllBullets(const std::vector<Tank>& enemyTanks,
-                              const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
-                              int numPlayers);
-    
-    // Individual rendering methods for different bullet sources
-    static void DrawEnemyBullets(const std::vector<Tank>& enemyTanks);
-    static void DrawPlayerBullets(const std::array<Tank, TankHandler::MAX_PLAYERS>& players, int numPlayers);
+    // Draw all bullets from a vector
+    static void Draw(const std::vector<Bullet>& bullets);
     
 private:
-    // Helper methods
     static void SetupBulletRenderState();
     static void RestoreBulletRenderState();
-    static void DrawBulletsFromTank(const Tank& tank);
 };
