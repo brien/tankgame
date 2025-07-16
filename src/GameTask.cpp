@@ -69,9 +69,6 @@ void GameTask::OnSuspend()
 
 void GameTask::Update()
 {
-    static float ycam=0.8f;
-    static float xzcam=1.0f;
-    
     if(InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {
         TaskHandler::GetSingleton().KillAllTasks();
@@ -177,21 +174,6 @@ void GameTask::Update()
         if(InputTask::KeyDown(SDL_SCANCODE_2))
         {
             TankHandler::GetSingleton().numPlayers=2;
-        }
-        if(InputTask::KeyDown(SDL_SCANCODE_1))
-        {
-            ycam=.8;
-            xzcam=1;
-        }
-        if(InputTask::KeyDown(SDL_SCANCODE_C))
-        {
-            ycam=1.2;
-            xzcam=2;
-        }
-        if(InputTask::KeyDown(SDL_SCANCODE_3))
-        {
-            ycam=20.2;
-            xzcam=0.2;
         }
         
         if (debug)

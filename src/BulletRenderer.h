@@ -16,7 +16,7 @@
 /**
  * @brief Handles rendering of all bullets in the game
  * 
- * This class is responsible for rende ring bullets from both player tanks
+ * This class is responsible for rendering bullets from both player tanks
  * and enemy tanks. Separated from TankHandler to improve code organization
  * and provide a focused interface for bullet rendering operations.
  */
