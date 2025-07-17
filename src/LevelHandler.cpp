@@ -162,7 +162,7 @@ bool LevelHandler::Load(const char filePath[])
 
                         if (t[i][j] == -1)
                         {
-                            if (App::GetSingleton().gameTask->versus)
+                            if (App::GetSingleton().gameTask->IsVersusMode())
                             {
                                 t[i][j] = 10;
                             }
@@ -875,38 +875,35 @@ void LevelHandler::DrawTerrain()
                 {
                     for (int iy = lastBY; iy <= t[ix][iz]; iy++)
                     {
-                        if (iy == t[ix][iz])
+
+                        glBegin(GL_QUADS);
+
+                        glColor3fv(colors[colorNumber2]);
+
+                        if (lastBY < 0)
                         {
-
-                            glBegin(GL_QUADS);
-
-                            glColor3fv(colors[colorNumber2]);
-
-                            if (lastBY < 0)
-                            {
-                                glColor3fv(colors[colorNumber + 1]);
-                            }
-
-                            glTexCoord2i(0, 0);
-                            glVertex3f((float)ix + 1, (float)lastBY, (float)iz);
-
-                            glTexCoord2i(1, 0);
-                            glVertex3f((float)ix + 1, (float)lastBY, (float)iz + 1);
-
-                            glColor3fv(colors[colorNumber]);
-
-                            if (lastBY < 0)
-                            {
-                                glColor3fv(colors[colorNumber]);
-                            }
-
-                            glTexCoord2i(1, iy - lastBY);
-                            glVertex3f((float)ix + 1, (float)iy, (float)iz + 1);
-
-                            glTexCoord2i(0, iy - lastBY);
-                            glVertex3f((float)ix + 1, (float)iy, (float)iz);
-                            glEnd();
+                            glColor3fv(colors[colorNumber + 1]);
                         }
+
+                        glTexCoord2i(0, 0);
+                        glVertex3f((float)ix + 1, (float)lastBY, (float)iz);
+
+                        glTexCoord2i(1, 0);
+                        glVertex3f((float)ix + 1, (float)lastBY, (float)iz + 1);
+
+                        glColor3fv(colors[colorNumber]);
+
+                        if (lastBY < 0)
+                        {
+                            glColor3fv(colors[colorNumber]);
+                        }
+
+                        glTexCoord2i(1, iy - lastBY);
+                        glVertex3f((float)ix + 1, (float)iy, (float)iz + 1);
+
+                        glTexCoord2i(0, iy - lastBY);
+                        glVertex3f((float)ix + 1, (float)iy, (float)iz);
+                        glEnd();
                     }
                 }
             }

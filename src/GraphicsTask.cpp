@@ -179,7 +179,7 @@ void GraphicsTask::Update()
     
     glDisable(GL_LIGHTING);
     
-    if(App::GetSingleton().gameTask->gameStarted)
+    if(App::GetSingleton().gameTask->IsGameStarted())
     {
         for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
         {
@@ -257,12 +257,12 @@ void GraphicsTask::Update()
     
     if(drawMenu)
     {
-        DrawMenu(App::GetSingleton().gameTask->menuState);
+        DrawMenu(App::GetSingleton().gameTask->GetMenuState());
     }
 
     //DrawTextTest();
     
-    if (App::GetSingleton().gameTask->debug)
+    if (App::GetSingleton().gameTask->IsDebugMode())
     {
         char buffer[32];
         float framesPerSecond = 1.0f / GlobalTimer::dT;
@@ -924,7 +924,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glBlendFunc(GL_ONE, GL_ONE);
     glColor4f(1.0f,1.0f,1.0f,1.0f);
     
-    if(App::GetSingleton().gameTask->paused)
+    if(App::GetSingleton().gameTask->IsPaused())
     {
         glPushMatrix();
         glLoadIdentity();
@@ -946,7 +946,7 @@ void GraphicsTask::DrawHUD(Tank& player)
         glPopMatrix();
     }
     
-    if( App::GetSingleton().gameTask->versus && (!TankHandler::GetSingleton().players[0].alive || !TankHandler::GetSingleton().players[1].alive) )
+    if( App::GetSingleton().gameTask->IsVersusMode() && (!TankHandler::GetSingleton().players[0].alive || !TankHandler::GetSingleton().players[1].alive) )
     {
         glPushMatrix();
         glLoadIdentity();

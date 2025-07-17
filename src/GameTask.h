@@ -7,30 +7,38 @@ class GameTask : public ITask
 public:
     GameTask();
     virtual ~GameTask();
-    
-    bool Start();
-    void Update();
-    void Stop();
-    void OnSuspend();
-    void OnResume();
-    
+
+    bool Start() override;
+    void Update() override;
+    void Stop() override;
+    void OnSuspend() override;
+    void OnResume() override;
+
+    // Public getter methods for private flags
+    bool IsGameStarted() const { return gameStarted; }
+    int GetMenuState() const { return menuState; }
+    bool IsDebugMode() const { return debug; }
+    bool IsPaused() const { return paused; }
+    bool IsVersusMode() const { return versus; }
+
+private:
+    enum class GameState { MENU, PLAYING, GAME_OVER };
+    GameState currentState;
+
+    void HandleMenuState();
+    void HandlePlayingState();
+    void HandleGameOverState();
+
     void SetUpGame();
-    void DisplayScore();
-    void DisplayTime();
-    void GameOver();
-    
+    void TransitionToState(GameState newState);
+
     void Visible(bool visible);
-    
+
     bool paused;
-    
     bool debug;
-    
+    bool gameStarted;
+    bool gameOver;
     int menuState;
     bool versus;
-        
     int timer;
-    
-    bool gameOver;
-    bool gameStarted;
-    
 };

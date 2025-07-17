@@ -62,7 +62,7 @@ void TankHandler::InitializePlayerTanks()
         players[j].Init();
         players[j].isPlayer = true;
 
-        if (App::GetSingleton().gameTask->versus)
+        if (App::GetSingleton().gameTask->IsVersusMode())
         {
             SetPlayerVersusPositions(players[j], j);
         }
@@ -400,7 +400,7 @@ void TankHandler::UpdatePlayerStates()
         else
         {
             players[i].Die();
-            if (App::GetSingleton().gameTask->versus)
+            if (App::GetSingleton().gameTask->IsVersusMode())
             {
                 if (players[i].deadtime > VERSUS_RESPAWN_DELAY)
                 {
@@ -474,7 +474,7 @@ void TankHandler::UpdateEnemyTanks()
 
 void TankHandler::UpdateVersusMode()
 {
-    if (App::GetSingleton().gameTask->versus)
+    if (App::GetSingleton().gameTask->IsVersusMode())
     {
         players[0].dist = sqrt((players[0].x - players[1].x) * (players[0].x - players[1].x) + (players[0].z - players[1].z) * (players[0].z - players[1].z));
         players[1].dist = players[0].dist;

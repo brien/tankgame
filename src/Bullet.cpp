@@ -249,7 +249,7 @@ void Bullet::HandlePlayerCollision(Tank &playerTank)
 {
     if (tankId != playerTank.id)
     {
-        if (tankId < 0 && !App::GetSingleton().gameTask->versus)
+        if (tankId < 0 && !App::GetSingleton().gameTask->IsVersusMode())
         {
             App::GetSingleton().soundTask->PlayChannel(3);
             if (playerTank.energy < playerTank.maxEnergy * 2)

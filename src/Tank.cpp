@@ -845,7 +845,7 @@ void Tank::NextFrame()
 
     hitNum = TankHandler::GetSingleton().hitCombo[(-1 * id) - 1];
 
-    if (energy > maxEnergy && !App::GetSingleton().gameTask->debug)
+    if (energy > maxEnergy && !App::GetSingleton().gameTask->IsDebugMode())
     {
         energy = maxEnergy;
     }
@@ -870,7 +870,7 @@ void Tank::NextFrame()
     if (energy < 0 && alive)
     {
         alive = false;
-        if (id < 0 && App::GetSingleton().gameTask->versus)
+        if (id < 0 && App::GetSingleton().gameTask->IsVersusMode())
         {
             if (id == -1)
             {
@@ -1177,14 +1177,14 @@ void Tank::HandleInput()
     }
 
     // Common debug controls that apply to all input modes
-    if (InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->debug)
+    if (InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->IsDebugMode())
     {
         TankHandler::GetSingleton().special[0] += 100;
         energy += maxEnergy * 20;
         charge += maxCharge * 20;
     }
 
-    if (InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->debug)
+    if (InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->IsDebugMode())
     {
         TankHandler::GetSingleton().special[0] = 10;
         energy = maxEnergy;
@@ -1226,7 +1226,7 @@ void Tank::AI()
     }
     else
     {
-        if (energy > (maxEnergy / 2) && !App::GetSingleton().gameTask->versus)
+        if (energy > (maxEnergy / 2) && !App::GetSingleton().gameTask->IsVersusMode())
         {
             state = EnemyState::STATE_HUNT;
         }
@@ -1243,7 +1243,7 @@ void Tank::AI()
         }
     }
 
-    if (TankHandler::GetSingleton().tanks.size() == 1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber - 47) && !App::GetSingleton().gameTask->versus))
+    if (TankHandler::GetSingleton().tanks.size() == 1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber - 47) && !App::GetSingleton().gameTask->IsVersusMode()))
     {
         state = EnemyState::STATE_HUNT;
         TankHandler::GetSingleton().numAttackingTanks++;

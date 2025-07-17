@@ -26,6 +26,7 @@ GameTask::GameTask()
     timer = 0;
     paused = false;
     debug = false;
+    currentState = GameState::MENU;
     SDL_SetRelativeMouseMode(SDL_TRUE);
 }
 
@@ -69,155 +70,74 @@ void GameTask::OnSuspend()
 
 void GameTask::Update()
 {
-    if(InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
+    switch (currentState)
+    {
+    case GameState::MENU:
+        HandleMenuState();
+        break;
+    case GameState::PLAYING:
+        HandlePlayingState();
+        break;
+    case GameState::GAME_OVER:
+        HandleGameOverState();
+        break;
+    }
+}
+
+void GameTask::HandleMenuState()
+{
+    App::GetSingleton().graphicsTask->drawMenu = true;
+    FXHandler::GetSingleton().NextFrame();
+
+    if (InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1))
+    {
+        TankHandler::GetSingleton().isInputJoy = false;
+        if (menuState > 0)
+        {
+            TankHandler::GetSingleton().numPlayers = 2;
+        }
+        versus = (menuState == 2);
+        SetUpGame();
+        TransitionToState(GameState::PLAYING);
+    }
+
+    if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {
         TaskHandler::GetSingleton().KillAllTasks();
     }
-    
-    if(!gameStarted)
+}
+
+void GameTask::HandlePlayingState()
+{
+    App::GetSingleton().graphicsTask->drawHUD = true;
+    App::GetSingleton().graphicsTask->drawMenu = false;
+
+    FXHandler::GetSingleton().NextFrame();
+    TankHandler::GetSingleton().NextFrame();
+    BulletHandler::GetSingleton().NextFrame();
+
+    if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {
-        App::GetSingleton().graphicsTask->drawMenu=true;
-        FXHandler::GetSingleton().NextFrame();
-        
-        if ( InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1) )
-        {
-            TankHandler::GetSingleton().isInputJoy=false;
-            if(menuState>0)
-            {
-                TankHandler::GetSingleton().numPlayers=2;
-            }
-            if(menuState==1)
-            {
-                versus=false;
-            }
-            
-            if(menuState==2)
-            {
-                versus=true;
-            }
-            
-            SetUpGame();
-            gameStarted=true;
-        }
-        
-        if ( InputTask::GetButton(0, 0) || InputTask::GetButton(0, 1) )
-        {
-            TankHandler::GetSingleton().isInputJoy=true;
-            if(menuState>0)
-            {
-                TankHandler::GetSingleton().numPlayers=2;
-            }
-            if(menuState==1)
-            {
-                versus=false;
-            }
-            if(menuState==2)
-            {
-                versus=true;
-            }
-            
-            SetUpGame();
-            gameStarted=true;
-        }
-        
-        if ( InputTask::KeyDown(SDL_SCANCODE_I) )
-        {
-            debug=true;
-            App::GetSingleton().soundTask->PlayChannel(1);
-        }
-        
-        if(InputTask::KeyDown(SDL_SCANCODE_2))
-        {
-            TankHandler::GetSingleton().numPlayers=2;
-        }
-        
-        if(menuState==0)
-        {
-            if(InputTask::KeyDown(SDL_SCANCODE_RIGHT) || InputTask::KeyDown(SDL_SCANCODE_D) || InputTask::GetAxis(0, 0) > 5000 )
-            {
-                menuState=1;
-            }
-        }
-        if(menuState==1)
-        {
-            if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::KeyDown(SDL_SCANCODE_A) || InputTask::GetAxis(0, 0) < -5000)
-            {
-                menuState=0;
-            }
-            if(InputTask::KeyDown(SDL_SCANCODE_DOWN) || InputTask::KeyDown(SDL_SCANCODE_S) || InputTask::GetAxis(0,1) > 5000)
-            {
-                menuState=2;
-            }
-        }
-        if(menuState==2)
-        {
-            if(InputTask::KeyDown(SDL_SCANCODE_LEFT) || InputTask::KeyDown(SDL_SCANCODE_A) || InputTask::GetAxis(0, 0) < -5000 )
-            {
-                menuState=0;
-            }
-            if(InputTask::KeyDown(SDL_SCANCODE_UP) || InputTask::KeyDown(SDL_SCANCODE_W) || InputTask::GetAxis(0,1) < -5000 )
-            {
-                menuState=1;
-            }
-        }
-        
+        TransitionToState(GameState::MENU);
     }
-    
-    if(InputTask::KeyDown(SDL_SCANCODE_M))
+
+    if (gameOver)
     {
-        App::GetSingleton().soundTask->PauseMusic();
-    }
-    
-    
-    if(gameStarted && !gameOver)
-    {
-        if(InputTask::KeyDown(SDL_SCANCODE_2))
-        {
-            TankHandler::GetSingleton().numPlayers=2;
-        }
-        
-        if (debug)
-        {
-            if (InputTask::KeyDown(SDL_SCANCODE_H))
-            {
-                LevelHandler::GetSingleton().NextLevel(true);
-            }
-            if (InputTask::KeyDown(SDL_SCANCODE_L))
-            {
-                LevelHandler::GetSingleton().NextLevel(false);
-            }
-        }
-        
-        App::GetSingleton().graphicsTask->drawHUD=true;
-        App::GetSingleton().graphicsTask->drawMenu=false;
-        
-        FXHandler::GetSingleton().NextFrame();
-        TankHandler::GetSingleton().NextFrame();
-        BulletHandler::GetSingleton().NextFrame();
-    }
-    
-    if(gameOver)
-    {
-        GameOver();
+        TransitionToState(GameState::GAME_OVER);
     }
 }
 
-void GameTask::GameOver()
+void GameTask::HandleGameOverState()
 {
-    
+    GameOver();
+
+    if (InputTask::KeyDown(SDL_SCANCODE_RETURN))
+    {
+        TransitionToState(GameState::MENU);
+    }
 }
 
-void GameTask::DisplayScore()
+void GameTask::TransitionToState(GameState newState)
 {
-    
-}
-
-void GameTask::DisplayTime()
-{
-    
-}
-
-void GameTask::Stop()
-{
-    
+    currentState = newState;
 }
