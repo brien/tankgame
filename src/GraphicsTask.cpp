@@ -76,15 +76,12 @@ bool GraphicsTask::Start()
     
     glFrontFace(GL_CW);
     
-    GLfloat LightAmbient[]= { 1.0f, 1.0f, 1.0f, 1.0f};
+    // Removed unused LightAmbient and LightSpecular variables to fix -Wunused-variable warnings
     GLfloat LightDiffuse[]= { 1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat LightSpecular[]= { 0.8f, 0.8f, 0.8f, 0.8f};
-    
     GLfloat LightPosition[]= { 0.0f, 1.0f, 0.0f, 0.0f };
     
-    
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
-    //	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightAmbient);
+    //glLightModelfv(GL_LIGHT_MODEL_AMBIENT, LightAmbient);
     
     glPushMatrix();
     
@@ -527,7 +524,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glTexCoord2f(1, 1);
     glVertex3f(-0.55f+0.03f,0.37f,static_cast<float>(0));
-				
+                
     glTexCoord2f(1, 0);
     glVertex3f(-0.55f+0.03f,0.34f,static_cast<float>(0));
     
@@ -545,7 +542,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glTexCoord2f(1, 1);
     glVertex3f(-0.55f+0.03f,0.32f,static_cast<float>(0));
-				
+                
     glTexCoord2f(1, 0);
     glVertex3f(-0.55f+0.03f,0.29f,static_cast<float>(0));
     
@@ -648,7 +645,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     glVertex3f(-0.51f+0.29f*rper,0.29f,0);
     glVertex3f(-0.51f,0.29f,0);
     
-    if(App::GetSingleton().gameTask->debug)
+    if(App::GetSingleton().gameTask->IsDebugMode())
     {
         //RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, "Debug Mode");
         float test=(2*static_cast<float>(GlobalTimer::dT));
@@ -752,17 +749,17 @@ void GraphicsTask::DrawHUD(Tank& player)
      
      glBegin(GL_QUADS);
      
-		   glTexCoord2f(0, 1);
-		   glVertex3f((float)0,(float).04,(float)0);
+           glTexCoord2f(0, 1);
+           glVertex3f((float)0,(float).04,(float)0);
      
-		   glTexCoord2f(1, 1);
-		   glVertex3f((float).04,(float).04,(float)0);
+           glTexCoord2f(1, 1);
+           glVertex3f((float).04,(float).04,(float)0);
      
-		   glTexCoord2f(1, 0);
-		   glVertex3f((float).04,(float)0,(float)0);
-		   
-		   glTexCoord2f(0, 0);
-		   glVertex3f((float)0,(float)0,(float)0);
+           glTexCoord2f(1, 0);
+           glVertex3f((float).04,(float)0,(float)0);
+           
+           glTexCoord2f(0, 0);
+           glVertex3f((float)0,(float)0,(float)0);
      glEnd();
      //}
      
@@ -822,7 +819,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glTexCoord2f(1, 1);
     glVertex3f((float).04,(float).04,(float)0);
-				
+                
     glTexCoord2f(1, 0);
     glVertex3f((float).04,(float)0,(float)0);
     
@@ -851,7 +848,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glTexCoord2f(0, 0);
     glVertex3f((float)0,(float)0,(float)0);
-	   glEnd();
+       glEnd();
     //}
     
     glPopMatrix();
@@ -1032,7 +1029,7 @@ void GraphicsTask::DrawHUD(Tank& player)
     
     glTexCoord2f(1, 1);
     glVertex3f((float).04,(float).04,(float)0);
-				
+                
     glTexCoord2f(1, 0);
     glVertex3f((float).04,(float)0,(float)0);
     
@@ -1121,7 +1118,6 @@ void GraphicsTask::DrawTextTest()
     glBlendFunc(GL_ONE, GL_ONE);
 
     char buffer[32];
-    float framesPerSecond = 20.20f; // 1.0f / GlobalTimer::dT;
 
     sprintf(buffer, "F: %s", "string");
     //RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, buffer);
@@ -1317,21 +1313,6 @@ void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLub
     SDL_Color Color = { 255, 255, 0 };
     SDL_Surface* Message = TTF_RenderText_Blended(const_cast<TTF_Font*>(defaultFont), Text, Color);
     unsigned Texture = 0;
-
-    Uint8 colors = Message->format->BytesPerPixel;
-    GLenum texture_format;
-    if (colors == 4) {   // alpha
-        if (Message->format->Rmask == 0x000000ff)
-            texture_format = GL_RGBA;
-        else
-            texture_format = GL_BGRA_EXT;
-    }
-    else {             // no alpha
-        if (Message->format->Rmask == 0x000000ff)
-            texture_format = GL_RGB;
-        else
-            texture_format = GL_BGR_EXT;
-    }
 
     glGenTextures(1, &Texture);
     glBindTexture(GL_TEXTURE_2D, Texture); //textureHandler.GetTextureArray()[12]);

@@ -41,7 +41,8 @@ int LevelHandler::Strlen(const char *stringy)
     return cp;
 }
 
-LevelHandler::LevelHandler() : enemy{0}, fileName{""}, levelNumber(48), colorNumber(0), colorNumber2(0), drawFloor(true), drawTop(false)
+// Reordered member initializer list to match declaration order in LevelHandler.h to fix -Wreorder warning
+LevelHandler::LevelHandler() : items(), drawFloor(true), drawWalls(false), drawTop(false), start{0}, enemy{0}, fileName{""}, sizeX(128), sizeZ(128), levelNumber(48), colorNumber(0), colorNumber2(0)
 {
 }
 
@@ -136,11 +137,11 @@ bool LevelHandler::Load(const char filePath[])
             int cdepth = sizeZ;
             char *oneline = new char[cdepth]; // Storage per line
 
-            for (unsigned int i = 0; i < sizeX; i++)
+            for (int i = 0; i < sizeX; i++)
             {
                 // Get next line
                 fgets(oneline, cdepth, filein);
-                for (unsigned int j = 0; j < sizeZ; j++)
+                for (int j = 0; j < sizeZ; j++)
                 {
                     t[i][j] = oneline[j];
 

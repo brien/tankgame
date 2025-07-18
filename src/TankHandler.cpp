@@ -22,16 +22,9 @@
 #include <algorithm>
 #include <vector>
 
+// Reordered member initializer list to match declaration order in TankHandler.h to fix -Wreorder warning
 TankHandler::TankHandler()
-    : numPlayers(1),
-      numAttackingTanks(0),
-      combo{0, 0},
-      special{0, 0},
-      comboNum{0, 0},
-      hitCombo{0, 0},
-      wins{0, 0},
-      isInputJoy(false),
-      difficultySetting(0)
+    : players{}, combo{0, 0}, special{0, 0}, comboNum{0, 0}, hitCombo{0, 0}, wins{0, 0}, tanks(), closest(0.0f), isInputJoy(false), difficultySetting(0), numPlayers(1), numAttackingTanks(0)
 {
 }
 

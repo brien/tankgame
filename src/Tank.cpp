@@ -941,7 +941,7 @@ bool Tank::Move(float rate)
         int kx = 0;
         int kz = 2;
 
-        bool done = false;
+        // Removed unused variable 'done' to fix -Wunused-but-set-variable warning
 
         // Find which specific collision point is colliding and create appropriate FX
         int which = TankCollisionHelper::FindCollidingPoint(*this);
@@ -985,13 +985,11 @@ bool Tank::Move(float rate)
         if (static_cast<int>(x + collisionPoints[kx] + vx) != static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) == static_cast<int>(z + collisionPoints[kz]))
         {
             z += vz / 2;
-            done = true;
         }
         // else
         if (static_cast<int>(x + collisionPoints[kx] + vx) == static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) != static_cast<int>(z + collisionPoints[kz]))
         {
             x += vx / 2;
-            done = true;
         }
         // else
         if (static_cast<int>(x + collisionPoints[kx] + vx) != static_cast<int>(x + collisionPoints[kx]) && static_cast<int>(z + collisionPoints[kz] + vz) != static_cast<int>(z + collisionPoints[kz]))
@@ -999,12 +997,10 @@ bool Tank::Move(float rate)
             if (LevelHandler::GetSingleton().PointCollision((x + vx + collisionPoints[kx]), y, z + collisionPoints[kz]) && !LevelHandler::GetSingleton().PointCollision(x + collisionPoints[kx], y, z + vz + collisionPoints[kz]))
             {
                 z += vz / 2;
-                done = true;
             }
             else
             {
                 x += vx / 2;
-                done = true;
             }
         }
 

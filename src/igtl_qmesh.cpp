@@ -207,7 +207,7 @@ bool igtl_QGLMesh::SetTriangleColor(unsigned int n, float r, float g, float b){
 //Set the n'th triangles color
 bool igtl_QGLMesh::SetTriangleColor(float r, float g, float b){
     
-    for( int n = 0; n < m_triangles.size(); n++)
+    for( size_t n = 0; n < m_triangles.size(); n++)
     {
         m_triangles[n].m_r = r;
         m_triangles[n].m_g = g;

@@ -16,10 +16,10 @@ public:
 
     // Public getter methods for private flags
     bool IsGameStarted() const { return gameStarted; }
-    int GetMenuState() const { return menuState; }
     bool IsDebugMode() const { return debug; }
     bool IsPaused() const { return paused; }
     bool IsVersusMode() const { return versus; }
+    int GetMenuState() const { return menuState; }
 
 private:
     enum class GameState { MENU, PLAYING, GAME_OVER };
