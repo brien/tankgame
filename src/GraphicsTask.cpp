@@ -34,6 +34,7 @@
 #include "LevelHandler.h"
 #include "FXHandler.h"
 #include "VideoTask.h"
+#include "math.h"
 
 typedef unsigned short WORD;
 typedef unsigned char byte;
@@ -191,19 +192,16 @@ void GraphicsTask::Update()
     
     if(App::GetSingleton().gameTask->IsGameStarted())
     {
-        for(int i=0; i<TankHandler::GetSingleton().numPlayers; i++)
+        // Update cameras using CameraManager instead of manual calculations
+        int numPlayers = TankHandler::GetSingleton().numPlayers;
+        cameraManager.UpdateCameras(TankHandler::GetSingleton().players, numPlayers, true);
+        
+        // Copy camera data to the old cams array for backward compatibility
+        for(int i = 0; i < numPlayers && i < 4; i++)
         {
-            cams[i].SetPos(
-                TankHandler::GetSingleton().players[i].x - cams[i].xzdist * static_cast<float>(cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)),
-                TankHandler::GetSingleton().players[i].y + cams[i].ydist,
-                TankHandler::GetSingleton().players[i].z - cams[i].xzdist * static_cast<float>(sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR))
-            );
-            
-            cams[i].SetFocus(
-                TankHandler::GetSingleton().players[i].x + static_cast<float>(cos((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR)),
-                TankHandler::GetSingleton().players[i].y + 0.3f,
-                TankHandler::GetSingleton().players[i].z + static_cast<float>(sin((TankHandler::GetSingleton().players[i].ry + TankHandler::GetSingleton().players[i].rty) * DTR))
-            );
+            const Camera& managedCam = cameraManager.GetCamera(i);
+            cams[i].SetPos(managedCam.xpos(), managedCam.ypos(), managedCam.zpos());
+            cams[i].SetFocus(managedCam.xfocus(), managedCam.yfocus(), managedCam.zfocus());
         }
     }
     

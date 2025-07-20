@@ -27,6 +27,7 @@
 #include "DisplayList.h"
 #include "TextureHandler.h"
 #include "rendering/ViewportManager.h"
+#include "rendering/CameraManager.h"
 #include "VideoTask.h"
 
 class GraphicsTask : public ITask
@@ -40,6 +41,7 @@ public:
     
     Camera cams[4];
     ViewportManager viewportManager;  // Manages viewport layout for split-screen
+    CameraManager cameraManager;      // Manages camera positioning and behavior
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
