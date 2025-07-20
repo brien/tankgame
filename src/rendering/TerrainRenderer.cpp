@@ -18,7 +18,7 @@ TerrainRenderer::TerrainRenderer() :
     lastHeightX(0),
     lastHeightZ(0)
 {
-    initializeColorPalette();
+    InitializeColorPalette();
 }
 
 bool TerrainRenderer::Initialize() {
@@ -47,17 +47,17 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData& terrainData) {
     SetupRenderState();
     
     try {
-        setupTerrainColors(terrainData);
+        SetupTerrainColors(terrainData);
         
         glEnable(GL_DEPTH_TEST);
         glEnable(GL_TEXTURE_2D);
         
         // Render terrain components in order
-        renderFloatingElements(terrainData);
-        renderTerrainSurface(terrainData);
-        renderTerrainWalls(terrainData);
-        renderBoundaryWalls(terrainData);
-        renderWaterEffects(terrainData);
+        RenderFloatingElements(terrainData);
+        RenderTerrainSurface(terrainData);
+        RenderTerrainWalls(terrainData);
+        RenderBoundaryWalls(terrainData);
+        RenderWaterEffects(terrainData);
         
     } catch (...) {
         Logger::Get().Write("Exception occurred during terrain rendering");
@@ -67,11 +67,11 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData& terrainData) {
     CleanupRenderState();
 }
 
-void TerrainRenderer::renderFloatingElements(const TerrainRenderData& terrain) {
+void TerrainRenderer::RenderFloatingElements(const TerrainRenderData& terrain) {
     glFrontFace(GL_CCW);
     glColor3fv(colorPalette[terrain.colorNumber2]);
     
-    bindTerrainTexture(terrain.levelNumber);
+    BindTerrainTexture(terrain.levelNumber);
     
     for (int q = 0; q < terrain.sizeX; q++) {
         for (int w = 0; w < terrain.sizeZ; w++) {
@@ -92,12 +92,12 @@ void TerrainRenderer::renderFloatingElements(const TerrainRenderData& terrain) {
     glFrontFace(GL_CW);
 }
 
-void TerrainRenderer::renderTerrainSurface(const TerrainRenderData& terrain) {
+void TerrainRenderer::RenderTerrainSurface(const TerrainRenderData& terrain) {
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
     
     // Set texture based on level
-    bindTerrainTexture(terrain.levelNumber);
+    BindTerrainTexture(terrain.levelNumber);
     
     glNormal3f(0, 1, 0);
     
@@ -111,7 +111,7 @@ void TerrainRenderer::renderTerrainSurface(const TerrainRenderData& terrain) {
             
             if (currentY != terrain.heightMap[jx][jz] || jz == sz - 1) {
                 // Render terrain strip
-                renderTerrainQuad(jx, jz, currentY, stripLength, jz == sz - 1);
+                RenderTerrainQuad(jx, jz, currentY, stripLength, jz == sz - 1);
                 stripLength = 0;
             }
             
@@ -120,18 +120,18 @@ void TerrainRenderer::renderTerrainSurface(const TerrainRenderData& terrain) {
     }
 }
 
-void TerrainRenderer::renderTerrainWalls(const TerrainRenderData& terrain) {
+void TerrainRenderer::RenderTerrainWalls(const TerrainRenderData& terrain) {
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
     
-    bindTerrainTexture(terrain.levelNumber);
+    BindTerrainTexture(terrain.levelNumber);
     
     // Render walls in X direction (front faces)
     for (int ix = 0; ix <= sx; ix++) {
         int lastY = 0;
         for (int iz = 0; iz <= sz; iz++) {
             if (terrain.heightMap[ix][iz] != lastY && iz != sz && ix != 0) {
-                renderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 0);
+                RenderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 0);
             }
             lastY = terrain.heightMap[ix][iz];
         }
@@ -142,7 +142,7 @@ void TerrainRenderer::renderTerrainWalls(const TerrainRenderData& terrain) {
         int lastY = 0;
         for (int iz = sz - 1; iz > 0; iz--) {
             if (terrain.heightMap[ix][iz] != lastY && ix != sx) {
-                renderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 1);
+                RenderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 1);
             }
             lastY = terrain.heightMap[ix][iz];
         }
@@ -153,7 +153,7 @@ void TerrainRenderer::renderTerrainWalls(const TerrainRenderData& terrain) {
         int lastY = 0;
         for (int ix = 0; ix <= sx; ix++) {
             if (terrain.heightMap[ix][iz] != lastY && ix != sx && iz != 0) {
-                renderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 2);
+                RenderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 2);
             }
             lastY = terrain.heightMap[ix][iz];
         }
@@ -164,14 +164,14 @@ void TerrainRenderer::renderTerrainWalls(const TerrainRenderData& terrain) {
         int lastY = 0;
         for (int ix = sx; ix >= 0; ix--) {
             if (terrain.heightMap[ix][iz] != lastY && ix != 0) {
-                renderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 3);
+                RenderWallQuad(ix, iz, lastY, terrain.heightMap[ix][iz], 3);
             }
             lastY = terrain.heightMap[ix][iz];
         }
     }
 }
 
-void TerrainRenderer::renderBoundaryWalls(const TerrainRenderData& terrain) {
+void TerrainRenderer::RenderBoundaryWalls(const TerrainRenderData& terrain) {
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
     
@@ -260,7 +260,7 @@ void TerrainRenderer::renderBoundaryWalls(const TerrainRenderData& terrain) {
     }
 }
 
-void TerrainRenderer::renderWaterEffects(const TerrainRenderData& terrain) {
+void TerrainRenderer::RenderWaterEffects(const TerrainRenderData& terrain) {
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
     
@@ -289,7 +289,7 @@ void TerrainRenderer::renderWaterEffects(const TerrainRenderData& terrain) {
                 for (int iz = 0; iz <= sz; iz++) {
                     if (terrain.heightMap[ix][iz] != lastY && iz != sz) {
                         if (terrain.heightMap[ix][iz] < 0) {
-                            renderBlendQuad(ix, iz, lastY, direction);
+                            RenderBlendQuad(ix, iz, lastY, direction);
                         }
                     }
                     lastY = terrain.heightMap[ix][iz];
@@ -301,7 +301,7 @@ void TerrainRenderer::renderWaterEffects(const TerrainRenderData& terrain) {
                 for (int iz = sz - 1; iz > 0; iz--) {
                     if (terrain.heightMap[ix][iz] != lastY) {
                         if (terrain.heightMap[ix][iz] < 0) {
-                            renderBlendQuad(ix, iz, lastY, direction);
+                            RenderBlendQuad(ix, iz, lastY, direction);
                         }
                     }
                     lastY = terrain.heightMap[ix][iz];
@@ -313,7 +313,7 @@ void TerrainRenderer::renderWaterEffects(const TerrainRenderData& terrain) {
                 for (int ix = 0; ix <= sx; ix++) {
                     if (terrain.heightMap[ix][iz] != lastY && ix != sx) {
                         if (terrain.heightMap[ix][iz] < 0) {
-                            renderBlendQuad(ix, iz, lastY, direction);
+                            RenderBlendQuad(ix, iz, lastY, direction);
                         }
                     }
                     lastY = terrain.heightMap[ix][iz];
@@ -325,7 +325,7 @@ void TerrainRenderer::renderWaterEffects(const TerrainRenderData& terrain) {
                 for (int ix = sx; ix >= 0; ix--) {
                     if (terrain.heightMap[ix][iz] != lastY && ix != 0) {
                         if (terrain.heightMap[ix][iz] < 0) {
-                            renderBlendQuad(ix, iz, lastY, direction);
+                            RenderBlendQuad(ix, iz, lastY, direction);
                         }
                     }
                     lastY = terrain.heightMap[ix][iz];
@@ -341,12 +341,12 @@ void TerrainRenderer::renderWaterEffects(const TerrainRenderData& terrain) {
     glEnable(GL_CULL_FACE);
 }
 
-void TerrainRenderer::setupTerrainColors(const TerrainRenderData& terrain) {
+void TerrainRenderer::SetupTerrainColors(const TerrainRenderData& terrain) {
     // Colors are set up during rendering of individual components
     // This method could be used for any global color setup if needed
 }
 
-void TerrainRenderer::bindTerrainTexture(int levelNumber) {
+void TerrainRenderer::BindTerrainTexture(int levelNumber) {
     if (!App::GetSingleton().graphicsTask) {
         return;
     }
@@ -363,7 +363,7 @@ void TerrainRenderer::bindTerrainTexture(int levelNumber) {
     }
 }
 
-void TerrainRenderer::renderTerrainQuad(int x, int z, int height, int strips, bool isLast) {
+void TerrainRenderer::RenderTerrainQuad(int x, int z, int height, int strips, bool isLast) {
     if (height >= 25) return; // Skip high terrain
     
     // Set color based on height
@@ -400,7 +400,7 @@ void TerrainRenderer::renderTerrainQuad(int x, int z, int height, int strips, bo
     glEnd();
 }
 
-void TerrainRenderer::renderWallQuad(int ix, int iz, int lastY, int currentY, int direction) {
+void TerrainRenderer::RenderWallQuad(int ix, int iz, int lastY, int currentY, int direction) {
     for (int iy = lastY; iy <= currentY; iy++) {
         if (iy == currentY) {
             glBegin(GL_QUADS);
@@ -467,7 +467,7 @@ void TerrainRenderer::renderWallQuad(int ix, int iz, int lastY, int currentY, in
     }
 }
 
-void TerrainRenderer::renderBlendQuad(int ix, int iz, int height, int direction) {
+void TerrainRenderer::RenderBlendQuad(int ix, int iz, int height, int direction) {
     glBegin(GL_QUADS);
     
     switch (direction) {
@@ -519,7 +519,7 @@ void TerrainRenderer::renderBlendQuad(int ix, int iz, int height, int direction)
     glEnd();
 }
 
-void TerrainRenderer::initializeColorPalette() {
+void TerrainRenderer::InitializeColorPalette() {
     // Initialize the 32-color palette used for terrain rendering
     float colors[COLOR_PALETTE_SIZE][4] = {
         {1.0, 1.0, 1.0, 1.0}, {0.0, 1.0, 0.0, 1.0}, {1.0, 0.0, 0.0, 1.0}, {0.0, 0.0, 1.0, 1.0},

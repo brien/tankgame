@@ -28,18 +28,18 @@ public:
 
 private:
     // Main rendering functions
-    void renderFloatingElements(const TerrainRenderData& terrain);
-    void renderTerrainSurface(const TerrainRenderData& terrain);
-    void renderTerrainWalls(const TerrainRenderData& terrain);
-    void renderBoundaryWalls(const TerrainRenderData& terrain);
-    void renderWaterEffects(const TerrainRenderData& terrain);
+    void RenderFloatingElements(const TerrainRenderData& terrain);
+    void RenderTerrainSurface(const TerrainRenderData& terrain);
+    void RenderTerrainWalls(const TerrainRenderData& terrain);
+    void RenderBoundaryWalls(const TerrainRenderData& terrain);
+    void RenderWaterEffects(const TerrainRenderData& terrain);
     
     // Utility functions
-    void setupTerrainColors(const TerrainRenderData& terrain);
-    void bindTerrainTexture(int levelNumber);
-    void renderTerrainQuad(int x, int z, int height, int strips, bool isLast = false);
-    void renderWallQuad(int ix, int iz, int lastY, int currentY, int direction);
-    void renderBlendQuad(int ix, int iz, int height, int direction);
+    void SetupTerrainColors(const TerrainRenderData& terrain);
+    void BindTerrainTexture(int levelNumber);
+    void RenderTerrainQuad(int x, int z, int height, int strips, bool isLast = false);
+    void RenderWallQuad(int ix, int iz, int lastY, int currentY, int direction);
+    void RenderBlendQuad(int ix, int iz, int height, int direction);
     
     // Color palette for terrain rendering
     static constexpr int COLOR_PALETTE_SIZE = 32;
@@ -61,7 +61,7 @@ private:
     mutable int lastHeightZ;
     
     // Initialize the color palette
-    void initializeColorPalette();
+    void InitializeColorPalette();
 };
 
 #endif // TERRAINRENDERER_H
