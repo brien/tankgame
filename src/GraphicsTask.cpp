@@ -60,6 +60,9 @@ bool GraphicsTask::Start()
     //glShadeModel( GL_SMOOTH );
     glClearColor( 0, 0, 0.0f, 0.0f );
     
+    // Initialize viewport manager
+    viewportManager.SetupSinglePlayer(VideoTask::scrWidth, VideoTask::scrHeight);
+    
     // Setup our viewport.
     glViewport( 0, 0, VideoTask::scrWidth, VideoTask::scrHeight );
     
@@ -160,10 +163,20 @@ void GraphicsTask::Update()
     
     if(lastnumPlayers!=TankHandler::GetSingleton().numPlayers)
     {
+        // Setup viewports when player count changes
+        int numPlayers = TankHandler::GetSingleton().numPlayers;
+        if (numPlayers > 1) {
+            viewportManager.SetupSplitScreen(numPlayers, VideoTask::scrWidth, VideoTask::scrHeight);
+        } else {
+            viewportManager.SetupSinglePlayer(VideoTask::scrWidth, VideoTask::scrHeight);
+        }
+        
         glMatrixMode( GL_PROJECTION );
         glLoadIdentity( );
         float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight/2);
         gluPerspective( 45.0, ratio, 0.1, 1024.0 );
+        
+        lastnumPlayers = numPlayers;
     }
 
 
@@ -196,7 +209,8 @@ void GraphicsTask::Update()
     
     if(TankHandler::GetSingleton().numPlayers>1)
     {
-        glViewport(0, 0, VideoTask::scrWidth, VideoTask::scrHeight/2);
+        // Render for Player 1 (camera index 1)
+        viewportManager.SetActiveViewport(1);
         
         gluLookAt(cams[1].xpos(),cams[1].ypos(),cams[1].zpos(),
                   cams[1].xfocus(),cams[1].yfocus(),cams[1].zfocus(),
@@ -217,7 +231,8 @@ void GraphicsTask::Update()
             DrawHUD(TankHandler::GetSingleton().players[1]);
         }
         
-        glViewport(0, 300, VideoTask::scrWidth, VideoTask::scrHeight/2);
+        // Render for Player 0 (camera index 0)
+        viewportManager.SetActiveViewport(0);
         
         glLoadIdentity();
         

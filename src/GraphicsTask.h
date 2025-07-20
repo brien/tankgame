@@ -26,6 +26,8 @@
 #include "Camera.h"
 #include "DisplayList.h"
 #include "TextureHandler.h"
+#include "rendering/ViewportManager.h"
+#include "VideoTask.h"
 
 class GraphicsTask : public ITask
 {
@@ -37,6 +39,7 @@ public:
     TTF_Font *defaultFont;
     
     Camera cams[4];
+    ViewportManager viewportManager;  // Manages viewport layout for split-screen
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
