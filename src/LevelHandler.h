@@ -11,6 +11,9 @@ using namespace std;
 #include "Item.h"
 #include "Singleton.h"
 
+// Forward declaration
+struct TerrainRenderData;
+
 class LevelHandler : public Singleton<LevelHandler>
 {
 public:
@@ -49,6 +52,9 @@ public:
 
     void DrawTerrain();
     void DrawItems();
+
+    // Rendering data extraction for new rendering pipeline
+    void populateTerrainRenderData(struct TerrainRenderData& renderData) const;
 
     void DrawTerrain_OLD();
 

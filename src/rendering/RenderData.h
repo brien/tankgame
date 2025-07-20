@@ -3,34 +3,10 @@
 
 #include <vector>
 
-/**
- * Tank type enumeration for different tank abilities and appearances
- */
-enum class TankType
-{
-    TYPE_GREY,
-    TYPE_RED,
-    TYPE_BLUE,
-    TYPE_YELLOW,
-    TYPE_PURPLE,
-    TANK_TYPE_COUNT
-};
-
-/**
- * Effect type enumeration for different visual effects
- */
-enum class FxType
-{
-    TYPE_ZERO = 0,
-    TYPE_JUMP = 1,
-    TYPE_SMOKE = 2,
-    TYPE_THREE = 3,
-    TYPE_SMALL_SQUARE = 4,
-    TYPE_STAR = 5,
-    TYPE_DEATH = 6,
-    TYPE_SMALL_RECTANGLE = 7,
-    FX_TYPE_COUNT = 8
-};
+// Include Tank.h for TankType enum
+#include "../Tank.h"
+// Include FXHandler.h for FxType enum
+#include "../FXHandler.h"
 
 /**
  * Basic 3D vector structure for rendering data
@@ -201,12 +177,43 @@ struct ItemRenderData {
  * Rendering data for terrain/level geometry
  */
 struct TerrainRenderData {
-    int levelNumber;            // Different levels have different terrain meshes
-    // Note: More complex terrain data (heightmaps, textures) can be added here
-    // For now, level number determines which pre-loaded terrain to render
+    static const int MAX_SIZE_X = 128;
+    static const int MAX_SIZE_Z = 128;
+    
+    int levelNumber;                        // Different levels have different terrain meshes
+    int colorNumber;                        // Primary color index
+    int colorNumber2;                       // Secondary color index
+    int sizeX;                             // Terrain width
+    int sizeZ;                             // Terrain depth
+    
+    // Terrain height maps
+    int heightMap[MAX_SIZE_X][MAX_SIZE_Z];     // Main terrain height data (t array)
+    int floatMap[MAX_SIZE_X][MAX_SIZE_Z];      // Floating elements height data (f array)
+    
+    // Drawing flags
+    bool drawFloor;
+    bool drawWalls;
+    bool drawTop;
     
     // Constructor
-    TerrainRenderData() : levelNumber(0) {}
+    TerrainRenderData() : 
+        levelNumber(0), 
+        colorNumber(0), 
+        colorNumber2(0), 
+        sizeX(128), 
+        sizeZ(128),
+        drawFloor(true),
+        drawWalls(false),
+        drawTop(false)
+    {
+        // Initialize arrays to zero
+        for (int x = 0; x < MAX_SIZE_X; x++) {
+            for (int z = 0; z < MAX_SIZE_Z; z++) {
+                heightMap[x][z] = 0;
+                floatMap[x][z] = 0;
+            }
+        }
+    }
 };
 
 /**

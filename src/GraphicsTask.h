@@ -28,6 +28,7 @@
 #include "TextureHandler.h"
 #include "rendering/ViewportManager.h"
 #include "rendering/CameraManager.h"
+#include "rendering/TerrainRenderer.h"
 #include "VideoTask.h"
 
 class GraphicsTask : public ITask
@@ -42,6 +43,7 @@ public:
     Camera cams[4];
     ViewportManager viewportManager;  // Manages viewport layout for split-screen
     CameraManager cameraManager;      // Manages camera positioning and behavior
+    TerrainRenderer terrainRenderer;  // Handles all terrain rendering
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;

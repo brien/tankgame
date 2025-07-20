@@ -15,6 +15,7 @@
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "App.h"
+#include "rendering/RenderData.h"
 #include <iostream>
 #include <algorithm>
 
@@ -41,7 +42,6 @@ int LevelHandler::Strlen(const char *stringy)
     return cp;
 }
 
-// Reordered member initializer list to match declaration order in LevelHandler.h to fix -Wreorder warning
 LevelHandler::LevelHandler() : items(), drawFloor(true), drawWalls(false), drawTop(false), start{0}, enemy{0}, fileName{""}, sizeX(128), sizeZ(128), levelNumber(48), colorNumber(0), colorNumber2(0)
 {
 }
@@ -773,10 +773,10 @@ void LevelHandler::DrawTerrain()
                             glBegin(GL_QUADS);
 
                             glTexCoord2i(0, 0);
-                            glVertex3i(ix, iy, iz + 1);
+                            glVertex3f(ix, iy, iz + 1);
 
                             glTexCoord2i(1, 0);
-                            glVertex3i(ix + 1, iy, iz + 1);
+                            glVertex3f(ix + 1, iy, iz + 1);
 
                             glColor3fv(colors[colorNumber2]);
 
@@ -786,10 +786,10 @@ void LevelHandler::DrawTerrain()
                             }
 
                             glTexCoord2i(1, iy - lastBY);
-                            glVertex3i(ix + 1, lastBY, iz + 1);
+                            glVertex3f(ix + 1, lastBY, iz + 1);
 
                             glTexCoord2i(0, iy - lastBY);
-                            glVertex3i(ix, lastBY, iz + 1);
+                            glVertex3f(ix, lastBY, iz + 1);
 
                             glColor3fv(colors[colorNumber]);
 
@@ -831,10 +831,10 @@ void LevelHandler::DrawTerrain()
                             glBegin(GL_QUADS);
 
                             glTexCoord2i(0, 0);
-                            glVertex3i(ix, iy, iz);
+                            glVertex3f(ix, iy, iz);
 
                             glTexCoord2i(1, 0);
-                            glVertex3i(ix, iy, iz + 1);
+                            glVertex3f(ix, iy, iz + 1);
 
                             glColor3fv(colors[colorNumber2]);
 
@@ -844,10 +844,10 @@ void LevelHandler::DrawTerrain()
                             }
 
                             glTexCoord2i(1, iy - lastY);
-                            glVertex3i(ix, lastY, iz + 1);
+                            glVertex3f(ix, lastY, iz + 1);
 
                             glTexCoord2i(0, iy - lastY);
-                            glVertex3i(ix, lastY, iz);
+                            glVertex3f(ix, lastY, iz);
 
                             glColor3fv(colors[colorNumber]);
 
@@ -1180,6 +1180,25 @@ void LevelHandler::DrawTerrain()
     glEnable(GL_CULL_FACE);
 
     glPopMatrix();
+}
+
+void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) const {
+    renderData.levelNumber = levelNumber;
+    renderData.colorNumber = colorNumber;
+    renderData.colorNumber2 = colorNumber2;
+    renderData.sizeX = sizeX;
+    renderData.sizeZ = sizeZ;
+    renderData.drawFloor = drawFloor;
+    renderData.drawWalls = drawWalls;
+    renderData.drawTop = drawTop;
+    
+    // Copy height map data
+    for (int x = 0; x < TerrainRenderData::MAX_SIZE_X && x < sizeX; x++) {
+        for (int z = 0; z < TerrainRenderData::MAX_SIZE_Z && z < sizeZ; z++) {
+            renderData.heightMap[x][z] = t[x][z];
+            renderData.floatMap[x][z] = f[x][z];
+        }
+    }
 }
 
 // ############################################################

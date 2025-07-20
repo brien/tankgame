@@ -21,6 +21,8 @@
 #endif
 
 #include "GraphicsTask.h"
+#include "LevelHandler.h"
+#include "rendering/RenderData.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <iostream>
@@ -31,7 +33,6 @@
 
 #include "App.h"
 #include "TankHandler.h"
-#include "LevelHandler.h"
 #include "FXHandler.h"
 #include "VideoTask.h"
 #include "math.h"
@@ -135,6 +136,12 @@ bool GraphicsTask::Start()
 
     BuildDisplayLists();
 
+    // Initialize new rendering pipeline components
+    if (!terrainRenderer.Initialize()) {
+        Logger::Get().Write("ERROR: Failed to initialize TerrainRenderer\n");
+        return false;
+    }
+
     return true;
 }
 
@@ -151,6 +158,11 @@ void GraphicsTask::Stop()
 {
     Logger::Get().Write("GraphicsTask: ClosingFont \n");
     TTF_CloseFont(defaultFont);
+    
+    // Cleanup new rendering pipeline
+    terrainRenderer.Cleanup();
+    
+    Logger::Get().Write("GraphicsTask: Stopped \n");
 }
 
 
@@ -214,7 +226,10 @@ void GraphicsTask::Update()
                   cams[1].xfocus(),cams[1].yfocus(),cams[1].zfocus(),
                   0, 1, 0);
         
-        LevelHandler::GetSingleton().DrawTerrain();
+        // Use new terrain renderer
+        TerrainRenderData terrainData;
+        LevelHandler::GetSingleton().populateTerrainRenderData(terrainData);
+        terrainRenderer.RenderTerrain(terrainData);
         
         TankHandler::GetSingleton().DrawBullets();
         
@@ -247,9 +262,10 @@ void GraphicsTask::Update()
         DrawSky();
     }
     
-    
-    
-    LevelHandler::GetSingleton().DrawTerrain();
+    // Use new terrain renderer for main player view
+    TerrainRenderData terrainData;
+    LevelHandler::GetSingleton().populateTerrainRenderData(terrainData);
+    terrainRenderer.RenderTerrain(terrainData);
     
     TankHandler::GetSingleton().DrawBullets();
     
