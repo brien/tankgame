@@ -147,6 +147,11 @@ bool GraphicsTask::Start()
         Logger::Get().Write("ERROR: Failed to initialize NewBulletRenderer\n");
         return false;
     }
+    
+    if (!effectRenderer.Initialize()) {
+        Logger::Get().Write("ERROR: Failed to initialize EffectRenderer\n");
+        return false;
+    }
 
     return true;
 }
@@ -168,6 +173,7 @@ void GraphicsTask::Stop()
     // Cleanup new rendering pipeline
     terrainRenderer.Cleanup();
     bulletRenderer.Cleanup();
+    effectRenderer.Cleanup();
     
     Logger::Get().Write("GraphicsTask: Stopped \n");
 }
@@ -241,7 +247,8 @@ void GraphicsTask::Update()
         // Use new bullet rendering pipeline
         RenderBulletsWithNewPipeline();
         
-        FXHandler::GetSingleton().Draw();
+        // Use new effect rendering pipeline
+        RenderEffectsWithNewPipeline();
         
         LevelHandler::GetSingleton().DrawItems();
         
@@ -278,7 +285,8 @@ void GraphicsTask::Update()
     // Use new bullet rendering pipeline
     RenderBulletsWithNewPipeline();
     
-    FXHandler::GetSingleton().Draw();
+    // Use new effect rendering pipeline
+    RenderEffectsWithNewPipeline();
     
     LevelHandler::GetSingleton().DrawItems();
     
@@ -506,6 +514,15 @@ void GraphicsTask::RenderBulletsWithNewPipeline() {
     
     // Render using the new bullet renderer
     bulletRenderer.RenderBullets(bulletRenderData);
+}
+
+void GraphicsTask::RenderEffectsWithNewPipeline() {
+    // Extract effect render data from FXHandler
+    const std::vector<FX>& effects = FXHandler::GetSingleton().fx;
+    std::vector<EffectRenderData> effectRenderData = EffectDataExtractor::ExtractEffectRenderData(effects);
+    
+    // Render using the new effect renderer
+    effectRenderer.RenderEffects(effectRenderData);
 }
 
 

@@ -30,7 +30,9 @@
 #include "rendering/CameraManager.h"
 #include "rendering/TerrainRenderer.h"
 #include "rendering/NewBulletRenderer.h"
+#include "rendering/EffectRenderer.h"
 #include "rendering/BulletDataExtractor.h"
+#include "rendering/EffectDataExtractor.h"
 #include "VideoTask.h"
 
 class GraphicsTask : public ITask
@@ -47,6 +49,7 @@ public:
     CameraManager cameraManager;      // Manages camera positioning and behavior
     TerrainRenderer terrainRenderer;  // Handles all terrain rendering
     NewBulletRenderer bulletRenderer; // Handles all bullet rendering
+    EffectRenderer effectRenderer;    // Handles all visual effect rendering
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
@@ -76,6 +79,7 @@ public:
     
     // New rendering pipeline methods
     void RenderBulletsWithNewPipeline();
+    void RenderEffectsWithNewPipeline();
     
     bool Start();
     void Update();
