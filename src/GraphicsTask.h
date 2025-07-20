@@ -29,6 +29,8 @@
 #include "rendering/ViewportManager.h"
 #include "rendering/CameraManager.h"
 #include "rendering/TerrainRenderer.h"
+#include "rendering/NewBulletRenderer.h"
+#include "rendering/BulletDataExtractor.h"
 #include "VideoTask.h"
 
 class GraphicsTask : public ITask
@@ -44,6 +46,7 @@ public:
     ViewportManager viewportManager;  // Manages viewport layout for split-screen
     CameraManager cameraManager;      // Manages camera positioning and behavior
     TerrainRenderer terrainRenderer;  // Handles all terrain rendering
+    NewBulletRenderer bulletRenderer; // Handles all bullet rendering
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
@@ -70,6 +73,9 @@ public:
     void DrawSky();
     void DrawTextTest();
     void RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text);
+    
+    // New rendering pipeline methods
+    void RenderBulletsWithNewPipeline();
     
     bool Start();
     void Update();

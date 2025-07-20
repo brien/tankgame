@@ -112,6 +112,7 @@ struct BulletRenderData {
     TankType type1, type2;      // Bullet type determines appearance
     int ownerId;                // ID of tank that fired this bullet
     float speed;                // Current speed for trail length calculation
+    float power;                // Bullet power (affects alpha blending)
     
     // Constructor
     BulletRenderData()
@@ -124,6 +125,7 @@ struct BulletRenderData {
         , type2(TankType::TYPE_GREY)
         , ownerId(-1)
         , speed(0.0f)
+        , power(100.0f)
     {}
 };
 

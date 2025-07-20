@@ -33,6 +33,7 @@
 
 #include "App.h"
 #include "TankHandler.h"
+#include "BulletHandler.h"
 #include "FXHandler.h"
 #include "VideoTask.h"
 #include "math.h"
@@ -141,6 +142,11 @@ bool GraphicsTask::Start()
         Logger::Get().Write("ERROR: Failed to initialize TerrainRenderer\n");
         return false;
     }
+    
+    if (!bulletRenderer.Initialize()) {
+        Logger::Get().Write("ERROR: Failed to initialize NewBulletRenderer\n");
+        return false;
+    }
 
     return true;
 }
@@ -161,6 +167,7 @@ void GraphicsTask::Stop()
     
     // Cleanup new rendering pipeline
     terrainRenderer.Cleanup();
+    bulletRenderer.Cleanup();
     
     Logger::Get().Write("GraphicsTask: Stopped \n");
 }
@@ -231,7 +238,8 @@ void GraphicsTask::Update()
         LevelHandler::GetSingleton().populateTerrainRenderData(terrainData);
         terrainRenderer.RenderTerrain(terrainData);
         
-        TankHandler::GetSingleton().DrawBullets();
+        // Use new bullet rendering pipeline
+        RenderBulletsWithNewPipeline();
         
         FXHandler::GetSingleton().Draw();
         
@@ -267,7 +275,8 @@ void GraphicsTask::Update()
     LevelHandler::GetSingleton().populateTerrainRenderData(terrainData);
     terrainRenderer.RenderTerrain(terrainData);
     
-    TankHandler::GetSingleton().DrawBullets();
+    // Use new bullet rendering pipeline
+    RenderBulletsWithNewPipeline();
     
     FXHandler::GetSingleton().Draw();
     
@@ -489,6 +498,16 @@ void GraphicsTask::DrawSky()
     glEnable(GL_CULL_FACE);
     //glEnable(GL_DEPTH_TEST);
 }
+
+void GraphicsTask::RenderBulletsWithNewPipeline() {
+    // Extract bullet render data from BulletHandler
+    const std::vector<Bullet>& bullets = BulletHandler::GetSingleton().GetBullets();
+    std::vector<BulletRenderData> bulletRenderData = BulletDataExtractor::ExtractBulletRenderData(bullets);
+    
+    // Render using the new bullet renderer
+    bulletRenderer.RenderBullets(bulletRenderData);
+}
+
 
 void GraphicsTask::DrawHUD(Tank& player)
 {
@@ -1313,7 +1332,6 @@ void GraphicsTask::DrawMenu(int option)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glDisable(GL_BLEND);
-    
 }
 
 void GraphicsTask::RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text)
@@ -1638,7 +1656,7 @@ void GraphicsTask::BuildDisplayLists()
     glEnd();
     
     //glEndList();
-    squarelist.EndNewList();
+       squarelist.EndNewList();
     
     //squarelist2=cubelist1+13;
     squarelist2 = DisplayList(1);
