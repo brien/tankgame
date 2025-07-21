@@ -152,6 +152,11 @@ bool GraphicsTask::Start()
         Logger::Get().Write("ERROR: Failed to initialize EffectRenderer\n");
         return false;
     }
+    
+    if (!itemRenderer.Initialize()) {
+        Logger::Get().Write("ERROR: Failed to initialize ItemRenderer\n");
+        return false;
+    }
 
     return true;
 }

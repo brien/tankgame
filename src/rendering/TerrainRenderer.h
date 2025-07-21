@@ -47,9 +47,9 @@ private:
     
     // Texture IDs for different terrain types
     enum TerrainTextures {
-        TEXTURE_STANDARD = 11,
-        TEXTURE_WATER = 10,
-        TEXTURE_SPECIAL = 15,
+        TEXTURE_BLACK = 11,
+        TEXTURE_WHITE = 10,
+        TEXTURE_CHECKER = 15,
         TEXTURE_BLEND = 12
     };
     

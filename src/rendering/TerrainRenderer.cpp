@@ -355,11 +355,11 @@ void TerrainRenderer::BindTerrainTexture(int levelNumber) {
     
     // Select texture based on level
     if (levelNumber == 50 || levelNumber == 56 || levelNumber == 57 || levelNumber == 58) {
-        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_SPECIAL]);
+        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_CHECKER]);
     } else if (levelNumber == 48 || levelNumber == 70 || levelNumber == 69) {
-        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WATER]);
+        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WHITE]);
     } else {
-        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_STANDARD]);
+        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK]);
     }
 }
 
