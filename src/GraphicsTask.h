@@ -31,8 +31,10 @@
 #include "rendering/TerrainRenderer.h"
 #include "rendering/NewBulletRenderer.h"
 #include "rendering/EffectRenderer.h"
+#include "rendering/ItemRenderer.h"
 #include "rendering/BulletDataExtractor.h"
 #include "rendering/EffectDataExtractor.h"
+#include "rendering/ItemDataExtractor.h"
 #include "VideoTask.h"
 
 class GraphicsTask : public ITask
@@ -50,6 +52,7 @@ public:
     TerrainRenderer terrainRenderer;  // Handles all terrain rendering
     NewBulletRenderer bulletRenderer; // Handles all bullet rendering
     EffectRenderer effectRenderer;    // Handles all visual effect rendering
+    ItemRenderer itemRenderer;       // Handles all item/power-up rendering
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
@@ -78,8 +81,10 @@ public:
     void RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text);
     
     // New rendering pipeline methods
+    void RenderTerrainWithNewPipeline();
     void RenderBulletsWithNewPipeline();
     void RenderEffectsWithNewPipeline();
+    void RenderItemsWithNewPipeline();
     
     bool Start();
     void Update();

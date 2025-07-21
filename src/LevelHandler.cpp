@@ -315,6 +315,15 @@ void LevelHandler::AddItem(float x, float y, float z, TankType type)
     }
 }
 
+void LevelHandler::UpdateItems()
+{
+    for (auto& item : items) {
+        if (item.alive) {
+            item.Update();
+        }
+    }
+}
+
 void LevelHandler::ItemCollision()
 {
     for (vector<Item>::iterator j = items.begin(); j != items.end(); j++)

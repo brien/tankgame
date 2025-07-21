@@ -63,10 +63,14 @@ Item::Item(float nx, float ny, float nz, TankType ntype)
     }
 }
 
+void Item::Update()
+{
+    // Update rotation for spinning animation
+    ry++;
+}
+
 void Item::Draw()
 {
-    ry++;
-
     glPushMatrix();
 
     glTranslatef(x, y, z);

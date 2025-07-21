@@ -40,6 +40,7 @@ public:
     void Flatten(int height);
     bool PointCollision(float x, float y, float z);
     void ItemCollision();
+    void UpdateItems();  // Updates item states (rotation animations)
     void AddItem(float x, float y, float z, TankType type);
 
     bool HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz);

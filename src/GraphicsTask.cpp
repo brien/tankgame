@@ -250,7 +250,8 @@ void GraphicsTask::Update()
         // Use new effect rendering pipeline
         RenderEffectsWithNewPipeline();
         
-        LevelHandler::GetSingleton().DrawItems();
+        // Use new item rendering pipeline
+        RenderItemsWithNewPipeline();
         
         TankHandler::GetSingleton().DrawTanks();
         
@@ -288,7 +289,8 @@ void GraphicsTask::Update()
     // Use new effect rendering pipeline
     RenderEffectsWithNewPipeline();
     
-    LevelHandler::GetSingleton().DrawItems();
+    // Use new item rendering pipeline
+    RenderItemsWithNewPipeline();
     
     TankHandler::GetSingleton().DrawTanks();
     
@@ -523,6 +525,15 @@ void GraphicsTask::RenderEffectsWithNewPipeline() {
     
     // Render using the new effect renderer
     effectRenderer.RenderEffects(effectRenderData);
+}
+
+void GraphicsTask::RenderItemsWithNewPipeline() {
+    // Extract item render data from LevelHandler
+    const std::vector<Item>& items = LevelHandler::GetSingleton().items;
+    std::vector<ItemRenderData> itemRenderData = ItemDataExtractor::ExtractRenderData(items);
+    
+    // Render using the new item renderer
+    itemRenderer.RenderItems(itemRenderData);
 }
 
 

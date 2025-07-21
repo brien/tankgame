@@ -358,6 +358,7 @@ void TankHandler::NextFrame()
     UpdateEnemyTanks();
     UpdateVersusMode();
     
+    LevelHandler::GetSingleton().UpdateItems();  // Update item animations
     LevelHandler::GetSingleton().ItemCollision();
 }
 
