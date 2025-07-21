@@ -17,5 +17,4 @@ public:
     TankType type;
 
     void Update();  // Updates item state (rotation animation)
-    void Draw();
 };

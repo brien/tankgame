@@ -157,6 +157,11 @@ bool GraphicsTask::Start()
         Logger::Get().Write("ERROR: Failed to initialize ItemRenderer\n");
         return false;
     }
+    
+    if (!tankRenderer.Initialize()) {
+        Logger::Get().Write("ERROR: Failed to initialize NewTankRenderer\n");
+        return false;
+    }
 
     return true;
 }
@@ -258,7 +263,8 @@ void GraphicsTask::Update()
         // Use new item rendering pipeline
         RenderItemsWithNewPipeline();
         
-        TankHandler::GetSingleton().DrawTanks();
+        // Use new tank rendering pipeline
+        RenderTanksWithNewPipeline();
         
         if(drawHUD)
         {
@@ -297,7 +303,8 @@ void GraphicsTask::Update()
     // Use new item rendering pipeline
     RenderItemsWithNewPipeline();
     
-    TankHandler::GetSingleton().DrawTanks();
+    // Use new tank rendering pipeline
+    RenderTanksWithNewPipeline();
     
     
     if(drawHUD)
@@ -539,6 +546,18 @@ void GraphicsTask::RenderItemsWithNewPipeline() {
     
     // Render using the new item renderer
     itemRenderer.RenderItems(itemRenderData);
+}
+
+void GraphicsTask::RenderTanksWithNewPipeline() {
+    // Extract tank render data from TankHandler (players and enemies)
+    const auto& players = TankHandler::GetSingleton().players;
+    const auto& enemyTanks = TankHandler::GetSingleton().tanks;
+    const auto& special = TankHandler::GetSingleton().special;
+    int numPlayers = TankHandler::GetSingleton().numPlayers;
+    std::vector<TankRenderData> tankRenderData = TankDataExtractor::ExtractAllTankData(players, enemyTanks, special, numPlayers);
+    
+    // Render using the new tank renderer
+    tankRenderer.RenderTanks(tankRenderData);
 }
 
 
@@ -1631,6 +1650,7 @@ void GraphicsTask::BuildDisplayLists()
     //glEndList();
     turretlist.EndNewList();
     
+       
     //cannonlist=cubelist1+8;
     
     //glNewList(cubelist1+8, GL_COMPILE);

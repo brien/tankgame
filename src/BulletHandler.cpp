@@ -1,5 +1,4 @@
 #include "BulletHandler.h"
-#include "BulletRenderer.h"
 
 BulletHandler& BulletHandler::GetSingleton() {
     static BulletHandler instance;
@@ -21,9 +20,7 @@ void BulletHandler::NextFrame() {
     }
 }
 
-void BulletHandler::DrawBullets() const {
-    BulletRenderer::Draw(bullets);
-}
+// Legacy DrawBullets method removed - bullets now handled by NewBulletRenderer
 
 void BulletHandler::Clear() {
     bullets.clear();

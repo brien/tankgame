@@ -51,9 +51,6 @@ public:
     bool SetTerrainHeight(int x, int z, int height);
     void GenerateTerrain();
 
-    void DrawTerrain();
-    void DrawItems();
-
     // Rendering data extraction for new rendering pipeline
     void populateTerrainRenderData(struct TerrainRenderData& renderData) const;
 

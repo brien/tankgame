@@ -68,24 +68,3 @@ void Item::Update()
     // Update rotation for spinning animation
     ry++;
 }
-
-void Item::Draw()
-{
-    glPushMatrix();
-
-    glTranslatef(x, y, z);
-
-    glRotatef(-ry, 0, 1, 0);
-    glRotatef(rz, 0, 0, 1);
-    glRotatef(90, 0, 0, 1);
-
-    glColor3f(r, g, b);
-
-    glFrontFace(GL_CCW);
-
-    App::GetSingleton().graphicsTask->itemlist.Call(0);
-
-    glFrontFace(GL_CW);
-
-    glPopMatrix();
-}

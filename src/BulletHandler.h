@@ -8,7 +8,6 @@ public:
 
     void AddBullet(const Bullet& bullet);
     void NextFrame();
-    void DrawBullets() const;
     void Clear();
     std::vector<Bullet>& GetBullets();
     const std::vector<Bullet>& GetBullets() const;

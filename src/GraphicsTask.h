@@ -32,9 +32,11 @@
 #include "rendering/NewBulletRenderer.h"
 #include "rendering/EffectRenderer.h"
 #include "rendering/ItemRenderer.h"
+#include "rendering/NewTankRenderer.h"
 #include "rendering/BulletDataExtractor.h"
 #include "rendering/EffectDataExtractor.h"
 #include "rendering/ItemDataExtractor.h"
+#include "rendering/TankDataExtractor.h"
 #include "VideoTask.h"
 
 class GraphicsTask : public ITask
@@ -53,6 +55,7 @@ public:
     NewBulletRenderer bulletRenderer; // Handles all bullet rendering
     EffectRenderer effectRenderer;    // Handles all visual effect rendering
     ItemRenderer itemRenderer;       // Handles all item/power-up rendering
+    NewTankRenderer tankRenderer;     // Handles all tank rendering
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
@@ -85,6 +88,7 @@ public:
     void RenderBulletsWithNewPipeline();
     void RenderEffectsWithNewPipeline();
     void RenderItemsWithNewPipeline();
+    void RenderTanksWithNewPipeline();
     
     bool Start();
     void Update();

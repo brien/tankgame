@@ -1,8 +1,7 @@
 #include "PlayerTankRenderer.h"
-#include "Tank.h"
-#include "App.h"
-#include "GlobalTimer.h"
-#include "TankHandler.h"
+#include "../Tank.h"
+#include "../App.h"
+#include "../GlobalTimer.h"
 
 void PlayerTankRenderer::DrawPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                                         const std::array<float, TankHandler::MAX_PLAYERS>& special,
@@ -200,6 +199,149 @@ void PlayerTankRenderer::RenderTargetingIndicator(const Tank& player)
 }
 
 void PlayerTankRenderer::RenderReadyIndicator(const Tank& player, float drift)
+{
+    glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
+    glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
+
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+
+    glScalef(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
+    App::GetSingleton().graphicsTask->squarelist.Call(0);
+    glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
+}
+
+// ===== TankRenderData Interface Implementations =====
+
+void PlayerTankRenderer::RenderPlayerTank(const TankRenderData& tank, float drift)
+{
+    SetupPlayerTankRenderState();
+    
+    glPushMatrix();
+    RenderTankBody(tank);
+    RenderTankTurret(tank);
+    glPopMatrix();
+    
+    RestoreRenderState();
+}
+
+void PlayerTankRenderer::RenderPlayerEffects(const TankRenderData& tank, float drift)
+{
+    SetupPlayerEffectsRenderState();
+    
+    // Awesome effects are performed using the texture matrix stack
+    glMatrixMode(GL_TEXTURE);
+    glPushMatrix();
+    glTranslatef(TEXTURE_DRIFT_SPEED * drift, 0, 0);
+    glMatrixMode(GL_MODELVIEW);
+
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
+    glColor3f(tank.r, tank.g, tank.b);
+
+    glPushMatrix();
+    RenderEffectBody(tank);
+    RenderEffectTurret(tank);
+    glPopMatrix();
+
+    glMatrixMode(GL_TEXTURE);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+
+    glDepthMask(GL_TRUE);
+    glPopMatrix();
+}
+
+void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float drift, bool hasEnemyTargets)
+{
+    if (!hasEnemyTargets) return;
+    
+    SetupTargetingUIRenderState();
+    
+    glPushMatrix();
+    glTranslatef(tank.position.x, tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z);
+    glRotatef(-tank.targetRotation, 0, 1, 0);
+
+    RenderTargetingIndicator(tank);
+    
+    if (tank.charge >= tank.fireCost)
+    {
+        RenderReadyIndicator(tank, drift);
+    }
+
+    RestoreRenderState();
+    glRotatef(tank.targetRotation, 0, 1, 0);
+    glTranslatef(-tank.position.x, -tank.position.y + TARGETING_HEIGHT_OFFSET, -tank.position.z);
+    glPopMatrix();
+}
+
+// TankRenderData helper methods
+
+void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
+{
+    glPushMatrix();
+    glTranslatef(tank.position.x, tank.position.y + TANK_HEIGHT_OFFSET, tank.position.z);
+    glRotatef(tank.bodyRotation.x, 1, 0, 0);
+    glRotatef(-tank.bodyRotation.y - 90, 0, 1, 0);
+    glRotatef(tank.bodyRotation.z, 0, 0, 1);
+
+    glFrontFace(GL_CCW);
+    glColor3f(tank.r2, tank.g2, tank.b2);
+    App::GetSingleton().graphicsTask->bodylist.Call(0);
+}
+
+void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
+{
+    // Draw turret (continuing from body transformation)
+    glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
+    glRotatef(tank.turretRotation.x, 1, 0, 0);
+    glRotatef(-tank.turretRotation.y + 180, 0, 1, 0);
+    glRotatef(tank.turretRotation.z, 0, 0, 1);
+
+    glColor3f(tank.r, tank.g, tank.b);
+    App::GetSingleton().graphicsTask->turretlist.Call(0);
+
+    glFrontFace(GL_CW);
+    glPopMatrix();
+}
+
+void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
+{
+    glDisable(GL_LIGHTING);
+    glTranslatef(tank.position.x, tank.position.y + TANK_HEIGHT_OFFSET, tank.position.z);
+    glRotatef(tank.bodyRotation.x, 1, 0, 0);
+    glRotatef(-tank.bodyRotation.y - 90, 0, 1, 0);
+    glRotatef(tank.bodyRotation.z, 0, 0, 1);
+
+    glFrontFace(GL_CCW);
+    App::GetSingleton().graphicsTask->bodylist.Call(0);
+}
+
+void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
+{
+    // Draw effect turret
+    glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
+    glRotatef(tank.turretRotation.x, 1, 0, 0);
+    glRotatef(-tank.turretRotation.y + 180, 0, 1, 0);
+    glRotatef(tank.turretRotation.z, 0, 0, 1);
+
+    glColor3f(tank.r2, tank.g2, tank.b2);
+
+    if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
+    {
+        App::GetSingleton().graphicsTask->turretlist.Call(0);
+    }
+
+    glFrontFace(GL_CW);
+}
+
+void PlayerTankRenderer::RenderTargetingIndicator(const TankRenderData& tank)
+{
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
+    glColor4f(1.0f, tank.health / 50.0f, 0.1f, 1.0); // Use health as distance approximation
+    App::GetSingleton().graphicsTask->squarelist.Call(0);
+}
+
+void PlayerTankRenderer::RenderReadyIndicator(const TankRenderData& tank, float drift)
 {
     glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
     glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);

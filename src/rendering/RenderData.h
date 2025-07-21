@@ -37,6 +37,7 @@ struct TankRenderData {
     Vector3 position;           // x, y, z world coordinates
     Vector3 bodyRotation;       // rx, ry, rz body orientation
     Vector3 turretRotation;     // rtx, rty, rtz turret orientation (independent of body)
+    float targetRotation;       // rrl - rotation towards closest enemy for targeting UI
     
     // Visual state for HUD and effects
     float health;               // Current health for health bar
@@ -73,6 +74,7 @@ struct TankRenderData {
         : position(0, 0, 0)
         , bodyRotation(0, 0, 0)
         , turretRotation(0, 0, 0)
+        , targetRotation(0.0f)
         , health(100.0f)
         , maxHealth(100.0f)
         , charge(0.0f)

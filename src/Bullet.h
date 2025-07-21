@@ -24,7 +24,6 @@ public:
            float rx, float ry, float rz);
     ~Bullet() = default;
     void NextFrame();
-    void Draw() const;
 
     // Accessor methods for alive member
     bool IsAlive() const { return alive; }
