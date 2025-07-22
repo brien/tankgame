@@ -64,10 +64,6 @@ public:
 
     void NextFrame();
 
-    // Rendering methods - now delegated to TankRenderingManager
-    void DrawTanks() const;
-    void DrawBullets() const;
-
     float closest = 0.0f;
     bool isInputJoy = false;
     int difficultySetting = 0;

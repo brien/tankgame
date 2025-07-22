@@ -14,7 +14,6 @@
 #include "TankTypeManager.h"
 #include "LevelHandler.h"
 #include "GlobalTimer.h"
-#include "TankRenderingManager.h"
 #include "math.h"
 #include "App.h"
 #include <string>
@@ -358,6 +357,7 @@ void TankHandler::NextFrame()
     UpdateEnemyTanks();
     UpdateVersusMode();
     
+    LevelHandler::GetSingleton().UpdateItems();  // Update item animations
     LevelHandler::GetSingleton().ItemCollision();
 }
 
@@ -491,12 +491,3 @@ void TankHandler::UpdateVersusMode()
     }
 }
 
-void TankHandler::DrawTanks() const
-{
-    TankRenderingManager::RenderAllTanks(players, tanks, special, numPlayers);
-}
-
-void TankHandler::DrawBullets() const
-{
-    TankRenderingManager::RenderAllBullets(players, tanks, numPlayers);
-}

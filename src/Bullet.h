@@ -24,11 +24,32 @@ public:
            float rx, float ry, float rz);
     ~Bullet() = default;
     void NextFrame();
-    void Draw() const;
 
     // Accessor methods for alive member
     bool IsAlive() const { return alive; }
     void SetAlive(bool isAlive) { alive = isAlive; }
+
+    // Accessor methods for rendering data extraction
+    float GetX() const { return x; }
+    float GetY() const { return y; }
+    float GetZ() const { return z; }
+    float GetVX() const { return vx; }
+    float GetVY() const { return vy; }
+    float GetVZ() const { return vz; }
+    float GetRX() const { return rx; }
+    float GetRY() const { return ry; }
+    float GetRZ() const { return rz; }
+    float GetR() const { return r; }
+    float GetG() const { return g; }
+    float GetB() const { return b; }
+    float GetR2() const { return r2; }
+    float GetG2() const { return g2; }
+    float GetB2() const { return b2; }
+    float GetPower() const { return power; }
+    TankType GetType1() const { return type1; }
+    TankType GetType2() const { return type2; }
+    int GetTankId() const { return tankId; }
+    float GetMoveRate() const { return moveRate; }
 
 private:
     float x = 0.0f, y = 0.0f, z = 0.0f;

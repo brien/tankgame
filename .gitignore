@@ -472,3 +472,4 @@ FodyWeavers.xsd
 # JetBrains Rider
 *.sln.iml
 .DS_Store
+src/build.sh

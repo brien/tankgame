@@ -19,6 +19,7 @@
 #endif
 
 #include <SDL2/SDL_ttf.h>
+#include <memory>
 
 #include "ITask.h"
 #include "igtl_qmesh.h"
@@ -26,6 +27,21 @@
 #include "Camera.h"
 #include "DisplayList.h"
 #include "TextureHandler.h"
+#include "rendering/ViewportManager.h"
+#include "rendering/CameraManager.h"
+#include "rendering/TerrainRenderer.h"
+#include "rendering/BulletRenderer.h"
+#include "rendering/EffectRenderer.h"
+#include "rendering/ItemRenderer.h"
+#include "rendering/TankRenderer.h"
+#include "rendering/BulletDataExtractor.h"
+#include "rendering/EffectDataExtractor.h"
+#include "rendering/ItemDataExtractor.h"
+#include "rendering/TankDataExtractor.h"
+#include "VideoTask.h"
+#include "rendering/ResourceManager.h"
+#include "rendering/SceneDataBuilder.h"
+#include "rendering/RenderingPipeline.h"
 
 class GraphicsTask : public ITask
 {
@@ -37,6 +53,20 @@ public:
     TTF_Font *defaultFont;
     
     Camera cams[4];
+    ViewportManager viewportManager;  // Manages viewport layout for split-screen
+    CameraManager cameraManager;      // Manages camera positioning and behavior
+    
+    // Phase 4: New Centralized Rendering Pipeline Components
+    std::unique_ptr<ResourceManager> resourceManager;      // Centralized resource management
+    std::unique_ptr<SceneDataBuilder> sceneDataBuilder;    // Scene data extraction and building
+    std::unique_ptr<RenderingPipeline> renderingPipeline;  // Centralized rendering orchestration
+    
+    // Legacy specialized renderers (will be managed by RenderingPipeline)
+    TerrainRenderer terrainRenderer;  // Handles all terrain rendering
+    BulletRenderer bulletRenderer; // Handles all bullet rendering
+    EffectRenderer effectRenderer;    // Handles all visual effect rendering
+    ItemRenderer itemRenderer;       // Handles all item/power-up rendering
+    TankRenderer tankRenderer;     // Handles all tank rendering
     
     DisplayList cubelist1 = 1;
     DisplayList cubelist2;
@@ -64,12 +94,26 @@ public:
     void DrawTextTest();
     void RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text);
     
+    // New rendering pipeline methods
+    void RenderTerrainWithNewPipeline();
+    void RenderBulletsWithNewPipeline();
+    void RenderEffectsWithNewPipeline();
+    void RenderItemsWithNewPipeline();
+    void RenderTanksWithNewPipeline();
+    
+    // Phase 4: Centralized rendering methods
+    void InitializeNewRenderingPipeline();
+    void CleanupNewRenderingPipeline();
+    void RenderWithNewPipeline();          // Main centralized rendering method
+    void RenderWithLegacyMethods();        // Fallback to legacy rendering
+    
     bool Start();
     void Update();
     void Stop();
     
     bool drawHUD = true;
     bool drawMenu = false;
+    bool useNewRenderingPipeline = true;  // Phase 4: Toggle for new vs legacy rendering
 private:
     igtl_QGLMesh bodymesh;
     igtl_QGLMesh turretmesh;
@@ -79,4 +123,5 @@ private:
     void BuildDisplayLists();
     void FixMesh(igtl_QGLMesh& mesh);
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
+    void RenderLegacyUIElements();  // Legacy HUD/UI rendering
 };

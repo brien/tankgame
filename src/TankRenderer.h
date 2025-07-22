@@ -11,7 +11,9 @@
 
 class Tank;
 
-class TankRenderer {
+class TankRendererDeprecated {
+    // This class is deprecated and should not be used.
+    // It serves as a placeholder to maintain compatibility with old code.
 public:
     static void Draw(const Tank& tank);
     static void Draw2(const Tank& tank);

@@ -941,8 +941,6 @@ bool Tank::Move(float rate)
         int kx = 0;
         int kz = 2;
 
-        // Removed unused variable 'done' to fix -Wunused-but-set-variable warning
-
         // Find which specific collision point is colliding and create appropriate FX
         int which = TankCollisionHelper::FindCollidingPoint(*this);
         if (which >= 0 && which <= 3)
@@ -1438,7 +1436,7 @@ void Tank::Draw() const
 {
     if (alive)
     {
-        TankRenderer::Draw(*this);
+        TankRendererDeprecated::Draw(*this);
     }
     else
     {
@@ -1448,5 +1446,5 @@ void Tank::Draw() const
 
 void Tank::Draw2()
 {
-    TankRenderer::Draw2(*this);
+    TankRendererDeprecated::Draw2(*this);
 }

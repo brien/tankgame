@@ -10,10 +10,8 @@
 #endif
 
 #include <array>
-#include "TankHandler.h"
-
-// Forward declarations
-class Tank;
+#include "../TankHandler.h"
+#include "RenderData.h"
 
 /**
  * @brief Handles rendering of player tanks with special effects and visual enhancements
@@ -25,7 +23,7 @@ class Tank;
 class PlayerTankRenderer 
 {
 public:
-    // Main rendering methods
+    // Main rendering methods (legacy Tank interface)
     static void DrawPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players, 
                                const std::array<float, TankHandler::MAX_PLAYERS>& special,
                                int numPlayers, 
@@ -35,6 +33,11 @@ public:
     static void DrawPlayerEffects(const Tank& player, const std::array<float, TankHandler::MAX_PLAYERS>& special, 
                                  int playerIndex, float drift);
     static void DrawTargetingUI(const Tank& player, float drift);
+
+    // New TankRenderData interface
+    static void RenderPlayerTank(const TankRenderData& tank, float drift);
+    static void RenderPlayerEffects(const TankRenderData& tank, float drift);
+    static void RenderTargetingUI(const TankRenderData& tank, float drift, bool hasEnemyTargets);
 
     // Rendering constants (extracted from TankHandler)
     static constexpr float TANK_HEIGHT_OFFSET = 0.05f;
@@ -56,11 +59,19 @@ private:
     static void SetupTargetingUIRenderState();
     static void RestoreRenderState();
     
-    // Internal rendering helpers
+    // Internal rendering helpers (legacy Tank interface)
     static void RenderTankBody(const Tank& player);
     static void RenderTankTurret(const Tank& player);
     static void RenderEffectBody(const Tank& player);
     static void RenderEffectTurret(const Tank& player, const std::array<float, TankHandler::MAX_PLAYERS>& special, int playerIndex);
     static void RenderTargetingIndicator(const Tank& player);
     static void RenderReadyIndicator(const Tank& player, float drift);
+    
+    // Internal rendering helpers (TankRenderData interface)
+    static void RenderTankBody(const TankRenderData& tank);
+    static void RenderTankTurret(const TankRenderData& tank);
+    static void RenderEffectBody(const TankRenderData& tank);
+    static void RenderEffectTurret(const TankRenderData& tank);
+    static void RenderTargetingIndicator(const TankRenderData& tank);
+    static void RenderReadyIndicator(const TankRenderData& tank, float drift);
 };

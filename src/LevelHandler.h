@@ -11,6 +11,9 @@ using namespace std;
 #include "Item.h"
 #include "Singleton.h"
 
+// Forward declaration
+struct TerrainRenderData;
+
 class LevelHandler : public Singleton<LevelHandler>
 {
 public:
@@ -37,6 +40,7 @@ public:
     void Flatten(int height);
     bool PointCollision(float x, float y, float z);
     void ItemCollision();
+    void UpdateItems();  // Updates item states (rotation animations)
     void AddItem(float x, float y, float z, TankType type);
 
     bool HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz);
@@ -47,10 +51,11 @@ public:
     bool SetTerrainHeight(int x, int z, int height);
     void GenerateTerrain();
 
-    void DrawTerrain();
-    void DrawItems();
+    // Rendering data extraction for new rendering pipeline
+    void populateTerrainRenderData(struct TerrainRenderData& renderData) const;
 
-    void DrawTerrain_OLD();
+    // Legacy rendering methods removed - terrain rendering now handled by TerrainRenderer
+    // void DrawTerrain_OLD(); // REMOVED - replaced by data-driven TerrainRenderer
 
     int Strlen(const char *stringy);
 

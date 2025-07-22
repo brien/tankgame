@@ -128,91 +128,6 @@ void FX::Update()
 	}
 }
 
-void FX::Draw()
-{
-	glColor3f(r, g, b);
-
-	glPushMatrix();
-
-	glTranslatef(x, y + .2, z);
-	glRotatef(rx, 1, 0, 0);
-	glRotatef(-ry, 0, 1, 0);
-	glRotatef(rz, 0, 0, 1);
-
-	if (type == FxType::TYPE_THREE)
-	{
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[16]);
-	}
-	if (type == FxType::TYPE_STAR)
-	{
-		glEnable(GL_TEXTURE_2D);
-		glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[19]);
-	}
-
-	glDisable(GL_CULL_FACE);
-
-	if (type == FxType::TYPE_ZERO)
-	{
-		glScalef(5 * time / maxTime, 1, 5 * time / maxTime);
-	}
-
-	if (type == FxType::TYPE_JUMP)
-	{
-		glScalef(1 * time / maxTime, 1, 1 * time / maxTime);
-	}
-
-	if (type == FxType::TYPE_SMOKE)
-	{
-		glScalef(.25 * time / maxTime, .25, .25 * time / maxTime);
-	}
-
-	if (type == FxType::TYPE_SMALL_SQUARE)
-	{
-		glScalef(.5 * time / maxTime, .5, .5 * time / maxTime);
-	}
-
-	if (type == FxType::TYPE_STAR)
-	{
-		glScalef(.3 * time / maxTime, .3, .3 * time / maxTime);
-	}
-
-	if (type == FxType::TYPE_DEATH)
-	{
-		// glCallList(App::GetSingleton().graphicsTask->squarelist2);
-		App::GetSingleton().graphicsTask->squarelist2.Call(0);
-	}
-
-	if (type == FxType::TYPE_ZERO)
-	{
-		// glCallList(App::GetSingleton().graphicsTask->squarelist2);
-		App::GetSingleton().graphicsTask->squarelist2.Call(0);
-	}
-
-	if (type == FxType::TYPE_SMALL_RECTANGLE)
-	{
-		glScalef(0.02, 1, 0.2);
-		// glCallList(App::GetSingleton().graphicsTask->squarelist2);
-	}
-
-	glEnable(GL_BLEND);
-	glEnable(GL_DEPTH_TEST);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE);
-	glDepthMask(GL_FALSE);
-
-	glColor4f(r, g, b, a);
-
-	// glCallList(App::GetSingleton().graphicsTask->squarelist);
-	App::GetSingleton().graphicsTask->squarelist.Call(0);
-
-	glDisable(GL_BLEND);
-	glDisable(GL_TEXTURE_2D);
-	glDepthMask(GL_TRUE);
-	glEnable(GL_CULL_FACE);
-
-	glPopMatrix();
-}
-
 FXHandler::FXHandler()
 {
 	fx.reserve(128);
@@ -258,18 +173,4 @@ void FXHandler::ClearFX()
 	fx.clear();
 }
 
-void FXHandler::Draw()
-{
-	if (!fx.empty())
-	{
-		vector<FX>::iterator it;
-		for (it = fx.begin(); it != fx.end();)
-		{
-			if (it->alive)
-			{
-				it->Draw();
-				++it;
-			}
-		}
-	}
-}
+// Legacy draw method removed - effects now handled by EffectRenderer
