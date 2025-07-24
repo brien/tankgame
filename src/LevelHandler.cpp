@@ -198,6 +198,7 @@ bool LevelHandler::Load(const char filePath[])
 void LevelHandler::NextLevel(bool forb)
 {
     FXHandler::GetSingleton().ClearFX();
+    BulletHandler::GetSingleton().Clear();
 
     items.clear();
 
