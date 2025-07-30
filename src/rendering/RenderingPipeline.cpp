@@ -24,6 +24,7 @@ RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &c
 
 bool RenderingPipeline::Initialize()
 {
+    Logger::Get().Write("RenderingPipeline initializing... \n");
     // Initialize all specialized renderers
     bool success = true;
 
@@ -46,7 +47,7 @@ bool RenderingPipeline::Initialize()
     {
         success = false;
     }
-
+    Logger::Get().Write("RenderingPipeline Initialized Successfully: %b\n", success);
     return success;
 }
 

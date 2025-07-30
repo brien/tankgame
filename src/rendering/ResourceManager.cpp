@@ -73,10 +73,10 @@ bool ResourceManager::InitializeFonts() {
     }
     
     // Load default font
-    defaultFont = TTF_OpenFont("runtime/fonts/arial.ttf", 16);
+    defaultFont = TTF_OpenFont("fonts/arial.ttf", 16);
     if (!defaultFont) {
         // Try alternative font location
-        defaultFont = TTF_OpenFont("runtime/fonts/DroidSansMono.ttf", 16);
+        defaultFont = TTF_OpenFont("fonts/DroidSansMono.ttf", 16);
     }
     
     fontsLoaded = (defaultFont != nullptr);
@@ -93,10 +93,10 @@ bool ResourceManager::InitializeTextures() {
 bool ResourceManager::InitializeMeshes() {
     try {
         // Load mesh files (moved from GraphicsTask)
-        PrepareMesh(bodyMesh, "runtime/converted_nowbody.obj");
-        PrepareMesh(turretMesh, "runtime/converted_nowturret.obj");
-        PrepareMesh(cannonMesh, "runtime/converted_cannon.obj");
-        PrepareMesh(itemMesh, "runtime/converted_item.obj");
+        PrepareMesh(bodyMesh, "nowbody.gsm");
+        PrepareMesh(turretMesh, "nowturret.gsm");
+        PrepareMesh(cannonMesh, "cannon.gsm");
+        PrepareMesh(itemMesh, "body.gsm");
         
         meshesLoaded = true;
     } catch (...) {
