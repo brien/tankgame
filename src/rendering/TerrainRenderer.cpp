@@ -35,7 +35,7 @@ bool TerrainRenderer::Initialize() {
 void TerrainRenderer::Cleanup() {
     displayListInitialized = false;
     BaseRenderer::Cleanup();
-    Logger::Get().Write("TerrainRenderer cleaned up");
+    Logger::Get().Write("TerrainRenderer cleaned up \n");
 }
 
 void TerrainRenderer::RenderTerrain(const TerrainRenderData& terrainData) {
@@ -96,6 +96,10 @@ void TerrainRenderer::RenderTerrainSurface(const TerrainRenderData& terrain) {
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
     
+    auto* textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
+
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_CHECKER]);
+
     // Set texture based on level
     BindTerrainTexture(terrain.levelNumber);
     
