@@ -96,6 +96,7 @@ void PlayerTankRenderer::SetupPlayerTankRenderState()
 {
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);

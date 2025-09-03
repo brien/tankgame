@@ -62,7 +62,7 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
         RenderTerrainSurface(terrainData);
         RenderTerrainWalls(terrainData);
         //RenderBoundaryWalls(terrainData);
-        //RenderWaterEffects(terrainData);
+        RenderWaterEffects(terrainData);
     }
     catch (...)
     {
@@ -125,7 +125,7 @@ void TerrainRenderer::RenderTerrainSurface(const TerrainRenderData &terrain)
             {
                 // Bind surface-specific texture (different from walls)
                 BindSurfaceTexture(terrain.levelNumber, (int)currentY);
-                
+
                 // Render terrain strip
                 RenderTerrainQuad(jx, jz, currentY, stripLength, jz == sz - 1);
                 stripLength = 0;
