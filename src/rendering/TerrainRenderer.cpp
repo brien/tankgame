@@ -58,11 +58,11 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
         glEnable(GL_TEXTURE_2D);
 
         // Render terrain components in order
-        RenderFloatingElements(terrainData);
+        //RenderFloatingElements(terrainData);
         RenderTerrainSurface(terrainData);
         RenderTerrainWalls(terrainData);
-        RenderBoundaryWalls(terrainData);
-        RenderWaterEffects(terrainData);
+        //RenderBoundaryWalls(terrainData);
+        //RenderWaterEffects(terrainData);
     }
     catch (...)
     {
@@ -78,7 +78,8 @@ void TerrainRenderer::RenderFloatingElements(const TerrainRenderData &terrain)
     glFrontFace(GL_CCW);
     glColor3fv(colorPalette[terrain.colorNumber2]);
 
-    BindTerrainTexture(terrain.levelNumber);
+    // Use surface texture for floating elements to match the terrain surface
+    BindWallTexture(terrain.levelNumber);
 
     for (int q = 0; q < terrain.sizeX; q++)
     {
@@ -108,13 +109,6 @@ void TerrainRenderer::RenderTerrainSurface(const TerrainRenderData &terrain)
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
 
-    auto *textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
-
-    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_CHECKER]);
-
-    // Set texture based on level
-    BindTerrainTexture(terrain.levelNumber);
-
     glNormal3f(0, 1, 0);
 
     // Render horizontal terrain strips
@@ -129,6 +123,9 @@ void TerrainRenderer::RenderTerrainSurface(const TerrainRenderData &terrain)
 
             if (currentY != terrain.heightMap[jx][jz] || jz == sz - 1)
             {
+                // Bind surface-specific texture (different from walls)
+                BindSurfaceTexture(terrain.levelNumber, (int)currentY);
+                
                 // Render terrain strip
                 RenderTerrainQuad(jx, jz, currentY, stripLength, jz == sz - 1);
                 stripLength = 0;
@@ -144,7 +141,8 @@ void TerrainRenderer::RenderTerrainWalls(const TerrainRenderData &terrain)
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
 
-    BindTerrainTexture(terrain.levelNumber);
+    // Bind wall-specific texture (different from surface)
+    BindWallTexture(terrain.levelNumber);
 
     // Render walls in X direction (front faces)
     for (int ix = 0; ix <= sx; ix++)
@@ -412,7 +410,7 @@ void TerrainRenderer::SetupTerrainColors(const TerrainRenderData &terrain)
     glColor3f(colors.defaultColor.x, colors.defaultColor.y, colors.defaultColor.z);
 }
 
-void TerrainRenderer::BindTerrainTexture(int levelNumber)
+void TerrainRenderer::BindSurfaceTexture(int levelNumber, int currentHeight)
 {
     if (!App::GetSingleton().graphicsTask)
     {
@@ -421,19 +419,47 @@ void TerrainRenderer::BindTerrainTexture(int levelNumber)
 
     auto *textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
 
-    // Select texture based on level
-    if (levelNumber == 50 || levelNumber == 56 || levelNumber == 57 || levelNumber == 58)
+    // Select surface texture based on level
+    // For title screen (level 0 and some others), use checker pattern for top surface
+    if (levelNumber == 0 || levelNumber == 50 || levelNumber == 56 || levelNumber == 57 || levelNumber == 58)
     {
-        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_CHECKER]);
+        if(currentHeight == 0)
+        {
+            glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK]);
+        }
+        else
+        {
+            glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_CHECKER]);
+        }
     }
     else if (levelNumber == 48 || levelNumber == 70 || levelNumber == 69)
     {
-        glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WHITE]);
+        if(currentHeight == 0)
+        {
+            glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK]);
+        }
+        else
+        {
+            glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_WHITE]);
+        }
     }
     else
     {
         glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK]);
     }
+}
+
+void TerrainRenderer::BindWallTexture(int levelNumber)
+{
+    if (!App::GetSingleton().graphicsTask)
+    {
+        return;
+    }
+
+    auto *textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
+    
+    glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK]);
+
 }
 
 void TerrainRenderer::RenderTerrainQuad(int x, int z, int height, int strips, bool isLast)

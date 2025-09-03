@@ -37,7 +37,8 @@ private:
 
     // Utility functions
     void SetupTerrainColors(const TerrainRenderData &terrain);
-    void BindTerrainTexture(int levelNumber);
+    void BindSurfaceTexture(int levelNumber,int currentHeight);
+    void BindWallTexture(int levelNumber);
     void RenderTerrainQuad(int x, int z, int height, int strips, bool isLast = false);
     void RenderWallQuad(int ix, int iz, int lastY, int currentY, int direction);
     void RenderBlendQuad(int ix, int iz, int height, int direction);
