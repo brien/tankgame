@@ -1,0 +1,16 @@
+{
+    "name": "Forest Valley",
+    "author": "TankGame Team",
+    "difficulty": 2,
+    "theme": {
+        "defaultColor": [0.1, 1.0, 0.1],
+        "blockColor": [0.0, 0.8, 0.0],
+        "useSpecialColoring": false,
+        "themeId": 1
+    },
+    "gameplay": {
+        "enemyMultiplier": 1.2,
+        "itemSpawnRate": 0.9,
+        "baseEnemyCount": 6
+    }
+}

@@ -1,0 +1,16 @@
+{
+    "name": "Crimson Battlefield",
+    "author": "TankGame Team",
+    "difficulty": 3,
+    "theme": {
+        "defaultColor": [1.0, 0.1, 0.1],
+        "blockColor": [0.8, 0.0, 0.0],
+        "useSpecialColoring": false,
+        "themeId": 2
+    },
+    "gameplay": {
+        "enemyMultiplier": 1.5,
+        "itemSpawnRate": 0.8,
+        "baseEnemyCount": 7
+    }
+}

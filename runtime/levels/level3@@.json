@@ -1,0 +1,16 @@
+{
+    "name": "Special Operations",
+    "author": "TankGame Team",
+    "difficulty": 4,
+    "theme": {
+        "defaultColor": [0.5, 0.5, 1.0],
+        "blockColor": [0.2, 0.2, 0.8],
+        "useSpecialColoring": true,
+        "themeId": 3
+    },
+    "gameplay": {
+        "enemyMultiplier": 1.8,
+        "itemSpawnRate": 0.7,
+        "baseEnemyCount": 8
+    }
+}

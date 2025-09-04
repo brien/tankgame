@@ -1,0 +1,16 @@
+{
+    "name": "Desert Plains",
+    "author": "TankGame Team",
+    "difficulty": 1,
+    "theme": {
+        "defaultColor": [1.0, 1.0, 1.0],
+        "blockColor": [0.0, 1.0, 0.0],
+        "useSpecialColoring": false,
+        "themeId": 0
+    },
+    "gameplay": {
+        "enemyMultiplier": 1.0,
+        "itemSpawnRate": 1.0,
+        "baseEnemyCount": 5
+    }
+}

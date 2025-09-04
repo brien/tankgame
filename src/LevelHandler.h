@@ -7,12 +7,36 @@
 #pragma once
 
 #include <vector>
+#include <string>
 using namespace std;
 #include "Item.h"
 #include "Singleton.h"
+#include "rendering/RenderData.h"
 
 // Forward declaration
 struct TerrainRenderData;
+
+/**
+ * Level metadata structure for JSON-based level configuration
+ */
+struct LevelMetadata {
+    std::string name = "Unnamed Level";
+    std::string author = "Unknown";
+    int difficulty = 1;
+    
+    struct Theme {
+        Vector3 defaultColor = Vector3(1.0f, 1.0f, 1.0f);
+        Vector3 blockColor = Vector3(0.0f, 1.0f, 0.0f);
+        bool useSpecialColoring = false;
+        int themeId = 0;
+    } theme;
+    
+    struct Gameplay {
+        float enemyMultiplier = 1.0f;
+        float itemSpawnRate = 1.0f;
+        int baseEnemyCount = 5;
+    } gameplay;
+};
 
 class LevelHandler : public Singleton<LevelHandler>
 {
@@ -74,4 +98,12 @@ private:
 
     int t[MAX_SIZE_X][MAX_SIZE_Z];
     int f[MAX_SIZE_X][MAX_SIZE_Z];
+    
+    // JSON metadata support
+    LevelMetadata metadata;
+    bool LoadMetadata(const std::string& levelPath);
+    std::string GetMetadataPath(const std::string& levelPath) const;
+    
+    // Debug method to print loaded metadata
+    void PrintMetadata() const;
 };

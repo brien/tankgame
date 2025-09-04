@@ -1,0 +1,16 @@
+{
+    "name": "Neon Battleground",
+    "author": "Advanced AI Designer",
+    "difficulty": 5,
+    "theme": {
+        "defaultColor": [0.8, 0.2, 1.0],
+        "blockColor": [1.0, 0.0, 1.0],
+        "useSpecialColoring": true,
+        "themeId": 4
+    },
+    "gameplay": {
+        "enemyMultiplier": 2.0,
+        "itemSpawnRate": 0.6,
+        "baseEnemyCount": 10
+    }
+}

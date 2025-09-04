@@ -15,9 +15,12 @@
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "App.h"
+#include "Logger.h"
 #include "rendering/RenderData.h"
+#include <nlohmann/json.hpp>
 #include <iostream>
 #include <algorithm>
+#include <fstream>
 
 // cheap strlen function, requires a NULL TERMINATED STRING be passed.
 // Returns the length of the passed string
@@ -78,6 +81,11 @@ bool LevelHandler::Load(const char filePath[])
 
     if (filePath != NULL)
     {
+        // Try to load metadata first
+        if (LoadMetadata(std::string(filePath))) {
+            PrintMetadata();
+        }
+        
         FILE *filein;
         int errnum;
         filein = fopen(filePath, "rt");
@@ -234,13 +242,17 @@ void LevelHandler::NextLevel(bool forb)
 
     Load(fileName);
 
-    if (levelNumber == 51 || levelNumber == 52 || levelNumber == 57 || levelNumber == 55 || levelNumber > 70 || levelNumber == 66)
-    {
+    // Replace hardcoded color logic with metadata-driven approach
+    if (metadata.theme.useSpecialColoring) {
         colorNumber2 = colorNumber + 2;
-    }
-    else
-    {
-        colorNumber2 = colorNumber;
+    } else {
+        // Keep fallback for legacy levels without metadata
+        if (levelNumber == 51 || levelNumber == 52 || levelNumber == 57 || 
+            levelNumber == 55 || levelNumber > 70 || levelNumber == 66) {
+            colorNumber2 = colorNumber + 2;
+        } else {
+            colorNumber2 = colorNumber;
+        }
     }
 
     TankHandler::GetSingleton().Init();
@@ -528,19 +540,23 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
     renderData.drawWalls = drawWalls;
     renderData.drawTop = drawTop;
     
-    // Set terrain colors based on level number (moved from DrawTerrain_OLD OpenGL calls)
-    if (levelNumber == 48) {
-        renderData.colors.defaultColor = Vector3(1.0f, 1.0f, 1.0f);  // White
-    } else if (levelNumber == 49) {
-        renderData.colors.defaultColor = Vector3(0.1f, 1.0f, 0.1f);  // Green
-    } else if (levelNumber == 50) {
-        renderData.colors.defaultColor = Vector3(1.0f, 0.1f, 0.1f);  // Red
-    } else {
-        renderData.colors.defaultColor = Vector3(1.0f, 1.0f, 1.0f);  // Default white
-    }
+    // Use metadata colors if available, otherwise fall back to hardcoded values
+    renderData.colors.defaultColor = metadata.theme.defaultColor;
+    renderData.colors.blockColor = metadata.theme.blockColor;
     
-    // Set block color for terrain rendering (moved from line 740)
-    renderData.colors.blockColor = Vector3(0.0f, 1.0f, 0.0f);  // Green
+    // Fallback for legacy levels without metadata
+    if (metadata.theme.defaultColor.x == 1.0f && 
+        metadata.theme.defaultColor.y == 1.0f && 
+        metadata.theme.defaultColor.z == 1.0f && 
+        metadata.name == "Unnamed Level") {
+        if (levelNumber == 48) {
+            renderData.colors.defaultColor = Vector3(1.0f, 1.0f, 1.0f);  // White
+        } else if (levelNumber == 49) {
+            renderData.colors.defaultColor = Vector3(0.1f, 1.0f, 0.1f);  // Green
+        } else if (levelNumber == 50) {
+            renderData.colors.defaultColor = Vector3(1.0f, 0.1f, 0.1f);  // Red
+        }
+    }
     
     // Copy height map data
     for (int x = 0; x < TerrainRenderData::MAX_SIZE_X && x < sizeX; x++) {
@@ -557,17 +573,123 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
 
 int LevelHandler::GetEnemyCountForLevel(int levelNumber) const
 {
+    // Use metadata if available
+    int baseCount = metadata.gameplay.baseEnemyCount;
+    float multiplier = metadata.gameplay.enemyMultiplier;
+    
     // Constants for enemy count calculation
     const int BASE_LEVEL = 48;      // Starting level number
-    const int BASE_ENEMIES = 5;     // Minimum number of enemies
     const int ENEMIES_PER_LEVEL = 3; // Additional enemies per level
 
     // Calculate enemy count based on level progression
-    int count = BASE_ENEMIES + ENEMIES_PER_LEVEL * (levelNumber - BASE_LEVEL);
+    int count = static_cast<int>(baseCount + ENEMIES_PER_LEVEL * (levelNumber - BASE_LEVEL) * multiplier);
     
     // Ensure we never have fewer than the base number of enemies
-    return std::max(count, BASE_ENEMIES);
+    return std::max(count, baseCount);
 }
 
 // Legacy DrawTerrain_OLD() method removed - terrain rendering now handled by 
 // data-driven TerrainRenderer through RenderingPipeline architecture
+
+// ############################################################
+// JSON Metadata Support
+// ############################################################
+
+std::string LevelHandler::GetMetadataPath(const std::string& levelPath) const {
+    std::string metadataPath = levelPath;
+    size_t dotPos = metadataPath.find_last_of('.');
+    if (dotPos != std::string::npos) {
+        metadataPath = metadataPath.substr(0, dotPos) + ".json";
+    } else {
+        metadataPath += ".json";
+    }
+    return metadataPath;
+}
+
+bool LevelHandler::LoadMetadata(const std::string& levelPath) {
+    std::string metadataPath = GetMetadataPath(levelPath);
+    
+    std::ifstream file(metadataPath);
+    if (!file.is_open()) {
+        Logger::Get().Write("LevelHandler: No metadata file found: %s, using defaults\n", metadataPath.c_str());
+        return false;
+    }
+    
+    try {
+        nlohmann::json j;
+        file >> j;
+        
+        // Load basic metadata
+        if (j.contains("name")) {
+            metadata.name = j["name"].get<std::string>();
+        }
+        if (j.contains("author")) {
+            metadata.author = j["author"].get<std::string>();
+        }
+        if (j.contains("difficulty")) {
+            metadata.difficulty = j["difficulty"].get<int>();
+        }
+        
+        // Load theme data
+        if (j.contains("theme")) {
+            auto theme = j["theme"];
+            if (theme.contains("defaultColor")) {
+                auto color = theme["defaultColor"];
+                metadata.theme.defaultColor = Vector3(
+                    color[0].get<float>(),
+                    color[1].get<float>(),
+                    color[2].get<float>()
+                );
+            }
+            if (theme.contains("blockColor")) {
+                auto color = theme["blockColor"];
+                metadata.theme.blockColor = Vector3(
+                    color[0].get<float>(),
+                    color[1].get<float>(),
+                    color[2].get<float>()
+                );
+            }
+            if (theme.contains("useSpecialColoring")) {
+                metadata.theme.useSpecialColoring = theme["useSpecialColoring"].get<bool>();
+            }
+            if (theme.contains("themeId")) {
+                metadata.theme.themeId = theme["themeId"].get<int>();
+            }
+        }
+        
+        // Load gameplay data
+        if (j.contains("gameplay")) {
+            auto gameplay = j["gameplay"];
+            if (gameplay.contains("enemyMultiplier")) {
+                metadata.gameplay.enemyMultiplier = gameplay["enemyMultiplier"].get<float>();
+            }
+            if (gameplay.contains("itemSpawnRate")) {
+                metadata.gameplay.itemSpawnRate = gameplay["itemSpawnRate"].get<float>();
+            }
+            if (gameplay.contains("baseEnemyCount")) {
+                metadata.gameplay.baseEnemyCount = gameplay["baseEnemyCount"].get<int>();
+            }
+        }
+        
+        Logger::Get().Write("LevelHandler: Successfully loaded metadata from: %s\n", metadataPath.c_str());
+        return true;
+        
+    } catch (const std::exception& e) {
+        Logger::Get().Write("LevelHandler: Error parsing metadata file %s: %s\n", metadataPath.c_str(), e.what());
+        return false;
+    }
+}
+
+void LevelHandler::PrintMetadata() const {
+    Logger::Get().Write("Level Metadata:\n");
+    Logger::Get().Write("  Name: %s\n", metadata.name.c_str());
+    Logger::Get().Write("  Author: %s\n", metadata.author.c_str());
+    Logger::Get().Write("  Difficulty: %d\n", metadata.difficulty);
+    Logger::Get().Write("  Default Color: (%.2f, %.2f, %.2f)\n", 
+        metadata.theme.defaultColor.x, metadata.theme.defaultColor.y, metadata.theme.defaultColor.z);
+    Logger::Get().Write("  Block Color: (%.2f, %.2f, %.2f)\n", 
+        metadata.theme.blockColor.x, metadata.theme.blockColor.y, metadata.theme.blockColor.z);
+    Logger::Get().Write("  Use Special Coloring: %s\n", metadata.theme.useSpecialColoring ? "true" : "false");
+    Logger::Get().Write("  Enemy Multiplier: %.2f\n", metadata.gameplay.enemyMultiplier);
+    Logger::Get().Write("  Base Enemy Count: %d\n", metadata.gameplay.baseEnemyCount);
+}
