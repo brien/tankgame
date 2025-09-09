@@ -42,10 +42,18 @@ private:
     void RenderTerrainQuad(int x, int z, int height, int strips, bool isLast = false);
     void RenderWallQuad(int ix, int iz, int lastY, int currentY, int direction);
     void RenderBlendQuad(int ix, int iz, int height, int direction);
+    
+    // Color helper methods for metadata-based coloring
+    void SetPrimaryColor();
+    void SetSecondaryColor();
+    void SetBlockColor();
 
     // Color palette for terrain rendering
     static constexpr int COLOR_PALETTE_SIZE = 32;
     float colorPalette[COLOR_PALETTE_SIZE][4];
+    
+    // Current terrain data for metadata-based coloring
+    const TerrainRenderData* currentTerrainData;
 
     // Texture IDs for different terrain types
     enum TerrainTextures

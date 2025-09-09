@@ -7,6 +7,7 @@
 #include <GL/gl.h>
 #endif
 
+#include <cmath>
 #include "TerrainRenderer.h"
 #include "RenderData.h"
 #include "../App.h"
@@ -15,7 +16,8 @@
 TerrainRenderer::TerrainRenderer() : BaseRenderer(),
                                      displayListInitialized(false),
                                      lastHeightX(0),
-                                     lastHeightZ(0)
+                                     lastHeightZ(0),
+                                     currentTerrainData(nullptr)
 {
     InitializeColorPalette();
 }
@@ -58,10 +60,10 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
         glEnable(GL_TEXTURE_2D);
 
         // Render terrain components in order
-        //RenderFloatingElements(terrainData);
+        RenderFloatingElements(terrainData);
         RenderTerrainSurface(terrainData);
         RenderTerrainWalls(terrainData);
-        //RenderBoundaryWalls(terrainData);
+        RenderBoundaryWalls(terrainData);
         RenderWaterEffects(terrainData);
     }
     catch (...)
@@ -76,7 +78,7 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
 void TerrainRenderer::RenderFloatingElements(const TerrainRenderData &terrain)
 {
     glFrontFace(GL_CCW);
-    glColor3fv(colorPalette[terrain.colorNumber2]);
+    glColor3f(terrain.colors.blockColor.x, terrain.colors.blockColor.y, terrain.colors.blockColor.z);
 
     // Use surface texture for floating elements to match the terrain surface
     BindWallTexture(terrain.levelNumber);
@@ -206,7 +208,7 @@ void TerrainRenderer::RenderBoundaryWalls(const TerrainRenderData &terrain)
     int sx = terrain.sizeX - 1;
     int sz = terrain.sizeZ - 1;
 
-    glColor3fv(colorPalette[terrain.colorNumber]);
+    glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
 
     // Special handling for level 48 (underground level)
     if (terrain.levelNumber == 48)
@@ -233,12 +235,12 @@ void TerrainRenderer::RenderBoundaryWalls(const TerrainRenderData &terrain)
     // Boundary walls (4 walls around the level)
     // Front wall
     glBegin(GL_QUADS);
-    glColor3fv(colorPalette[terrain.colorNumber]);
+    glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
     glTexCoord2f(0, 30);
     glVertex3f(1.0f, 30.0f, 1.0f);
     glTexCoord2f(sx - 1, 30);
     glVertex3f(sx, 30.0f, 1.0f);
-    glColor3fv(colorPalette[terrain.colorNumber2]);
+    glColor3f(terrain.colors.blockColor.x, terrain.colors.blockColor.y, terrain.colors.blockColor.z);
     glTexCoord2f(sx - 1, 0);
     glVertex3f(sx, 0.0f, 1.0f);
     glTexCoord2f(0, 0);
@@ -247,12 +249,12 @@ void TerrainRenderer::RenderBoundaryWalls(const TerrainRenderData &terrain)
 
     // Back wall
     glBegin(GL_QUADS);
-    glColor3fv(colorPalette[terrain.colorNumber]);
+    glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
     glTexCoord2f(sx - 1, 30);
     glVertex3f(sx, 30.0f, sz);
     glTexCoord2f(0, 30);
     glVertex3f(1.0f, 30.0f, sz);
-    glColor3fv(colorPalette[terrain.colorNumber2]);
+    glColor3f(terrain.colors.blockColor.x, terrain.colors.blockColor.y, terrain.colors.blockColor.z);
     glTexCoord2f(0, 0);
     glVertex3f(1.0f, 0.0f, sz);
     glTexCoord2f(sx - 1, 0);
@@ -261,12 +263,12 @@ void TerrainRenderer::RenderBoundaryWalls(const TerrainRenderData &terrain)
 
     // Right wall
     glBegin(GL_QUADS);
-    glColor3fv(colorPalette[terrain.colorNumber]);
+    glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
     glTexCoord2f(0, 30);
     glVertex3f(sz, 30.0f, 1.0f);
     glTexCoord2f(sx - 1, 30);
     glVertex3f(sx, 30.0f, sz);
-    glColor3fv(colorPalette[terrain.colorNumber2]);
+    glColor3f(terrain.colors.blockColor.x, terrain.colors.blockColor.y, terrain.colors.blockColor.z);
     glTexCoord2f(sx - 1, 0);
     glVertex3f(sx, 0.0f, sz);
     glTexCoord2f(0, 0);
@@ -275,12 +277,12 @@ void TerrainRenderer::RenderBoundaryWalls(const TerrainRenderData &terrain)
 
     // Left wall
     glBegin(GL_QUADS);
-    glColor3fv(colorPalette[terrain.colorNumber]);
+    glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
     glTexCoord2f(0, 30);
     glVertex3f(1.0f, 30.0f, sz);
     glTexCoord2f(sx - 1, 30);
     glVertex3f(1.0f, 30.0f, 1.0f);
-    glColor3fv(colorPalette[terrain.colorNumber2]);
+    glColor3f(terrain.colors.blockColor.x, terrain.colors.blockColor.y, terrain.colors.blockColor.z);
     glTexCoord2f(sx - 1, 0);
     glVertex3f(1.0f, 0.0f, 1.0f);
     glTexCoord2f(0, 0);
@@ -313,7 +315,7 @@ void TerrainRenderer::RenderWaterEffects(const TerrainRenderData &terrain)
                       App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[TEXTURE_BLEND]);
     }
 
-    glColor4fv(colorPalette[terrain.colorNumber + 1]);
+    glColor4f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z, 0.5f);
 
     // Render water effects for negative height areas
     for (int direction = 0; direction < 4; direction++)
@@ -395,7 +397,7 @@ void TerrainRenderer::RenderWaterEffects(const TerrainRenderData &terrain)
     }
 
     // Restore OpenGL state
-    glColor3fv(colorPalette[terrain.colorNumber]);
+    glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
     glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);
     glEnable(GL_CULL_FACE);
@@ -403,11 +405,57 @@ void TerrainRenderer::RenderWaterEffects(const TerrainRenderData &terrain)
 
 void TerrainRenderer::SetupTerrainColors(const TerrainRenderData &terrain)
 {
-    // Set the appropriate terrain color based on level number and terrain color data
+    // Use metadata colors instead of hardcoded palette
     // This replaces the OpenGL color calls that were previously in LevelHandler::DrawTerrain_OLD()
-
+    
+    // Store the current terrain data for use in rendering methods
+    currentTerrainData = &terrain;
+    
+    // Set default color as the base terrain color
     const auto &colors = terrain.colors;
+    
+    // Only log when color changes to avoid spam (using epsilon for float comparison)
+    static Vector3 lastLoggedColor(-2.0f, -2.0f, -2.0f);  // Use invalid color as initial value
+    static bool hasLogged = false;
+    
+    const float epsilon = 0.001f;
+    bool colorChanged = !hasLogged ||
+                       std::abs(colors.defaultColor.x - lastLoggedColor.x) > epsilon || 
+                       std::abs(colors.defaultColor.y - lastLoggedColor.y) > epsilon || 
+                       std::abs(colors.defaultColor.z - lastLoggedColor.z) > epsilon;
+    
+    if (colorChanged) {
+        Logger::Get().Write("TerrainRenderer: Setting terrain color to (%.2f, %.2f, %.2f)\n", 
+            colors.defaultColor.x, colors.defaultColor.y, colors.defaultColor.z);
+        lastLoggedColor = colors.defaultColor;
+        hasLogged = true;
+    }
+    
     glColor3f(colors.defaultColor.x, colors.defaultColor.y, colors.defaultColor.z);
+}
+
+void TerrainRenderer::SetPrimaryColor()
+{
+    if (currentTerrainData) {
+        const auto &color = currentTerrainData->colors.defaultColor;
+        glColor3f(color.x, color.y, color.z);
+    }
+}
+
+void TerrainRenderer::SetSecondaryColor()
+{
+    if (currentTerrainData) {
+        const auto &color = currentTerrainData->colors.blockColor;
+        glColor3f(color.x, color.y, color.z);
+    }
+}
+
+void TerrainRenderer::SetBlockColor()
+{
+    if (currentTerrainData) {
+        const auto &color = currentTerrainData->colors.blockColor;
+        glColor3f(color.x, color.y, color.z);
+    }
 }
 
 void TerrainRenderer::BindSurfaceTexture(int levelNumber, int currentHeight)
@@ -467,14 +515,22 @@ void TerrainRenderer::RenderTerrainQuad(int x, int z, int height, int strips, bo
     if (height >= 25)
         return; // Skip high terrain
 
-    // Set color based on height
+    // Set color based on height - use metadata colors instead of palette
     if (height == 0)
     {
-        glColor3fv(colorPalette[lastHeightZ % COLOR_PALETTE_SIZE]); // colorNumber2
+        if (currentTerrainData) {
+            glColor3f(currentTerrainData->colors.blockColor.x, 
+                     currentTerrainData->colors.blockColor.y, 
+                     currentTerrainData->colors.blockColor.z);
+        }
     }
     else
     {
-        glColor3fv(colorPalette[lastHeightX % COLOR_PALETTE_SIZE]); // colorNumber
+        if (currentTerrainData) {
+            glColor3f(currentTerrainData->colors.defaultColor.x, 
+                     currentTerrainData->colors.defaultColor.y, 
+                     currentTerrainData->colors.defaultColor.z);
+        }
     }
 
     glBegin(GL_QUADS);
@@ -516,14 +572,22 @@ void TerrainRenderer::RenderWallQuad(int ix, int iz, int lastY, int currentY, in
         {
             glBegin(GL_QUADS);
 
-            // Set colors based on height
+            // Set colors based on height - use metadata colors
             if (lastY < 0)
             {
-                glColor3fv(colorPalette[(lastHeightX + 1) % COLOR_PALETTE_SIZE]);
+                if (currentTerrainData) {
+                    glColor3f(currentTerrainData->colors.blockColor.x, 
+                             currentTerrainData->colors.blockColor.y, 
+                             currentTerrainData->colors.blockColor.z);
+                }
             }
             else
             {
-                glColor3fv(colorPalette[lastHeightZ % COLOR_PALETTE_SIZE]);
+                if (currentTerrainData) {
+                    glColor3f(currentTerrainData->colors.defaultColor.x, 
+                             currentTerrainData->colors.defaultColor.y, 
+                             currentTerrainData->colors.defaultColor.z);
+                }
             }
 
             // Render quad based on direction
@@ -575,7 +639,11 @@ void TerrainRenderer::RenderWallQuad(int ix, int iz, int lastY, int currentY, in
             }
 
             // Restore main color
-            glColor3fv(colorPalette[lastHeightX % COLOR_PALETTE_SIZE]);
+            if (currentTerrainData) {
+                glColor3f(currentTerrainData->colors.defaultColor.x, 
+                         currentTerrainData->colors.defaultColor.y, 
+                         currentTerrainData->colors.defaultColor.z);
+            }
 
             glEnd();
         }

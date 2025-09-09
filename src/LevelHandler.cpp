@@ -82,9 +82,7 @@ bool LevelHandler::Load(const char filePath[])
     if (filePath != NULL)
     {
         // Try to load metadata first
-        if (LoadMetadata(std::string(filePath))) {
-            PrintMetadata();
-        }
+        LoadMetadata(std::string(filePath));
         
         FILE *filein;
         int errnum;

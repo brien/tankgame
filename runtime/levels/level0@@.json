@@ -3,8 +3,8 @@
     "author": "TankGame Team",
     "difficulty": 1,
     "theme": {
-        "defaultColor": [1.0, 1.0, 1.0],
-        "blockColor": [0.0, 1.0, 0.0],
+        "defaultColor": [0.8, 0.7, 0.4],
+        "blockColor": [0.6, 0.4, 0.2],
         "useSpecialColoring": false,
         "themeId": 0
     },

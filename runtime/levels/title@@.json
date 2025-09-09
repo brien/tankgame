@@ -1,0 +1,16 @@
+{
+    "name": "Title Screen",
+    "author": "TankGame Team",
+    "difficulty": 0,
+    "theme": {
+        "defaultColor": [0.9, 0.9, 1.0],
+        "blockColor": [0.7, 0.7, 0.9],
+        "useSpecialColoring": false,
+        "themeId": -1
+    },
+    "gameplay": {
+        "enemyMultiplier": 0.0,
+        "itemSpawnRate": 0.0,
+        "baseEnemyCount": 0
+    }
+}
