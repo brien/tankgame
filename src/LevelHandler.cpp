@@ -11,6 +11,7 @@
 #include <GL/gl.h>
 #endif
 
+#include <cmath>
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "FXHandler.h"
@@ -542,17 +543,67 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
     renderData.colors.defaultColor = metadata.theme.defaultColor;
     renderData.colors.blockColor = metadata.theme.blockColor;
     
-    // Fallback for legacy levels without metadata
+    // Only log when colors change to avoid spam (using epsilon for float comparison)
+    static Vector3 lastLoggedDefaultColor(-2.0f, -2.0f, -2.0f);
+    static Vector3 lastLoggedBlockColor(-2.0f, -2.0f, -2.0f);
+    static int lastLoggedLevel = -1;
+    static bool hasLogged = false;
+    
+    const float epsilon = 0.001f;
+    bool colorChanged = !hasLogged ||
+                       lastLoggedLevel != levelNumber ||
+                       std::abs(renderData.colors.defaultColor.x - lastLoggedDefaultColor.x) > epsilon || 
+                       std::abs(renderData.colors.defaultColor.y - lastLoggedDefaultColor.y) > epsilon || 
+                       std::abs(renderData.colors.defaultColor.z - lastLoggedDefaultColor.z) > epsilon ||
+                       std::abs(renderData.colors.blockColor.x - lastLoggedBlockColor.x) > epsilon || 
+                       std::abs(renderData.colors.blockColor.y - lastLoggedBlockColor.y) > epsilon || 
+                       std::abs(renderData.colors.blockColor.z - lastLoggedBlockColor.z) > epsilon;
+    
+    if (colorChanged) {
+        Logger::Get().Write("LevelHandler: Level %d - Setting colors: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
+            levelNumber,
+            renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
+            renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
+        lastLoggedDefaultColor = renderData.colors.defaultColor;
+        lastLoggedBlockColor = renderData.colors.blockColor;
+        lastLoggedLevel = levelNumber;
+        hasLogged = true;
+    }
+    
+    // Fallback for levels without proper metadata (detect if using default values)
     if (metadata.theme.defaultColor.x == 1.0f && 
         metadata.theme.defaultColor.y == 1.0f && 
         metadata.theme.defaultColor.z == 1.0f && 
+        metadata.theme.blockColor.x == 0.0f &&
+        metadata.theme.blockColor.y == 1.0f &&
+        metadata.theme.blockColor.z == 0.0f &&
         metadata.name == "Unnamed Level") {
+        
+        if (colorChanged) {
+            Logger::Get().Write("LevelHandler: Level %d using fallback colors\n", levelNumber);
+        }
+        
+        // Apply legacy hardcoded colors for specific levels
         if (levelNumber == 48) {
             renderData.colors.defaultColor = Vector3(1.0f, 1.0f, 1.0f);  // White
+            renderData.colors.blockColor = Vector3(0.8f, 0.8f, 0.8f);    // Light gray
         } else if (levelNumber == 49) {
             renderData.colors.defaultColor = Vector3(0.1f, 1.0f, 0.1f);  // Green
+            renderData.colors.blockColor = Vector3(0.0f, 0.7f, 0.0f);    // Dark green
         } else if (levelNumber == 50) {
             renderData.colors.defaultColor = Vector3(1.0f, 0.1f, 0.1f);  // Red
+            renderData.colors.blockColor = Vector3(0.7f, 0.0f, 0.0f);    // Dark red
+        } else {
+            // Use a more reasonable default color instead of pure white
+            renderData.colors.defaultColor = Vector3(0.7f, 0.7f, 0.7f);  // Light gray
+            renderData.colors.blockColor = Vector3(0.5f, 0.5f, 0.5f);    // Dark gray
+        }
+        
+        if (colorChanged) {
+            Logger::Get().Write("LevelHandler: Level %d fallback colors applied: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
+                levelNumber,
+                renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
+                renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
         }
     }
     

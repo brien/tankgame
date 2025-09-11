@@ -1,0 +1,16 @@
+{
+    "name": "Level 7 - Golden Plains",
+    "author": "TankGame Team",
+    "difficulty": 8,
+    "theme": {
+        "defaultColor": [1.0, 0.8, 0.2],
+        "blockColor": [0.8, 0.6, 0.0],
+        "useSpecialColoring": false,
+        "themeId": 7
+    },
+    "gameplay": {
+        "enemyMultiplier": 2.6,
+        "itemSpawnRate": 0.3,
+        "baseEnemyCount": 12
+    }
+}

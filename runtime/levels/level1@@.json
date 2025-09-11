@@ -1,10 +1,10 @@
 {
-    "name": "Forest Valley",
+    "name": "Green Level",
     "author": "TankGame Team",
     "difficulty": 2,
     "theme": {
-        "defaultColor": [0.2, 0.8, 0.3],
-        "blockColor": [0.1, 0.6, 0.2],
+        "defaultColor": [0.0, 1.0, 0.0],
+        "blockColor": [1.0, 1.0, 1.0],
         "useSpecialColoring": false,
         "themeId": 1
     },

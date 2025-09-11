@@ -1,10 +1,10 @@
 {
-    "name": "Special Operations",
+    "name": "Blue Level",
     "author": "TankGame Team",
     "difficulty": 4,
     "theme": {
-        "defaultColor": [0.5, 0.5, 1.0],
-        "blockColor": [0.2, 0.2, 0.8],
+        "defaultColor": [0.0, 0.0, 1.0],
+        "blockColor": [0.0, 0.0, 1.0],
         "useSpecialColoring": true,
         "themeId": 3
     },

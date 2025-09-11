@@ -1,0 +1,16 @@
+{
+    "name": "Level 6 - Aqua Depths",
+    "author": "TankGame Team",
+    "difficulty": 7,
+    "theme": {
+        "defaultColor": [0.0, 0.8, 0.8],
+        "blockColor": [0.0, 0.6, 0.6],
+        "useSpecialColoring": false,
+        "themeId": 6
+    },
+    "gameplay": {
+        "enemyMultiplier": 2.4,
+        "itemSpawnRate": 0.4,
+        "baseEnemyCount": 11
+    }
+}

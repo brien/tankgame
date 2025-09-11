@@ -1,0 +1,16 @@
+{
+    "name": "Level 5 - Purple Canyon",
+    "author": "TankGame Team",
+    "difficulty": 6,
+    "theme": {
+        "defaultColor": [0.8, 0.4, 0.8],
+        "blockColor": [0.6, 0.2, 0.6],
+        "useSpecialColoring": false,
+        "themeId": 5
+    },
+    "gameplay": {
+        "enemyMultiplier": 2.2,
+        "itemSpawnRate": 0.5,
+        "baseEnemyCount": 10
+    }
+}
