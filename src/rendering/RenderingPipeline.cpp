@@ -186,6 +186,10 @@ void RenderingPipeline::SetupLighting(const SceneData &scene)
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
 
+    // Enable color material so renderers can set material colors with glColor3f
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+
     // Setup main directional light (sun)
     GLfloat lightPos[] = {0.5f, 1.0f, 0.5f, 0.0f}; // Directional light
     GLfloat lightAmbient[] = {0.2f, 0.2f, 0.2f, 1.0f};

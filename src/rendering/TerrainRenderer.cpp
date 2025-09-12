@@ -40,11 +40,8 @@ void TerrainRenderer::Setup3DRenderState()
     // Call base class setup first
     BaseRenderer::Setup3DRenderState();
     
-    // For terrain rendering, we want to work with the global lighting setup
-    // instead of fighting against it. Enable color material so our glColor3f
-    // calls affect the material properties properly.
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    // Color material is now handled at the pipeline level in SetupLighting()
+    // so we don't need to set it here
     
     // Ensure lighting is enabled (should already be enabled by RenderingPipeline)
     glEnable(GL_LIGHTING);
