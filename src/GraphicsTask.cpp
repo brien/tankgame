@@ -521,7 +521,7 @@ void GraphicsTask::RenderTanksWithNewPipeline()
     std::vector<TankRenderData> tankRenderData = TankDataExtractor::ExtractAllTankData(players, enemyTanks, special, numPlayers);
 
     // Render using the new tank renderer
-    tankRenderer.RenderTanks(tankRenderData);
+    tankRenderer.RenderMultiple(tankRenderData);
 }
 
 void GraphicsTask::DrawHUD(Tank &player)
