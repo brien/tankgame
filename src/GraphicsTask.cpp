@@ -235,16 +235,8 @@ void GraphicsTask::Update()
         }
     }
 
-    // Phase 4: Use new centralized rendering pipeline
-    if (useNewRenderingPipeline)
-    {
-        RenderWithNewPipeline();
-    }
-    else
-    {
-        // Fallback to existing individual rendering calls
-        RenderWithLegacyMethods();
-    }
+    // Use centralized rendering pipeline
+    RenderWithNewPipeline();
 }
 
 // ============================================================================
@@ -262,7 +254,6 @@ void GraphicsTask::InitializeNewRenderingPipeline()
         if (!resourceManager->Initialize())
         {
             Logger::Get().Write("ERROR: Failed to initialize ResourceManager\n");
-            useNewRenderingPipeline = false;
             return;
         }
 
@@ -282,7 +273,6 @@ void GraphicsTask::InitializeNewRenderingPipeline()
         if (!renderingPipeline->Initialize())
         {
             Logger::Get().Write("ERROR: Failed to initialize RenderingPipeline\n");
-            useNewRenderingPipeline = false;
             return;
         }
 
@@ -291,7 +281,6 @@ void GraphicsTask::InitializeNewRenderingPipeline()
     catch (const std::exception &e)
     {
         Logger::Get().Write("ERROR: Exception during rendering pipeline initialization: %s\n", e.what());
-        useNewRenderingPipeline = false;
     }
 }
 
@@ -319,10 +308,9 @@ void GraphicsTask::CleanupNewRenderingPipeline()
 
 void GraphicsTask::RenderWithNewPipeline()
 {
-    if (!useNewRenderingPipeline || !sceneDataBuilder || !renderingPipeline)
+    if (!sceneDataBuilder || !renderingPipeline)
     {
-        // Fallback to legacy rendering
-        RenderWithLegacyMethods();
+        Logger::Get().Write("ERROR: New rendering pipeline not properly initialized!\n");
         return;
     }
 
@@ -348,120 +336,6 @@ void GraphicsTask::RenderWithNewPipeline()
     catch (const std::exception &e)
     {
         Logger::Get().Write("ERROR: Exception during centralized rendering: %s\n", e.what());
-        Logger::Get().Write("Falling back to legacy rendering methods\n");
-        useNewRenderingPipeline = false;
-        //RenderWithLegacyMethods();
-    }
-}
-
-void GraphicsTask::RenderWithLegacyMethods()
-{
-    // Preserve the original rendering logic as fallback
-    Logger::Get().Write("RenderWithLegacyMethods: Falling back to legacy rendering methods\n");
-    if (TankHandler::GetSingleton().numPlayers > 1)
-    {
-        // Render for Player 1 (camera index 1)
-        viewportManager.SetActiveViewport(1);
-
-        gluLookAt(cams[1].xpos(), cams[1].ypos(), cams[1].zpos(),
-                  cams[1].xfocus(), cams[1].yfocus(), cams[1].zfocus(),
-                  0, 1, 0);
-
-        // Use legacy terrain renderer
-        TerrainRenderData terrainData;
-        LevelHandler::GetSingleton().populateTerrainRenderData(terrainData);
-        terrainRenderer.RenderTerrain(terrainData);
-
-        // Use legacy rendering pipelines
-        RenderBulletsWithNewPipeline();
-        RenderEffectsWithNewPipeline();
-        RenderItemsWithNewPipeline();
-        RenderTanksWithNewPipeline();
-
-        // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
-        // if (drawHUD)
-        // {
-        //     DrawHUD(TankHandler::GetSingleton().players[1]);
-        // }
-
-        // Render for Player 0 (camera index 0)
-        viewportManager.SetActiveViewport(0);
-
-        glLoadIdentity();
-        glDisable(GL_LIGHTING);
-    }
-
-    gluLookAt(cams[0].xpos(), cams[0].ypos(), cams[0].zpos(),
-              cams[0].xfocus(), cams[0].yfocus(), cams[0].zfocus(),
-              0, 1, 0);
-
-    if (LevelHandler::GetSingleton().levelNumber == 48)
-    {
-        DrawSky();
-    }
-
-    // Use legacy terrain renderer for main player view
-    TerrainRenderData terrainData;
-    LevelHandler::GetSingleton().populateTerrainRenderData(terrainData);
-    terrainRenderer.RenderTerrain(terrainData);
-
-    // Use legacy rendering pipelines
-    RenderBulletsWithNewPipeline();
-    RenderEffectsWithNewPipeline();
-    RenderItemsWithNewPipeline();
-    RenderTanksWithNewPipeline();
-
-    // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
-    // if (drawHUD)
-    // {
-    //     DrawHUD(TankHandler::GetSingleton().players[0]);
-    // }
-
-    if (drawMenu)
-    {
-        DrawMenu(App::GetSingleton().gameTask->GetMenuState());
-    }
-
-    if (App::GetSingleton().gameTask->IsDebugMode())
-    {
-        char buffer[32];
-        float framesPerSecond = 1.0f / GlobalTimer::dT;
-        sprintf(buffer, "FPS: %.2f", framesPerSecond);
-        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, buffer);
-    }
-}
-
-void GraphicsTask::RenderLegacyUIElements()
-{
-    // Render HUD for all players
-    // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
-    // if (drawHUD)
-    // {
-    //     int numPlayers = TankHandler::GetSingleton().numPlayers;
-    //     for (int i = 0; i < numPlayers && i < 2; ++i)
-    //     {
-    //         // Set viewport for this player's HUD
-    //         if (numPlayers > 1)
-    //         {
-    //             viewportManager.SetActiveViewport(i);
-    //         }
-    //         DrawHUD(TankHandler::GetSingleton().players[i]);
-    //     }
-    // }
-
-    // Render menu if active
-    if (drawMenu)
-    {
-        DrawMenu(App::GetSingleton().gameTask->GetMenuState());
-    }
-
-    // Render debug information
-    if (App::GetSingleton().gameTask->IsDebugMode())
-    {
-        char buffer[32];
-        float framesPerSecond = 1.0f / GlobalTimer::dT;
-        sprintf(buffer, "FPS: %.2f", framesPerSecond);
-        RenderText(defaultFont, 255, 255, 255, 0.0, 0.0, 0.0, buffer);
     }
 }
 
@@ -479,49 +353,6 @@ void GraphicsTask::PrepareMesh(igtl_QGLMesh &mesh, const char *fileName)
 void GraphicsTask::DrawSky()
 {
     // Unused for now. Simple skybox rendering for level 48
-}
-
-void GraphicsTask::RenderBulletsWithNewPipeline()
-{
-    // Extract bullet render data from BulletHandler
-    const std::vector<Bullet> &bullets = BulletHandler::GetSingleton().GetBullets();
-    std::vector<BulletRenderData> bulletRenderData = BulletDataExtractor::ExtractBulletRenderData(bullets);
-
-    // Render using the new bullet renderer
-    bulletRenderer.RenderBullets(bulletRenderData);
-}
-
-void GraphicsTask::RenderEffectsWithNewPipeline()
-{
-    // Extract effect render data from FXHandler
-    const std::vector<FX> &effects = FXHandler::GetSingleton().fx;
-    std::vector<EffectRenderData> effectRenderData = EffectDataExtractor::ExtractEffectRenderData(effects);
-
-    // Render using the new effect renderer
-    effectRenderer.RenderEffects(effectRenderData);
-}
-
-void GraphicsTask::RenderItemsWithNewPipeline()
-{
-    // Extract item render data from LevelHandler
-    const std::vector<Item> &items = LevelHandler::GetSingleton().items;
-    std::vector<ItemRenderData> itemRenderData = ItemDataExtractor::ExtractRenderData(items);
-
-    // Render using the new item renderer
-    itemRenderer.RenderItems(itemRenderData);
-}
-
-void GraphicsTask::RenderTanksWithNewPipeline()
-{
-    // Extract tank render data from TankHandler (players and enemies)
-    const auto &players = TankHandler::GetSingleton().players;
-    const auto &enemyTanks = TankHandler::GetSingleton().tanks;
-    const auto &special = TankHandler::GetSingleton().special;
-    int numPlayers = TankHandler::GetSingleton().numPlayers;
-    std::vector<TankRenderData> tankRenderData = TankDataExtractor::ExtractAllTankData(players, enemyTanks, special, numPlayers);
-
-    // Render using the new tank renderer
-    tankRenderer.RenderMultiple(tankRenderData);
 }
 
 void GraphicsTask::DrawHUD(Tank &player)

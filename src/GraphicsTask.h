@@ -94,18 +94,10 @@ public:
     void DrawTextTest();
     void RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text);
     
-    // New rendering pipeline methods
-    void RenderTerrainWithNewPipeline();
-    void RenderBulletsWithNewPipeline();
-    void RenderEffectsWithNewPipeline();
-    void RenderItemsWithNewPipeline();
-    void RenderTanksWithNewPipeline();
-    
-    // Phase 4: Centralized rendering methods
+    // Centralized rendering methods
     void InitializeNewRenderingPipeline();
     void CleanupNewRenderingPipeline();
     void RenderWithNewPipeline();          // Main centralized rendering method
-    void RenderWithLegacyMethods();        // Fallback to legacy rendering
     
     bool Start();
     void Update();
@@ -113,7 +105,6 @@ public:
     
     bool drawHUD = true;
     bool drawMenu = false;
-    bool useNewRenderingPipeline = true;  // Phase 4: Toggle for new vs legacy rendering
 private:
     igtl_QGLMesh bodymesh;
     igtl_QGLMesh turretmesh;
