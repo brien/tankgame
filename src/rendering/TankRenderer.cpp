@@ -188,13 +188,13 @@ void TankRenderer::RenderPlayerTank(const TankRenderData& tank) {
     
     // Delegate to PlayerTankRenderer for all player tank rendering
     PlayerTankRenderer::RenderPlayerTank(tank, drift);
-    // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
-    // PlayerTankRenderer::RenderPlayerEffects(tank, drift);
+
+    PlayerTankRenderer::RenderPlayerEffects(tank, drift);
     
     // Render targeting UI (assume enemies exist for now - could be improved)
     bool hasEnemyTargets = true; // TODO: Pass this information from game logic
-    // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
-    // PlayerTankRenderer::RenderTargetingUI(tank, drift, hasEnemyTargets);
+
+    PlayerTankRenderer::RenderTargetingUI(tank, drift, hasEnemyTargets);
 }
 
 void TankRenderer::RenderEnemyTank(const TankRenderData& tank) {
