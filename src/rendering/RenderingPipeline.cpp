@@ -93,7 +93,7 @@ void RenderingPipeline::SetupRenderState()
     glShadeModel(GL_SMOOTH);
 
     // Set clear color (dark blue/black for space-like background)
-    glClearColor(0.0f, 0.0f, 0.1f, 1.0f);
+    glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
 }
 
 void RenderingPipeline::CleanupRenderState()
@@ -197,17 +197,8 @@ void RenderingPipeline::SetupLighting(const SceneData &scene)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
     glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
 
-    // Basic lighting adjustment based on level - could be enhanced with special lighting data
-    if (scene.terrain.levelNumber >= 48)
-    {
-        // Brighter lighting for special levels
-        GLfloat brightAmbient[] = {0.4f, 0.4f, 0.5f, 1.0f};
-        glLightfv(GL_LIGHT0, GL_AMBIENT, brightAmbient);
-    }
-    GLfloat lavaAmbient[] = {0.3f, 0.2f, 0.1f, 1.0f};
-    GLfloat lavaDiffuse[] = {1.0f, 0.6f, 0.3f, 1.0f};
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lavaAmbient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lavaDiffuse);
+    // Keep lighting simple and consistent for all levels
+    // Let the terrain colors from JSON metadata be the primary color source
 }
 
 void RenderingPipeline::RenderSkybox(const SceneData &scene)

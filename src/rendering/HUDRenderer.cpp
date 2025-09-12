@@ -77,7 +77,7 @@ void HUDRenderer::RenderPlayerHUD(const HUDRenderData& hudData) {
         // Debug meter visualization
         glBegin(GL_QUADS);
         float debugValue = 2.0f * hudData.deltaTime;
-        ApplyColor(Vector3(1.0f, debugValue, 1.0f));
+        //ApplyColor(Vector3(1.0f, debugValue, 1.0f));
         glVertex3f(0.50f, -0.30f, 0);
         glVertex3f(0.50f, -0.30f + debugValue, 0);
         glVertex3f(0.50f + 0.01f, -0.30f + debugValue, 0);

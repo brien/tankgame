@@ -560,8 +560,9 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
                        std::abs(renderData.colors.blockColor.z - lastLoggedBlockColor.z) > epsilon;
     
     if (colorChanged) {
-        Logger::Get().Write("LevelHandler: Level %d - Setting colors: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
-            levelNumber,
+        int logicalLevel = ConvertInternalToLogicalLevel(levelNumber);
+        Logger::Get().Write("LevelHandler: Level %d (internal %d) - Setting colors: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
+            logicalLevel, levelNumber,
             renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
             renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
         lastLoggedDefaultColor = renderData.colors.defaultColor;
@@ -580,7 +581,8 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
         metadata.name == "Unnamed Level") {
         
         if (colorChanged) {
-            Logger::Get().Write("LevelHandler: Level %d using fallback colors\n", levelNumber);
+            int logicalLevel = ConvertInternalToLogicalLevel(levelNumber);
+            Logger::Get().Write("LevelHandler: Level %d (internal %d) using fallback colors\n", logicalLevel, levelNumber);
         }
         
         // Apply legacy hardcoded colors for specific levels
@@ -600,8 +602,9 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
         }
         
         if (colorChanged) {
-            Logger::Get().Write("LevelHandler: Level %d fallback colors applied: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
-                levelNumber,
+            int logicalLevel = ConvertInternalToLogicalLevel(levelNumber);
+            Logger::Get().Write("LevelHandler: Level %d (internal %d) fallback colors applied: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
+                logicalLevel, levelNumber,
                 renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
                 renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
         }
@@ -741,4 +744,41 @@ void LevelHandler::PrintMetadata() const {
     Logger::Get().Write("  Use Special Coloring: %s\n", metadata.theme.useSpecialColoring ? "true" : "false");
     Logger::Get().Write("  Enemy Multiplier: %.2f\n", metadata.gameplay.enemyMultiplier);
     Logger::Get().Write("  Base Enemy Count: %d\n", metadata.gameplay.baseEnemyCount);
+}
+
+// Helper functions for level number conversion
+int LevelHandler::GetLogicalLevelNumber() const {
+    return ConvertInternalToLogicalLevel(levelNumber);
+}
+
+void LevelHandler::SetLogicalLevelNumber(int logicalLevel) {
+    levelNumber = ConvertLogicalToInternalLevel(logicalLevel);
+}
+
+int LevelHandler::ConvertLogicalToInternalLevel(int logicalLevel) {
+    // Convert 0-based logical level numbers to internal ASCII-based system
+    // Logical 0 → Internal 48 (ASCII '0')
+    // Logical 1 → Internal 49 (ASCII '1') 
+    // ...
+    // Logical 9 → Internal 57 (ASCII '9')
+    // Logical 10 → Internal 65 (ASCII 'A')
+    // Logical 11 → Internal 66 (ASCII 'B')
+    // etc.
+    
+    if (logicalLevel <= 9) {
+        return 48 + logicalLevel;  // ASCII '0' through '9'
+    } else {
+        return 65 + (logicalLevel - 10);  // ASCII 'A' through 'Z'
+    }
+}
+
+int LevelHandler::ConvertInternalToLogicalLevel(int internalLevel) {
+    // Convert internal ASCII-based system back to 0-based logical levels
+    if (internalLevel >= 48 && internalLevel <= 57) {
+        return internalLevel - 48;  // ASCII '0' through '9' → 0-9
+    } else if (internalLevel >= 65 && internalLevel <= 90) {
+        return (internalLevel - 65) + 10;  // ASCII 'A' through 'Z' → 10-35
+    } else {
+        return 0;  // Fallback to level 0 for invalid values
+    }
 }

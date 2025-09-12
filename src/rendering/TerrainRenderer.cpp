@@ -35,6 +35,26 @@ bool TerrainRenderer::Initialize()
     return true;
 }
 
+void TerrainRenderer::Setup3DRenderState()
+{
+    // Call base class setup first
+    BaseRenderer::Setup3DRenderState();
+    
+    // For terrain rendering, we want to work with the global lighting setup
+    // instead of fighting against it. Enable color material so our glColor3f
+    // calls affect the material properties properly.
+    glEnable(GL_COLOR_MATERIAL);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    
+    // Ensure lighting is enabled (should already be enabled by RenderingPipeline)
+    glEnable(GL_LIGHTING);
+    
+    // Set texture environment to modulate texture with material color
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+    
+    CheckGLError("TerrainRenderer::Setup3DRenderState");
+}
+
 void TerrainRenderer::Cleanup()
 {
     displayListInitialized = false;
@@ -57,6 +77,7 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
         SetupTerrainColors(terrainData);
 
         glEnable(GL_DEPTH_TEST);
+        // Re-enable texturing now that we've fixed the lighting issue
         glEnable(GL_TEXTURE_2D);
 
         // Render terrain components in order
@@ -425,13 +446,33 @@ void TerrainRenderer::SetupTerrainColors(const TerrainRenderData &terrain)
                        std::abs(colors.defaultColor.z - lastLoggedColor.z) > epsilon;
     
     if (colorChanged) {
-        Logger::Get().Write("TerrainRenderer: Setting terrain color to (%.2f, %.2f, %.2f)\n", 
+        // Convert internal level number to logical level number for clearer logging
+        int logicalLevel = (terrain.levelNumber >= 48 && terrain.levelNumber <= 57) ? 
+                          terrain.levelNumber - 48 : 
+                          (terrain.levelNumber >= 65) ? terrain.levelNumber - 65 + 10 : 0;
+        Logger::Get().Write("TerrainRenderer: Level %d (internal %d) - Setting terrain color to (%.2f, %.2f, %.2f)\n", 
+            logicalLevel, terrain.levelNumber,
             colors.defaultColor.x, colors.defaultColor.y, colors.defaultColor.z);
         lastLoggedColor = colors.defaultColor;
         hasLogged = true;
     }
     
+    // Set the OpenGL color
     glColor3f(colors.defaultColor.x, colors.defaultColor.y, colors.defaultColor.z);
+    
+    // Debug: Verify the color was actually set and check for any color matrix transformations
+    GLfloat setColor[4];
+    glGetFloatv(GL_CURRENT_COLOR, setColor);
+    if (colorChanged) {
+        Logger::Get().Write("TerrainRenderer: OpenGL color after glColor3f: (%.2f, %.2f, %.2f, %.2f)\n", 
+                           setColor[0], setColor[1], setColor[2], setColor[3]);
+        
+        // Check if any lighting is affecting colors
+        GLboolean lightingEnabled = glIsEnabled(GL_LIGHTING);
+        GLboolean colorMaterialEnabled = glIsEnabled(GL_COLOR_MATERIAL);
+        Logger::Get().Write("TerrainRenderer: GL_LIGHTING=%d, GL_COLOR_MATERIAL=%d\n", 
+                           lightingEnabled, colorMaterialEnabled);
+    }
 }
 
 void TerrainRenderer::SetPrimaryColor()

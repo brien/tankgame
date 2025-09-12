@@ -91,6 +91,12 @@ public:
     int levelNumber;
     int colorNumber;
     int colorNumber2;
+    
+    // Helper functions for level number conversion
+    int GetLogicalLevelNumber() const;
+    void SetLogicalLevelNumber(int logicalLevel);
+    static int ConvertLogicalToInternalLevel(int logicalLevel);
+    static int ConvertInternalToLogicalLevel(int internalLevel);
 
 private:
     static const int MAX_SIZE_X = 128;

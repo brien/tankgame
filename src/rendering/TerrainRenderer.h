@@ -27,6 +27,10 @@ public:
     // Terrain-specific rendering method
     void RenderTerrain(const TerrainRenderData &terrainData);
 
+protected:
+    // Override render state setup to disable lighting for terrain
+    void Setup3DRenderState();
+
 private:
     // Main rendering functions
     void RenderFloatingElements(const TerrainRenderData &terrain);

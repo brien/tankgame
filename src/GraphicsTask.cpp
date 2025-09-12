@@ -350,14 +350,14 @@ void GraphicsTask::RenderWithNewPipeline()
         Logger::Get().Write("ERROR: Exception during centralized rendering: %s\n", e.what());
         Logger::Get().Write("Falling back to legacy rendering methods\n");
         useNewRenderingPipeline = false;
-        RenderWithLegacyMethods();
+        //RenderWithLegacyMethods();
     }
 }
 
 void GraphicsTask::RenderWithLegacyMethods()
 {
     // Preserve the original rendering logic as fallback
-
+    Logger::Get().Write("RenderWithLegacyMethods: Falling back to legacy rendering methods\n");
     if (TankHandler::GetSingleton().numPlayers > 1)
     {
         // Render for Player 1 (camera index 1)
@@ -378,10 +378,11 @@ void GraphicsTask::RenderWithLegacyMethods()
         RenderItemsWithNewPipeline();
         RenderTanksWithNewPipeline();
 
-        if (drawHUD)
-        {
-            DrawHUD(TankHandler::GetSingleton().players[1]);
-        }
+        // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
+        // if (drawHUD)
+        // {
+        //     DrawHUD(TankHandler::GetSingleton().players[1]);
+        // }
 
         // Render for Player 0 (camera index 0)
         viewportManager.SetActiveViewport(0);
@@ -410,10 +411,11 @@ void GraphicsTask::RenderWithLegacyMethods()
     RenderItemsWithNewPipeline();
     RenderTanksWithNewPipeline();
 
-    if (drawHUD)
-    {
-        DrawHUD(TankHandler::GetSingleton().players[0]);
-    }
+    // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
+    // if (drawHUD)
+    // {
+    //     DrawHUD(TankHandler::GetSingleton().players[0]);
+    // }
 
     if (drawMenu)
     {
@@ -432,19 +434,20 @@ void GraphicsTask::RenderWithLegacyMethods()
 void GraphicsTask::RenderLegacyUIElements()
 {
     // Render HUD for all players
-    if (drawHUD)
-    {
-        int numPlayers = TankHandler::GetSingleton().numPlayers;
-        for (int i = 0; i < numPlayers && i < 2; ++i)
-        {
-            // Set viewport for this player's HUD
-            if (numPlayers > 1)
-            {
-                viewportManager.SetActiveViewport(i);
-            }
-            DrawHUD(TankHandler::GetSingleton().players[i]);
-        }
-    }
+    // TEMPORARILY DISABLED TO TEST TERRAIN COLOR ISSUE
+    // if (drawHUD)
+    // {
+    //     int numPlayers = TankHandler::GetSingleton().numPlayers;
+    //     for (int i = 0; i < numPlayers && i < 2; ++i)
+    //     {
+    //         // Set viewport for this player's HUD
+    //         if (numPlayers > 1)
+    //         {
+    //             viewportManager.SetActiveViewport(i);
+    //         }
+    //         DrawHUD(TankHandler::GetSingleton().players[i]);
+    //     }
+    // }
 
     // Render menu if active
     if (drawMenu)
