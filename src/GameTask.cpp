@@ -70,6 +70,8 @@ void GameTask::OnSuspend()
 
 void GameTask::Update()
 {
+    HandleCommonState();
+    
     switch (currentState)
     {
     case GameState::MENU:
@@ -81,6 +83,14 @@ void GameTask::Update()
     case GameState::GAME_OVER:
         HandleGameOverState();
         break;
+    }
+}
+
+void GameTask::HandleCommonState()
+{
+    if (InputTask::KeyDown(SDL_SCANCODE_M))
+    {
+        App::GetSingleton().soundTask->PauseMusic();
     }
 }
 

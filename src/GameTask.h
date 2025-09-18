@@ -25,6 +25,7 @@ private:
     enum class GameState { MENU, PLAYING, GAME_OVER };
     GameState currentState;
 
+    void HandleCommonState();
     void HandleMenuState();
     void HandlePlayingState();
     void HandleGameOverState();
