@@ -332,6 +332,19 @@ void GraphicsTask::RenderWithNewPipeline()
 
         // UI rendering is now handled by the RenderingPipeline
         // All HUD, Menu, and Debug rendering is data-driven and centralized
+        
+        // Fallback: Draw legacy HUD if enabled and game is started
+        if (drawHUD && App::GetSingleton().gameTask->IsGameStarted())
+        {
+            int numPlayers = TankHandler::GetSingleton().numPlayers;
+            for (int i = 0; i < numPlayers; i++)
+            {
+                if (TankHandler::GetSingleton().players[i].alive)
+                {
+                    DrawHUD(TankHandler::GetSingleton().players[i]);
+                }
+            }
+        }
     }
     catch (const std::exception &e)
     {
@@ -446,24 +459,22 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glDisable(GL_TEXTURE_2D);
 
+    // Temporarily disable blend for outline drawing
     glDisable(GL_BLEND);
 
     glBegin(GL_LINE_LOOP);
 
-    // Armor
-    // Reload
-
+    // Armor/Health Bar Outline
     glColor3f(1.0f, 0.8f, 0.8f);
-    // glCallList(cubelist1);
     glVertex3f(-0.51f, 0.37f, 0);
     glVertex3f(-0.51f + 0.29f, 0.37f, 0);
     glVertex3f(-0.51f + 0.29f, 0.34f, 0);
     glVertex3f(-0.51f, 0.34f, 0);
 
-    // Reload
     glEnd();
     glBegin(GL_LINE_LOOP);
 
+    // Charge/Reload Bar Outline
     glColor3f(0.5f, 1.0f, 1.0f);
 
     glVertex3f(-0.51f, 0.32f, 0);
@@ -475,6 +486,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glBegin(GL_LINE_LOOP);
 
+    // Small yellow outline box (purpose unclear)
     glColor3f(1.0f, 1.0f, 0.0f);
 
     glVertex3f(-0.51f, 0.37f, 0);
@@ -486,6 +498,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glBegin(GL_LINES);
 
+    // Fire cost indicator line
     glColor3f(0.5f, 1.0f, 1.0f);
 
     glVertex3f(-0.51f + 0.29f * player.fireCost / player.maxCharge, 0.32f, 0);
@@ -493,23 +506,40 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glEnd();
 
-    // glPopMatrix();
-
-    // glDisable(GL_TEXTURE_2D);
+    // Enable blending for filled bar rendering and disable face culling for 2D HUD
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);  // Disable face culling for 2D HUD elements
 
     glBegin(GL_QUADS);
 
-    // Armor
-    // Reload
-    float amer = (static_cast<float>(player.energy) / player.maxEnergy);
-    if (amer > 1)
+    // Armor/Health Bar - Filled portion
+    // Prevent division by zero
+    float amer = 0.0f;
+    if (player.maxEnergy > 0.0f)
     {
-        amer = 1;
-        // glColor3f(1,0,0);
+        amer = (static_cast<float>(player.energy) / player.maxEnergy);
+        if (amer > 1.0f)
+        {
+            amer = 1.0f;
+        }
+        if (amer < 0.0f)
+        {
+            amer = 0.0f;
+        }
     }
-    glColor3f(1.0, 0.4f * amer, 0.6f * amer);
+    
+    // Debug: Ensure we have a minimum visible bar even when energy is very low
+    float minVisibleAmount = 0.05f; // Always show at least 5% of the bar for visibility testing
+    if (amer > 0.0f && amer < minVisibleAmount)
+    {
+        amer = minVisibleAmount;
+    }
+    
+    // Make health bar more visible with full opacity and better color scaling
+    glColor4f(1.0f, 0.4f + 0.4f * amer, 0.6f + 0.2f * amer, 1.0f);
 
-    // glCallList(cubelist1);
+    // Draw filled health bar quad
     glVertex3f(-0.51f, 0.37f, 0);
     glVertex3f(-0.51f + 0.29f * amer, 0.37f, 0);
     glVertex3f(-0.51f + 0.29f * amer, 0.34f, 0);
@@ -517,20 +547,27 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glEnd();
 
-    if (player.charge < player.fireCost)
-        glEnable(GL_BLEND);
-    else
-        glDisable(GL_BLEND);
+    // Continue with charge/reload bar - ensure blending is enabled and face culling disabled  
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glDisable(GL_CULL_FACE);  // Ensure face culling remains disabled for all 2D elements
 
     glBegin(GL_QUADS);
 
-    // Reload
-    float rper = (static_cast<float>(player.charge) / player.maxCharge);
+    // Charge/Reload Bar - Filled portion
+    float rper = 0.0f;
+    if (player.maxCharge > 0.0f)
+    {
+        rper = (static_cast<float>(player.charge) / player.maxCharge);
+        if (rper > 1.0f)
+            rper = 1.0f;
+        if (rper < 0.0f)
+            rper = 0.0f;
+    }
 
-    if (rper > 1)
-        rper = 1;
-
-    glColor4f(0.5f, rper, 1.0f, 0.02f);
+    // Make charge bar visible with proper alpha - was 0.02f (invisible!)
+    float alpha = (player.charge < player.fireCost) ? 0.6f : 1.0f;
+    glColor4f(0.5f, rper, 1.0f, alpha);
 
     glVertex3f(-0.51f, 0.32f, 0);
     glVertex3f(-0.51f + 0.29f * rper, 0.32f, 0);
@@ -979,6 +1016,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_LIGHTING);
     glDisable(GL_BLEND);
+    glEnable(GL_CULL_FACE);  // Restore face culling
 }
 
 void GraphicsTask::DrawTextTest()
