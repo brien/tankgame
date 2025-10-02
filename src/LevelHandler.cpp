@@ -84,7 +84,7 @@ bool LevelHandler::Load(const char filePath[])
     {
         // Try to load metadata first
         LoadMetadata(std::string(filePath));
-        
+
         FILE *filein;
         int errnum;
         filein = fopen(filePath, "rt");
@@ -242,14 +242,20 @@ void LevelHandler::NextLevel(bool forb)
     Load(fileName);
 
     // Replace hardcoded color logic with metadata-driven approach
-    if (metadata.theme.useSpecialColoring) {
+    if (metadata.theme.useSpecialColoring)
+    {
         colorNumber2 = colorNumber + 2;
-    } else {
+    }
+    else
+    {
         // Keep fallback for legacy levels without metadata
-        if (levelNumber == 51 || levelNumber == 52 || levelNumber == 57 || 
-            levelNumber == 55 || levelNumber > 70 || levelNumber == 66) {
+        if (levelNumber == 51 || levelNumber == 52 || levelNumber == 57 ||
+            levelNumber == 55 || levelNumber > 70 || levelNumber == 66)
+        {
             colorNumber2 = colorNumber + 2;
-        } else {
+        }
+        else
+        {
             colorNumber2 = colorNumber;
         }
     }
@@ -329,8 +335,10 @@ void LevelHandler::AddItem(float x, float y, float z, TankType type)
 
 void LevelHandler::UpdateItems()
 {
-    for (auto& item : items) {
-        if (item.alive) {
+    for (auto &item : items)
+    {
+        if (item.alive)
+        {
             item.Update();
         }
     }
@@ -528,8 +536,8 @@ void LevelHandler::GenerateTerrain()
     }
 }
 
-
-void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) const {
+void LevelHandler::populateTerrainRenderData(TerrainRenderData &renderData) const
+{
     renderData.levelNumber = levelNumber;
     renderData.colorNumber = colorNumber;
     renderData.colorNumber2 = colorNumber2;
@@ -538,81 +546,94 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData& renderData) cons
     renderData.drawFloor = drawFloor;
     renderData.drawWalls = drawWalls;
     renderData.drawTop = drawTop;
-    
+
     // Use metadata colors if available, otherwise fall back to hardcoded values
     renderData.colors.defaultColor = metadata.theme.defaultColor;
     renderData.colors.blockColor = metadata.theme.blockColor;
-    
+
     // Only log when colors change to avoid spam (using epsilon for float comparison)
     static Vector3 lastLoggedDefaultColor(-2.0f, -2.0f, -2.0f);
     static Vector3 lastLoggedBlockColor(-2.0f, -2.0f, -2.0f);
     static int lastLoggedLevel = -1;
     static bool hasLogged = false;
-    
+
     const float epsilon = 0.001f;
     bool colorChanged = !hasLogged ||
-                       lastLoggedLevel != levelNumber ||
-                       std::abs(renderData.colors.defaultColor.x - lastLoggedDefaultColor.x) > epsilon || 
-                       std::abs(renderData.colors.defaultColor.y - lastLoggedDefaultColor.y) > epsilon || 
-                       std::abs(renderData.colors.defaultColor.z - lastLoggedDefaultColor.z) > epsilon ||
-                       std::abs(renderData.colors.blockColor.x - lastLoggedBlockColor.x) > epsilon || 
-                       std::abs(renderData.colors.blockColor.y - lastLoggedBlockColor.y) > epsilon || 
-                       std::abs(renderData.colors.blockColor.z - lastLoggedBlockColor.z) > epsilon;
-    
-    if (colorChanged) {
+                        lastLoggedLevel != levelNumber ||
+                        std::abs(renderData.colors.defaultColor.x - lastLoggedDefaultColor.x) > epsilon ||
+                        std::abs(renderData.colors.defaultColor.y - lastLoggedDefaultColor.y) > epsilon ||
+                        std::abs(renderData.colors.defaultColor.z - lastLoggedDefaultColor.z) > epsilon ||
+                        std::abs(renderData.colors.blockColor.x - lastLoggedBlockColor.x) > epsilon ||
+                        std::abs(renderData.colors.blockColor.y - lastLoggedBlockColor.y) > epsilon ||
+                        std::abs(renderData.colors.blockColor.z - lastLoggedBlockColor.z) > epsilon;
+
+    if (colorChanged)
+    {
         int logicalLevel = ConvertInternalToLogicalLevel(levelNumber);
         Logger::Get().Write("LevelHandler: Level %d (internal %d) - Setting colors: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
-            logicalLevel, levelNumber,
-            renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
-            renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
+                            logicalLevel, levelNumber,
+                            renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
+                            renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
         lastLoggedDefaultColor = renderData.colors.defaultColor;
         lastLoggedBlockColor = renderData.colors.blockColor;
         lastLoggedLevel = levelNumber;
         hasLogged = true;
     }
-    
+
     // Fallback for levels without proper metadata (detect if using default values)
-    if (metadata.theme.defaultColor.x == 1.0f && 
-        metadata.theme.defaultColor.y == 1.0f && 
-        metadata.theme.defaultColor.z == 1.0f && 
+    if (metadata.theme.defaultColor.x == 1.0f &&
+        metadata.theme.defaultColor.y == 1.0f &&
+        metadata.theme.defaultColor.z == 1.0f &&
         metadata.theme.blockColor.x == 0.0f &&
         metadata.theme.blockColor.y == 1.0f &&
         metadata.theme.blockColor.z == 0.0f &&
-        metadata.name == "Unnamed Level") {
-        
-        if (colorChanged) {
+        metadata.name == "Unnamed Level")
+    {
+
+        if (colorChanged)
+        {
             int logicalLevel = ConvertInternalToLogicalLevel(levelNumber);
             Logger::Get().Write("LevelHandler: Level %d (internal %d) using fallback colors\n", logicalLevel, levelNumber);
         }
-        
+
         // Apply legacy hardcoded colors for specific levels
-        if (levelNumber == 48) {
-            renderData.colors.defaultColor = Vector3(1.0f, 1.0f, 1.0f);  // White
-            renderData.colors.blockColor = Vector3(0.8f, 0.8f, 0.8f);    // Light gray
-        } else if (levelNumber == 49) {
-            renderData.colors.defaultColor = Vector3(0.1f, 1.0f, 0.1f);  // Green
-            renderData.colors.blockColor = Vector3(0.0f, 0.7f, 0.0f);    // Dark green
-        } else if (levelNumber == 50) {
-            renderData.colors.defaultColor = Vector3(1.0f, 0.1f, 0.1f);  // Red
-            renderData.colors.blockColor = Vector3(0.7f, 0.0f, 0.0f);    // Dark red
-        } else {
-            // Use a more reasonable default color instead of pure white
-            renderData.colors.defaultColor = Vector3(0.7f, 0.7f, 0.7f);  // Light gray
-            renderData.colors.blockColor = Vector3(0.5f, 0.5f, 0.5f);    // Dark gray
+        if (levelNumber == 48)
+        {
+            renderData.colors.defaultColor = Vector3(1.0f, 1.0f, 1.0f); // White
+            renderData.colors.blockColor = Vector3(0.8f, 0.8f, 0.8f);   // Light gray
         }
-        
-        if (colorChanged) {
+        else if (levelNumber == 49)
+        {
+            renderData.colors.defaultColor = Vector3(0.1f, 1.0f, 0.1f); // Green
+            renderData.colors.blockColor = Vector3(0.0f, 0.7f, 0.0f);   // Dark green
+        }
+        else if (levelNumber == 50)
+        {
+            renderData.colors.defaultColor = Vector3(1.0f, 0.1f, 0.1f); // Red
+            renderData.colors.blockColor = Vector3(0.7f, 0.0f, 0.0f);   // Dark red
+        }
+        else
+        {
+            // Use a more reasonable default color instead of pure white
+            renderData.colors.defaultColor = Vector3(0.7f, 0.7f, 0.7f); // Light gray
+            renderData.colors.blockColor = Vector3(0.5f, 0.5f, 0.5f);   // Dark gray
+        }
+
+        if (colorChanged)
+        {
             int logicalLevel = ConvertInternalToLogicalLevel(levelNumber);
             Logger::Get().Write("LevelHandler: Level %d (internal %d) fallback colors applied: default(%.2f,%.2f,%.2f) block(%.2f,%.2f,%.2f)\n",
-                logicalLevel, levelNumber,
-                renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
-                renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
+                                logicalLevel, levelNumber,
+                                renderData.colors.defaultColor.x, renderData.colors.defaultColor.y, renderData.colors.defaultColor.z,
+                                renderData.colors.blockColor.x, renderData.colors.blockColor.y, renderData.colors.blockColor.z);
         }
     }
-    
+
     // Copy height map data
-    for (int x = 0; x < TerrainRenderData::MAX_SIZE_X && x < sizeX; x++) {
-        for (int z = 0; z < TerrainRenderData::MAX_SIZE_Z && z < sizeZ; z++) {
+    for (int x = 0; x < TerrainRenderData::MAX_SIZE_X && x < sizeX; x++)
+    {
+        for (int z = 0; z < TerrainRenderData::MAX_SIZE_Z && z < sizeZ; z++)
+        {
             renderData.heightMap[x][z] = t[x][z];
             renderData.floatMap[x][z] = f[x][z];
         }
@@ -628,157 +649,188 @@ int LevelHandler::GetEnemyCountForLevel(int levelNumber) const
     // Use metadata if available
     int baseCount = metadata.gameplay.baseEnemyCount;
     float multiplier = metadata.gameplay.enemyMultiplier;
-    
+
     // Constants for enemy count calculation
-    const int BASE_LEVEL = 48;      // Starting level number
+    const int BASE_LEVEL = 48;       // Starting level number
     const int ENEMIES_PER_LEVEL = 3; // Additional enemies per level
 
     // Calculate enemy count based on level progression
     int count = static_cast<int>(baseCount + ENEMIES_PER_LEVEL * (levelNumber - BASE_LEVEL) * multiplier);
-    
+
     // Ensure we never have fewer than the base number of enemies
     return std::max(count, baseCount);
 }
 
-// Legacy DrawTerrain_OLD() method removed - terrain rendering now handled by 
+// Legacy DrawTerrain_OLD() method removed - terrain rendering now handled by
 // data-driven TerrainRenderer through RenderingPipeline architecture
 
 // ############################################################
 // JSON Metadata Support
 // ############################################################
 
-std::string LevelHandler::GetMetadataPath(const std::string& levelPath) const {
+std::string LevelHandler::GetMetadataPath(const std::string &levelPath) const
+{
     std::string metadataPath = levelPath;
     size_t dotPos = metadataPath.find_last_of('.');
-    if (dotPos != std::string::npos) {
+    if (dotPos != std::string::npos)
+    {
         metadataPath = metadataPath.substr(0, dotPos) + ".json";
-    } else {
+    }
+    else
+    {
         metadataPath += ".json";
     }
     return metadataPath;
 }
 
-bool LevelHandler::LoadMetadata(const std::string& levelPath) {
+bool LevelHandler::LoadMetadata(const std::string &levelPath)
+{
     std::string metadataPath = GetMetadataPath(levelPath);
-    
+
     std::ifstream file(metadataPath);
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         Logger::Get().Write("LevelHandler: No metadata file found: %s, using defaults\n", metadataPath.c_str());
         return false;
     }
-    
-    try {
+
+    try
+    {
         nlohmann::json j;
         file >> j;
-        
+
         // Load basic metadata
-        if (j.contains("name")) {
+        if (j.contains("name"))
+        {
             metadata.name = j["name"].get<std::string>();
         }
-        if (j.contains("author")) {
+        if (j.contains("author"))
+        {
             metadata.author = j["author"].get<std::string>();
         }
-        if (j.contains("difficulty")) {
+        if (j.contains("difficulty"))
+        {
             metadata.difficulty = j["difficulty"].get<int>();
         }
-        
+
         // Load theme data
-        if (j.contains("theme")) {
+        if (j.contains("theme"))
+        {
             auto theme = j["theme"];
-            if (theme.contains("defaultColor")) {
+            if (theme.contains("defaultColor"))
+            {
                 auto color = theme["defaultColor"];
                 metadata.theme.defaultColor = Vector3(
                     color[0].get<float>(),
                     color[1].get<float>(),
-                    color[2].get<float>()
-                );
+                    color[2].get<float>());
             }
-            if (theme.contains("blockColor")) {
+            if (theme.contains("blockColor"))
+            {
                 auto color = theme["blockColor"];
                 metadata.theme.blockColor = Vector3(
                     color[0].get<float>(),
                     color[1].get<float>(),
-                    color[2].get<float>()
-                );
+                    color[2].get<float>());
             }
-            if (theme.contains("useSpecialColoring")) {
+            if (theme.contains("useSpecialColoring"))
+            {
                 metadata.theme.useSpecialColoring = theme["useSpecialColoring"].get<bool>();
             }
-            if (theme.contains("themeId")) {
+            if (theme.contains("themeId"))
+            {
                 metadata.theme.themeId = theme["themeId"].get<int>();
             }
         }
-        
+
         // Load gameplay data
-        if (j.contains("gameplay")) {
+        if (j.contains("gameplay"))
+        {
             auto gameplay = j["gameplay"];
-            if (gameplay.contains("enemyMultiplier")) {
+            if (gameplay.contains("enemyMultiplier"))
+            {
                 metadata.gameplay.enemyMultiplier = gameplay["enemyMultiplier"].get<float>();
             }
-            if (gameplay.contains("itemSpawnRate")) {
+            if (gameplay.contains("itemSpawnRate"))
+            {
                 metadata.gameplay.itemSpawnRate = gameplay["itemSpawnRate"].get<float>();
             }
-            if (gameplay.contains("baseEnemyCount")) {
+            if (gameplay.contains("baseEnemyCount"))
+            {
                 metadata.gameplay.baseEnemyCount = gameplay["baseEnemyCount"].get<int>();
             }
         }
-        
+
         Logger::Get().Write("LevelHandler: Successfully loaded metadata from: %s\n", metadataPath.c_str());
         return true;
-        
-    } catch (const std::exception& e) {
+    }
+    catch (const std::exception &e)
+    {
         Logger::Get().Write("LevelHandler: Error parsing metadata file %s: %s\n", metadataPath.c_str(), e.what());
         return false;
     }
 }
 
-void LevelHandler::PrintMetadata() const {
+void LevelHandler::PrintMetadata() const
+{
     Logger::Get().Write("Level Metadata:\n");
     Logger::Get().Write("  Name: %s\n", metadata.name.c_str());
     Logger::Get().Write("  Author: %s\n", metadata.author.c_str());
     Logger::Get().Write("  Difficulty: %d\n", metadata.difficulty);
-    Logger::Get().Write("  Default Color: (%.2f, %.2f, %.2f)\n", 
-        metadata.theme.defaultColor.x, metadata.theme.defaultColor.y, metadata.theme.defaultColor.z);
-    Logger::Get().Write("  Block Color: (%.2f, %.2f, %.2f)\n", 
-        metadata.theme.blockColor.x, metadata.theme.blockColor.y, metadata.theme.blockColor.z);
+    Logger::Get().Write("  Default Color: (%.2f, %.2f, %.2f)\n",
+                        metadata.theme.defaultColor.x, metadata.theme.defaultColor.y, metadata.theme.defaultColor.z);
+    Logger::Get().Write("  Block Color: (%.2f, %.2f, %.2f)\n",
+                        metadata.theme.blockColor.x, metadata.theme.blockColor.y, metadata.theme.blockColor.z);
     Logger::Get().Write("  Use Special Coloring: %s\n", metadata.theme.useSpecialColoring ? "true" : "false");
     Logger::Get().Write("  Enemy Multiplier: %.2f\n", metadata.gameplay.enemyMultiplier);
     Logger::Get().Write("  Base Enemy Count: %d\n", metadata.gameplay.baseEnemyCount);
 }
 
 // Helper functions for level number conversion
-int LevelHandler::GetLogicalLevelNumber() const {
+int LevelHandler::GetLogicalLevelNumber() const
+{
     return ConvertInternalToLogicalLevel(levelNumber);
 }
 
-void LevelHandler::SetLogicalLevelNumber(int logicalLevel) {
+void LevelHandler::SetLogicalLevelNumber(int logicalLevel)
+{
     levelNumber = ConvertLogicalToInternalLevel(logicalLevel);
 }
 
-int LevelHandler::ConvertLogicalToInternalLevel(int logicalLevel) {
+int LevelHandler::ConvertLogicalToInternalLevel(int logicalLevel)
+{
     // Convert 0-based logical level numbers to internal ASCII-based system
     // Logical 0 → Internal 48 (ASCII '0')
-    // Logical 1 → Internal 49 (ASCII '1') 
+    // Logical 1 → Internal 49 (ASCII '1')
     // ...
     // Logical 9 → Internal 57 (ASCII '9')
     // Logical 10 → Internal 65 (ASCII 'A')
     // Logical 11 → Internal 66 (ASCII 'B')
     // etc.
-    
-    if (logicalLevel <= 9) {
-        return 48 + logicalLevel;  // ASCII '0' through '9'
-    } else {
-        return 65 + (logicalLevel - 10);  // ASCII 'A' through 'Z'
+
+    if (logicalLevel <= 9)
+    {
+        return 48 + logicalLevel; // ASCII '0' through '9'
+    }
+    else
+    {
+        return 65 + (logicalLevel - 10); // ASCII 'A' through 'Z'
     }
 }
 
-int LevelHandler::ConvertInternalToLogicalLevel(int internalLevel) {
+int LevelHandler::ConvertInternalToLogicalLevel(int internalLevel)
+{
     // Convert internal ASCII-based system back to 0-based logical levels
-    if (internalLevel >= 48 && internalLevel <= 57) {
-        return internalLevel - 48;  // ASCII '0' through '9' → 0-9
-    } else if (internalLevel >= 65 && internalLevel <= 90) {
-        return (internalLevel - 65) + 10;  // ASCII 'A' through 'Z' → 10-35
-    } else {
-        return 0;  // Fallback to level 0 for invalid values
+    if (internalLevel >= 48 && internalLevel <= 57)
+    {
+        return internalLevel - 48; // ASCII '0' through '9' → 0-9
+    }
+    else if (internalLevel >= 65 && internalLevel <= 90)
+    {
+        return (internalLevel - 65) + 10; // ASCII 'A' through 'Z' → 10-35
+    }
+    else
+    {
+        return 0; // Fallback to level 0 for invalid values
     }
 }
