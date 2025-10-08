@@ -332,19 +332,6 @@ void GraphicsTask::RenderWithNewPipeline()
 
         // UI rendering is now handled by the RenderingPipeline
         // All HUD, Menu, and Debug rendering is data-driven and centralized
-        
-        // Fallback: Draw legacy HUD if enabled and game is started
-        if (drawHUD && App::GetSingleton().gameTask->IsGameStarted())
-        {
-            int numPlayers = TankHandler::GetSingleton().numPlayers;
-            for (int i = 0; i < numPlayers; i++)
-            {
-                if (TankHandler::GetSingleton().players[i].alive)
-                {
-                    DrawHUD(TankHandler::GetSingleton().players[i]);
-                }
-            }
-        }
     }
     catch (const std::exception &e)
     {

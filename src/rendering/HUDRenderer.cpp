@@ -77,7 +77,7 @@ void HUDRenderer::RenderPlayerHUD(const HUDRenderData& hudData) {
         // Debug meter visualization
         glBegin(GL_QUADS);
         float debugValue = 2.0f * hudData.deltaTime;
-        //ApplyColor(Vector3(1.0f, debugValue, 1.0f));
+        ApplyColor(Vector3(1.0f, debugValue, 1.0f));
         glVertex3f(0.50f, -0.30f, 0);
         glVertex3f(0.50f, -0.30f + debugValue, 0);
         glVertex3f(0.50f + 0.01f, -0.30f + debugValue, 0);
@@ -195,8 +195,12 @@ void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData) {
     RenderQuad(-0.51f, 0.34f, 0.29f, 0.03f, Vector3(0.2f, 0.2f, 0.2f));
     
     // Health bar fill
-    float healthPercent = hudData.health / hudData.maxHealth;
-    if (healthPercent > 1.0f) healthPercent = 1.0f;
+    float healthPercent = 0.0f;
+    if (hudData.maxHealth > 0.0f) {
+        healthPercent = hudData.health / hudData.maxHealth;
+        if (healthPercent > 1.0f) healthPercent = 1.0f;
+        if (healthPercent < 0.0f) healthPercent = 0.0f;
+    }
     
     RenderQuad(-0.51f, 0.34f, 0.29f * healthPercent, 0.03f, hudData.healthColor);
     
@@ -221,8 +225,12 @@ void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
     RenderQuad(-0.51f, 0.29f, 0.29f, 0.03f, Vector3(0.2f, 0.2f, 0.2f));
     
     // Energy bar fill
-    float energyPercent = hudData.energy / hudData.maxEnergy;
-    if (energyPercent > 1.0f) energyPercent = 1.0f;
+    float energyPercent = 0.0f;
+    if (hudData.maxEnergy > 0.0f) {
+        energyPercent = hudData.energy / hudData.maxEnergy;
+        if (energyPercent > 1.0f) energyPercent = 1.0f;
+        if (energyPercent < 0.0f) energyPercent = 0.0f;
+    }
     
     RenderQuad(-0.51f, 0.29f, 0.29f * energyPercent, 0.03f, hudData.energyColor);
     
@@ -244,8 +252,12 @@ void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
 
 void HUDRenderer::RenderChargeBar(const HUDRenderData& hudData) {
     // Charge bar fill
-    float chargePercent = hudData.charge / hudData.maxCharge;
-    if (chargePercent > 1.0f) chargePercent = 1.0f;
+    float chargePercent = 0.0f;
+    if (hudData.maxCharge > 0.0f) {
+        chargePercent = hudData.charge / hudData.maxCharge;
+        if (chargePercent > 1.0f) chargePercent = 1.0f;
+        if (chargePercent < 0.0f) chargePercent = 0.0f;
+    }
     
     // Enable blending if can't fire
     if (!hudData.canFire) {
@@ -409,13 +421,15 @@ void HUDRenderer::SetupHUDRenderState() {
     glDisable(GL_LIGHTING);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // Use proper alpha blending instead of additive
+    glDisable(GL_CULL_FACE);  // Disable face culling for 2D HUD elements
 }
 
 void HUDRenderer::CleanupHUDRenderState() {
     glDisable(GL_BLEND);
     glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
+    glEnable(GL_CULL_FACE);  // Restore face culling
 }
 
 void HUDRenderer::SetupTextRenderState() {
