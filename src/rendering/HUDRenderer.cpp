@@ -190,10 +190,15 @@ void HUDRenderer::RenderTargetingLine(const HUDRenderData& hudData) {
     glPopMatrix();
 }
 
-void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData) {
+void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData)
+{
+    float healthBarX = -0.95f;
+    float healthBarY = 0.90f;
+    float healthBarWidth = 0.29f;
+    float healthBarHeight = 0.03f;
     // Health bar background
-    RenderQuad(-0.51f, 0.34f, 0.29f, 0.03f, Vector3(0.2f, 0.2f, 0.2f));
-    
+    RenderQuad(healthBarX, healthBarY, healthBarWidth, healthBarHeight, Vector3(0.2f, 0.2f, 0.2f));
+
     // Health bar fill
     float healthPercent = 0.0f;
     if (hudData.maxHealth > 0.0f) {
@@ -201,16 +206,16 @@ void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData) {
         if (healthPercent > 1.0f) healthPercent = 1.0f;
         if (healthPercent < 0.0f) healthPercent = 0.0f;
     }
-    
-    RenderQuad(-0.51f, 0.34f, 0.29f * healthPercent, 0.03f, hudData.healthColor);
-    
+
+    RenderQuad(healthBarX, healthBarY, healthBarWidth * healthPercent, healthBarHeight, hudData.healthColor);
+
     // Health bar border
     glBegin(GL_LINE_LOOP);
     ApplyColor(Vector3(1.0f, 0.8f, 0.8f));
-    glVertex3f(-0.51f, 0.37f, 0);
-    glVertex3f(-0.51f + 0.29f, 0.37f, 0);
-    glVertex3f(-0.51f + 0.29f, 0.34f, 0);
-    glVertex3f(-0.51f, 0.34f, 0);
+    glVertex3f(healthBarX, healthBarY + healthBarHeight, 0);
+    glVertex3f(healthBarX + healthBarWidth, healthBarY + healthBarHeight, 0);
+    glVertex3f(healthBarX + healthBarWidth, healthBarY, 0);
+    glVertex3f(healthBarX, healthBarY, 0);
     glEnd();
     
     // Health icon
