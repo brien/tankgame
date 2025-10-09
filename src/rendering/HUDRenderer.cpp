@@ -195,8 +195,8 @@ void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData)
 {
     float healthBarX = -0.95f;
     float healthBarY = 0.90f;
-    float healthBarWidth = 0.29f;
-    float healthBarHeight = 0.03f;
+    float healthBarWidth = 0.40f;
+    float healthBarHeight = 0.04f;
     // Health bar background
     RenderQuad(healthBarX, healthBarY, healthBarWidth, healthBarHeight, Vector3(0.2f, 0.2f, 0.2f));
 
@@ -220,17 +220,21 @@ void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData)
     glEnd();
     
     // Health icon
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
     if (texturesLoaded) {
-        RenderTexturedQuad(-0.55f, 0.34f, 0.03f, 0.03f, 
+        float iconX = healthBarX - 0.04f;  // Position icon to the left of the bar
+        RenderTexturedQuad(iconX, healthBarY, 0.03f, healthBarHeight, 
                           hudTextures[TEXTURE_HEALTH_ICON], Vector3(1.0f, 0.6f, 0.6f));
     }
+    glDisable(GL_BLEND);
 }
 
 void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
     float energyBarX = -0.95f;
-    float energyBarY = 0.86f;  // Slightly below health bar (health bar is at 0.90f)
-    float energyBarWidth = 0.29f;
-    float energyBarHeight = 0.03f;
+    float energyBarY = 0.85f;  // Slightly below health bar (health bar is at 0.90f)
+    float energyBarWidth = 0.40f;
+    float energyBarHeight = 0.04f;
     
     // Energy bar background
     RenderQuad(energyBarX, energyBarY, energyBarWidth, energyBarHeight, Vector3(0.2f, 0.2f, 0.2f));
@@ -254,12 +258,15 @@ void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
     glVertex3f(energyBarX, energyBarY, 0);
     glEnd();
     
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_ONE, GL_ONE);
     // Energy icon
     if (texturesLoaded) {
         float iconX = energyBarX - 0.04f;  // Position icon to the left of the bar
         RenderTexturedQuad(iconX, energyBarY, 0.03f, energyBarHeight, 
                           hudTextures[TEXTURE_ENERGY_ICON], Vector3(0.6f, 0.6f, 1.0f));
     }
+    glDisable(GL_BLEND);
 }
 
 void HUDRenderer::RenderActionCostIndicators(const HUDRenderData& hudData) {
