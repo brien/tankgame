@@ -5,11 +5,11 @@ struct TankConfig
 {
     float fireRate;
     float attack;
-    float maxCharge;
-    float chargeRegen;
+    float maxEnergy;        // Was: maxCharge (now consistent with Tank class)
+    float energyRegen;      // Was: chargeRegen (now consistent with Tank class)
     float moveCost;
     float fireCost;
-    float chargeCost;
+    float specialCost;      // Was: chargeCost (now consistent with Tank class)
     int bounces;
     float r, g, b;
 };

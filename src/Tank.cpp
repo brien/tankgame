@@ -38,11 +38,11 @@ void Tank::SetType(TankType t1, TankType t2)
     auto config = TankTypeManager::GetConfig(t1, t2);
     fireRate = config.fireRate;
     attack = config.attack;
-    maxEnergy = config.maxCharge;        // Was: maxCharge (now energy for actions)
-    energyRegen = config.chargeRegen;    // Was: chargeRegen (now energyRegen)
+    maxEnergy = config.maxEnergy;        // Now consistently named
+    energyRegen = config.energyRegen;    // Now consistently named
     moveCost = config.moveCost;
-    fireCost = config.maxCharge / 10.0f;  // Note: Still using config.maxCharge since it's the same value
-    specialCost = config.chargeCost;     // Was: chargeCost (now specialCost)
+    fireCost = config.maxEnergy / 10.0f;  // Using consistent field name
+    specialCost = config.specialCost;     // Now consistently named
     bounces = config.bounces;
 
     // Set colors
