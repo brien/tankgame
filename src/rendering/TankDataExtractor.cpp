@@ -9,11 +9,11 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     data.turretRotation = Vector3(tank.rtx, tank.rty, tank.rtz);
     data.targetRotation = tank.rrl;
     
-    // Extract health and charge
-    data.health = tank.energy;
-    data.maxHealth = tank.maxEnergy;
-    data.charge = tank.charge;
-    data.maxCharge = tank.maxCharge;
+    // Extract health and energy (was: health and charge)
+    data.health = tank.health;      // Now correctly maps to health
+    data.maxHealth = tank.maxHealth;
+    data.charge = tank.energy;      // Charge field now represents energy for actions
+    data.maxCharge = tank.maxEnergy;
     data.fireCost = tank.fireCost;
     
     // Extract colors

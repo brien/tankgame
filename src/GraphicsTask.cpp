@@ -488,8 +488,8 @@ void GraphicsTask::DrawHUD(Tank &player)
     // Fire cost indicator line
     glColor3f(0.5f, 1.0f, 1.0f);
 
-    glVertex3f(-0.51f + 0.29f * player.fireCost / player.maxCharge, 0.32f, 0);
-    glVertex3f(-0.51f + 0.29f * player.fireCost / player.maxCharge, 0.29f, 0);
+    glVertex3f(-0.51f + 0.29f * player.fireCost / player.maxEnergy, 0.32f, 0);
+    glVertex3f(-0.51f + 0.29f * player.fireCost / player.maxEnergy, 0.29f, 0);
 
     glEnd();
 
@@ -541,19 +541,19 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glBegin(GL_QUADS);
 
-    // Charge/Reload Bar - Filled portion
+    // Energy Bar - Filled portion (was charge/reload bar)
     float rper = 0.0f;
-    if (player.maxCharge > 0.0f)
+    if (player.maxEnergy > 0.0f)
     {
-        rper = (static_cast<float>(player.charge) / player.maxCharge);
+        rper = (static_cast<float>(player.energy) / player.maxEnergy);
         if (rper > 1.0f)
             rper = 1.0f;
         if (rper < 0.0f)
             rper = 0.0f;
     }
 
-    // Make charge bar visible with proper alpha - was 0.02f (invisible!)
-    float alpha = (player.charge < player.fireCost) ? 0.6f : 1.0f;
+    // Make energy bar visible with proper alpha - was 0.02f (invisible!)
+    float alpha = (player.energy < player.fireCost) ? 0.6f : 1.0f;
     glColor4f(0.5f, rper, 1.0f, alpha);
 
     glVertex3f(-0.51f, 0.32f, 0);

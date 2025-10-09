@@ -38,11 +38,11 @@ void Tank::SetType(TankType t1, TankType t2)
     auto config = TankTypeManager::GetConfig(t1, t2);
     fireRate = config.fireRate;
     attack = config.attack;
-    maxCharge = config.maxCharge;
-    chargeRegen = config.chargeRegen;
+    maxEnergy = config.maxCharge;        // Was: maxCharge (now energy for actions)
+    energyRegen = config.chargeRegen;    // Was: chargeRegen (now energyRegen)
     moveCost = config.moveCost;
-    fireCost = config.maxCharge / 10.0f;
-    chargeCost = config.chargeCost;
+    fireCost = config.maxCharge / 10.0f;  // Note: Still using config.maxCharge since it's the same value
+    specialCost = config.chargeCost;     // Was: chargeCost (now specialCost)
     bounces = config.bounces;
 
     // Set colors
@@ -162,7 +162,7 @@ void Tank::Die()
 void Tank::Fire(float dTpressed)
 {
 
-    if (charge >= fireCost && fireTimer > fireRate)
+    if (energy >= fireCost && fireTimer > fireRate)
     {
         float ratio = (z - TankHandler::GetSingleton().players[0].z) / (x - TankHandler::GetSingleton().players[0].x);
         float ryp = toDegrees(atan(ratio));
@@ -195,7 +195,7 @@ void Tank::Fire(float dTpressed)
 
         fireTimer = 0;
 
-        charge -= fireCost;
+        energy -= fireCost;
     }
 }
 
@@ -426,9 +426,9 @@ void Tank::Fall()
 
         if (!grounded)
         {
-            if (charge < 2 * maxCharge / 3)
+            if (energy < 2 * maxEnergy / 3)
             {
-                charge += maxCharge / 3;
+                energy += maxEnergy / 3;
             }
             if (id < 0)
             {
@@ -466,9 +466,9 @@ void Tank::Fall()
         }
         if (!grounded)
         {
-            if (charge < 2 * maxCharge / 3)
+            if (energy < 2 * maxEnergy / 3)
             {
-                charge += maxCharge / 3;
+                energy += maxEnergy / 3;
             }
         }
         isJumping = false;
@@ -506,30 +506,36 @@ Tank::Tank()
     bonusTime = 0.0f;
     deadtime = 0.0f;
     jumpTime = 0.0f;
-    turbo = false;
-    recharge = false;
     isJumping = false;
     grounded = false;
+    turbo = false;
+
+    // === REFACTORED: Initialize new clear system ===
+    // Health system (survival)
+    health = 100.0f;        // Was: energy (but was actually health)
+    maxHealth = 100.0f;     // Was: maxEnergy
+    healthRegen = 0.5f;     // Slow health regeneration
+    
+    // Energy system (actions)
+    energy = 100.0f;        // Was: charge (now clearly for actions)
+    maxEnergy = 100.0f;     // Was: maxCharge
+    energyRegen = 2.0f;     // Fast energy regeneration
+    
+    // Action costs
+    fireCost = 10.0f;       // Energy cost to fire
+    jumpCost = 15.0f;       // Energy cost to jump
+    moveCost = 0.1f;        // Energy cost for movement
+    specialCost = 25.0f;    // Energy cost for special abilities
 
     collisionRadius = 0.0f;
     rotRate = 0.0f;
     movRate = 0.0f;
-    moveCost = 0.0f;
-    maxEnergy = 0.0f;
-    maxCharge = 0.0f;
     jumpRate = 0.0f;
-    jumpCost = 0.0f;
     fireTimer = 0.0f;
     fireRate = 0.0f;
-    fireCost = 0.0f;
     fallRate = 0.0f;
-    energyRegen = 0.0f;
-    energy = 0.0f;
     dist = 0.0f;
     control = 0;
-    chargeRegen = 0.0f;
-    chargeCost = 0.0f;
-    charge = 0.0f;
     bounces = 0.0f;
     b = 0.0f;
     b2 = 0.0f;
@@ -551,23 +557,21 @@ Tank::~Tank()
 
 Tank::Tank(Tank&& other) noexcept
     : isPlayer(other.isPlayer),
-      turbo(other.turbo),
-      recharge(other.recharge),
-      charge(other.charge),
-      maxCharge(other.maxCharge),
-      chargeRegen(other.chargeRegen),
+      health(other.health),
+      maxHealth(other.maxHealth),
+      healthRegen(other.healthRegen),
+      energy(other.energy),
+      maxEnergy(other.maxEnergy),
+      energyRegen(other.energyRegen),
       fireCost(other.fireCost),
       jumpCost(other.jumpCost),
       moveCost(other.moveCost),
-      chargeCost(other.chargeCost),
+      specialCost(other.specialCost),
       fireTimer(other.fireTimer),
       fireRate(other.fireRate),
       bounces(other.bounces),
       attack(other.attack),
       alive(other.alive),
-      energy(other.energy),
-      maxEnergy(other.maxEnergy),
-      energyRegen(other.energyRegen),
       id(other.id),
       x(other.x), y(other.y), z(other.z),
       vx(other.vx), vy(other.vy), vz(other.vz),
@@ -588,6 +592,7 @@ Tank::Tank(Tank&& other) noexcept
       isJumping(other.isJumping),
       grounded(other.grounded),
       jumpTime(other.jumpTime),
+      turbo(other.turbo),
       bonus(other.bonus),
       bonusTime(other.bonusTime),
       deadtime(other.deadtime),
@@ -604,23 +609,21 @@ Tank& Tank::operator=(Tank&& other) noexcept
 {
     if (this != &other) {
         isPlayer = other.isPlayer;
-        turbo = other.turbo;
-        recharge = other.recharge;
-        charge = other.charge;
-        maxCharge = other.maxCharge;
-        chargeRegen = other.chargeRegen;
+        health = other.health;
+        maxHealth = other.maxHealth;
+        healthRegen = other.healthRegen;
+        energy = other.energy;
+        maxEnergy = other.maxEnergy;
+        energyRegen = other.energyRegen;
         fireCost = other.fireCost;
         jumpCost = other.jumpCost;
         moveCost = other.moveCost;
-        chargeCost = other.chargeCost;
+        specialCost = other.specialCost;
         fireTimer = other.fireTimer;
         fireRate = other.fireRate;
         bounces = other.bounces;
         attack = other.attack;
         alive = other.alive;
-        energy = other.energy;
-        maxEnergy = other.maxEnergy;
-        energyRegen = other.energyRegen;
         id = other.id;
         x = other.x; y = other.y; z = other.z;
         vx = other.vx; vy = other.vy; vz = other.vz;
@@ -641,6 +644,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         isJumping = other.isJumping;
         grounded = other.grounded;
         jumpTime = other.jumpTime;
+        turbo = other.turbo;
         bonus = other.bonus;
         bonusTime = other.bonusTime;
         deadtime = other.deadtime;
@@ -663,25 +667,28 @@ void Tank::Init()
 
     isJumping = false;
     grounded = false;
+    turbo = false;
 
     fireTimer = 0;
     fireRate = .5;
 
-    recharge = true;
-    turbo = false;
-    energy = 1000;
-    maxEnergy = 1000;
     alive = true;
-    charge = 100;
-    maxCharge = 100;
-
-    chargeRegen = 50;
-    energyRegen = 100;
+    
+    // === REFACTORED: Initialize clear two-concept system ===
+    // Health system (survival)  
+    health = 1000;          // Was: energy = 1000 (but energy was actually health)
+    maxHealth = 1000;       // Was: maxEnergy = 1000
+    healthRegen = 100;      // Was: energyRegen = 100 (slow health regen)
+    
+    // Energy system (actions)
+    energy = 100;           // Was: charge = 100 (now clearly for actions)
+    maxEnergy = 100;        // Was: maxCharge = 100
+    energyRegen = 50;       // Was: chargeRegen = 50 (fast energy regen)
 
     moveCost = 0;
     jumpCost = 150;
-    fireCost = maxCharge / 2;
-    chargeCost = 200;
+    fireCost = maxEnergy / 2;  // Was: maxCharge / 2
+    specialCost = 200;         // Was: chargeCost = 200
 
     bounces = 2;
 
@@ -788,13 +795,13 @@ void Tank::RotBarrel(bool forb)
 void Tank::Jump()
 {
 
-    if (charge > 0)
+    if (energy > 0)
     {
         jumpTime += GlobalTimer::dT;
 
-        charge -= jumpCost * GlobalTimer::dT;
+        energy -= jumpCost * GlobalTimer::dT;
 
-        if (charge > 5)
+        if (energy > 5)
         {
             vy = (jumpRate * jumpTime);
         }
@@ -845,16 +852,27 @@ void Tank::NextFrame()
 
     hitNum = TankHandler::GetSingleton().hitCombo[(-1 * id) - 1];
 
+    // === REFACTORED: Update health and energy systems ===
+    
+    // Clamp health to valid range
+    if (health > maxHealth && !App::GetSingleton().gameTask->IsDebugMode())
+    {
+        health = maxHealth;
+    }
+    
+    // Clamp energy to valid range
     if (energy > maxEnergy && !App::GetSingleton().gameTask->IsDebugMode())
     {
         energy = maxEnergy;
     }
 
-    if (energy < maxEnergy / 2)
+    // Smoke effect when health is low (was energy < maxEnergy / 2)
+    if (health < maxHealth / 2)
     {
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x, y + .1, z, 0, .01, 0, 0, ry + rty, 90, .2, .2, .2, 1);
     }
 
+    // Boundary checks
     if (x >= 128 || x <= 0 || z >= 128 || z <= 0)
     {
         x = 64;
@@ -867,7 +885,8 @@ void Tank::NextFrame()
         z = 64;
     }
 
-    if (energy < 0 && alive)
+    // Check if tank should die (health-based, not energy-based)
+    if (health <= 0 && alive)
     {
         alive = false;
         if (id < 0 && App::GetSingleton().gameTask->IsVersusMode())
@@ -886,23 +905,21 @@ void Tank::NextFrame()
     {
         fireTimer += GlobalTimer::dT;
         Fall();
-        if (charge < maxCharge && energy > maxEnergy / 3 && recharge)
-        {
-            charge += chargeRegen / 2 * GlobalTimer::dT;
-            energy -= chargeCost * GlobalTimer::dT;
+        
+        // Health regeneration (slow, for survival)
+        if (health < maxHealth && alive) {
+            health += healthRegen * GlobalTimer::dT;
+            if (health > maxHealth) {
+                health = maxHealth;
+            }
         }
-        else if (energy >= maxEnergy && charge < maxCharge)
-        {
-            charge += chargeRegen / 2 * GlobalTimer::dT;
-            energy -= chargeCost * GlobalTimer::dT;
-        }
-        if (energy < maxEnergy)
-        {
+        
+        // Energy regeneration (faster, for actions)
+        if (energy < maxEnergy) {
             energy += energyRegen * GlobalTimer::dT;
-        }
-        if (charge < maxCharge)
-        {
-            charge += chargeRegen / 2 * GlobalTimer::dT;
+            if (energy > maxEnergy) {
+                energy = maxEnergy;
+            }
         }
     }
 }
@@ -1012,7 +1029,7 @@ bool Tank::Move(float rate)
         moved = false;
     }
 
-    charge -= rate * moveCost * GlobalTimer::dT;
+    energy -= rate * moveCost * GlobalTimer::dT;
 
     if (x >= 128 || x <= 0 || z >= 128 || z <= 0)
     {
@@ -1157,7 +1174,7 @@ bool Tank::Move(bool forb)
         z = 64;
     }
 
-    charge -= moveCost * GlobalTimer::dT;
+    energy -= moveCost * GlobalTimer::dT;
 
     return moved;
 }
@@ -1174,15 +1191,15 @@ void Tank::HandleInput()
     if (InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->IsDebugMode())
     {
         TankHandler::GetSingleton().special[0] += 100;
+        health += maxHealth * 20;
         energy += maxEnergy * 20;
-        charge += maxCharge * 20;
     }
 
     if (InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->IsDebugMode())
     {
         TankHandler::GetSingleton().special[0] = 10;
+        health = maxHealth;
         energy = maxEnergy;
-        charge = maxCharge;
     }
 
     // Allow switching to keyboard/mouse mode from other input modes
@@ -1283,7 +1300,7 @@ void Tank::Wander()
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp) < (y + vy + 3) && charge > (maxCharge / 4) && LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z) > (int)(y - 7))
+        if (LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp) < (y + vy + 3) && energy > (maxEnergy / 4) && LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z) > (int)(y - 7))
         {
             Jump();
         }
@@ -1296,7 +1313,7 @@ void Tank::Wander()
 
 void Tank::Fear()
 {
-    recharge = false;
+    // Note: recharge flag removed - energy regeneration is now automatic
 
     double ratio;
 
@@ -1343,7 +1360,7 @@ void Tank::Fear()
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + 3) && charge > (maxCharge / 4))
+        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + 3) && energy > (maxEnergy / 4))
         {
             Jump();
         }
@@ -1362,7 +1379,7 @@ void Tank::Fear()
 void Tank::Hunt(Tank &player)
 {
 
-    recharge = true;
+    // Note: recharge flag removed - energy regeneration is now automatic
 
     double ratio;
     float xpp;
@@ -1402,7 +1419,7 @@ void Tank::Hunt(Tank &player)
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + 5) && charge > (maxCharge / 4))
+        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + 5) && energy > (maxEnergy / 4))
         {
             Jump();
         }
@@ -1425,7 +1442,7 @@ void Tank::Hunt(Tank &player)
     }
     else
     {
-        if (charge >= (maxCharge / 2) && (int)player.y == (int)y)
+        if (energy >= (maxEnergy / 2) && (int)player.y == (int)y)
         {
             Fire(1);
         }

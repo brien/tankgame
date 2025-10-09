@@ -67,16 +67,22 @@ public:
 
     bool isPlayer;
 
-    bool turbo;
-    bool recharge;
-    float charge;
-    float maxCharge;
-    float chargeRegen;
-
-    float fireCost;
-    float jumpCost;
-    float moveCost;
-    float chargeCost;
+    // === REFACTORED: Clear two-concept system ===
+    // 1. HEALTH - Tank's structural integrity (survival)
+    float health;           // Was: energy (but actually represented health)
+    float maxHealth;        // Was: maxEnergy
+    float healthRegen;      // Health regeneration rate (slow)
+    
+    // 2. ENERGY - Used for actions (firing, jumping, special abilities)
+    float energy;           // Was: charge (now clearly for actions)
+    float maxEnergy;        // Was: maxCharge
+    float energyRegen;      // Was: chargeRegen (energy regeneration rate)
+    
+    // Action costs (how much energy each action consumes)
+    float fireCost;         // Energy cost to fire
+    float jumpCost;         // Energy cost to jump
+    float moveCost;         // Energy cost for movement (if applicable)
+    float specialCost;      // Was: chargeCost (for special abilities)
 
     float fireTimer;
     float fireRate;
@@ -84,10 +90,6 @@ public:
     int attack;
 
     bool alive;
-
-    float energy;
-    float maxEnergy;
-    float energyRegen;
 
     int id;
 
@@ -148,6 +150,7 @@ public:
     bool isJumping;
     bool grounded;
     float jumpTime;
+    bool turbo;         // Turbo mode flag (consumes extra energy)
 
     bool PointCollision(float cx, float cy, float cz);
 
@@ -155,6 +158,15 @@ public:
 
     void Draw() const;
     void Draw2();
+
+    // === COMPATIBILITY LAYER (temporary) ===
+    // These provide backward compatibility during migration
+    // Old "energy" field was actually health
+    [[deprecated("Use health instead")]] float& GetOldEnergyRef() { return health; }
+    [[deprecated("Use maxHealth instead")]] float& GetOldMaxEnergyRef() { return maxHealth; }
+    // Old "charge" field is now energy  
+    [[deprecated("Use energy instead")]] float& GetOldChargeRef() { return energy; }
+    [[deprecated("Use maxEnergy instead")]] float& GetOldMaxChargeRef() { return maxEnergy; }
 
     int bonus;
     float bonusTime;

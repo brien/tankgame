@@ -40,7 +40,7 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.Move(true);
-            tank.charge -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.jumpCost * GlobalTimer::dT;
         }
     }
     
@@ -59,7 +59,7 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.Move(false);
-            tank.charge -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.jumpCost * GlobalTimer::dT;
         }
     }
 
@@ -94,7 +94,7 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
     }
 
     // Turbo controls
-    if (tank.charge > 0 && (InputTask::GetButton(tank.jid, 3) || InputTask::GetButton(tank.jid, 2)))
+    if (tank.energy > 0 && (InputTask::GetButton(tank.jid, 3) || InputTask::GetButton(tank.jid, 2)))
     {
         tank.turbo = true;
     }

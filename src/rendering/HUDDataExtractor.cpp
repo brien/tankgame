@@ -16,17 +16,18 @@ HUDRenderData HUDDataExtractor::ExtractPlayerHUD(const Tank& player, int playerI
     hudData.playerPosition = Vector3(player.x, player.y, player.z);
     hudData.playerRotation = Vector3(player.rx, player.ry + player.rty, player.rz);
     
-    // Health and energy data
-    hudData.health = player.energy;  // Note: In Tank class, 'energy' is actually health
-    hudData.maxHealth = player.maxEnergy;
-    hudData.energy = player.energy;
-    hudData.maxEnergy = player.maxEnergy;
-    hudData.charge = player.charge;
-    hudData.maxCharge = player.maxCharge;
+    // === REFACTORED: Clear health vs energy distinction ===
+    // Health data (survival)
+    hudData.health = player.health;           // Now properly using health field
+    hudData.maxHealth = player.maxHealth;     // Now properly using maxHealth field
+    
+    // Energy data (actions)
+    hudData.energy = player.energy;           // Now properly using energy field (was charge)
+    hudData.maxEnergy = player.maxEnergy;     // Now properly using maxEnergy field (was maxCharge)
     hudData.fireCost = player.fireCost;
     
-    // Calculate firing ability
-    hudData.canFire = (player.charge >= player.fireCost);
+    // Calculate firing ability (energy-based)
+    hudData.canFire = (player.energy >= player.fireCost);
     
     // Extract combo and special data
     ExtractComboAndSpecialData(player, playerId, hudData);
@@ -186,12 +187,9 @@ void HUDDataExtractor::SetHUDColors(const Tank& player, HUDRenderData& hudData) 
         hudData.healthColor = Vector3(1.0f, 0.4f, 0.4f); // Red for low health
     }
     
-    // Energy bar color (always same color scheme as original)
+    // Energy bar color (blue-cyan scheme for action energy)
     float energyPercent = hudData.energy / hudData.maxEnergy;
-    hudData.energyColor = Vector3(1.0f, 0.4f * energyPercent, 0.6f * energyPercent);
-    
-    // Charge bar color
-    hudData.chargeColor = Vector3(0.5f, hudData.charge / hudData.maxCharge, 1.0f);
+    hudData.energyColor = Vector3(0.2f, 0.6f + 0.4f * energyPercent, 1.0f);
     
     // Targeting line color
     hudData.targetingColor = Vector3(1.0f, 0.0f, 0.0f);

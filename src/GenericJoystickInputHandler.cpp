@@ -33,10 +33,10 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     if (InputTask::GetAxis(tank.jid, 1) < -5000)
     {
         tank.Move(-1.0f * (float)InputTask::GetAxis(tank.jid, 1) / (float)20000);
-        if (tank.turbo && tank.charge > 0)
+        if (tank.turbo && tank.energy > 0)
         {
             tank.Move(true);
-            tank.charge -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.jumpCost * GlobalTimer::dT;
         }
     }
     
@@ -52,10 +52,10 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     if (InputTask::GetAxis(tank.jid, 1) > 8000)
     {
         tank.Move(false);
-        if (tank.turbo && tank.charge > 0)
+        if (tank.turbo && tank.energy > 0)
         {
             tank.Move(false);
-            tank.charge -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.jumpCost * GlobalTimer::dT;
         }
     }
 
@@ -63,7 +63,7 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     if (InputTask::GetButton(tank.jid, 1) || InputTask::GetButton(tank.jid, 2) || InputTask::GetButton(tank.jid, 6))
     {
         tank.Jump();
-        if (tank.turbo && tank.charge > 0)
+        if (tank.turbo && tank.energy > 0)
         {
             tank.Jump();
         }
@@ -94,7 +94,7 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     }
     
     // Turbo controls
-    if (tank.charge > 0 && (InputTask::GetButton(tank.jid, 4) || InputTask::GetButton(tank.jid, 10)))
+    if (tank.energy > 0 && (InputTask::GetButton(tank.jid, 4) || InputTask::GetButton(tank.jid, 10)))
     {
         tank.turbo = true;
     }

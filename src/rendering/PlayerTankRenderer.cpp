@@ -79,7 +79,7 @@ void PlayerTankRenderer::DrawTargetingUI(const Tank& player, float drift)
 
     RenderTargetingIndicator(player);
     
-    if (player.fireTimer > player.fireRate && player.fireCost < player.charge)
+    if (player.fireTimer > player.fireRate && player.fireCost < player.energy)
     {
         RenderReadyIndicator(player, drift);
     }

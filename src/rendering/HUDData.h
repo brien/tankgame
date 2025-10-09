@@ -20,14 +20,19 @@ struct HUDRenderData {
     Vector3 playerPosition;             // Player world position
     Vector3 playerRotation;             // Player rotation (body + turret for targeting line)
     
-    // Health and energy bars
+    // === REFACTORED: Clear two-concept system ===
+    // Health system (survival)
     float health;                       // Current health (0.0 - maxHealth)
     float maxHealth;                    // Maximum health
-    float energy;                       // Current energy (0.0 - maxEnergy)  
-    float maxEnergy;                    // Maximum energy
-    float charge;                       // Current charge (0.0 - maxCharge)
-    float maxCharge;                    // Maximum charge
-    float fireCost;                     // Cost to fire (for charge indicator line)
+    
+    // Energy system (actions)  
+    float energy;                       // Current energy for actions (0.0 - maxEnergy)
+    float maxEnergy;                    // Maximum energy for actions
+    
+    // Action costs (for UI indicators)
+    float fireCost;                     // Energy cost to fire (for indicator line)
+    float jumpCost;                     // Energy cost to jump
+    float specialCost;                  // Energy cost for special abilities
     
     // Special abilities and combo system
     float combo;                        // Combo meter (0.0 - 100.0)
@@ -45,8 +50,7 @@ struct HUDRenderData {
     
     // Colors for UI elements
     Vector3 healthColor;                // Health bar color
-    Vector3 energyColor;                // Energy bar color
-    Vector3 chargeColor;                // Charge bar color
+    Vector3 energyColor;                // Energy bar color (was chargeColor)
     Vector3 targetingColor;             // Targeting line color
     Vector3 comboColor;                 // Combo meter color
     Vector3 specialColor;               // Special meter color
@@ -70,9 +74,9 @@ struct HUDRenderData {
         maxHealth(100.0f),
         energy(100.0f),
         maxEnergy(100.0f),
-        charge(100.0f),
-        maxCharge(100.0f),
         fireCost(10.0f),
+        jumpCost(15.0f),
+        specialCost(25.0f),
         combo(0.0f),
         special(0.0f),
         comboNumber(0),
@@ -84,8 +88,7 @@ struct HUDRenderData {
         showFPSCounter(true),
         showDebugInfo(false),
         healthColor(1.0f, 0.4f, 0.6f),
-        energyColor(1.0f, 0.4f, 0.6f),
-        chargeColor(0.5f, 1.0f, 1.0f),
+        energyColor(0.5f, 1.0f, 1.0f),
         targetingColor(1.0f, 0.0f, 0.0f),
         comboColor(1.0f, 1.0f, 0.1f),
         specialColor(0.5f, 1.0f, 1.0f),

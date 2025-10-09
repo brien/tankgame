@@ -58,7 +58,8 @@ void HUDRenderer::RenderPlayerHUD(const HUDRenderData& hudData) {
         RenderEnergyBar(hudData);
     }
     
-    RenderChargeBar(hudData);
+    // Show action cost indicators on energy bar
+    RenderActionCostIndicators(hudData);
     
     if (hudData.showComboMeter) {
         RenderComboMeter(hudData);
@@ -226,8 +227,13 @@ void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData)
 }
 
 void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
+    float energyBarX = -0.95f;
+    float energyBarY = 0.86f;  // Slightly below health bar (health bar is at 0.90f)
+    float energyBarWidth = 0.29f;
+    float energyBarHeight = 0.03f;
+    
     // Energy bar background
-    RenderQuad(-0.51f, 0.29f, 0.29f, 0.03f, Vector3(0.2f, 0.2f, 0.2f));
+    RenderQuad(energyBarX, energyBarY, energyBarWidth, energyBarHeight, Vector3(0.2f, 0.2f, 0.2f));
     
     // Energy bar fill
     float energyPercent = 0.0f;
@@ -237,57 +243,55 @@ void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
         if (energyPercent < 0.0f) energyPercent = 0.0f;
     }
     
-    RenderQuad(-0.51f, 0.29f, 0.29f * energyPercent, 0.03f, hudData.energyColor);
+    RenderQuad(energyBarX, energyBarY, energyBarWidth * energyPercent, energyBarHeight, hudData.energyColor);
     
     // Energy bar border
     glBegin(GL_LINE_LOOP);
     ApplyColor(Vector3(0.5f, 1.0f, 1.0f));
-    glVertex3f(-0.51f, 0.32f, 0);
-    glVertex3f(-0.51f + 0.29f, 0.32f, 0);
-    glVertex3f(-0.51f + 0.29f, 0.29f, 0);
-    glVertex3f(-0.51f, 0.29f, 0);
+    glVertex3f(energyBarX, energyBarY + energyBarHeight, 0);
+    glVertex3f(energyBarX + energyBarWidth, energyBarY + energyBarHeight, 0);
+    glVertex3f(energyBarX + energyBarWidth, energyBarY, 0);
+    glVertex3f(energyBarX, energyBarY, 0);
     glEnd();
     
     // Energy icon
     if (texturesLoaded) {
-        RenderTexturedQuad(-0.55f, 0.29f, 0.03f, 0.03f, 
+        float iconX = energyBarX - 0.04f;  // Position icon to the left of the bar
+        RenderTexturedQuad(iconX, energyBarY, 0.03f, energyBarHeight, 
                           hudTextures[TEXTURE_ENERGY_ICON], Vector3(0.6f, 0.6f, 1.0f));
     }
 }
 
-void HUDRenderer::RenderChargeBar(const HUDRenderData& hudData) {
-    // Charge bar fill
-    float chargePercent = 0.0f;
-    if (hudData.maxCharge > 0.0f) {
-        chargePercent = hudData.charge / hudData.maxCharge;
-        if (chargePercent > 1.0f) chargePercent = 1.0f;
-        if (chargePercent < 0.0f) chargePercent = 0.0f;
-    }
+void HUDRenderer::RenderActionCostIndicators(const HUDRenderData& hudData) {
+    // Show fire cost indicator on energy bar
+    float energyBarX = -0.95f;
+    float energyBarY = 0.86f;
+    float energyBarWidth = 0.29f;
+    float energyBarHeight = 0.03f;
     
-    // Enable blending if can't fire
-    if (!hudData.canFire) {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-    
-    glBegin(GL_QUADS);
-    ApplyColor(hudData.chargeColor, hudData.canFire ? 1.0f : 0.5f);
-    glVertex3f(-0.51f, 0.32f, 0);
-    glVertex3f(-0.51f + 0.29f * chargePercent, 0.32f, 0);
-    glVertex3f(-0.51f + 0.29f * chargePercent, 0.29f, 0);
-    glVertex3f(-0.51f, 0.29f, 0);
-    glEnd();
-    
-    // Fire cost indicator line
-    glBegin(GL_LINES);
-    ApplyColor(Vector3(0.5f, 1.0f, 1.0f));
-    float costPosition = -0.51f + 0.29f * (hudData.fireCost / hudData.maxCharge);
-    glVertex3f(costPosition, 0.32f, 0);
-    glVertex3f(costPosition, 0.29f, 0);
-    glEnd();
-    
-    if (!hudData.canFire) {
-        glDisable(GL_BLEND);
+    if (hudData.maxEnergy > 0.0f) {
+        // Fire cost indicator line
+        float fireCostPercent = hudData.fireCost / hudData.maxEnergy;
+        float indicatorX = energyBarX + energyBarWidth * fireCostPercent;
+        
+        // Draw fire cost indicator line
+        glBegin(GL_LINES);
+        ApplyColor(hudData.canFire ? Vector3(1.0f, 0.8f, 0.2f) : Vector3(0.8f, 0.4f, 0.4f)); 
+        glVertex3f(indicatorX, energyBarY, 0);
+        glVertex3f(indicatorX, energyBarY + energyBarHeight, 0);
+        glEnd();
+        
+        // Optional: Show jump cost indicator if different from fire cost
+        if (hudData.jumpCost != hudData.fireCost) {
+            float jumpCostPercent = hudData.jumpCost / hudData.maxEnergy;
+            float jumpIndicatorX = energyBarX + energyBarWidth * jumpCostPercent;
+            
+            glBegin(GL_LINES);
+            ApplyColor(Vector3(0.2f, 1.0f, 0.8f)); // Cyan for jump cost
+            glVertex3f(jumpIndicatorX, energyBarY, 0);
+            glVertex3f(jumpIndicatorX, energyBarY + energyBarHeight, 0);
+            glEnd();
+        }
     }
 }
 

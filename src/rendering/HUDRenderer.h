@@ -66,7 +66,7 @@ private:
     void RenderTargetingLine(const HUDRenderData& hudData);
     void RenderHealthBar(const HUDRenderData& hudData);
     void RenderEnergyBar(const HUDRenderData& hudData);
-    void RenderChargeBar(const HUDRenderData& hudData);
+    void RenderActionCostIndicators(const HUDRenderData& hudData);
     void RenderComboMeter(const HUDRenderData& hudData);
     void RenderSpecialMeter(const HUDRenderData& hudData);
     void RenderFPSCounter(const HUDRenderData& hudData);
