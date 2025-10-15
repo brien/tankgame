@@ -346,11 +346,13 @@ void LevelHandler::UpdateItems()
 
 void LevelHandler::ItemCollision()
 {
-    for (vector<Item>::iterator j = items.begin(); j != items.end(); j++)
+    for (auto j = items.begin(); j != items.end();)
     {
+        bool itemCollected = false;
+        
         for (int i = 0; i < TankHandler::GetSingleton().numPlayers; i++)
         {
-            if (TankHandler::GetSingleton().players[i].PointCollision(j->x, j->y, j->z))
+            if (j->alive && TankHandler::GetSingleton().players[i].PointCollision(j->x, j->y, j->z))
             {
                 TankHandler::GetSingleton().players[i].SetType(j->type, TankHandler::GetSingleton().players[i].type1);
 
@@ -362,13 +364,23 @@ void LevelHandler::ItemCollision()
                 if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
                     TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
 
-                j->alive = false;
-
                 FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1);
 
                 App::GetSingleton().soundTask->PlayChannel(3);
-                return;
+                
+                itemCollected = true;
+                break;  // Exit the player loop since item is collected
             }
+        }
+        
+        if (itemCollected || !j->alive)
+        {
+            // Remove the item from the vector completely
+            j = items.erase(j);
+        }
+        else
+        {
+            ++j;
         }
     }
 }
