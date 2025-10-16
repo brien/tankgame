@@ -5,6 +5,7 @@
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "FXHandler.h"
+#include "GameWorld.h"
 
 void GameTask::SetUpGame()
 {
@@ -176,9 +177,13 @@ void GameTask::HandlePlayingState()
     App::GetSingleton().graphicsTask->drawHUD = true;
     App::GetSingleton().graphicsTask->drawMenu = false;
 
+    // Phase 1: Keep existing handler calls during transition
     FXHandler::GetSingleton().NextFrame();
     TankHandler::GetSingleton().NextFrame();
     BulletHandler::GetSingleton().NextFrame();
+    
+    // Phase 1: Add GameWorld update alongside existing systems
+    gameWorld.Update();
 
     if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ITask.h"
+#include "GameWorld.h"
 
 class GameTask : public ITask
 {
@@ -34,6 +35,9 @@ private:
     void TransitionToState(GameState newState);
 
     void Visible(bool visible);
+
+    // Phase 1: Add GameWorld alongside existing systems
+    GameWorld gameWorld;
 
     bool paused;
     bool debug;
