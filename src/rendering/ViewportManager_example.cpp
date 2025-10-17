@@ -51,6 +51,8 @@ void ExampleUsage()
         viewportManager.SetActiveViewport(i);
 
         const Viewport &vp = viewportManager.GetViewport(i);
+        // Use the viewport for rendering (suppress unused warning)
+        (void)vp; // Explicitly mark as used for example code
         // vp.x, vp.y, vp.width, vp.height are now available
 
         // Render scene for this viewport...

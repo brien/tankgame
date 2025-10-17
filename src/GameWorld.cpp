@@ -3,38 +3,39 @@
 #include "BulletHandler.h"
 #include "LevelHandler.h"
 #include "FXHandler.h"
+#include "FXEntity.h"
 #include "Logger.h"
 
 GameWorld::GameWorld() {
-    Logger::Get().Write("GameWorld: Initializing alongside existing systems\n");
+    Logger::Get().Write("GameWorld: Phase 2A - Initializing with FX management\n");
     initialized = true;
 }
 
 void GameWorld::Update() {
-    // Phase 1: Empty implementation - existing handlers still do the work
-    // This demonstrates the structure and allows GameTask to call gameWorld.Update()
+    // Phase 2A: Now actively manages FX entities
+    effects.Update();
     
-    // Future phases will move entity updates here:
+    // Future phases will add other entity updates here:
     // enemies.Update();
     // bullets.Update();  
     // items.Update();
-    // effects.Update();
     
-    // For now, just track that we're running
+    // Track that we're running
     if (!initialized) {
         initialized = true;
     }
 }
 
 void GameWorld::Reset() {
-    Logger::Get().Write("GameWorld: Reset called\n");
+    Logger::Get().Write("GameWorld: Phase 2A - Reset with FX cleanup\n");
     
-    // Phase 1: Delegate to existing systems
-    // Future: Will clear our own entity managers
+    // Phase 2A: Clear our FX entities
+    effects.Clear();
+    
+    // Future: Will clear other entity managers
     // enemies.Clear();
     // bullets.Clear();
     // items.Clear();
-    // effects.Clear();
     
     initialized = false;
 }
@@ -93,6 +94,23 @@ size_t GameWorld::GetItemCount() const {
 }
 
 size_t GameWorld::GetEffectCount() const {
-    // Phase 1: Delegate to existing FXHandler
-    return FXHandler::GetSingleton().fx.size();
+    // Phase 2A: Return count from both old system and new system
+    size_t oldCount = FXHandler::GetSingleton().fx.size();
+    size_t newCount = effects.GetAliveCount();
+    return oldCount + newCount;
+}
+
+void GameWorld::CreateFX(FxType type, float x, float y, float z, 
+                        float rx, float ry, float rz, 
+                        float r, float g, float b, float a) {
+    // Phase 2A-1: Create FX in new system
+    effects.Create(type, x, y, z, rx, ry, rz, r, g, b, a);
+}
+
+void GameWorld::CreateFX(FxType type, float x, float y, float z, 
+                        float dx, float dy, float dz,
+                        float rx, float ry, float rz, 
+                        float r, float g, float b, float a) {
+    // Phase 2A-1: Create FX with velocity in new system
+    effects.Create(type, x, y, z, dx, dy, dz, rx, ry, rz, r, g, b, a);
 }

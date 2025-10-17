@@ -14,10 +14,10 @@
 #include "../Logger.h"
 
 TerrainRenderer::TerrainRenderer() : BaseRenderer(),
+                                     currentTerrainData(nullptr),
                                      displayListInitialized(false),
                                      lastHeightX(0),
-                                     lastHeightZ(0),
-                                     currentTerrainData(nullptr)
+                                     lastHeightZ(0)
 {
     InitializeColorPalette();
 }
