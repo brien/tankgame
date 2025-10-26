@@ -13,6 +13,7 @@
 
 #include <cmath>
 #include "LevelHandler.h"
+#include "GameWorld.h"
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "App.h"
@@ -326,10 +327,19 @@ bool LevelHandler::FallCollision(float x, float y, float z)
 
 void LevelHandler::AddItem(float x, float y, float z, TankType type)
 {
-    if (x < sizeX || z < sizeZ)
+    if (gameWorld)
     {
-        Item temp(x, t[(int)x][(int)z] + .2, z, type);
-        items.push_back(temp);
+        // Delegate to GameWorld
+        gameWorld->CreateItem(x, y, z, type);
+    }
+    else
+    {
+        // Fallback to old system during transition
+        if (x < sizeX || z < sizeZ)
+        {
+            Item temp(x, t[(int)x][(int)z] + .2, z, type);
+            items.push_back(temp);
+        }
     }
 }
 
@@ -346,6 +356,7 @@ void LevelHandler::UpdateItems()
 
 void LevelHandler::ItemCollision()
 {
+    // Handle old system items (still in LevelHandler)
     for (auto j = items.begin(); j != items.end();)
     {
         bool itemCollected = false;
@@ -381,6 +392,42 @@ void LevelHandler::ItemCollision()
         else
         {
             ++j;
+        }
+    }
+    
+    // Handle new system items (managed by GameWorld) 
+    if (gameWorld)
+    {
+        const auto& gameWorldItems = gameWorld->GetItems();
+        for (const auto& itemPtr : gameWorldItems)
+        {
+            if (!itemPtr->IsAlive()) continue;
+            
+            const Item& item = *itemPtr; // Dereference the unique_ptr
+            
+            for (int i = 0; i < TankHandler::GetSingleton().numPlayers; i++)
+            {
+                if (TankHandler::GetSingleton().players[i].PointCollision(item.x, item.y, item.z))
+                {
+                    TankHandler::GetSingleton().players[i].SetType(item.type, TankHandler::GetSingleton().players[i].type1);
+
+                    if (item.type == TankHandler::GetSingleton().players[i].type1)
+                        TankHandler::GetSingleton().players[i].energy += TankHandler::GetSingleton().players[i].maxEnergy;
+                    else
+                        TankHandler::GetSingleton().players[i].energy += TankHandler::GetSingleton().players[i].maxEnergy / 2;
+
+                    if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
+                        TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
+
+                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, item.x, item.y, item.z, 90, 0, 90, item.r, item.g, item.b, 1);
+
+                    App::GetSingleton().soundTask->PlayChannel(3);
+                    
+                    // Mark item for removal using Entity interface
+                    itemPtr->Kill();
+                    break;  // Exit the player loop since item is collected
+                }
+            }
         }
     }
 }
@@ -845,4 +892,34 @@ int LevelHandler::ConvertInternalToLogicalLevel(int internalLevel)
     {
         return 0; // Fallback to level 0 for invalid values
     }
+}
+
+std::vector<const Item*> LevelHandler::GetAllItems() const
+{
+    // Create unified view that combines old LevelHandler items and new GameWorld items
+    unifiedItemView.clear();
+    
+    // Add old system items (still in LevelHandler)
+    for (const auto& item : items)
+    {
+        if (item.alive)
+        {
+            unifiedItemView.push_back(&item);
+        }
+    }
+    
+    // Add new system items (managed by GameWorld)
+    if (gameWorld)
+    {
+        const auto& gameWorldItems = gameWorld->GetItems();
+        for (const auto& itemPtr : gameWorldItems)
+        {
+            if (itemPtr->IsAlive())
+            {
+                unifiedItemView.push_back(itemPtr.get()); // Get raw pointer from unique_ptr
+            }
+        }
+    }
+    
+    return unifiedItemView;
 }

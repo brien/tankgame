@@ -769,7 +769,7 @@ void GraphicsTask::DrawHUD(Tank &player)
      float bangM=((float)player.dist/50);
      if(bangM>1)bangM=1;
 
-     if(TankHandler::GetSingleton().tanks.size()>0)
+     if(TankHandler::GetSingleton().GetAllEnemyTanks().size()>0)
      {
      glColor4f(1.0f,bangM,0.1f,0.0);
 
@@ -798,7 +798,7 @@ void GraphicsTask::DrawHUD(Tank &player)
      glEnable(GL_BLEND);
      glBlendFunc(GL_ONE, GL_ONE);
 
-     if(TankHandler::GetSingleton().tanks.size()>0)
+     if(TankHandler::GetSingleton().GetAllEnemyTanks().size()>0)
      {
      glPushMatrix();
      glLoadIdentity();
@@ -924,7 +924,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     // Ones of enemy tanks left:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().tanks.size() % 10]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().GetAllEnemyTanks().size() % 10]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -943,7 +943,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     // Tens of enemy tanks left:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().tanks.size() / 10]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().GetAllEnemyTanks().size() / 10]);
 
     glBegin(GL_QUADS);
 

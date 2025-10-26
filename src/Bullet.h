@@ -6,10 +6,12 @@
 
 #pragma once
 
+#include "Entity.h"
+
 class Tank;
 enum class TankType;
 
-class Bullet
+class Bullet : public Entity
 {
 
 public:
@@ -23,10 +25,17 @@ public:
            float x, float y, float z,
            float rx, float ry, float rz);
     ~Bullet() = default;
+    
+    // Entity interface implementation
+    void Update() override { NextFrame(); }
+    bool IsAlive() const override { return alive; }
+    void OnDestroy() override {}
+    void Kill() override { alive = false; }
+    
+    // Legacy methods for compatibility
     void NextFrame();
 
     // Accessor methods for alive member
-    bool IsAlive() const { return alive; }
     void SetAlive(bool isAlive) { alive = isAlive; }
 
     // Accessor methods for rendering data extraction
@@ -50,6 +59,7 @@ public:
     TankType GetType2() const { return type2; }
     int GetTankId() const { return tankId; }
     float GetMoveRate() const { return moveRate; }
+    int GetBounces() const { return maxbounces; }
 
 private:
     float x = 0.0f, y = 0.0f, z = 0.0f;

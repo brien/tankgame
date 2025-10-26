@@ -80,6 +80,19 @@ std::vector<TankRenderData> TankDataExtractor::ExtractEnemyData(const std::vecto
     return renderData;
 }
 
+std::vector<TankRenderData> TankDataExtractor::ExtractEnemyData(const std::vector<const Tank*>& enemyTanks) {
+    std::vector<TankRenderData> renderData;
+    renderData.reserve(enemyTanks.size());
+    
+    for (const auto* tank : enemyTanks) {
+        if (tank && tank->alive) {
+            renderData.push_back(ExtractRenderData(*tank));
+        }
+    }
+    
+    return renderData;
+}
+
 std::vector<TankRenderData> TankDataExtractor::ExtractAllTankData(
     const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
     const std::vector<Tank>& enemyTanks,

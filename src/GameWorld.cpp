@@ -1,116 +1,58 @@
 #include "GameWorld.h"
-#include "TankHandler.h"
-#include "BulletHandler.h"
-#include "LevelHandler.h"
+#include "Tank.h"
+#include "Bullet.h"
 #include "FXHandler.h"
-#include "FXEntity.h"
+#include "Item.h"
 #include "Logger.h"
 
-GameWorld::GameWorld() {
-    Logger::Get().Write("GameWorld: Phase 2A - Initializing with FX management\n");
-    initialized = true;
-}
+GameWorld::GameWorld() = default;
 
 void GameWorld::Update() {
-    // Phase 2A: Now actively manages FX entities
+    // Update all entity types using unified EntityManager
+    tanks.Update();
+    bullets.Update();
     effects.Update();
-    
-    // Future phases will add other entity updates here:
-    // enemies.Update();
-    // bullets.Update();  
-    // items.Update();
-    
-    // Track that we're running
-    if (!initialized) {
-        initialized = true;
-    }
+    items.Update();
+
+    // Handle interactions
+    HandleCollisions();
+    HandleItemCollection();
 }
 
-void GameWorld::Reset() {
-    Logger::Get().Write("GameWorld: Phase 2A - Reset with FX cleanup\n");
-    
-    // Phase 2A: Clear our FX entities
+void GameWorld::Clear() {
+    tanks.Clear();
+    bullets.Clear(); 
     effects.Clear();
-    
-    // Future: Will clear other entity managers
-    // enemies.Clear();
-    // bullets.Clear();
-    // items.Clear();
-    
-    initialized = false;
+    items.Clear();
 }
 
-bool GameWorld::AreAllEnemiesDead() const {
-    // Phase 1: Delegate to existing TankHandler
-    const auto& tanks = TankHandler::GetSingleton().tanks;
-    return std::all_of(tanks.begin(), tanks.end(), 
-        [](const Tank& tank) { return !tank.alive; });
+Tank* GameWorld::CreateTank() {
+    return tanks.Create();
 }
 
-bool GameWorld::AreAllPlayersDead() const {
-    // Phase 1: Delegate to existing TankHandler
-    const auto& players = TankHandler::GetSingleton().players;
-    int numPlayers = TankHandler::GetSingleton().numPlayers;
-    
-    for (int i = 0; i < numPlayers; i++) {
-        if (players[i].alive) {
-            return false;
-        }
-    }
-    return true;
+Bullet* GameWorld::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
+                               float r, float g, float b, float r2, float g2, float b2,
+                               float x, float y, float z, float rx, float ry, float rz) {
+    return bullets.Create(id, attack, type1, type2, bounces, dTpressed, r, g, b, r2, g2, b2, x, y, z, rx, ry, rz);
 }
 
-int GameWorld::GetRemainingPlayers() const {
-    // Phase 1: Delegate to existing TankHandler
-    const auto& players = TankHandler::GetSingleton().players;
-    int numPlayers = TankHandler::GetSingleton().numPlayers;
-    int remaining = 0;
-    
-    for (int i = 0; i < numPlayers; i++) {
-        if (players[i].alive) {
-            remaining++;
-        }
-    }
-    return remaining;
+FX* GameWorld::CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a) {
+    return effects.Create(type, x, y, z, rx, ry, rz, r, g, b, a);
 }
 
-size_t GameWorld::GetEnemyCount() const {
-    // Phase 1: Delegate to existing TankHandler
-    const auto& tanks = TankHandler::GetSingleton().tanks;
-    return std::count_if(tanks.begin(), tanks.end(),
-        [](const Tank& tank) { return tank.alive; });
+FX* GameWorld::CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a) {
+    return effects.Create(type, x, y, z, dx, dy, dz, rx, ry, rz, r, g, b, a);
 }
 
-size_t GameWorld::GetBulletCount() const {
-    // Phase 1: Delegate to existing BulletHandler
-    return BulletHandler::GetSingleton().GetBullets().size();
+Item* GameWorld::CreateItem(float x, float y, float z, TankType type) {
+    return items.Create(x, y, z, type);
 }
 
-size_t GameWorld::GetItemCount() const {
-    // Phase 1: Delegate to existing LevelHandler
-    const auto& items = LevelHandler::GetSingleton().items;
-    return std::count_if(items.begin(), items.end(),
-        [](const Item& item) { return item.alive; });
+void GameWorld::HandleCollisions() {
+    // Centralized collision handling
+    // Move collision logic here from handlers
 }
 
-size_t GameWorld::GetEffectCount() const {
-    // Phase 2A: Return count from both old system and new system
-    size_t oldCount = FXHandler::GetSingleton().fx.size();
-    size_t newCount = effects.GetAliveCount();
-    return oldCount + newCount;
-}
-
-void GameWorld::CreateFX(FxType type, float x, float y, float z, 
-                        float rx, float ry, float rz, 
-                        float r, float g, float b, float a) {
-    // Phase 2A-1: Create FX in new system
-    effects.Create(type, x, y, z, rx, ry, rz, r, g, b, a);
-}
-
-void GameWorld::CreateFX(FxType type, float x, float y, float z, 
-                        float dx, float dy, float dz,
-                        float rx, float ry, float rz, 
-                        float r, float g, float b, float a) {
-    // Phase 2A-1: Create FX with velocity in new system
-    effects.Create(type, x, y, z, dx, dy, dz, rx, ry, rz, r, g, b, a);
+void GameWorld::HandleItemCollection() {
+    // Move item collection logic here from LevelHandler
 }

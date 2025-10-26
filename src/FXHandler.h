@@ -3,6 +3,7 @@
 #include <vector>
 using namespace std;
 #include "Singleton.h"
+#include "Entity.h"
 
 enum class FxType
 {
@@ -17,15 +18,22 @@ enum class FxType
     FX_TYPE_COUNT = 8
 };
 
-class FX
+class FX : public Entity
 {
 public:
     FX();
     FX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     FX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     ~FX() = default;
+    
+    // Entity interface implementation
+    void Update() override;
+    bool IsAlive() const override { return alive; }
+    void OnDestroy() override {}
+    void Kill() override { alive = false; }
+    
+    // Legacy methods for compatibility
     void SetMaxTime();
-    void Update();
 
     bool alive;
 
@@ -54,4 +62,14 @@ public:
     void CreateFX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
 
     void ClearFX();
+    
+    // Interface to GameWorld
+    void SetGameWorld(class GameWorld* world) { gameWorld = world; }
+    
+    // Get all FX for rendering (combines old and new systems)
+    const std::vector<FX>& GetAllFX() const;
+
+private:
+    class GameWorld* gameWorld = nullptr;
+    mutable std::vector<FX> unifiedFXView; // Mutable for const GetAllFX()
 };

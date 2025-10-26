@@ -118,7 +118,7 @@ void Tank::Die()
 
     TankHandler::GetSingleton().numAttackingTanks--;
 
-    if (TankHandler::GetSingleton().tanks.size() != 1 && id >= 0)
+    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() != 1 && id >= 0)
     {
         LevelHandler::GetSingleton().AddItem(x, y + .2, z, type1);
     }
@@ -153,7 +153,7 @@ void Tank::Die()
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
         FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1);
     }
-    if (TankHandler::GetSingleton().tanks.size() == 1 && id >= 0)
+    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 && id >= 0)
     {
         LevelHandler::GetSingleton().SetTerrainHeight(static_cast<int>(x), static_cast<int>(z), -20);
     }
@@ -371,7 +371,7 @@ void Tank::Special(float dTpressed)
     }
 }
 
-bool Tank::PointCollision(float cx, float cy, float cz)
+bool Tank::PointCollision(float cx, float cy, float cz) const
 {
     bool result = false;
     if ((cy - y) < 0.3f && (y - cy) < 0)
@@ -1254,7 +1254,7 @@ void Tank::AI()
         }
     }
 
-    if (TankHandler::GetSingleton().tanks.size() == 1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber - 47) && !App::GetSingleton().gameTask->IsVersusMode()))
+    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber - 47) && !App::GetSingleton().gameTask->IsVersusMode()))
     {
         state = EnemyState::STATE_HUNT;
         TankHandler::GetSingleton().numAttackingTanks++;

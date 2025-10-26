@@ -63,6 +63,12 @@ public:
     void DestroyTank();
 
     void NextFrame();
+    
+    // Interface to GameWorld (for enemy tanks only)
+    void SetGameWorld(class GameWorld* world) { gameWorld = world; }
+    
+    // Get all tanks for rendering (combines players + enemies from both old and new systems)
+    std::vector<const Tank*> GetAllEnemyTanks() const;
 
     float closest = 0.0f;
     bool isInputJoy = false;
@@ -71,6 +77,9 @@ public:
     int numAttackingTanks = 0;
 
 private:
+    class GameWorld* gameWorld = nullptr;
+    mutable std::vector<const Tank*> unifiedEnemyView; // Mutable for const GetAllEnemyTanks()
+    
     // Main initialization functions
     void InitializeEnemyTanks();
     void InitializePlayerTanks();

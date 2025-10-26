@@ -13,8 +13,9 @@ using namespace std;
 #include "Singleton.h"
 #include "rendering/RenderData.h"
 
-// Forward declaration
+// Forward declarations
 struct TerrainRenderData;
+class GameWorld;
 
 /**
  * Level metadata structure for JSON-based level configuration
@@ -67,6 +68,12 @@ public:
     void UpdateItems();  // Updates item states (rotation animations)
     void AddItem(float x, float y, float z, TankType type);
 
+    // Interface to GameWorld
+    void SetGameWorld(GameWorld* world) { gameWorld = world; }
+    
+    // Get all items for rendering (combines old and new systems)
+    std::vector<const Item*> GetAllItems() const;
+
     bool HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz);
     bool FallCollision(float x, float y, float z);
     bool FloatCollision(float x, float y, float z);
@@ -112,4 +119,7 @@ private:
     
     // Debug method to print loaded metadata
     void PrintMetadata() const;
+
+    GameWorld* gameWorld = nullptr; // Pointer to the GameWorld instance
+    mutable std::vector<const Item*> unifiedItemView; // Mutable for const GetAllItems()
 };

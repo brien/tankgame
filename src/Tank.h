@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Entity.h"
 #include "igtl_qmesh.h"
 #include "BulletHandler.h"
 
@@ -47,12 +48,11 @@ enum class InputMode
 // Forward declaration for helper class
 class TankCollisionHelper;
 
-class Tank
+class Tank : public Entity
 {
     // Allow the collision helper to access private members
     friend class TankCollisionHelper;
     
-public:
 public:
     Tank();
     ~Tank();
@@ -92,6 +92,20 @@ public:
     bool alive;
 
     int id;
+    
+    // Entity interface implementation
+    void Update() override { 
+        if (!isPlayer && id >= 0) {
+            // Enemy tanks (id >= 0, isPlayer = false) need AI updates
+            // Debug: Uncomment this to verify enemy tanks are updating
+            // printf("Enemy tank %d updating (isPlayer=%d, id=%d)\n", id, isPlayer, id);
+            AI(); 
+        }
+        NextFrame(); 
+    }
+    bool IsAlive() const override { return alive; }
+    void OnDestroy() override { Die(); }
+    void Kill() override { alive = false; }
 
     void Init();
 
@@ -152,7 +166,7 @@ public:
     float jumpTime;
     bool turbo;         // Turbo mode flag (consumes extra energy)
 
-    bool PointCollision(float cx, float cy, float cz);
+    bool PointCollision(float cx, float cy, float cz) const;
 
     void NextFrame();
 

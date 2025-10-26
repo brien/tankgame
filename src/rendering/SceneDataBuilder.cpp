@@ -56,9 +56,9 @@ std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
         tankHandler.numPlayers
     );
     
-    // Extract enemy tank data using direct access to public members
+    // Extract enemy tank data using unified view (combines old + GameWorld enemy tanks)
     auto enemyTanks = TankDataExtractor::ExtractEnemyData(
-        tankHandler.tanks
+        tankHandler.GetAllEnemyTanks()
     );
     
     // Combine all tank data
@@ -70,18 +70,34 @@ std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
 }
 
 std::vector<BulletRenderData> SceneDataBuilder::ExtractBulletData() const {
-    // Delegate to BulletDataExtractor with correct method name
-    return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetBullets());
+    // Delegate to BulletDataExtractor using unified Bullet view (combines old + GameWorld bullets)
+    return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetAllBullets());
 }
 
 std::vector<EffectRenderData> SceneDataBuilder::ExtractEffectData() const {
-    // Delegate to EffectDataExtractor with correct method name
-    return EffectDataExtractor::ExtractEffectRenderData(fxHandler.fx);
+    // Delegate to EffectDataExtractor using unified FX view (combines old + GameWorld FX)
+    return EffectDataExtractor::ExtractEffectRenderData(fxHandler.GetAllFX());
 }
 
 std::vector<ItemRenderData> SceneDataBuilder::ExtractItemData() const {
-    // Delegate to ItemDataExtractor with correct method name
-    return ItemDataExtractor::ExtractRenderData(levelHandler.items);
+    // Use unified item view (combines old LevelHandler items + new GameWorld items)
+    auto allItems = levelHandler.GetAllItems();
+    
+    std::vector<ItemRenderData> itemData;
+    itemData.reserve(allItems.size());
+    
+    for (const Item* item : allItems) {
+        if (item && item->IsAlive()) {
+            ItemRenderData data;
+            data.position = Vector3{item->x, item->y, item->z};
+            data.rotationY = item->ry; // Use only Y rotation for spinning
+            data.itemType = item->type;
+            data.visible = true;
+            itemData.push_back(data);
+        }
+    }
+    
+    return itemData;
 }
 
 TerrainRenderData SceneDataBuilder::ExtractTerrainData() const {

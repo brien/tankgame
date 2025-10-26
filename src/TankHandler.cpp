@@ -16,6 +16,7 @@
 #include "GlobalTimer.h"
 #include "math.h"
 #include "App.h"
+#include "GameWorld.h"
 #include <string>
 #include <utility>
 #include <algorithm>
@@ -287,7 +288,21 @@ void TankHandler::InitializeEnemyTanks()
     
     for (int i = 0; i < enemyCount; ++i)
     {
-        tanks.emplace_back(CreateEnemyTank(i));
+        if (gameWorld) {
+            // Delegate to GameWorld - create enemy tank there
+            Tank* newTank = gameWorld->CreateTank();
+            if (newTank) {
+                newTank->Init();
+                newTank->isPlayer = false; // Ensure it's marked as enemy tank
+                newTank->id = i; // Set proper enemy tank ID
+                SetEnemyPosition(*newTank, i);
+                SetEnemyType(*newTank, i);
+                newTank->jumpCost = 0; // Enemy tanks don't pay jump cost
+            }
+        } else {
+            // Fallback to old system during transition
+            tanks.emplace_back(CreateEnemyTank(i));
+        }
     }
 }
 
@@ -449,6 +464,13 @@ void TankHandler::UpdatePlayerTargeting()
 
 void TankHandler::UpdateEnemyTanks()
 {
+    if (gameWorld) {
+        // GameWorld handles enemy tank updates through EntityManager
+        // The enemy tanks are managed by GameWorld's EntityManager<Tank>
+        return;
+    }
+    
+    // Legacy update loop for fallback
     for (auto it = tanks.begin(); it != tanks.end();)
     {
         if (it->alive)
@@ -488,6 +510,35 @@ void TankHandler::UpdateVersusMode()
 
         players[1].rr = rtyp;
         players[1].rrl = players[1].rr;
+    }
+}
+
+std::vector<const Tank*> TankHandler::GetAllEnemyTanks() const {
+    if (gameWorld) {
+        // Return unified view of both old enemy tanks and GameWorld enemy tanks
+        unifiedEnemyView.clear();
+        
+        // Add old system enemy tanks (as pointers)
+        for (const auto& tank : tanks) {
+            unifiedEnemyView.push_back(&tank);
+        }
+        
+        // Add GameWorld enemy tanks (already pointers)
+        const auto& worldTanks = gameWorld->GetTanks();
+        for (const auto& tankPtr : worldTanks) {
+            if (tankPtr && tankPtr->IsAlive()) {
+                unifiedEnemyView.push_back(tankPtr.get());
+            }
+        }
+        
+        return unifiedEnemyView;
+    } else {
+        // Fallback to old system - convert to pointers
+        unifiedEnemyView.clear();
+        for (const auto& tank : tanks) {
+            unifiedEnemyView.push_back(&tank);
+        }
+        return unifiedEnemyView;
     }
 }
 

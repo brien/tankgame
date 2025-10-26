@@ -39,6 +39,13 @@ public:
     static std::vector<TankRenderData> ExtractEnemyData(const std::vector<Tank>& enemyTanks);
     
     /**
+     * Extracts rendering data from enemy tanks vector (pointer version).
+     * @param enemyTanks Vector of pointers to enemy Tank objects
+     * @return Vector of TankRenderData structures for rendering
+     */
+    static std::vector<TankRenderData> ExtractEnemyData(const std::vector<const Tank*>& enemyTanks);
+    
+    /**
      * Extracts rendering data from all tanks (players + enemies).
      * @param players Array of player Tank objects
      * @param enemyTanks Vector of enemy Tank objects

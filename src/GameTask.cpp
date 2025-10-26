@@ -47,6 +47,12 @@ bool GameTask::Start()
 
     paused = false;
     debug = false;
+    
+    // Connect handlers to GameWorld (singletons are now initialized)
+    FXHandler::GetSingleton().SetGameWorld(&gameWorld);
+    BulletHandler::GetSingleton().SetGameWorld(&gameWorld);
+    TankHandler::GetSingleton().SetGameWorld(&gameWorld);
+    LevelHandler::GetSingleton().SetGameWorld(&gameWorld);
 
     return true;
 }
@@ -98,7 +104,8 @@ void GameTask::HandleCommonState()
 void GameTask::HandleMenuState()
 {
     App::GetSingleton().graphicsTask->drawMenu = true;
-    FXHandler::GetSingleton().NextFrame();
+    // Update GameWorld for menu effects (now handles FX through GameWorld)
+    gameWorld.Update();
 
     if (InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1))
     {
@@ -177,13 +184,13 @@ void GameTask::HandlePlayingState()
     App::GetSingleton().graphicsTask->drawHUD = true;
     App::GetSingleton().graphicsTask->drawMenu = false;
 
-    // Phase 1: Keep existing handler calls during transition
-    FXHandler::GetSingleton().NextFrame();
+    // New unified update replaces individual handler updates
+    gameWorld.Update();
+    
+    // Legacy handler updates for systems not yet migrated
     TankHandler::GetSingleton().NextFrame();
     BulletHandler::GetSingleton().NextFrame();
-    
-    // Phase 1: Add GameWorld update alongside existing systems
-    gameWorld.Update();
+    // FXHandler now delegates to GameWorld, so NextFrame() is effectively a no-op
 
     if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {

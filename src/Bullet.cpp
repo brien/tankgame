@@ -143,11 +143,13 @@ void Bullet::NextFrame()
         }
     }
 
-    for (vector<Tank>::iterator it = TankHandler::GetSingleton().tanks.begin(); it != TankHandler::GetSingleton().tanks.end(); ++it)
+    // Check collision with enemy tanks using unified view (old + GameWorld tanks)
+    auto enemyTanks = TankHandler::GetSingleton().GetAllEnemyTanks();
+    for (const Tank* tank : enemyTanks)
     {
-        if ((*it).PointCollision(x, y, z) || (*it).PointCollision(x - xpp / 2, y, z - zpp / 2))
+        if (tank && (tank->PointCollision(x, y, z) || tank->PointCollision(x - xpp / 2, y, z - zpp / 2)))
         {
-            HandleTankCollision(*it);
+            HandleTankCollision(const_cast<Tank&>(*tank));
         }
     }
 
