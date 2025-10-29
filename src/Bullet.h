@@ -60,6 +60,16 @@ public:
     int GetTankId() const { return tankId; }
     float GetMoveRate() const { return moveRate; }
     int GetBounces() const { return maxbounces; }
+    float GetDT() const { return dT; }
+    bool GetIsSpecial() const { return isSpecial; }
+    
+    // Setters needed by CombatSystem
+    void SetPower(float newPower) { power = newPower; }
+    
+    // Collision handling methods
+    void HandleLevelCollision(float xpp, float zpp, float ory);
+    void HandlePlayerCollision(Tank &playerTank);
+    void HandleTankCollision(Tank &playerTank);
 
 private:
     float x = 0.0f, y = 0.0f, z = 0.0f;
@@ -88,8 +98,4 @@ private:
     int maxbounces = 0;
 
     bool alive = true;
-
-    void HandleLevelCollision(float xpp, float zpp, float ory);
-    void HandlePlayerCollision(Tank &playerTank);
-    void HandleTankCollision(Tank &playerTank);
 };

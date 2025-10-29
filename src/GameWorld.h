@@ -2,6 +2,8 @@
 
 #include "Entity.h"
 #include "EntityManager.h"
+#include "collision/CollisionSystem.h"
+#include "combat/CombatSystem.h"
 
 // Forward declarations for existing classes
 class Tank;
@@ -39,12 +41,31 @@ public:
     const auto& GetFX() const { return effects.GetEntities(); }
     const auto& GetItems() const { return items.GetEntities(); }
 
+    // Initialize/shutdown systems
+    void Initialize();
+    void Shutdown();
+    
+    // System accessors
+    CollisionSystem& GetCollisionSystem() { return collisionSystem; }
+
 private:
     EntityManager<Tank> tanks;
     EntityManager<Bullet> bullets;
     EntityManager<FX> effects;
     EntityManager<Item> items;
+    
+    // Game systems
+    CollisionSystem collisionSystem;
+    CombatSystem combatSystem;
 
     void HandleCollisions();
     void HandleItemCollection();
+    
+    // Event handlers
+    void SetupEventHandlers();
+    void OnCreateFXEvent(const struct CreateFXEvent& event);
+    
+    // Helper for updating entities with collision cleanup
+    template<typename T>
+    void UpdateEntitiesWithCleanup(EntityManager<T>& manager);
 };

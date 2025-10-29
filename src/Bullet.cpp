@@ -26,6 +26,8 @@
 #include "Tank.h"
 #include "FXHandler.h"
 #include "App.h"
+#include "events/Events.h"
+#include "events/CollisionEvents.h"
 
 Bullet::Bullet()
     : x(0.0f), y(0.0f), z(0.0f),
@@ -130,44 +132,74 @@ void Bullet::NextFrame()
 
     float ory = ry;
 
-    if (LevelHandler::GetSingleton().PointCollision(x, y, z))
-    {
-        HandleLevelCollision(xpp, zpp, ory);
+    // NEW: Event-based collision detection
+    
+    // Check level collision first
+    PointCollisionQuery levelQuery(x, y, z, CollisionLayer::LEVEL, this);
+    Events::GetBus().Publish(levelQuery);
+    
+    if (levelQuery.result) {
+        // Post level collision event for CombatSystem to handle
+        Events::GetBus().Post(BulletLevelCollisionEvent(this, x, y, z, xpp, zpp, ory));
+        return; // Level collision handling will determine if bullet survives
     }
 
-    for (int i = 0; i < TankHandler::GetSingleton().numPlayers; i++)
-    {
-        if (TankHandler::GetSingleton().players[i].PointCollision(x, y, z))
-        {
-            HandlePlayerCollision(TankHandler::GetSingleton().players[i]);
+    // Check tank collisions (both players and enemies)
+    // Use smaller radius to match original collision detection
+    SphereCollisionQuery tankQuery(x, y, z, 0.1f, CollisionLayer::ALL_TANKS, this);
+    Events::GetBus().Publish(tankQuery);
+    
+    if (!tankQuery.results.empty()) {
+        // Filter out the tank that fired this bullet
+        for (Entity* entity : tankQuery.results) {
+            Tank* tank = dynamic_cast<Tank*>(entity);
+            if (tank && tank->id != tankId) {
+                // Found a valid target (not the firing tank)
+                Events::GetBus().Post(BulletCollisionEvent(this, tank, x, y, z));
+                return; // CombatSystem will handle the collision response
+            } else if (tank && tank->id == tankId && dT > 0.5f) {
+                // Allow collision with firing tank only after 0.5 seconds (for healing/self-damage)
+                Events::GetBus().Post(BulletCollisionEvent(this, tank, x, y, z));
+                return;
+            }
+        }
+    }
+    
+    // Also check the previous position for fast-moving bullets
+    if (xpp != 0 || zpp != 0) {
+        SphereCollisionQuery prevQuery(x - xpp / 2, y, z - zpp / 2, 0.1f, CollisionLayer::ALL_TANKS, this);
+        Events::GetBus().Publish(prevQuery);
+        
+        if (!prevQuery.results.empty()) {
+            // Filter out the tank that fired this bullet
+            for (Entity* entity : prevQuery.results) {
+                Tank* tank = dynamic_cast<Tank*>(entity);
+                if (tank && tank->id != tankId) {
+                    // Found a valid target (not the firing tank)
+                    Events::GetBus().Post(BulletCollisionEvent(this, tank, x - xpp / 2, y, z - zpp / 2));
+                    return;
+                } else if (tank && tank->id == tankId && dT > 0.5f) {
+                    // Allow collision with firing tank only after 0.5 seconds (for healing/self-damage)
+                    Events::GetBus().Post(BulletCollisionEvent(this, tank, x - xpp / 2, y, z - zpp / 2));
+                    return;
+                }
+            }
         }
     }
 
-    // Check collision with enemy tanks using unified view (old + GameWorld tanks)
-    auto enemyTanks = TankHandler::GetSingleton().GetAllEnemyTanks();
-    for (const Tank* tank : enemyTanks)
-    {
-        if (tank && (tank->PointCollision(x, y, z) || tank->PointCollision(x - xpp / 2, y, z - zpp / 2)))
-        {
-            HandleTankCollision(const_cast<Tank&>(*tank));
-        }
+    // Check bounds
+    GetLevelBoundsQuery boundsQuery;
+    Events::GetBus().Publish(boundsQuery);
+    
+    if (x >= boundsQuery.sizeX || x <= 0 || z >= boundsQuery.sizeZ || z <= 0) {
+        Events::GetBus().Post(BulletOutOfBoundsEvent(this, x, y, z));
+        return;
     }
-
-    if (x >= LevelHandler::GetSingleton().sizeX || x <= 0 || z >= LevelHandler::GetSingleton().sizeZ || z <= 0)
-    {
-        alive = false;
-        if (tankId < 0)
-        {
-            TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
-        }
-    }
-    if (dT >= maxdT)
-    {
-        alive = false;
-        if (tankId < 0)
-        {
-            TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
-        }
+    
+    // Check timeout
+    if (dT >= maxdT) {
+        Events::GetBus().Post(BulletTimeoutEvent(this, dT));
+        return;
     }
 }
 

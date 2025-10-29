@@ -542,3 +542,30 @@ std::vector<const Tank*> TankHandler::GetAllEnemyTanks() const {
     }
 }
 
+void TankHandler::SetGameWorld(GameWorld* world) {
+    gameWorld = world;
+    
+    // Register existing player tanks with collision system when GameWorld is connected
+    if (gameWorld) {
+        RegisterPlayersWithCollisionSystem();
+    }
+}
+
+void TankHandler::RegisterPlayersWithCollisionSystem() {
+    if (!gameWorld) return;
+    
+    // Register all active player tanks with the collision system
+    for (int i = 0; i < numPlayers; i++) {
+        Tank* player = &players[i];
+        if (player->alive) {
+            player->isPlayer = true;  // Ensure it's marked as a player
+            gameWorld->GetCollisionSystem().RegisterEntity(
+                player, 
+                CollisionShape3D(CollisionShape3D::CUSTOM, 0.4f), 
+                CollisionLayer::PLAYER_TANKS
+            );
+            Logger::Get().Write("Registered player tank %d with collision system\n", i);
+        }
+    }
+}
+

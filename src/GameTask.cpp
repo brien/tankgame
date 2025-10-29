@@ -6,6 +6,7 @@
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "GameWorld.h"
+#include "events/Events.h"
 
 void GameTask::SetUpGame()
 {
@@ -48,6 +49,9 @@ bool GameTask::Start()
     paused = false;
     debug = false;
     
+    // Initialize GameWorld with collision and combat systems
+    gameWorld.Initialize();
+    
     // Connect handlers to GameWorld (singletons are now initialized)
     FXHandler::GetSingleton().SetGameWorld(&gameWorld);
     BulletHandler::GetSingleton().SetGameWorld(&gameWorld);
@@ -59,6 +63,7 @@ bool GameTask::Start()
 
 void GameTask::Stop()
 {
+    gameWorld.Shutdown();
 }
 
 void GameTask::Visible(bool visible)
@@ -184,6 +189,9 @@ void GameTask::HandlePlayingState()
     App::GetSingleton().graphicsTask->drawHUD = true;
     App::GetSingleton().graphicsTask->drawMenu = false;
 
+    // Process events first (handles collision queries, notifications, etc.)
+    Events::ProcessQueuedEvents();
+    
     // New unified update replaces individual handler updates
     gameWorld.Update();
     

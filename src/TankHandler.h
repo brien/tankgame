@@ -65,7 +65,8 @@ public:
     void NextFrame();
     
     // Interface to GameWorld (for enemy tanks only)
-    void SetGameWorld(class GameWorld* world) { gameWorld = world; }
+    void SetGameWorld(class GameWorld* world);
+    void RegisterPlayersWithCollisionSystem();
     
     // Get all tanks for rendering (combines players + enemies from both old and new systems)
     std::vector<const Tank*> GetAllEnemyTanks() const;
