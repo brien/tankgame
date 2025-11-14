@@ -68,7 +68,7 @@ public:
     ItemRenderer itemRenderer;       // Handles all item/power-up rendering
     TankRenderer tankRenderer;     // Handles all tank rendering
     
-    DisplayList cubelist1 = 1;
+    DisplayList cubelist1;
     DisplayList cubelist2;
     DisplayList bulletlist;
     DisplayList bodylist;

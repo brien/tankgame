@@ -117,6 +117,9 @@ bool VideoTask::Start()
     window = SDL_CreateWindow("tankgame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
     // sdlRenderer = SDL_CreateRenderer(window, -1, 0);
     glContext = SDL_GL_CreateContext(window);
+    
+    // Ensure the OpenGL context is current (important for macOS)
+    SDL_GL_MakeCurrent(window, glContext);
 
     SDL_GL_SetSwapInterval(1);
 

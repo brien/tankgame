@@ -20,7 +20,12 @@ DisplayList::DisplayList(int num)
 {
     enumIdx = 0;
     this->num = num;
-    idx = glGenLists(num);
+    // Only call glGenLists if num > 0 and OpenGL context exists
+    if (num > 0) {
+        idx = glGenLists(num);
+    } else {
+        idx = 0;
+    }
 }
 
 void DisplayList::BeginNewList()
