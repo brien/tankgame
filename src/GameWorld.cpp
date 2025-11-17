@@ -41,6 +41,24 @@ void GameWorld::Update() {
 }
 
 void GameWorld::Clear() {
+    // Unregister all entities from collision system before clearing
+    for (const auto& tank : tanks.GetEntities()) {
+        if (tank) {
+            collisionSystem.UnregisterEntity(tank.get());
+        }
+    }
+    for (const auto& bullet : bullets.GetEntities()) {
+        if (bullet) {
+            collisionSystem.UnregisterEntity(bullet.get());
+        }
+    }
+    for (const auto& item : items.GetEntities()) {
+        if (item) {
+            collisionSystem.UnregisterEntity(item.get());
+        }
+    }
+    
+    // Clear all entity collections
     tanks.Clear();
     bullets.Clear(); 
     effects.Clear();
@@ -63,8 +81,10 @@ Bullet* GameWorld::CreateBullet(int id, float attack, TankType type1, TankType t
 Tank* GameWorld::CreateTank() {
     Tank* tank = tanks.Create();
     
-    // Register tank with collision system 
+    // Set GameWorld reference so tank can create bullets
     if (tank) {
+        tank->SetGameWorld(this);
+        
         CollisionLayer layer = tank->isPlayer ? CollisionLayer::PLAYER_TANKS : CollisionLayer::ENEMY_TANKS;
         // Use collisionRadius * 2 to match original collision detection
         collisionSystem.RegisterEntity(tank, CollisionShape3D(CollisionShape3D::CUSTOM, 0.4f), layer);

@@ -205,8 +205,14 @@ bool LevelHandler::Load(const char filePath[])
 
 void LevelHandler::NextLevel(bool forb)
 {
+    // Clear legacy handlers
     FXHandler::GetSingleton().ClearFX();
     BulletHandler::GetSingleton().Clear();
+
+    // Clear GameWorld entities (bullets, effects, items) 
+    if (gameWorld) {
+        gameWorld->Clear();
+    }
 
     items.clear();
 

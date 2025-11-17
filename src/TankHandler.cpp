@@ -315,6 +315,12 @@ Tank TankHandler::CreateEnemyTank(int index)
     SetEnemyType(tank, index);
     
     tank.jumpCost = 0;
+    
+    // Set GameWorld reference if available
+    if (gameWorld) {
+        tank.SetGameWorld(gameWorld);
+    }
+    
     return tank;
 }
 
@@ -545,8 +551,17 @@ std::vector<const Tank*> TankHandler::GetAllEnemyTanks() const {
 void TankHandler::SetGameWorld(GameWorld* world) {
     gameWorld = world;
     
-    // Register existing player tanks with collision system when GameWorld is connected
+    // Set GameWorld reference for all player tanks
     if (gameWorld) {
+        for (int i = 0; i < numPlayers; i++) {
+            players[i].SetGameWorld(gameWorld);
+        }
+        
+        // Also set for enemy tanks if they exist
+        for (auto& enemy : tanks) {
+            enemy.SetGameWorld(gameWorld);
+        }
+        
         RegisterPlayersWithCollisionSystem();
     }
 }

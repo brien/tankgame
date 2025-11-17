@@ -13,6 +13,7 @@ using namespace std;
 // Forward declarations
 class TankRenderer;
 class InputHandler;
+class GameWorld;
 
 enum class EnemyState
 {
@@ -172,7 +173,17 @@ public:
 
     void Draw() const;
     void Draw2();
+    
+    // GameWorld access for bullet creation
+    void SetGameWorld(GameWorld* world) { gameWorld = world; }
 
+private:
+    // Helper method to create bullets through GameWorld
+    void CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
+                     float r, float g, float b, float r2, float g2, float b2,
+                     float x, float y, float z, float rx, float ry, float rz);
+
+public:
     // === COMPATIBILITY LAYER (temporary) ===
     // These provide backward compatibility during migration
     // Old "energy" field was actually health
@@ -187,4 +198,7 @@ public:
     float deadtime;
     float hitAlpha;
     int hitNum;
+
+private:
+    GameWorld* gameWorld = nullptr;
 };

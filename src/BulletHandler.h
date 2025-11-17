@@ -14,6 +14,7 @@ public:
     
     // Interface to GameWorld
     void SetGameWorld(class GameWorld* world) { gameWorld = world; }
+    class GameWorld* GetGameWorld() const { return gameWorld; }
     
     // Get all bullets for rendering (combines old and new systems)
     const std::vector<Bullet>& GetAllBullets() const;

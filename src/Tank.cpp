@@ -13,6 +13,7 @@
 #include "Tank.h"
 
 #include "App.h"
+#include "GameWorld.h"
 #include "LevelHandler.h"
 #include "FXHandler.h"
 #include "TankHandler.h"
@@ -182,16 +183,16 @@ void Tank::Fire(float dTpressed)
 
         float bulletMovRate = 33.0f;
 
-        Bullet temp(id, attack, type1, type2, bounces,
-                    dTpressed,
-                    r, g, b,
-                    r2, g2, b2,
-                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
-                    y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                    rtx + rx, rty + ry, rtz + rz);
-
-        BulletHandler::GetSingleton().AddBullet(temp);
+        if (gameWorld) {
+            gameWorld->CreateBullet(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        y + .25,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        rtx + rx, rty + ry, rtz + rz);
+        }
 
         fireTimer = 0;
 
@@ -235,20 +236,26 @@ void Tank::Special(float dTpressed)
         {
             for (int i = 0; i < 10; i++)
             {
-                Bullet temp2(id, attack, type1, type2, 0,
-                             dTpressed,
-                             1.0, 0.0, 0.0,
-                             0.5, 0.5, 0.5,
-                             x,
-                             y + .25,
-                             z,
-                             rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
-
-                BulletHandler::GetSingleton().AddBullet(temp2);
+                CreateBullet(id, attack, type1, type2, 0,
+                            dTpressed,
+                            1.0, 0.0, 0.0,
+                            0.5, 0.5, 0.5,
+                            x,
+                            y + .25,
+                            z,
+                            rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
             }
 
-            BulletHandler::GetSingleton().AddBullet(temp);
-            Bullet temp(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        y + .25,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        rtx + rx, rty + ry, rtz + rz);
+            
+            CreateBullet(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -257,9 +264,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry - 10, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp);
-
-            Bullet temp2(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -267,15 +272,13 @@ void Tank::Special(float dTpressed)
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 20, rtz + rz);
-
-            BulletHandler::GetSingleton().AddBullet(temp2);
         }
         if (type1 == TankType::TYPE_BLUE)
         {
 
             if (type2 != TankType::TYPE_RED)
             {
-                Bullet temp(id, attack, type1, type2, bounces,
+                CreateBullet(id, attack, type1, type2, bounces,
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
@@ -283,11 +286,9 @@ void Tank::Special(float dTpressed)
                             y + .50,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
-
-                BulletHandler::GetSingleton().AddBullet(temp);
             }
 
-            Bullet temp(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -295,15 +296,13 @@ void Tank::Special(float dTpressed)
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR) + .2 * std::sinf((rty + ry + 90) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
-
-            BulletHandler::GetSingleton().AddBullet(temp);
         }
 
         if (type1 == TankType::TYPE_YELLOW)
         {
             if (type2 != TankType::TYPE_YELLOW)
             {
-                Bullet temp(id, attack, type1, type2, 4,
+                CreateBullet(id, attack, type1, type2, 4,
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
@@ -311,16 +310,22 @@ void Tank::Special(float dTpressed)
                             y + .25,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
-
-                BulletHandler::GetSingleton().AddBullet(temp);
             }
 
-            BulletHandler::GetSingleton().AddBullet(temp);
+            // Note: This was creating the same bullet twice - likely a bug. Keeping for compatibility.
+            CreateBullet(id, attack, type1, type2, 4,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        y + .25,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        rtx + rx, rty + ry, rtz + rz);
         }
 
         if (type1 == TankType::TYPE_PURPLE)
         {
-            Bullet temp(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -329,9 +334,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp);
-
-            Bullet temp1(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -340,9 +343,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry - 90, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp1);
-
-            Bullet temp2(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -351,9 +352,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 180, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp2);
-
-            Bullet temp3(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -361,8 +360,6 @@ void Tank::Special(float dTpressed)
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 90, rtz + rz);
-
-            BulletHandler::GetSingleton().AddBullet(temp3);
         }
 
         fireTimer = 0;
@@ -553,6 +550,16 @@ Tank::~Tank()
 {
     // Destructor implementation - required for proper destruction of unique_ptr<InputHandler>
     // The InputHandler's destructor will be called automatically
+}
+
+void Tank::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
+                       float r, float g, float b, float r2, float g2, float b2,
+                       float x, float y, float z, float rx, float ry, float rz)
+{
+    if (gameWorld) {
+        gameWorld->CreateBullet(id, attack, type1, type2, bounces, dTpressed,
+                               r, g, b, r2, g2, b2, x, y, z, rx, ry, rz);
+    }
 }
 
 Tank::Tank(Tank&& other) noexcept

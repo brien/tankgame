@@ -1,5 +1,6 @@
 #include "SceneDataBuilder.h"
 #include "../App.h"
+#include "../GameWorld.h"
 
 SceneDataBuilder::SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
                                  const BulletHandler& bullets, const FXHandler& fx)
@@ -70,8 +71,23 @@ std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
 }
 
 std::vector<BulletRenderData> SceneDataBuilder::ExtractBulletData() const {
-    // Delegate to BulletDataExtractor using unified Bullet view (combines old + GameWorld bullets)
-    return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetAllBullets());
+    // Check if BulletHandler has GameWorld reference, use it directly for better performance
+    if (auto* gameWorld = bulletHandler.GetGameWorld()) {
+        const auto& worldBullets = gameWorld->GetBullets();
+        std::vector<Bullet> bulletRefs;
+        bulletRefs.reserve(worldBullets.size());
+        
+        for (const auto& bulletPtr : worldBullets) {
+            if (bulletPtr && bulletPtr->IsAlive()) {
+                bulletRefs.push_back(*bulletPtr);
+            }
+        }
+        
+        return BulletDataExtractor::ExtractBulletRenderData(bulletRefs);
+    } else {
+        // Fallback to BulletHandler (should be empty now)
+        return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetAllBullets());
+    }
 }
 
 std::vector<EffectRenderData> SceneDataBuilder::ExtractEffectData() const {
