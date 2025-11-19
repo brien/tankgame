@@ -286,18 +286,21 @@ void TankHandler::InitializeEnemyTanks()
     tanks.clear();
     int enemyCount = LevelHandler::GetSingleton().GetEnemyCountForLevel(LevelHandler::GetSingleton().levelNumber);
     
+    Logger::Get().Write("TankHandler::InitializeEnemyTanks - Creating %d enemy tanks\n", enemyCount);
+    
     for (int i = 0; i < enemyCount; ++i)
     {
         if (gameWorld) {
             // Delegate to GameWorld - create enemy tank there
             Tank* newTank = gameWorld->CreateTank();
+            Logger::Get().Write("  Created enemy tank %d via GameWorld: %p\n", i, (void*)newTank);
             if (newTank) {
                 newTank->Init();
                 newTank->isPlayer = false; // Ensure it's marked as enemy tank
                 newTank->id = i; // Set proper enemy tank ID
                 SetEnemyPosition(*newTank, i);
                 SetEnemyType(*newTank, i);
-                newTank->jumpCost = 0; // Enemy tanks don't pay jump cost
+                newTank->jumpCost = 150; // Enemy tanks pay same jump cost as players
             }
         } else {
             // Fallback to old system during transition
@@ -315,6 +318,12 @@ Tank TankHandler::CreateEnemyTank(int index)
     SetEnemyType(tank, index);
     
     tank.jumpCost = 0;
+    
+    // Set GameWorld reference if available
+    if (gameWorld) {
+        tank.SetGameWorld(gameWorld);
+    }
+    
     return tank;
 }
 
@@ -545,8 +554,17 @@ std::vector<const Tank*> TankHandler::GetAllEnemyTanks() const {
 void TankHandler::SetGameWorld(GameWorld* world) {
     gameWorld = world;
     
-    // Register existing player tanks with collision system when GameWorld is connected
+    // Set GameWorld reference for all player tanks
     if (gameWorld) {
+        for (int i = 0; i < numPlayers; i++) {
+            players[i].SetGameWorld(gameWorld);
+        }
+        
+        // Also set for enemy tanks if they exist
+        for (auto& enemy : tanks) {
+            enemy.SetGameWorld(gameWorld);
+        }
+        
         RegisterPlayersWithCollisionSystem();
     }
 }

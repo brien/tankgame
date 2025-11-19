@@ -66,10 +66,8 @@ public:
     // Setters needed by CombatSystem
     void SetPower(float newPower) { power = newPower; }
     
-    // Collision handling methods
+    // Collision handling methods (level collision still needed for bullet physics)
     void HandleLevelCollision(float xpp, float zpp, float ory);
-    void HandlePlayerCollision(Tank &playerTank);
-    void HandleTankCollision(Tank &playerTank);
 
 private:
     float x = 0.0f, y = 0.0f, z = 0.0f;

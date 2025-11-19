@@ -7,37 +7,14 @@ BulletHandler& BulletHandler::GetSingleton() {
 }
 
 void BulletHandler::AddBullet(const Bullet& bullet) {
-    if (gameWorld) {
-        // Delegate to GameWorld - extract all parameters from the bullet
-        gameWorld->CreateBullet(bullet.GetTankId(), bullet.GetPower(), 
-                               bullet.GetType1(), bullet.GetType2(), 
-                               bullet.GetBounces(), 1.0f, // dTpressed - use default
-                               bullet.GetR(), bullet.GetG(), bullet.GetB(),
-                               bullet.GetR2(), bullet.GetG2(), bullet.GetB2(),
-                               bullet.GetX(), bullet.GetY(), bullet.GetZ(),
-                               bullet.GetRX(), bullet.GetRY(), bullet.GetRZ());
-    } else {
-        // Fallback to old system during transition
-        bullets.push_back(bullet);
-    }
+    // Legacy method - no longer used, bullets created directly through GameWorld
+    // This method exists only for interface compatibility during transition
 }
 
 void BulletHandler::NextFrame() {
-    if (gameWorld) {
-        // GameWorld handles updates, we just need to sync for rendering
-        // The GameWorld's EntityManager will handle the update/cleanup
-        return;
-    }
-    
-    // Legacy update loop for fallback
-    for (auto it = bullets.begin(); it != bullets.end(); ) {
-        if (it->IsAlive()) {
-            it->NextFrame();
-            ++it;
-        } else {
-            it = bullets.erase(it);
-        }
-    }
+    // No-op - GameWorld handles all bullet updates through EntityManager
+    // Legacy bullets.clear() to ensure no accumulation during transition
+    bullets.clear();
 }
 
 // Legacy DrawBullets method removed - bullets now handled by NewBulletRenderer
@@ -56,23 +33,12 @@ const std::vector<Bullet>& BulletHandler::GetBullets() const {
 
 const std::vector<Bullet>& BulletHandler::GetAllBullets() const {
     if (gameWorld) {
-        // Return unified view of both old bullets and GameWorld bullets
-        unifiedBulletView.clear();
-        
-        // Add old system bullets
-        unifiedBulletView.insert(unifiedBulletView.end(), bullets.begin(), bullets.end());
-        
-        // Add GameWorld bullets by dereferencing the unique_ptrs
-        const auto& worldBullets = gameWorld->GetBullets();
-        for (const auto& bulletPtr : worldBullets) {
-            if (bulletPtr && bulletPtr->IsAlive()) {
-                unifiedBulletView.push_back(*bulletPtr);
-            }
-        }
-        
-        return unifiedBulletView;
+        // During transition: return empty vector since rendering should use GameWorld directly
+        // TODO: Remove this method entirely when rendering is updated
+        static const std::vector<Bullet> emptyBullets;
+        return emptyBullets;
     } else {
-        // Fallback to old system
+        // Fallback to old system (should not be used in practice)
         return bullets;
     }
 }

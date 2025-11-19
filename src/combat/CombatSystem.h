@@ -6,6 +6,9 @@
 #include "../Bullet.h"
 #include "../Item.h"
 
+// Forward declaration
+class PlayerManager;
+
 /**
  * Handles combat-related collision responses.
  * Processes collision events and applies appropriate game logic.
@@ -17,6 +20,9 @@ public:
     
     void Initialize();
     void Shutdown();
+    
+    // Set PlayerManager reference for scoring
+    void SetPlayerManager(PlayerManager* manager) { playerManager = manager; }
     
 private:
     // Event handlers for different collision types
@@ -32,4 +38,7 @@ private:
     void UpdatePlayerCombos(int playerIndex, class Tank* target, class Bullet* bullet);
     void CreateCollisionEffects(float x, float y, float z, float r, float g, float b, float angle);
     void ResetPlayerCombo(int playerIndex);
+    
+    // PlayerManager reference for scoring
+    PlayerManager* playerManager = nullptr;
 };

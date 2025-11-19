@@ -13,6 +13,7 @@ using namespace std;
 // Forward declarations
 class TankRenderer;
 class InputHandler;
+class GameWorld;
 
 enum class EnemyState
 {
@@ -117,8 +118,8 @@ public:
     float collisionRadius;
 
     int control;
-    InputMode inputMode;
     unsigned int jid;
+    InputMode inputMode;
     std::unique_ptr<InputHandler> inputHandler;
 
     float rx, ry, rz, rr, rrl;
@@ -147,6 +148,10 @@ public:
     void SetType(TankType t1, TankType t2);
     void SetTankColors(TankType t1, TankType t2);
     void SetInputMode(InputMode mode);
+    InputMode GetInputMode() const { return inputMode; }
+    
+    void SetJoyIndex(int index) { joyIndex = index; }
+    int GetJoyIndex() const { return joyIndex; }
 
     TankType type1;
     TankType type2;
@@ -172,7 +177,17 @@ public:
 
     void Draw() const;
     void Draw2();
+    
+    // GameWorld access for bullet creation
+    void SetGameWorld(GameWorld* world) { gameWorld = world; }
 
+private:
+    // Helper method to create bullets through GameWorld
+    void CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
+                     float r, float g, float b, float r2, float g2, float b2,
+                     float x, float y, float z, float rx, float ry, float rz);
+
+public:
     // === COMPATIBILITY LAYER (temporary) ===
     // These provide backward compatibility during migration
     // Old "energy" field was actually health
@@ -187,4 +202,8 @@ public:
     float deadtime;
     float hitAlpha;
     int hitNum;
+    int joyIndex = -1;
+
+private:
+    GameWorld* gameWorld = nullptr;
 };

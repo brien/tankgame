@@ -10,6 +10,7 @@
 #include "../LevelHandler.h"
 #include "../BulletHandler.h"
 #include "../FXHandler.h"
+#include "../PlayerManager.h"
 
 /**
  * Central coordinator for extracting all rendering data from game objects.
@@ -29,12 +30,12 @@ public:
     /**
      * Constructor with injected game object dependencies.
      * 
-     * @param tanks TankHandler containing all tank game logic
+     * @param players PlayerManager containing player tank management
      * @param level LevelHandler containing terrain and level data
      * @param bullets BulletHandler containing bullet game logic
      * @param fx FXHandler containing visual effects game logic
      */
-    SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
+    SceneDataBuilder(const PlayerManager& players, const LevelHandler& level, 
                     const BulletHandler& bullets, const FXHandler& fx);
     
     /**
@@ -70,7 +71,7 @@ public:
 
 private:
     // Game object references (injected dependencies)
-    const TankHandler& tankHandler;
+    const PlayerManager& playerManager;
     const LevelHandler& levelHandler;
     const BulletHandler& bulletHandler;
     const FXHandler& fxHandler;

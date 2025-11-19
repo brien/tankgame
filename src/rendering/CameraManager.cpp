@@ -63,6 +63,13 @@ void CameraManager::UpdateFollowCamera(int playerId, const Tank& tank) {
     float focusX, focusY, focusZ;
     CalculateFocusPosition(tank, focusX, focusY, focusZ);
     cam.SetFocus(focusX, focusY, focusZ);
+    
+    // Debug output (only occasionally to avoid spam)
+    static int debugCounter = 0;
+    if (++debugCounter % 60 == 0) { // Log every 60 frames (~1 second at 60fps)
+        printf("Camera %d: Tank at (%.2f, %.2f, %.2f), Camera at (%.2f, %.2f, %.2f)\n", 
+               playerId, tank.x, tank.y, tank.z, camX, camY, camZ);
+    }
 }
 
 void CameraManager::UpdateOverheadCamera(int playerId, const Tank& tank) {

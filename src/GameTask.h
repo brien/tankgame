@@ -21,6 +21,10 @@ public:
     bool IsPaused() const { return paused; }
     bool IsVersusMode() const { return versus; }
     int GetMenuState() const { return menuState; }
+    
+    // GameWorld access
+    GameWorld& GetGameWorld() { return gameWorld; }
+    const GameWorld& GetGameWorld() const { return gameWorld; }
 
 private:
     enum class GameState { MENU, PLAYING, GAME_OVER };

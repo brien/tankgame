@@ -4,6 +4,7 @@
 #include "EntityManager.h"
 #include "collision/CollisionSystem.h"
 #include "combat/CombatSystem.h"
+#include "PlayerManager.h"
 
 // Forward declarations for existing classes
 class Tank;
@@ -47,6 +48,7 @@ public:
     
     // System accessors
     CollisionSystem& GetCollisionSystem() { return collisionSystem; }
+    PlayerManager& GetPlayerManager() { return playerManager; }
 
 private:
     EntityManager<Tank> tanks;
@@ -57,6 +59,7 @@ private:
     // Game systems
     CollisionSystem collisionSystem;
     CombatSystem combatSystem;
+    PlayerManager playerManager;
 
     void HandleCollisions();
     void HandleItemCollection();

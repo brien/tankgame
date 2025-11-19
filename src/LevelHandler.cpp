@@ -16,6 +16,8 @@
 #include "GameWorld.h"
 #include "TankHandler.h"
 #include "FXHandler.h"
+#include "events/Events.h"
+#include "events/CollisionEvents.h"
 #include "App.h"
 #include "Logger.h"
 #include "rendering/RenderData.h"
@@ -205,8 +207,14 @@ bool LevelHandler::Load(const char filePath[])
 
 void LevelHandler::NextLevel(bool forb)
 {
+    // Clear legacy handlers
     FXHandler::GetSingleton().ClearFX();
     BulletHandler::GetSingleton().Clear();
+
+    // Clear GameWorld entities (bullets, effects, items) 
+    if (gameWorld) {
+        gameWorld->Clear();
+    }
 
     items.clear();
 
@@ -375,7 +383,7 @@ void LevelHandler::ItemCollision()
                 if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
                     TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
 
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_THREE), j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1));
 
                 App::GetSingleton().soundTask->PlayChannel(3);
                 
@@ -419,7 +427,7 @@ void LevelHandler::ItemCollision()
                     if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
                         TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
 
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, item.x, item.y, item.z, 90, 0, 90, item.r, item.g, item.b, 1);
+                    Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_THREE), item.x, item.y, item.z, 90, 0, 90, item.r, item.g, item.b, 1));
 
                     App::GetSingleton().soundTask->PlayChannel(3);
                     

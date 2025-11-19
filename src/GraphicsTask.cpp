@@ -222,9 +222,10 @@ void GraphicsTask::Update()
 
     if (App::GetSingleton().gameTask->IsGameStarted())
     {
-        // Update cameras using CameraManager
-        int numPlayers = TankHandler::GetSingleton().numPlayers;
-        cameraManager.UpdateCameras(TankHandler::GetSingleton().players, numPlayers, true);
+        // Update cameras using CameraManager with PlayerManager data
+        const auto& playerManager = App::GetSingleton().gameTask->GetGameWorld().GetPlayerManager();
+        int numPlayers = playerManager.GetNumPlayers();
+        cameraManager.UpdateCameras(playerManager.GetPlayers(), numPlayers, true);
 
         // Copy camera data to the old cams array for backward compatibility
         for (int i = 0; i < numPlayers && i < 4; i++)
@@ -258,8 +259,9 @@ void GraphicsTask::InitializeNewRenderingPipeline()
         }
 
         // Create SceneDataBuilder with references to game handlers
+        // Get PlayerManager through App -> GameTask -> GameWorld
         sceneDataBuilder = std::make_unique<SceneDataBuilder>(
-            TankHandler::GetSingleton(),
+            App::GetSingleton().gameTask->GetGameWorld().GetPlayerManager(),
             LevelHandler::GetSingleton(),
             BulletHandler::GetSingleton(),
             FXHandler::GetSingleton());

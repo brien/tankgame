@@ -93,6 +93,12 @@ void FX::Update()
 {
 	time += GlobalTimer::dT;
 
+	// Check if FX has expired
+	if (time >= maxTime || a <= 0.0f) {
+		alive = false;
+		return;
+	}
+
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
 		a -= 0.2 * GlobalTimer::dT;
@@ -138,8 +144,9 @@ void FXHandler::NextFrame()
 {
 	if (gameWorld)
 	{
-		// GameWorld handles updates, we just need to sync for rendering
-		// The GameWorld's EntityManager will handle the update/cleanup
+		// No-op - GameWorld handles all FX updates through EntityManager
+		// Legacy fx.clear() to ensure no accumulation during transition
+		fx.clear();
 		return;
 	}
 	
@@ -165,35 +172,15 @@ void FXHandler::NextFrame()
 
 void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
-	if (gameWorld)
-	{
-		// Delegate to GameWorld
-		gameWorld->CreateFX(_type, _x, _y, _z, _rx, _ry, _rz, _r, _g, _b, _a);
-	}
-	else
-	{
-		// Fallback to old system during transition
-		FX temp(_type, _x, _y, _z, _rx, _ry, _rz, _r, _g, _b, _a);
-		fx.push_back(temp);
-	}
+	// Legacy method - no longer used, effects created directly through GameWorld events
+	// This method exists only for interface compatibility during transition
 }
 
 void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
-	if (gameWorld)
-	{
-		// Delegate to GameWorld  
-		gameWorld->CreateFX(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _r, _g, _b, _a);
-	}
-	else
-	{
-		// Fallback to old system during transition
-		FX temp(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _r, _g, _b, _a);
-		fx.push_back(temp);
-	}
-}
-
-void FXHandler::ClearFX()
+	// Legacy method - no longer used, effects created directly through GameWorld events
+	// This method exists only for interface compatibility during transition
+}void FXHandler::ClearFX()
 {
 	fx.clear();
 	if (gameWorld)
@@ -206,27 +193,14 @@ const std::vector<FX>& FXHandler::GetAllFX() const
 {
 	if (gameWorld)
 	{
-		// Create unified view: old FX + GameWorld FX
-		unifiedFXView.clear();
-		
-		// Add old system FX
-		unifiedFXView.insert(unifiedFXView.end(), fx.begin(), fx.end());
-		
-		// Add GameWorld FX (dereference the unique_ptrs)
-		const auto& worldFX = gameWorld->GetFX();
-		for (const auto& fxPtr : worldFX)
-		{
-			if (fxPtr && fxPtr->IsAlive())
-			{
-				unifiedFXView.push_back(*fxPtr);
-			}
-		}
-		
-		return unifiedFXView;
+		// During transition: return empty vector since rendering should use GameWorld directly
+		// TODO: Remove this method entirely when rendering is updated
+		static const std::vector<FX> emptyFX;
+		return emptyFX;
 	}
 	else
 	{
-		// No GameWorld, just return old system FX
+		// Fallback to old system (should not be used in practice)
 		return fx;
 	}
 }

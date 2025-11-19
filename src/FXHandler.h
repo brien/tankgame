@@ -65,6 +65,7 @@ public:
     
     // Interface to GameWorld
     void SetGameWorld(class GameWorld* world) { gameWorld = world; }
+    class GameWorld* GetGameWorld() const { return gameWorld; }
     
     // Get all FX for rendering (combines old and new systems)
     const std::vector<FX>& GetAllFX() const;

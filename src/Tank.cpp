@@ -13,8 +13,11 @@
 #include "Tank.h"
 
 #include "App.h"
+#include "GameWorld.h"
 #include "LevelHandler.h"
 #include "FXHandler.h"
+#include "events/Events.h"
+#include "events/CollisionEvents.h"
 #include "TankHandler.h"
 #include "TankTypeManager.h"
 #include "TankRenderer.h"
@@ -125,33 +128,33 @@ void Tank::Die()
 
     if (deadtime < 0.01)
     {
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x, y, z + .5, 0, .05, 0, 0, ry, 0, r, g, b, 1));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, r, g, b, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 2, 0, ry, 0, r, g, b, .15);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x, y, z + .5, 0, .05, 0, 0, ry, 0, r, g, b, .15));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x, y, z + .5, 0, .05, 2, 0, ry, 0, r, g, b, .15));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z + .5, 0, .05, -3, 0, ry, 0, r, g, b, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z + .5, 0, .05, 2, 0, ry, 0, r, g, b, .15);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x + .5, y, z + .5, 0, .05, -3, 0, ry, 0, r, g, b, .15));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x + .5, y, z + .5, 0, .05, 2, 0, ry, 0, r, g, b, .15));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 3, .05, 0, 2, ry, 0, r2, g2, b2, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .05, 0, 0, ry, 0, r2, g2, b2, .15);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x + .5, y, z - .5, 3, .05, 0, 2, ry, 0, r2, g2, b2, .15));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x + .5, y, z - .5, 2, .05, 0, 0, ry, 0, r2, g2, b2, .15));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .01, 0, 0, ry, 0, r2, g2, b2, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .05, 0, -2, ry, 0, r2, g2, b2, .15);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x + .5, y, z - .5, 2, .01, 0, 0, ry, 0, r2, g2, b2, .15));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_DEATH), x + .5, y, z - .5, 2, .05, 0, -2, ry, 0, r2, g2, b2, .15));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x, y, z + .5, 0, .01, 0, 0, ry, 90, r, g, b, 1));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 0, 0, ry, 90, r, g, b, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x, y, z + .5, 0, .01, 0, 0, ry, 90, r, g, b, 1));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x, y, z + .5, 0, .01, 2, 0, ry, 90, r, g, b, 1));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z + .5, 0, .01, -3, 0, ry, 90, r, g, b, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z + .5, 0, .01, 2, 0, ry, 90, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x + .5, y, z + .5, 0, .01, -3, 0, ry, 90, r, g, b, 1));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x + .5, y, z + .5, 0, .01, 2, 0, ry, 90, r, g, b, 1));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 3, .01, 0, 2, ry, 90, r2, g2, b2, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x + .5, y, z - .5, 3, .01, 0, 2, ry, 90, r2, g2, b2, 1));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1));
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, r2, g2, b2, 1));
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE), x + .5, y, z - .5, 2, .01, 0, -2, ry, 90, r2, g2, b2, 1));
     }
     if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 && id >= 0)
     {
@@ -182,16 +185,16 @@ void Tank::Fire(float dTpressed)
 
         float bulletMovRate = 33.0f;
 
-        Bullet temp(id, attack, type1, type2, bounces,
-                    dTpressed,
-                    r, g, b,
-                    r2, g2, b2,
-                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
-                    y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                    rtx + rx, rty + ry, rtz + rz);
-
-        BulletHandler::GetSingleton().AddBullet(temp);
+        if (gameWorld) {
+            gameWorld->CreateBullet(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        y + .25,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        rtx + rx, rty + ry, rtz + rz);
+        }
 
         fireTimer = 0;
 
@@ -235,20 +238,26 @@ void Tank::Special(float dTpressed)
         {
             for (int i = 0; i < 10; i++)
             {
-                Bullet temp2(id, attack, type1, type2, 0,
-                             dTpressed,
-                             1.0, 0.0, 0.0,
-                             0.5, 0.5, 0.5,
-                             x,
-                             y + .25,
-                             z,
-                             rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
-
-                BulletHandler::GetSingleton().AddBullet(temp2);
+                CreateBullet(id, attack, type1, type2, 0,
+                            dTpressed,
+                            1.0, 0.0, 0.0,
+                            0.5, 0.5, 0.5,
+                            x,
+                            y + .25,
+                            z,
+                            rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
             }
 
-            BulletHandler::GetSingleton().AddBullet(temp);
-            Bullet temp(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        y + .25,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        rtx + rx, rty + ry, rtz + rz);
+            
+            CreateBullet(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -257,9 +266,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry - 10, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp);
-
-            Bullet temp2(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -267,15 +274,13 @@ void Tank::Special(float dTpressed)
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 20, rtz + rz);
-
-            BulletHandler::GetSingleton().AddBullet(temp2);
         }
         if (type1 == TankType::TYPE_BLUE)
         {
 
             if (type2 != TankType::TYPE_RED)
             {
-                Bullet temp(id, attack, type1, type2, bounces,
+                CreateBullet(id, attack, type1, type2, bounces,
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
@@ -283,11 +288,9 @@ void Tank::Special(float dTpressed)
                             y + .50,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
-
-                BulletHandler::GetSingleton().AddBullet(temp);
             }
 
-            Bullet temp(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -295,15 +298,13 @@ void Tank::Special(float dTpressed)
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR) + .2 * std::sinf((rty + ry + 90) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
-
-            BulletHandler::GetSingleton().AddBullet(temp);
         }
 
         if (type1 == TankType::TYPE_YELLOW)
         {
             if (type2 != TankType::TYPE_YELLOW)
             {
-                Bullet temp(id, attack, type1, type2, 4,
+                CreateBullet(id, attack, type1, type2, 4,
                             dTpressed,
                             r, g, b,
                             r2, g2, b2,
@@ -311,16 +312,22 @@ void Tank::Special(float dTpressed)
                             y + .25,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz);
-
-                BulletHandler::GetSingleton().AddBullet(temp);
             }
 
-            BulletHandler::GetSingleton().AddBullet(temp);
+            // Note: This was creating the same bullet twice - likely a bug. Keeping for compatibility.
+            CreateBullet(id, attack, type1, type2, 4,
+                        dTpressed,
+                        r, g, b,
+                        r2, g2, b2,
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        y + .25,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        rtx + rx, rty + ry, rtz + rz);
         }
 
         if (type1 == TankType::TYPE_PURPLE)
         {
-            Bullet temp(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                         dTpressed,
                         r, g, b,
                         r2, g2, b2,
@@ -329,9 +336,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp);
-
-            Bullet temp1(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -340,9 +345,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry - 90, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp1);
-
-            Bullet temp2(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -351,9 +354,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 180, rtz + rz);
 
-            BulletHandler::GetSingleton().AddBullet(temp2);
-
-            Bullet temp3(id, attack, type1, type2, bounces,
+            CreateBullet(id, attack, type1, type2, bounces,
                          dTpressed,
                          r, g, b,
                          r2, g2, b2,
@@ -361,8 +362,6 @@ void Tank::Special(float dTpressed)
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 90, rtz + rz);
-
-            BulletHandler::GetSingleton().AddBullet(temp3);
         }
 
         fireTimer = 0;
@@ -555,6 +554,16 @@ Tank::~Tank()
     // The InputHandler's destructor will be called automatically
 }
 
+void Tank::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
+                       float r, float g, float b, float r2, float g2, float b2,
+                       float x, float y, float z, float rx, float ry, float rz)
+{
+    if (gameWorld) {
+        gameWorld->CreateBullet(id, attack, type1, type2, bounces, dTpressed,
+                               r, g, b, r2, g2, b2, x, y, z, rx, ry, rz);
+    }
+}
+
 Tank::Tank(Tank&& other) noexcept
     : isPlayer(other.isPlayer),
       health(other.health),
@@ -577,8 +586,8 @@ Tank::Tank(Tank&& other) noexcept
       vx(other.vx), vy(other.vy), vz(other.vz),
       collisionRadius(other.collisionRadius),
       control(other.control),
-      inputMode(other.inputMode),
       jid(other.jid),
+      inputMode(other.inputMode),
       inputHandler(std::move(other.inputHandler)),
       rx(other.rx), ry(other.ry), rz(other.rz), rr(other.rr), rrl(other.rrl),
       rtx(other.rtx), rty(other.rty), rtz(other.rtz),
@@ -597,7 +606,8 @@ Tank::Tank(Tank&& other) noexcept
       bonusTime(other.bonusTime),
       deadtime(other.deadtime),
       hitAlpha(other.hitAlpha),
-      hitNum(other.hitNum)
+      hitNum(other.hitNum),
+      joyIndex(other.joyIndex)
 {
     // Copy collision points array
     for (int i = 0; i < 21; ++i) {
@@ -650,6 +660,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         deadtime = other.deadtime;
         hitAlpha = other.hitAlpha;
         hitNum = other.hitNum;
+        joyIndex = other.joyIndex;
         
         // Copy collision points array
         for (int i = 0; i < 21; ++i) {
@@ -735,8 +746,8 @@ void Tank::Init()
 
     rotRate = 75;
     movRate = 5;
-    fallRate = 2;
-    jumpRate = .3;
+    fallRate = 16.0f;  // Faster falling for responsive gameplay
+    jumpRate = 18.0f;  // Higher jump rate for proper jumping
 }
 
 void Tank::SetPosition(float _x, float _y, float _z)
@@ -794,7 +805,6 @@ void Tank::RotBarrel(bool forb)
 
 void Tank::Jump()
 {
-
     if (energy > 0)
     {
         jumpTime += GlobalTimer::dT;
@@ -803,10 +813,17 @@ void Tank::Jump()
 
         if (energy > 5)
         {
+            float oldVy = vy;
+            float oldY = y;
             vy = (jumpRate * jumpTime);
+            y += vy*GlobalTimer::dT;
+            Logger::Get().Write("  Jump physics: oldY=%.6f -> newY=%.6f, oldVy=%.6f -> newVy=%.6f\n", 
+                              oldY, y, oldVy, vy);
         }
-
-        // y += vy*GlobalTimer::dT;
+        else 
+        {
+            Logger::Get().Write("  Not enough energy for jump (energy=%.2f <= 5)\n", energy);
+        }
 
         // Check for float collision with upward offset during jump
         if (TankCollisionHelper::CheckFourPointFloatCollision(*this, 0.2f))
@@ -817,7 +834,7 @@ void Tank::Jump()
 
         // Jump damn it
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_JUMP, x, y - .2, z, 0, .5 * vy * GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_JUMP), x, y - .2, z, 0, .5 * vy * GlobalTimer::dT, 0, rx, ry, rz, r, g, b, 1));
         if (!isJumping && id < 0)
         {
             App::GetSingleton().soundTask->PlayChannel(4);
@@ -869,7 +886,7 @@ void Tank::NextFrame()
     // Smoke effect when health is low (was energy < maxEnergy / 2)
     if (health < maxHealth / 2)
     {
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x, y + .1, z, 0, .01, 0, 0, ry + rty, 90, .2, .2, .2, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x, y + .1, z, 0, .01, 0, 0, ry + rty, 90, .2, .2, .2, 1));
     }
 
     // Boundary checks
@@ -904,7 +921,21 @@ void Tank::NextFrame()
     else
     {
         fireTimer += GlobalTimer::dT;
-        Fall();
+        
+        // Debug: Log enemy tank physics for first few frames
+        if (id >= 0 && id < 5) { // Enemy tanks have id >= 0
+            static int logCount = 0;
+            if (++logCount % 300 == 0) { // Log occasionally to avoid spam
+                Logger::Get().Write("Enemy tank %d: alive=%d, health=%.1f, y=%.2f, isJumping=%d\n", 
+                                  id, alive ? 1 : 0, health, y, isJumping ? 1 : 0);
+            }
+        }
+        
+        // Only apply gravity/terrain collision when not jumping
+        if (!isJumping)
+        {
+            Fall();
+        }
         
         // Health regeneration (slow, for survival)
         if (health < maxHealth && alive) {
@@ -964,29 +995,29 @@ bool Tank::Move(float rate)
         {
             int xIndex = which * 3;
             int zIndex = xIndex + 2;
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, r, g, b, 1);
+            Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, r, g, b, 1));
         }
         else
         {
             // Fallback to manual checking if helper doesn't find the point
             if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1));
                 which = 0;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1));
                 which = 1;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1));
                 which = 2;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1));
                 which = 3;
             }
         }
@@ -1079,12 +1110,12 @@ bool Tank::Move(bool forb)
         float treadPointX = 0.25f * std::cosf((ry + 45) * DTR);
         float treadPointZ = 0.25f * std::sinf((ry + 45) * DTR);
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_RECTANGLE), x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1));
 
         treadPointX = 0.25f * std::cosf((ry + 315) * DTR);
         treadPointZ = 0.25f * std::sinf((ry + 315) * DTR);
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1);
+        Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_RECTANGLE), x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, r, g, b, 1));
     }
 
     // Check for collision using helper (includes center point + four corner points)
@@ -1105,29 +1136,29 @@ bool Tank::Move(bool forb)
         {
             int xIndex = which * 3;
             int zIndex = xIndex + 2;
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, r, g, b, 1);
+            Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, r, g, b, 1));
         }
         else
         {
             // Fallback to manual checking if helper doesn't find the point
             if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, r, g, b, 1));
                 which = 0;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, r, g, b, 1));
                 which = 1;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, r, g, b, 1));
                 which = 2;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1);
+                Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMOKE), x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, r, g, b, 1));
                 which = 3;
             }
         }
@@ -1300,7 +1331,10 @@ void Tank::Wander()
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp) < (y + vy + 3) && energy > (maxEnergy / 4) && LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z) > (int)(y - 7))
+        // Only jump over significant obstacles and when not already jumping
+        float terrainAhead = LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp);
+        float terrainCurrent = LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z);
+        if (!isJumping && terrainAhead > (y + 2) && energy > (maxEnergy / 2) && terrainCurrent > (int)(y - 7))
         {
             Jump();
         }

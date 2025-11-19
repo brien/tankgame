@@ -1,9 +1,10 @@
 #include "SceneDataBuilder.h"
 #include "../App.h"
+#include "../GameWorld.h"
 
-SceneDataBuilder::SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
+SceneDataBuilder::SceneDataBuilder(const PlayerManager& players, const LevelHandler& level, 
                                  const BulletHandler& bullets, const FXHandler& fx)
-    : tankHandler(tanks)
+    : playerManager(players)
     , levelHandler(level)
     , bulletHandler(bullets)
     , fxHandler(fx) {
@@ -49,16 +50,17 @@ bool SceneDataBuilder::IsReady() const {
 std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
     std::vector<TankRenderData> allTanks;
     
-    // Extract player tank data using direct access to public members
+    // Extract player tank data using PlayerManager
     auto playerTanks = TankDataExtractor::ExtractPlayerData(
-        tankHandler.players, 
-        tankHandler.special, 
-        tankHandler.numPlayers
+        playerManager.GetPlayers(), 
+        playerManager.GetSpecial(), 
+        playerManager.GetNumPlayers()
     );
     
     // Extract enemy tank data using unified view (combines old + GameWorld enemy tanks)
+    // Note: This will need to be updated when TankHandler is fully removed
     auto enemyTanks = TankDataExtractor::ExtractEnemyData(
-        tankHandler.GetAllEnemyTanks()
+        TankHandler::GetSingleton().GetAllEnemyTanks()
     );
     
     // Combine all tank data
@@ -70,13 +72,43 @@ std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
 }
 
 std::vector<BulletRenderData> SceneDataBuilder::ExtractBulletData() const {
-    // Delegate to BulletDataExtractor using unified Bullet view (combines old + GameWorld bullets)
-    return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetAllBullets());
+    // Check if BulletHandler has GameWorld reference, use it directly for better performance
+    if (auto* gameWorld = bulletHandler.GetGameWorld()) {
+        const auto& worldBullets = gameWorld->GetBullets();
+        std::vector<Bullet> bulletRefs;
+        bulletRefs.reserve(worldBullets.size());
+        
+        for (const auto& bulletPtr : worldBullets) {
+            if (bulletPtr && bulletPtr->IsAlive()) {
+                bulletRefs.push_back(*bulletPtr);
+            }
+        }
+        
+        return BulletDataExtractor::ExtractBulletRenderData(bulletRefs);
+    } else {
+        // Fallback to BulletHandler (should be empty now)
+        return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetAllBullets());
+    }
 }
 
 std::vector<EffectRenderData> SceneDataBuilder::ExtractEffectData() const {
-    // Delegate to EffectDataExtractor using unified FX view (combines old + GameWorld FX)
-    return EffectDataExtractor::ExtractEffectRenderData(fxHandler.GetAllFX());
+    // Check if FXHandler has GameWorld reference, use it directly for better performance
+    if (auto* gameWorld = fxHandler.GetGameWorld()) {
+        const auto& worldEffects = gameWorld->GetFX();
+        std::vector<FX> effectRefs;
+        effectRefs.reserve(worldEffects.size());
+        
+        for (const auto& effectPtr : worldEffects) {
+            if (effectPtr && effectPtr->IsAlive()) {
+                effectRefs.push_back(*effectPtr);
+            }
+        }
+        
+        return EffectDataExtractor::ExtractEffectRenderData(effectRefs);
+    } else {
+        // Fallback to FXHandler (should be empty now)
+        return EffectDataExtractor::ExtractEffectRenderData(fxHandler.GetAllFX());
+    }
 }
 
 std::vector<ItemRenderData> SceneDataBuilder::ExtractItemData() const {
@@ -122,7 +154,7 @@ TerrainRenderData SceneDataBuilder::ExtractTerrainData() const {
 std::vector<CameraData> SceneDataBuilder::ExtractCameraData() const {
     std::vector<CameraData> cameras;
     
-    int numPlayers = tankHandler.numPlayers;
+    int numPlayers = playerManager.GetNumPlayers();
     cameras.reserve(numPlayers);
     
     // Extract camera data for each player
@@ -147,11 +179,11 @@ std::vector<CameraData> SceneDataBuilder::ExtractCameraData() const {
 
 void SceneDataBuilder::ExtractGameState(SceneData& scene) const {
     // Extract game state from various handlers using actual available members
-    scene.numPlayers = tankHandler.numPlayers;
+    scene.numPlayers = playerManager.GetNumPlayers();
     scene.gameStarted = App::GetSingleton().gameTask->IsGameStarted();
     scene.paused = App::GetSingleton().gameTask->IsPaused();
     // Note: TankHandler doesn't seem to have versusMode as a method, use a reasonable fallback
-    scene.versusMode = (tankHandler.numPlayers > 1); // Simple heuristic
+    scene.versusMode = (playerManager.GetNumPlayers() > 1); // Simple heuristic
     
     // Debug mode could be extracted from a global setting or App state
     scene.debugMode = false; // TODO: Implement debug mode detection
@@ -239,8 +271,9 @@ std::unique_ptr<UIRenderData> SceneDataBuilder::ExtractUIData() const {
     int menuState = App::GetSingleton().gameTask->GetMenuState();
     bool showDebug = App::GetSingleton().gameTask->IsDebugMode();
     
+    // TODO: Update HUDDataExtractor to use PlayerManager instead of TankHandler
     UIRenderData uiData = HUDDataExtractor::ExtractCompleteUIData(
-        tankHandler, gameStarted, isPaused, showMenu, menuState, showDebug);
+        TankHandler::GetSingleton(), gameStarted, isPaused, showMenu, menuState, showDebug);
     
     return std::make_unique<UIRenderData>(std::move(uiData));
 }

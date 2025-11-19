@@ -195,8 +195,7 @@ void GameTask::HandlePlayingState()
     // New unified update replaces individual handler updates
     gameWorld.Update();
     
-    // Legacy handler updates for systems not yet migrated
-    TankHandler::GetSingleton().NextFrame();
+    // Keep BulletHandler cleanup for transition safety
     BulletHandler::GetSingleton().NextFrame();
     // FXHandler now delegates to GameWorld, so NextFrame() is effectively a no-op
 

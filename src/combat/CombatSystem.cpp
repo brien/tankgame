@@ -165,54 +165,53 @@ void CombatSystem::ApplyTankDamage(Tank* tank, float damage, Bullet* source) {
 }
 
 void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bullet) {
-    if (playerIndex < 0 || playerIndex >= 4) return;
+    if (playerIndex < 0 || playerIndex >= 4 || !playerManager) return;
     
-    TankHandler& handler = TankHandler::GetSingleton();
-    
-    handler.hitCombo[playerIndex]++;
-    handler.combo[playerIndex] += static_cast<float>(handler.hitCombo[playerIndex]) / 10.0f;
+    playerManager->AddHitCombo(playerIndex, 1);
+    playerManager->AddCombo(playerIndex, static_cast<float>(playerManager->GetHitCombo(playerIndex)) / 10.0f);
     
     if (target->health <= 0) {
         // Tank was killed
-        float distx = bullet->GetX() - handler.players[playerIndex].x;
-        float distz = bullet->GetZ() - handler.players[playerIndex].z;
+        float distx = bullet->GetX() - playerManager->GetPlayer(playerIndex).x;
+        float distz = bullet->GetZ() - playerManager->GetPlayer(playerIndex).z;
         float dist = std::sqrt(distx * distx + distz * distz);
         
         // Combo bonuses based on conditions
-        if (handler.hitCombo[playerIndex] > 9) {
-            handler.combo[playerIndex] += handler.comboNum[playerIndex] / 2.0f;
-            handler.players[playerIndex].bonus = 23;
-            handler.players[playerIndex].bonusTime = 0;
+        if (playerManager->GetHitCombo(playerIndex) > 9) {
+            playerManager->AddCombo(playerIndex, playerManager->GetComboNum(playerIndex) / 2.0f);
+            playerManager->GetPlayer(playerIndex).bonus = 23;
+            playerManager->GetPlayer(playerIndex).bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
-                handler.players[playerIndex].x, handler.players[playerIndex].y, handler.players[playerIndex].z,
+                playerManager->GetPlayer(playerIndex).x, playerManager->GetPlayer(playerIndex).y, playerManager->GetPlayer(playerIndex).z,
                 0, .01f, 0, 0, 0, 90, 0.5f, 0.5f, 0, 1));
         }
         
         if (dist > 20) {
-            handler.combo[playerIndex] += dist / 10.0f;
-            handler.players[playerIndex].bonus = 21;
-            handler.players[playerIndex].bonusTime = 0;
+            playerManager->AddCombo(playerIndex, dist / 10.0f);
+            playerManager->GetPlayer(playerIndex).bonus = 21;
+            playerManager->GetPlayer(playerIndex).bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
-                handler.players[playerIndex].x, handler.players[playerIndex].y, handler.players[playerIndex].z,
+                playerManager->GetPlayer(playerIndex).x, playerManager->GetPlayer(playerIndex).y, playerManager->GetPlayer(playerIndex).z,
                 0, .01f, 0, 0, 0, 90, 0, 1, 1, 1));
         }
         
         if (bullet->GetBounces() > 0 && bullet->GetDT() < 10.0f) {
-            handler.combo[playerIndex] += (1 + bullet->GetDT() / 2.0f);
-            handler.players[playerIndex].bonus = 22;
-            handler.players[playerIndex].bonusTime = 0;
+            playerManager->AddCombo(playerIndex, (1 + bullet->GetDT() / 2.0f));
+            playerManager->GetPlayer(playerIndex).bonus = 22;
+            playerManager->GetPlayer(playerIndex).bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
-                handler.players[playerIndex].x, handler.players[playerIndex].y, handler.players[playerIndex].z,
+                playerManager->GetPlayer(playerIndex).x, playerManager->GetPlayer(playerIndex).y, playerManager->GetPlayer(playerIndex).z,
                 0, .01f, 0, 0, 0, 90, 0.5f, 0.5f, 0, 1));
         }
         
-        handler.combo[playerIndex] += (10.0f / (handler.combo[playerIndex] / 10.0f + 1.0f));
+        float currentCombo = playerManager->GetCombo(playerIndex);
+        playerManager->AddCombo(playerIndex, (10.0f / (currentCombo / 10.0f + 1.0f)));
         
-        if (handler.combo[playerIndex] > handler.special[playerIndex]) {
-            handler.special[playerIndex] = handler.combo[playerIndex];
+        if (playerManager->GetCombo(playerIndex) > playerManager->GetSpecial(playerIndex)) {
+            playerManager->SetSpecial(playerIndex, playerManager->GetCombo(playerIndex));
         }
         
-        handler.comboNum[playerIndex]++;
+        playerManager->AddComboNum(playerIndex, 1);
     }
 }
 
@@ -224,6 +223,6 @@ void CombatSystem::CreateCollisionEffects(float x, float y, float z, float r, fl
 }
 
 void CombatSystem::ResetPlayerCombo(int playerIndex) {
-    if (playerIndex < 0 || playerIndex >= 4) return;
-    TankHandler::GetSingleton().hitCombo[playerIndex] = 0;
+    if (playerIndex < 0 || playerIndex >= 4 || !playerManager) return;
+    playerManager->ResetHitCombo(playerIndex);
 }
