@@ -421,7 +421,7 @@ void Tank::Fall()
         highest = TankCollisionHelper::FindHighestFloatHeight(*this);
         y = static_cast<float>(highest);
 
-        if (!grounded)
+        if (!isGrounded)
         {
             if (energy < 2 * maxEnergy / 3)
             {
@@ -433,7 +433,7 @@ void Tank::Fall()
             }
         }
         isJumping = false;
-        grounded = true;
+        isGrounded = true;
         jumpTime = 0.0f;
 
         vy = 0;
@@ -455,13 +455,13 @@ void Tank::Fall()
         else
         {
             vy = 0;
-            if (!grounded)
+            if (!isGrounded)
             {
                 if (id < 0)
                     App::GetSingleton().soundTask->PlayChannel(5);
             }
         }
-        if (!grounded)
+        if (!isGrounded)
         {
             if (energy < 2 * maxEnergy / 3)
             {
@@ -469,12 +469,12 @@ void Tank::Fall()
             }
         }
         isJumping = false;
-        grounded = true;
+        isGrounded = true;
         jumpTime = 0.0f;
     }
     else
     {
-        grounded = false;
+        isGrounded = false;
     }
 }
 
@@ -504,7 +504,7 @@ Tank::Tank()
     deadtime = 0.0f;
     jumpTime = 0.0f;
     isJumping = false;
-    grounded = false;
+    isGrounded = false;
     turbo = false;
 
     // === REFACTORED: Initialize new clear system ===
@@ -597,7 +597,7 @@ Tank::Tank(Tank&& other) noexcept
       r2(other.r2), g2(other.g2), b2(other.b2),
       dist(other.dist),
       isJumping(other.isJumping),
-      grounded(other.grounded),
+      isGrounded(other.isGrounded),
       jumpTime(other.jumpTime),
       turbo(other.turbo),
       bonus(other.bonus),
@@ -649,7 +649,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         r2 = other.r2; g2 = other.g2; b2 = other.b2;
         dist = other.dist;
         isJumping = other.isJumping;
-        grounded = other.grounded;
+        isGrounded = other.isGrounded;
         jumpTime = other.jumpTime;
         turbo = other.turbo;
         bonus = other.bonus;
@@ -673,7 +673,7 @@ void Tank::Init()
     deadtime = 0.0f;
 
     isJumping = false;
-    grounded = false;
+    isGrounded = false;
     turbo = false;
 
     fireTimer = 0;
@@ -1081,7 +1081,7 @@ bool Tank::Move(bool forb)
     // treadPointX = 0.25 * std::cosf((ry + 315) * DTR);
     // treadPointZ = 0.25 *  std::sinf((ry + 315) * DTR);
 
-    if (isPlayer && grounded)
+    if (isPlayer && isGrounded)
     {
         float treadPointX = 0.25f * std::cosf((ry + 45) * DTR);
         float treadPointZ = 0.25f * std::sinf((ry + 45) * DTR);

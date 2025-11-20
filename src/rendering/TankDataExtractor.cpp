@@ -34,7 +34,7 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     data.type2 = tank.type2;
     
     // Extract movement state
-    data.grounded = tank.grounded;
+    data.grounded = tank.isGrounded;
     data.isJumping = tank.isJumping;
     data.velocity = Vector3(tank.vx, tank.vy, tank.vz);
     

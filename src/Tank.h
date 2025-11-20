@@ -163,7 +163,7 @@ public:
     float dist;
 
     bool isJumping;
-    bool grounded;
+    bool isGrounded;
     float jumpTime;
     bool turbo;         // Turbo mode flag (consumes extra energy)
 
