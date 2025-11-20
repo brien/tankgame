@@ -3,11 +3,13 @@
 #include "../GameWorld.h"
 
 SceneDataBuilder::SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
-                                 const BulletHandler& bullets, const FXHandler& fx)
+                                 const BulletHandler& bullets, const FXHandler& fx,
+                                 const GameWorld* world)
     : tankHandler(tanks)
     , levelHandler(level)
     , bulletHandler(bullets)
-    , fxHandler(fx) {
+    , fxHandler(fx)
+    , gameWorld(world) {
 }
 
 SceneData SceneDataBuilder::BuildScene() const {
@@ -50,22 +52,35 @@ bool SceneDataBuilder::IsReady() const {
 std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
     std::vector<TankRenderData> allTanks;
     
-    // Extract player tank data using direct access to public members
-    auto playerTanks = TankDataExtractor::ExtractPlayerData(
-        tankHandler.players, 
-        tankHandler.special, 
-        tankHandler.numPlayers
-    );
-    
-    // Extract enemy tank data using unified view (combines old + GameWorld enemy tanks)
-    auto enemyTanks = TankDataExtractor::ExtractEnemyData(
-        tankHandler.GetAllEnemyTanks()
-    );
-    
-    // Combine all tank data
-    allTanks.reserve(playerTanks.size() + enemyTanks.size());
-    allTanks.insert(allTanks.end(), playerTanks.begin(), playerTanks.end());
-    allTanks.insert(allTanks.end(), enemyTanks.begin(), enemyTanks.end());
+    if (gameWorld) {
+        // NEW ARCHITECTURE: Extract all tanks from unified GameWorld
+        const auto& worldTanks = gameWorld->GetTanks();
+        allTanks.reserve(worldTanks.size());
+        
+        for (const auto& tankPtr : worldTanks) {
+            if (tankPtr && tankPtr->IsAlive()) {
+                allTanks.push_back(TankDataExtractor::ExtractRenderData(*tankPtr));
+            }
+        }
+    } else {
+        // LEGACY ARCHITECTURE: Extract from TankHandler (fallback during transition)
+        // Extract player tank data using direct access to public members
+        auto playerTanks = TankDataExtractor::ExtractPlayerData(
+            tankHandler.players, 
+            tankHandler.special, 
+            tankHandler.numPlayers
+        );
+        
+        // Extract enemy tank data using unified view (combines old + GameWorld enemy tanks)
+        auto enemyTanks = TankDataExtractor::ExtractEnemyData(
+            tankHandler.GetAllEnemyTanks()
+        );
+        
+        // Combine all tank data
+        allTanks.reserve(playerTanks.size() + enemyTanks.size());
+        allTanks.insert(allTanks.end(), playerTanks.begin(), playerTanks.end());
+        allTanks.insert(allTanks.end(), enemyTanks.begin(), enemyTanks.end());
+    }
     
     return allTanks;
 }

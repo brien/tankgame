@@ -68,6 +68,14 @@ public:
     void SetGameWorld(class GameWorld* world);
     void RegisterPlayersWithCollisionSystem();
     
+    // Access to player tanks (for PlayerManager migration)
+    Tank* GetPlayerTank(int playerIndex);
+    const Tank* GetPlayerTank(int playerIndex) const;
+    
+    // Migration control methods
+    void SetPlayerManager(class PlayerManager* pm);
+    void SetPlayerManagerActive(bool active);
+    
     // Get all tanks for rendering (combines players + enemies from both old and new systems)
     std::vector<const Tank*> GetAllEnemyTanks() const;
 
@@ -76,6 +84,10 @@ public:
     int difficultySetting = 0;
     int numPlayers = 1;
     int numAttackingTanks = 0;
+    
+    // Migration control - when true, PlayerManager handles players
+    bool playerManagerActive = false;
+    class PlayerManager* playerManager = nullptr;
 
 private:
     class GameWorld* gameWorld = nullptr;

@@ -2,6 +2,7 @@
 
 #include "ITask.h"
 #include "GameWorld.h"
+#include "PlayerManager.h"
 
 class GameTask : public ITask
 {
@@ -38,6 +39,7 @@ private:
 
     // Phase 1: Add GameWorld alongside existing systems
     GameWorld gameWorld;
+    PlayerManager playerManager;
 
     bool paused;
     bool debug;

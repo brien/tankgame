@@ -1188,11 +1188,18 @@ bool Tank::Move(bool forb)
 
 void Tank::HandleInput()
 {
+    static int inputLogCounter = 0;
+    
     // Use the appropriate input handler based on current input mode
     if (inputHandler)
     {
+        if (inputLogCounter % 180 == 0 && isPlayer) { // Log every 3 seconds for players only
+            std::cout << "Tank::HandleInput() - Player tank " << id << " processing input via LEGACY TankHandler path" << std::endl;
+        }
         inputHandler->HandleInput(*this);
     }
+    
+    inputLogCounter++;
 
     // Common debug controls that apply to all input modes
     if (InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->IsDebugMode())

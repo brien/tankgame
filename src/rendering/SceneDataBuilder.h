@@ -29,13 +29,15 @@ public:
     /**
      * Constructor with injected game object dependencies.
      * 
-     * @param tanks TankHandler containing all tank game logic
+     * @param tanks TankHandler containing legacy tank game logic (transitional)
      * @param level LevelHandler containing terrain and level data
      * @param bullets BulletHandler containing bullet game logic
      * @param fx FXHandler containing visual effects game logic
+     * @param world GameWorld containing unified entity management (optional)
      */
     SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
-                    const BulletHandler& bullets, const FXHandler& fx);
+                    const BulletHandler& bullets, const FXHandler& fx, 
+                    const class GameWorld* world = nullptr);
     
     /**
      * Builds complete scene data for rendering.
@@ -74,6 +76,7 @@ private:
     const LevelHandler& levelHandler;
     const BulletHandler& bulletHandler;
     const FXHandler& fxHandler;
+    const class GameWorld* gameWorld; // Unified entity management
     
     // Individual data extraction methods
     std::vector<TankRenderData> ExtractTankData() const;

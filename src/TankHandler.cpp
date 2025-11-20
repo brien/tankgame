@@ -372,11 +372,18 @@ void TankHandler::SetEnemyType(Tank& tank, int index)
 
 void TankHandler::NextFrame()
 {
+    static int frameCounter = 0;
+    if (frameCounter % 60 == 0) {
+        std::cout << "TankHandler::NextFrame() - Processing players through legacy system" << std::endl;
+    }
+    
     UpdatePlayerCombos();
     UpdatePlayerStates();
     UpdatePlayerTargeting();
     UpdateEnemyTanks();
     UpdateVersusMode();
+    
+    frameCounter++;
     
     LevelHandler::GetSingleton().UpdateItems();  // Update item animations
     LevelHandler::GetSingleton().ItemCollision();
@@ -384,6 +391,11 @@ void TankHandler::NextFrame()
 
 void TankHandler::UpdatePlayerCombos()
 {
+    // Skip if PlayerManager is handling players
+    if (playerManagerActive) {
+        return;
+    }
+    
     for (int i = 0; i < numPlayers; i++)
     {
         if (combo[i] > 0.0f)
@@ -403,10 +415,24 @@ void TankHandler::UpdatePlayerCombos()
 
 void TankHandler::UpdatePlayerStates()
 {
+    static int logCounter = 0;
+    
+    // Skip player processing if PlayerManager is handling them
+    if (playerManagerActive) {
+        if (logCounter % 120 == 0) {
+            std::cout << "TankHandler: SKIPPING player processing - PlayerManager is active" << std::endl;
+        }
+        logCounter++;
+        return;
+    }
+    
     for (int i = 0; i < numPlayers; i++)
     {
         if (players[i].alive)
         {
+            if (logCounter % 120 == 0) {
+                std::cout << "TankHandler: LEGACY processing player " << i << " NextFrame + HandleInput" << std::endl;
+            }
             players[i].NextFrame();
             players[i].HandleInput();
             players[i].deadtime = 0.0f;
@@ -429,10 +455,16 @@ void TankHandler::UpdatePlayerStates()
             players[i].deadtime += GlobalTimer::dT;
         }
     }
+    logCounter++;
 }
 
 void TankHandler::UpdatePlayerTargeting()
 {
+    // Skip if PlayerManager is handling players
+    if (playerManagerActive) {
+        return;
+    }
+    
     players[0].dist = INITIAL_PLAYER_DISTANCE;
     players[1].dist = INITIAL_PLAYER_DISTANCE;
 
@@ -495,6 +527,11 @@ void TankHandler::UpdateEnemyTanks()
 
 void TankHandler::UpdateVersusMode()
 {
+    // Skip if PlayerManager is handling players  
+    if (playerManagerActive) {
+        return;
+    }
+    
     if (App::GetSingleton().gameTask->IsVersusMode())
     {
         players[0].dist = sqrt((players[0].x - players[1].x) * (players[0].x - players[1].x) + (players[0].z - players[1].z) * (players[0].z - players[1].z));
@@ -582,5 +619,29 @@ void TankHandler::RegisterPlayersWithCollisionSystem() {
             Logger::Get().Write("Registered player tank %d with collision system\n", i);
         }
     }
+}
+
+Tank* TankHandler::GetPlayerTank(int playerIndex) {
+    if (playerIndex >= 0 && playerIndex < MAX_PLAYERS) {
+        return &players[playerIndex];
+    }
+    return nullptr;
+}
+
+const Tank* TankHandler::GetPlayerTank(int playerIndex) const {
+    if (playerIndex >= 0 && playerIndex < MAX_PLAYERS) {
+        return &players[playerIndex];
+    }
+    return nullptr;
+}
+
+void TankHandler::SetPlayerManager(PlayerManager* pm) {
+    playerManager = pm;
+    std::cout << "TankHandler: PlayerManager reference set" << std::endl;
+}
+
+void TankHandler::SetPlayerManagerActive(bool active) {
+    playerManagerActive = active;
+    std::cout << "TankHandler: PlayerManager " << (active ? "ACTIVATED" : "DEACTIVATED") << " - player processing " << (active ? "DISABLED" : "ENABLED") << std::endl;
 }
 

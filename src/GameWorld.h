@@ -34,6 +34,9 @@ public:
     FX* CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a);
     FX* CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a);
     Item* CreateItem(float x, float y, float z, TankType type);
+    
+    // Tank collision layer management
+    void ReregisterTankCollision(Tank* tank);
 
     // Access for rendering and other systems
     const auto& GetTanks() const { return tanks.GetEntities(); }

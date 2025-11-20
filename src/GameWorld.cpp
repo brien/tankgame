@@ -102,7 +102,28 @@ FX* GameWorld::CreateFX(FxType type, float x, float y, float z, float dx, float 
 }
 
 Item* GameWorld::CreateItem(float x, float y, float z, TankType type) {
-    return items.Create(x, y, z, type);
+    Item* item = items.Create(x, y, z, type);
+    
+    // Register item with collision system for player pickup detection
+    if (item) {
+        collisionSystem.RegisterEntity(item, CollisionShape3D(CollisionShape3D::SPHERE, 0.3f), CollisionLayer::ITEMS);
+    }
+    
+    return item;
+}
+
+void GameWorld::ReregisterTankCollision(Tank* tank) {
+    if (!tank) return;
+    
+    // Unregister from current collision layer
+    collisionSystem.UnregisterEntity(tank);
+    
+    // Re-register with correct collision layer based on isPlayer flag
+    CollisionLayer layer = tank->isPlayer ? CollisionLayer::PLAYER_TANKS : CollisionLayer::ENEMY_TANKS;
+    collisionSystem.RegisterEntity(tank, CollisionShape3D(CollisionShape3D::CUSTOM, 0.4f), layer);
+    
+    Logger::Get().Write("Tank collision layer updated to %s\n", 
+                       tank->isPlayer ? "PLAYER_TANKS" : "ENEMY_TANKS");
 }
 
 void GameWorld::HandleCollisions() {

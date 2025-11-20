@@ -6,16 +6,19 @@
 #include "TankHandler.h"
 #include "FXHandler.h"
 #include "GameWorld.h"
+#include "PlayerManager.h"
 #include "events/Events.h"
 
 void GameTask::SetUpGame()
 {
+    std::cout << "GameTask: Setting up new game..." << std::endl;
     LevelHandler::GetSingleton().Init();
     if (!LevelHandler::GetSingleton().Load("levels/level0@@.txt"))
     {
         std::cerr << "LevelHandler failed to load level." << std::endl;
     }
     TankHandler::GetSingleton().Init();
+    std::cout << "GameTask: Game setup complete" << std::endl;
 }
 
 GameTask::GameTask()
@@ -72,7 +75,17 @@ void GameTask::Visible(bool visible)
 
 void GameTask::OnResume()
 {
+    std::cout << "GameTask: OnResume - Initializing systems..." << std::endl;
     TankHandler::GetSingleton().Init();
+    std::cout << "GameTask: Initializing PlayerManager..." << std::endl;
+    playerManager.Initialize(&gameWorld);
+    
+    // Transfer player control from TankHandler to PlayerManager
+    std::cout << "GameTask: Activating PlayerManager control..." << std::endl;
+    TankHandler::GetSingleton().SetPlayerManager(&playerManager);
+    TankHandler::GetSingleton().SetPlayerManagerActive(true);
+    
+    std::cout << "GameTask: OnResume complete" << std::endl;
 }
 
 void GameTask::OnSuspend()
@@ -194,6 +207,9 @@ void GameTask::HandlePlayingState()
     
     // New unified update replaces individual handler updates
     gameWorld.Update();
+    
+    // Player management through PlayerManager
+    playerManager.NextFrame();
     
     // Legacy handler updates for systems not yet migrated
     TankHandler::GetSingleton().NextFrame();
