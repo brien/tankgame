@@ -34,8 +34,8 @@ Bullet::Bullet()
       vx(0.0f), vy(0.0f), vz(0.0f),
       rx(0.0f), ry(0.0f), rz(0.0f),
       dty(0.0f),
-      r(0.5f), g(0.5f), b(0.5f),
-      r2(0.5f), g2(0.5f), b2(0.5f),
+      primaryColor(0.5f, 0.5f, 0.5f, 1.0f),
+      secondaryColor(0.5f, 0.5f, 0.5f, 1.0f),
       moveRate(33.0f), power(0.0f),
       isSpecial(false),
       id(0), tankId(0),
@@ -50,16 +50,16 @@ Bullet::Bullet(int tid, float power,
                TankType type1, TankType type2,
                int maxbounces,
                float dTpressed,
-               float r, float g, float b,
-               float r2, float g2, float b2,
+               const Color& primaryColor,
+               const Color& secondaryColor,
                float x, float y, float z,
                float rx, float ry, float rz)
     : x(x), y(y), z(z),
       vx(0.0f), vy(0.0f), vz(0.0f),
       rx(rx), ry(ry), rz(rz),
       dty(0.0f),
-      r(r), g(g), b(b),
-      r2(r2), g2(g2), b2(b2),
+      primaryColor(primaryColor),
+      secondaryColor(secondaryColor),
       moveRate(33.0f), power(power),
       isSpecial(false),
       id(1), tankId(tid),
@@ -278,13 +278,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                     temp.power = power;
 
-                    temp.r = 1;
-                    temp.b = 0;
-                    temp.g = 0;
-
-                    temp.r2 = 1;
-                    temp.b2 = 0;
-                    temp.g2 = 0;
+                    temp.primaryColor = Color(1.0f, 0.0f, 0.0f, 1.0f);
+                    temp.secondaryColor = Color(1.0f, 0.0f, 0.0f, 1.0f);
 
                     temp.maxbounces = 0;
                     temp.numbounces = 0;
@@ -317,13 +312,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                     temp.power = power;
 
-                    temp.r = r;
-                    temp.b = b;
-                    temp.g = g;
-
-                    temp.r2 = r2;
-                    temp.b2 = b2;
-                    temp.g2 = g2;
+                    temp.primaryColor = primaryColor;
+                    temp.secondaryColor = secondaryColor;
 
                     temp.maxbounces = 4;
 
@@ -352,22 +342,12 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 temp.ry = -ory;
                 temp.rz = rz;
 
-                temp.power = power * 2;
+                temp.power = power;
 
-                temp.r = r;
-                temp.b = b;
-                temp.g = g;
-
-                temp.r2 = r2;
-                temp.b2 = b2;
-                temp.g2 = g2;
+                temp.primaryColor = primaryColor;
+                temp.secondaryColor = secondaryColor;
 
                 temp.maxbounces = 4;
-
-                temp.type1 = type1;
-                temp.type2 = type2;
-
-                temp.id = 1;
                 temp.alive = true;
 
                 //TODO: Special handling needs to be reimplemented after the bullet refactor
@@ -392,13 +372,8 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                 temp.dty = 10.0f;
 
-                temp.r = r;
-                temp.b = b;
-                temp.g = g;
-
-                temp.r2 = r2;
-                temp.b2 = b2;
-                temp.g2 = g2;
+                temp.primaryColor = primaryColor;
+                temp.secondaryColor = secondaryColor;
 
                 temp.maxbounces = 16;
 
@@ -425,23 +400,23 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
         if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) == static_cast<int>(z))
         {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
         }
 
         if (static_cast<int>(z + zpp) != static_cast<int>(z) && static_cast<int>(x + xpp) == static_cast<int>(x))
         {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
         }
 
         if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) != static_cast<int>(z))
         {
             if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, r, g, b, 1);
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
             }
             else
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, r, g, b, 1);
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
             }
         }
     }

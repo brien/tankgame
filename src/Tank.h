@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "igtl_qmesh.h"
 #include "BulletHandler.h"
+#include "TankTypeManager.h"
 
 #include <vector>
 #include <queue>
@@ -146,19 +147,22 @@ public:
     void Die();
 
     void SetType(TankType t1, TankType t2);
-    void SetTankColors(TankType t1, TankType t2);
     void SetInputMode(InputMode mode);
 
     TankType type1;
     TankType type2;
 
-    float r;
-    float g;
-    float b;
-
-    float r2;
-    float g2;
-    float b2;
+    // Dynamic color methods - replace hardcoded r,g,b fields
+    Color GetPrimaryColor() const { return TankTypeManager::GetTankTypeColor(type1); }
+    Color GetSecondaryColor() const { return TankTypeManager::GetTankTypeColor(type2); }
+    
+    // Convenience methods for RGB access (for legacy compatibility)
+    void GetPrimaryColorRGB(float& r, float& g, float& b) const { 
+        TankTypeManager::GetTankTypeColor(type1, r, g, b); 
+    }
+    void GetSecondaryColorRGB(float& r, float& g, float& b) const { 
+        TankTypeManager::GetTankTypeColor(type2, r, g, b); 
+    }
 
     float dist;
 
@@ -170,9 +174,6 @@ public:
     bool PointCollision(float cx, float cy, float cz) const;
 
     void NextFrame();
-
-    void Draw() const;
-    void Draw2();
     
     // GameWorld access for bullet creation
     void SetGameWorld(GameWorld* world) { gameWorld = world; }
@@ -180,7 +181,7 @@ public:
 private:
     // Helper method to create bullets through GameWorld
     void CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
-                     float r, float g, float b, float r2, float g2, float b2,
+                     const Color& primaryColor, const Color& secondaryColor,
                      float x, float y, float z, float rx, float ry, float rz);
 
 public:

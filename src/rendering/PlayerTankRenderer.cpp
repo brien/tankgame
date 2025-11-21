@@ -54,7 +54,8 @@ void PlayerTankRenderer::DrawPlayerEffects(const Tank& player,
     glMatrixMode(GL_MODELVIEW);
 
     glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
-    glColor3f(player.r, player.g, player.b);
+    Color primaryColor = player.GetPrimaryColor();
+    glColor3f(primaryColor.r, primaryColor.g, primaryColor.b);
 
     glPushMatrix();
     RenderEffectBody(player);
@@ -141,7 +142,8 @@ void PlayerTankRenderer::RenderTankBody(const Tank& player)
     glRotatef(player.rz, 0, 0, 1);
 
     glFrontFace(GL_CCW);
-    glColor3f(player.r2, player.g2, player.b2);
+    Color secondaryColor = player.GetSecondaryColor();
+    glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
     App::GetSingleton().graphicsTask->bodylist.Call(0);
 }
 
@@ -153,7 +155,8 @@ void PlayerTankRenderer::RenderTankTurret(const Tank& player)
     glRotatef(-player.rty + 180, 0, 1, 0);
     glRotatef(player.rtz, 0, 0, 1);
 
-    glColor3f(player.r, player.g, player.b);
+    Color primaryColor = player.GetPrimaryColor();
+    glColor3f(primaryColor.r, primaryColor.g, primaryColor.b);
     App::GetSingleton().graphicsTask->turretlist.Call(0);
 
     glFrontFace(GL_CW);
@@ -182,7 +185,8 @@ void PlayerTankRenderer::RenderEffectTurret(const Tank& player,
     glRotatef(-player.rty + 180, 0, 1, 0);
     glRotatef(player.rtz, 0, 0, 1);
 
-    glColor3f(player.r2, player.g2, player.b2);
+    Color secondaryColor = player.GetSecondaryColor();
+    glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
 
     if (special[playerIndex] >= player.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
     {
@@ -237,7 +241,7 @@ void PlayerTankRenderer::RenderPlayerEffects(const TankRenderData& tank, float d
     glMatrixMode(GL_MODELVIEW);
 
     glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
-    glColor3f(tank.r, tank.g, tank.b);
+    glColor3f(tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b);
 
     glPushMatrix();
     RenderEffectBody(tank);
@@ -286,7 +290,7 @@ void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
     glRotatef(tank.bodyRotation.z, 0, 0, 1);
 
     glFrontFace(GL_CCW);
-    glColor3f(tank.r2, tank.g2, tank.b2);
+    glColor3f(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b);
     App::GetSingleton().graphicsTask->bodylist.Call(0);
 }
 
@@ -298,7 +302,7 @@ void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
     glRotatef(-tank.turretRotation.y + 180, 0, 1, 0);
     glRotatef(tank.turretRotation.z, 0, 0, 1);
 
-    glColor3f(tank.r, tank.g, tank.b);
+    glColor3f(tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b);
     App::GetSingleton().graphicsTask->turretlist.Call(0);
 
     glFrontFace(GL_CW);
@@ -325,7 +329,7 @@ void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
     glRotatef(-tank.turretRotation.y + 180, 0, 1, 0);
     glRotatef(tank.turretRotation.z, 0, 0, 1);
 
-    glColor3f(tank.r2, tank.g2, tank.b2);
+    glColor3f(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b);
 
     if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
     {

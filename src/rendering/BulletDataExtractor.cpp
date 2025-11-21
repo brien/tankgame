@@ -38,12 +38,14 @@ BulletRenderData BulletDataExtractor::ExtractSingleBulletData(const Bullet& bull
     data.velocity.z = moveRate * std::sin(ry * DTR);
     
     // Colors
-    data.r = bullet.GetR();
-    data.g = bullet.GetG();
-    data.b = bullet.GetB();
-    data.r2 = bullet.GetR2();
-    data.g2 = bullet.GetG2();
-    data.b2 = bullet.GetB2();
+    data.primaryColor.r = bullet.GetR();
+    data.primaryColor.g = bullet.GetG();
+    data.primaryColor.b = bullet.GetB();
+    data.primaryColor.a = 1.0f;
+    data.secondaryColor.r = bullet.GetR2();
+    data.secondaryColor.g = bullet.GetG2();
+    data.secondaryColor.b = bullet.GetB2();
+    data.secondaryColor.a = 1.0f;
     
     // Type information
     data.type1 = bullet.GetType1();

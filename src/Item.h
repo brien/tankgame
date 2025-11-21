@@ -2,6 +2,7 @@
 
 #include "Entity.h"
 #include "Tank.h"
+#include "Color.h"
 
 class Item : public Entity
 {
@@ -13,7 +14,7 @@ public:
     float x, y, z;        // Position
     float rx, ry, rz;     // Rotation
 
-    float r, g, b;        // Color
+    Color color;          // Color
 
     TankType type;
     

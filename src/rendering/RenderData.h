@@ -3,6 +3,8 @@
 
 #include <vector>
 
+// Include Color.h for Color struct
+#include "../Color.h"
 // Include Tank.h for TankType enum
 #include "../Tank.h"
 // Include FXHandler.h for FxType enum
@@ -49,9 +51,9 @@ struct TankRenderData {
     float maxCharge;            // Maximum charge for charge bar percentage
     float fireCost;             // Cost to fire (for charge indicator line)
     
-    // Tank colors (primary and secondary for team identification)
-    float r, g, b;              // Primary color (0.0 - 1.0)
-    float r2, g2, b2;           // Secondary color (0.0 - 1.0)
+    // Tank colors
+    Color primaryColor;              // Primary color (0.0 - 1.0)
+    Color secondaryColor;           // Secondary color (0.0 - 1.0)
     
     // Status indicators
     bool alive;                 // Whether tank should be rendered
@@ -83,8 +85,8 @@ struct TankRenderData {
         , charge(0.0f)
         , maxCharge(100.0f)
         , fireCost(10.0f)
-        , r(1.0f), g(1.0f), b(1.0f)
-        , r2(0.5f), g2(0.5f), b2(0.5f)
+        , primaryColor(1.0f, 1.0f, 1.0f, 1.0f)
+        , secondaryColor(0.5f, 0.5f, 0.5f, 1.0f)
         , alive(true)
         , isPlayer(false)
         , playerId(0)
@@ -110,8 +112,8 @@ struct BulletRenderData {
     Vector3 velocity;           // Motion vector for trail effects
     
     // Colors inherited from firing tank
-    float r, g, b;              // Primary color
-    float r2, g2, b2;           // Secondary color
+    Color primaryColor;         // Primary color
+    Color secondaryColor;       // Secondary color
     
     // Type information for specialized bullet rendering
     TankType type1, type2;      // Bullet type determines appearance
@@ -124,8 +126,8 @@ struct BulletRenderData {
         : position(0, 0, 0)
         , rotation(0, 0, 0)
         , velocity(0, 0, 0)
-        , r(1.0f), g(1.0f), b(1.0f)
-        , r2(0.5f), g2(0.5f), b2(0.5f)
+        , primaryColor(1.0f, 1.0f, 1.0f, 1.0f)
+        , secondaryColor(0.5f, 0.5f, 0.5f, 1.0f)
         , type1(TankType::TYPE_GREY)
         , type2(TankType::TYPE_GREY)
         , ownerId(-1)

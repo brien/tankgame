@@ -17,12 +17,9 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     data.fireCost = tank.fireCost;
     
     // Extract colors
-    data.r = tank.r;
-    data.g = tank.g;
-    data.b = tank.b;
-    data.r2 = tank.r2;
-    data.g2 = tank.g2;
-    data.b2 = tank.b2;
+    // Get colors dynamically from tank types
+    data.primaryColor = tank.GetPrimaryColor();
+    data.secondaryColor = tank.GetSecondaryColor();
     
     // Extract status
     data.alive = tank.alive;

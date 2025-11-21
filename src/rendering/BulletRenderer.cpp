@@ -111,7 +111,7 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
     }
     
     // Set primary color and render outline
-    glColor3f(bullet.r, bullet.g, bullet.b);
+    glColor3f(bullet.primaryColor.r, bullet.primaryColor.g, bullet.primaryColor.b);
     glScalef(1, 1, scaleZ);
     
     // Render the bullet outline using the square display list
@@ -130,7 +130,7 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
         alpha += bullet.power / 1000.0f;
     }
     
-    glColor4f(bullet.r2, bullet.g2, bullet.b2, alpha);
+    glColor4f(bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha);
     
     // Render the glowing inner part
     if (App::GetSingleton().graphicsTask) {

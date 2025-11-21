@@ -20,14 +20,14 @@ FX::FX()
 	x = y = z = 0;
 	rx = ry = rz = 0;
 	dx = dy = dz = 0;
-	r = g = b = a = 0;
+	color = Color(0.0f, 0.0f, 0.0f, 0.0f);
 	time = 0;
 	maxTime = 10;
 	alive = true;
 	type = FxType::TYPE_ZERO;
 }
 
-FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, const Color& _color)
 {
 	type = _type;
 	x = _x;
@@ -37,17 +37,14 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _
 	ry = _ry;
 	rz = _rz;
 	dx = dy = dz = 0;
-	r = _r;
-	g = _g;
-	b = _b;
-	a = _a;
+	color = _color;
 
 	alive = true;
 	time = 0;
 	SetMaxTime();
 }
 
-FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, const Color& _color)
 {
 	type = _type;
 	x = _x;
@@ -59,10 +56,7 @@ FX::FX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _
 	rx = _rx;
 	ry = _ry;
 	rz = _rz;
-	r = _r;
-	g = _g;
-	b = _b;
-	a = _a;
+	color = _color;
 
 	alive = true;
 	time = 0;
@@ -95,11 +89,11 @@ void FX::Update()
 
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
-		a -= 0.2 * GlobalTimer::dT;
+		color.a -= 0.2 * GlobalTimer::dT;
 	}
 	else
 	{
-		a -= 2 * GlobalTimer::dT;
+		color.a -= 2 * GlobalTimer::dT;
 	}
 
 	x += dx * GlobalTimer::dT;
@@ -123,9 +117,9 @@ void FX::Update()
 	if (type == FxType::TYPE_JUMP && !LevelHandler::GetSingleton().PointCollision(x, y, z))
 	{
 		y -= 5 * GlobalTimer::dT;
-		r -= .5 * GlobalTimer::dT;
-		g -= .5 * GlobalTimer::dT;
-		b -= .5 * GlobalTimer::dT;
+		color.r -= .5 * GlobalTimer::dT;
+		color.g -= .5 * GlobalTimer::dT;
+		color.b -= .5 * GlobalTimer::dT;
 	}
 }
 
@@ -163,34 +157,44 @@ void FXHandler::NextFrame()
 	}
 }
 
-void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, const Color& _color)
 {
 	if (gameWorld)
 	{
 		// Delegate to GameWorld
-		gameWorld->CreateFX(_type, _x, _y, _z, _rx, _ry, _rz, _r, _g, _b, _a);
+		gameWorld->CreateFX(_type, _x, _y, _z, _rx, _ry, _rz, _color.r, _color.g, _color.b, _color.a);
 	}
 	else
 	{
 		// Fallback to old system during transition
-		FX temp(_type, _x, _y, _z, _rx, _ry, _rz, _r, _g, _b, _a);
+		FX temp(_type, _x, _y, _z, _rx, _ry, _rz, _color);
+		fx.push_back(temp);
+	}
+}
+
+void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
+{
+	CreateFX(_type, _x, _y, _z, _rx, _ry, _rz, Color(_r, _g, _b, _a));
+}
+
+void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, const Color& _color)
+{
+	if (gameWorld)
+	{
+		// Delegate to GameWorld  
+		gameWorld->CreateFX(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _color.r, _color.g, _color.b, _color.a);
+	}
+	else
+	{
+		// Fallback to old system during transition
+		FX temp(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _color);
 		fx.push_back(temp);
 	}
 }
 
 void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a)
 {
-	if (gameWorld)
-	{
-		// Delegate to GameWorld  
-		gameWorld->CreateFX(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _r, _g, _b, _a);
-	}
-	else
-	{
-		// Fallback to old system during transition
-		FX temp(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, _r, _g, _b, _a);
-		fx.push_back(temp);
-	}
+	CreateFX(_type, _x, _y, _z, _dx, _dy, _dz, _rx, _ry, _rz, Color(_r, _g, _b, _a));
 }
 
 void FXHandler::ClearFX()

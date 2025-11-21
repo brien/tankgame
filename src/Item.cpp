@@ -17,6 +17,7 @@ Item::Item()
 {
     x = y = z = 0;
     rx = ry = rz = 0;
+    color = Color(0.5f, 0.5f, 0.5f, 1.0f);  // Default grey
     alive = true;
 }
 
@@ -32,34 +33,22 @@ Item::Item(float nx, float ny, float nz, TankType ntype)
     switch (ntype)
     {
     case TankType::TYPE_GREY:
-        r = .5;
-        g = .5;
-        b = .5;
+        color = Color(0.5f, 0.5f, 0.5f, 1.0f);
         break;
     case TankType::TYPE_RED:
-        r = 1;
-        g = 0;
-        b = 0;
+        color = Color(1.0f, 0.0f, 0.0f, 1.0f);
         break;
     case TankType::TYPE_BLUE:
-        r = 0;
-        g = 0;
-        b = 1;
+        color = Color(0.0f, 0.0f, 1.0f, 1.0f);
         break;
     case TankType::TYPE_YELLOW:
-        r = 1;
-        g = 1;
-        b = 0;
+        color = Color(1.0f, 1.0f, 0.0f, 1.0f);
         break;
     case TankType::TYPE_PURPLE:
-        r = 1;
-        g = 0;
-        b = 1;
+        color = Color(1.0f, 0.0f, 1.0f, 1.0f);
         break;
     default:
-        r = .5;
-        g = .5;
-        b = .5;
+        color = Color(0.5f, 0.5f, 0.5f, 1.0f);
     }
 }
 

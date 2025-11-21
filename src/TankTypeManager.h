@@ -1,5 +1,10 @@
-#include "Tank.h"
+#pragma once
+
 #include <map>
+#include "Color.h"
+
+// Forward declaration
+enum class TankType;
 
 struct TankConfig
 {
@@ -11,7 +16,7 @@ struct TankConfig
     float fireCost;
     float specialCost;      // Was: chargeCost (now consistent with Tank class)
     int bounces;
-    float r, g, b;
+    float r, g, b;          // Tank type color
 };
 
 class TankTypeManager
@@ -23,21 +28,12 @@ private:
 public:
     static bool Initialize();
     
-    static TankConfig GetConfig(TankType type1, TankType type2)
-    {
-        TankConfig config = baseConfigs[type1];
-
-        auto combo = std::make_pair(type1, type2);
-        if (comboConfigs.find(combo) != comboConfigs.end())
-        {
-            // Apply combo modifications
-            auto comboConfig = comboConfigs[combo];
-            config.fireRate = comboConfig.fireRate;
-            config.attack = comboConfig.attack;
-            config.fireCost = comboConfig.fireCost;
-            config.bounces = comboConfig.bounces;
-        }
-
-        return config;
-    }
+    static TankConfig GetConfig(TankType type1, TankType type2);
+    
+    // Color mapping methods - get color for any tank type
+    static void GetTankTypeColor(TankType type, float& r, float& g, float& b);
+    static void GetTankTypeColor(TankType type, float& r, float& g, float& b, float& a);
+    
+    // Convenience method that returns color as Color struct
+    static Color GetTankTypeColor(TankType type);
 };

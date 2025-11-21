@@ -122,7 +122,7 @@ void TankRenderer::RenderEnemyTank(const TankRenderData& tank) {
     glRotatef(tank.bodyRotation.z, 0, 0, 1);
     
     // DrawBody with energy-based health coloring (secondary colors)
-    DrawEnemyTankBody(tank.r2, tank.g2, tank.b2, tank.health, tank.maxHealth);
+    DrawEnemyTankBody(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b, tank.health, tank.maxHealth);
     
     // SetupBarrelTransform
     glRotatef(tank.turretRotation.x, 1, 0, 0);
@@ -130,7 +130,7 @@ void TankRenderer::RenderEnemyTank(const TankRenderData& tank) {
     glRotatef(tank.turretRotation.z, 0, 0, 1);
     
     // DrawBarrel with energy-based health coloring (primary colors)
-    DrawEnemyTankBarrel(tank.r, tank.g, tank.b, tank.health, tank.maxHealth);
+    DrawEnemyTankBarrel(tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b, tank.health, tank.maxHealth);
     
     // SetupTurretTransform
     glTranslatef(0.1f, 0, 0);

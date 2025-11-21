@@ -4,6 +4,7 @@
 using namespace std;
 #include "Singleton.h"
 #include "Entity.h"
+#include "Color.h"
 
 enum class FxType
 {
@@ -22,8 +23,8 @@ class FX : public Entity
 {
 public:
     FX();
-    FX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
-    FX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
+    FX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, const Color& color);
+    FX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, const Color& color);
     ~FX() = default;
     
     // Entity interface implementation
@@ -39,7 +40,7 @@ public:
 
     FxType type;
 
-    float r, g, b, a;
+    Color color;
     float x, y, z;
     float rx, ry, rz;
     float dx, dy, dz;
@@ -58,6 +59,10 @@ public:
 
     void NextFrame();
 
+    void CreateFX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, const Color& color);
+    void CreateFX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, const Color& color);
+    
+    // Convenience overloads for backward compatibility
     void CreateFX(FxType type, float _x, float _y, float _z, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
     void CreateFX(FxType type, float _x, float _y, float _z, float _dx, float _dy, float _dz, float _rx, float _ry, float _rz, float _r, float _g, float _b, float _a);
 

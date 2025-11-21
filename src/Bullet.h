@@ -7,6 +7,7 @@
 #pragma once
 
 #include "Entity.h"
+#include "Color.h"
 
 class Tank;
 enum class TankType;
@@ -20,8 +21,8 @@ public:
            TankType type1, TankType type2,
            int maxbounces,
            float dTpressed,
-           float r, float g, float b,
-           float r2, float g2, float b2,
+           const Color& primaryColor,
+           const Color& secondaryColor,
            float x, float y, float z,
            float rx, float ry, float rz);
     ~Bullet() = default;
@@ -48,12 +49,14 @@ public:
     float GetRX() const { return rx; }
     float GetRY() const { return ry; }
     float GetRZ() const { return rz; }
-    float GetR() const { return r; }
-    float GetG() const { return g; }
-    float GetB() const { return b; }
-    float GetR2() const { return r2; }
-    float GetG2() const { return g2; }
-    float GetB2() const { return b2; }
+    float GetR() const { return primaryColor.r; }
+    float GetG() const { return primaryColor.g; }
+    float GetB() const { return primaryColor.b; }
+    float GetR2() const { return secondaryColor.r; }
+    float GetG2() const { return secondaryColor.g; }
+    float GetB2() const { return secondaryColor.b; }
+    const Color& GetPrimaryColor() const { return primaryColor; }
+    const Color& GetSecondaryColor() const { return secondaryColor; }
     float GetPower() const { return power; }
     TankType GetType1() const { return type1; }
     TankType GetType2() const { return type2; }
@@ -75,8 +78,8 @@ private:
     float rx = 0.0f, ry = 0.0f, rz = 0.0f;
     float dty = 0.0f;
 
-    float r = 0.5f, g = 0.5f, b = 0.5f;
-    float r2 = 0.5f, g2 = 0.5f, b2 = 0.5f;
+    Color primaryColor = Color(0.5f, 0.5f, 0.5f, 1.0f);
+    Color secondaryColor = Color(0.5f, 0.5f, 0.5f, 1.0f);
 
     float moveRate = 33.0f;
     float power = 0.0f;

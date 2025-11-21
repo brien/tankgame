@@ -148,7 +148,7 @@ void Player::CheckItemCollisions() {
                 static_cast<int>(FxType::TYPE_THREE),
                 item.x, item.y, item.z,
                 90, 0, 90,
-                item.r, item.g, item.b, 1.0f
+                item.color.r, item.color.g, item.color.b, 1.0f
             ));
             
             // Play pickup sound

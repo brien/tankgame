@@ -1,5 +1,4 @@
 #include "EnemyTankRendererImpl.h"
-#include "../TankRenderer.h" // For delegating to existing static methods
 
 #ifdef _WIN32
 #include <windows.h>
@@ -69,13 +68,13 @@ void EnemyTankRendererImpl::RenderEnemyTankGeometry(const TankRenderData& tank) 
     SetupBodyTransform(tank);
     
     // Draw body with secondary colors and health-based modification
-    DrawBody(tank.r2, tank.g2, tank.b2, tank.health, tank.maxHealth);
+    DrawBody(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b, tank.health, tank.maxHealth);
     
     // Setup barrel transform
     SetupBarrelTransform(tank);
     
     // Draw barrel with primary colors and health-based modification
-    DrawBarrel(tank.r, tank.g, tank.b, tank.health, tank.maxHealth);
+    DrawBarrel(tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b, tank.health, tank.maxHealth);
     
     // Setup turret transform
     SetupTurretTransform();

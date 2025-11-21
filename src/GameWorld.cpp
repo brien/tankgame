@@ -66,9 +66,9 @@ void GameWorld::Clear() {
 }
 
 Bullet* GameWorld::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
-                               float r, float g, float b, float r2, float g2, float b2,
+                               const Color& primaryColor, const Color& secondaryColor,
                                float x, float y, float z, float rx, float ry, float rz) {
-    Bullet* bullet = bullets.Create(id, attack, type1, type2, bounces, dTpressed, r, g, b, r2, g2, b2, x, y, z, rx, ry, rz);
+    Bullet* bullet = bullets.Create(id, attack, type1, type2, bounces, dTpressed, primaryColor, secondaryColor, x, y, z, rx, ry, rz);
     
     // Register bullet with collision system
     if (bullet) {
@@ -94,11 +94,11 @@ Tank* GameWorld::CreateTank() {
 }
 
 FX* GameWorld::CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a) {
-    return effects.Create(type, x, y, z, rx, ry, rz, r, g, b, a);
+    return effects.Create(type, x, y, z, rx, ry, rz, Color(r, g, b, a));
 }
 
 FX* GameWorld::CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a) {
-    return effects.Create(type, x, y, z, dx, dy, dz, rx, ry, rz, r, g, b, a);
+    return effects.Create(type, x, y, z, dx, dy, dz, rx, ry, rz, Color(r, g, b, a));
 }
 
 Item* GameWorld::CreateItem(float x, float y, float z, TankType type) {

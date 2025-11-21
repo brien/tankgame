@@ -381,7 +381,7 @@ void LevelHandler::ItemCollision()
                 if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
                     TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
 
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, j->x, j->y, j->z, 90, 0, 90, j->r, j->g, j->b, 1);
+                FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, j->x, j->y, j->z, 90, 0, 90, j->color.r, j->color.g, j->color.b, 1);
 
                 App::GetSingleton().soundTask->PlayChannel(3);
                 
@@ -425,7 +425,7 @@ void LevelHandler::ItemCollision()
                     if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
                         TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
 
-                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, item.x, item.y, item.z, 90, 0, 90, item.r, item.g, item.b, 1);
+                    FXHandler::GetSingleton().CreateFX(FxType::TYPE_THREE, item.x, item.y, item.z, 90, 0, 90, item.color.r, item.color.g, item.color.b, 1);
 
                     App::GetSingleton().soundTask->PlayChannel(3);
                     

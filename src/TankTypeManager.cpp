@@ -1,4 +1,5 @@
 #include "TankTypeManager.h"
+#include "Tank.h"  // For TankType enum
 
 // Define the static member variables
 std::map<TankType, TankConfig> TankTypeManager::baseConfigs;
@@ -27,9 +28,7 @@ bool TankTypeManager::Initialize()
         .fireCost = defaultFireCost,
         .specialCost = defaultSpecialCost,  // Updated field name
         .bounces = defaultBounces,
-        .r = 0.5f,
-        .g = 0.5f,
-        .b = 0.5f};
+        .r = 0.5f, .g = 0.5f, .b = 0.5f};
 
     baseConfigs[TankType::TYPE_RED] = {
         .fireRate = defaultFireRate / 10.0f,
@@ -40,9 +39,7 @@ bool TankTypeManager::Initialize()
         .fireCost = defaultMaxEnergy / 10.0f, // Updated reference
         .specialCost = defaultSpecialCost,    // Updated field name
         .bounces = defaultBounces,
-        .r = 1.0f,
-        .g = 0.0f,
-        .b = 0.0f};
+        .r = 1.0f, .g = 0.0f, .b = 0.0f};
 
     baseConfigs[TankType::TYPE_BLUE] = {
         .fireRate = defaultFireRate,
@@ -53,9 +50,7 @@ bool TankTypeManager::Initialize()
         .fireCost = defaultMaxEnergy,       // Updated reference
         .specialCost = defaultSpecialCost,  // Updated field name
         .bounces = defaultBounces,
-        .r = 0.0f,
-        .g = 0.0f,
-        .b = 1.0f};
+        .r = 0.0f, .g = 0.0f, .b = 1.0f};
 
     baseConfigs[TankType::TYPE_YELLOW] = {
         .fireRate = defaultFireRate,
@@ -66,9 +61,7 @@ bool TankTypeManager::Initialize()
         .fireCost = defaultMaxEnergy / 4.0f,  // Updated reference
         .specialCost = defaultSpecialCost,    // Updated field name
         .bounces = 400,
-        .r = 1.0f,
-        .g = 1.0f,
-        .b = 0.0f};
+        .r = 1.0f, .g = 1.0f, .b = 0.0f};
 
     baseConfigs[TankType::TYPE_PURPLE] = {
         .fireRate = defaultFireRate,
@@ -79,9 +72,7 @@ bool TankTypeManager::Initialize()
         .fireCost = defaultMaxEnergy / 4.0f,  // Updated reference
         .specialCost = defaultSpecialCost,    // Updated field name
         .bounces = 64,
-        .r = 1.0f,
-        .g = 0.0f,
-        .b = 1.0f};
+        .r = 1.0f, .g = 0.0f, .b = 1.0f};
 
     // Color combo configurations
     comboConfigs[{TankType::TYPE_RED, TankType::TYPE_GREY}] = {
@@ -172,6 +163,59 @@ bool TankTypeManager::Initialize()
     };
 
     return true;
+}
+
+// GetConfig method implementation
+TankConfig TankTypeManager::GetConfig(TankType type1, TankType type2)
+{
+    TankConfig config = baseConfigs[type1];
+
+    auto combo = std::make_pair(type1, type2);
+    if (comboConfigs.find(combo) != comboConfigs.end())
+    {
+        // Apply combo modifications
+        auto comboConfig = comboConfigs[combo];
+        config.fireRate = comboConfig.fireRate;
+        config.attack = comboConfig.attack;
+        config.fireCost = comboConfig.fireCost;
+        config.bounces = comboConfig.bounces;
+    }
+
+    return config;
+}
+
+// Color mapping method implementations
+void TankTypeManager::GetTankTypeColor(TankType type, float& r, float& g, float& b)
+{
+    // Ensure configs are initialized
+    if (baseConfigs.empty()) {
+        Initialize();
+    }
+    
+    auto it = baseConfigs.find(type);
+    if (it != baseConfigs.end()) {
+        r = it->second.r;
+        g = it->second.g;
+        b = it->second.b;
+    } else {
+        // Fallback to grey if type not found
+        r = 0.5f;
+        g = 0.5f;
+        b = 0.5f;
+    }
+}
+
+void TankTypeManager::GetTankTypeColor(TankType type, float& r, float& g, float& b, float& a)
+{
+    GetTankTypeColor(type, r, g, b);
+    a = 1.0f; // Default alpha for tank colors
+}
+
+Color TankTypeManager::GetTankTypeColor(TankType type)
+{
+    Color color;
+    GetTankTypeColor(type, color.r, color.g, color.b, color.a);
+    return color;
 }
 
 // Static initializer to automatically initialize the configs

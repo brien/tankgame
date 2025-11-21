@@ -36,10 +36,10 @@ EffectRenderData EffectDataExtractor::ExtractSingleEffectData(const FX& effect) 
     data.velocity.z = effect.dz;
     
     // Visual properties
-    data.r = effect.r;
-    data.g = effect.g;
-    data.b = effect.b;
-    data.alpha = effect.a;
+    data.r = effect.color.r;
+    data.g = effect.color.g;
+    data.b = effect.color.b;
+    data.alpha = effect.color.a;
     
     // Scale calculation based on time progression (from original FX::Draw logic)
     float timeRatio = (effect.maxTime > 0) ? (effect.time / effect.maxTime) : 1.0f;

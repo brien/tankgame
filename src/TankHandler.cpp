@@ -63,14 +63,7 @@ void TankHandler::InitializePlayerTanks()
 
         players[j].id = -1 * (j + 1);
 
-        // Set player colors
-        players[j].r = 1;
-        players[j].g = 0;
-        players[j].b = 0;
-
-        players[j].r2 = 1;
-        players[j].g2 = 1;
-        players[j].b2 = 1;
+        // Player colors are now handled dynamically via TankTypeManager based on type1/type2
 
         players[j].jid = j;
 
