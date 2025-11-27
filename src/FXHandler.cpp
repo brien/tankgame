@@ -67,19 +67,19 @@ void FX::SetMaxTime()
 {
 	if (type == FxType::TYPE_SMALL_SQUARE)
 	{
-		maxTime = 0.2;
+		maxTime = 0.2f;
 	}
 	else if (type == FxType::TYPE_DEATH)
 	{
-		maxTime = 0.4;
+		maxTime = 0.4f;
 	}
 	else if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
-		maxTime = 2.5;
+		maxTime = 2.5f;
 	}
 	else
 	{
-		maxTime = 0.3;
+		maxTime = 0.3f;
 	}
 }
 
