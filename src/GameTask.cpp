@@ -109,6 +109,14 @@ void GameTask::Update()
         HandleGameOverState();
         break;
     }
+
+    // Debug output (only occasionally to avoid spam)
+    static int debugCounter = 0;
+    if (++debugCounter % 60 == 0) { // Log every 60 frames (~1 second at 60fps)
+        printf("GameWorld entities - Tanks: %zu, Bullets: %zu, Items: %zu, Effects: %zu\n", 
+               gameWorld.GetTanks().size(), gameWorld.GetBullets().size(), 
+               gameWorld.GetItems().size(), gameWorld.GetFX().size());
+    }
 }
 
 void GameTask::HandleCommonState()
