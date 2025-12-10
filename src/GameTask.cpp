@@ -1,5 +1,6 @@
 #include <iostream>
 #include "App.h"
+#include "GlobalTimer.h"
 #include "GameTask.h"
 #include "InputTask.h"
 #include "LevelHandler.h"
@@ -112,10 +113,22 @@ void GameTask::Update()
 
     // Debug output (only occasionally to avoid spam)
     static int debugCounter = 0;
+    static int frameCount = 0;
+    static unsigned long lastFrameTime = 0;
+    
+    frameCount++;
+    
     if (++debugCounter % 60 == 0) { // Log every 60 frames (~1 second at 60fps)
-        printf("GameWorld entities - Tanks: %zu, Bullets: %zu, Items: %zu, Effects: %zu\n", 
+        unsigned long currentFrameTime = GlobalTimer::thisFrameIndex;
+        float elapsedSeconds = (currentFrameTime - lastFrameTime) / 1000.0f;
+        float fps = frameCount / elapsedSeconds;
+        
+        printf("GameWorld entities - Tanks: %zu, Bullets: %zu, Items: %zu, Effects: %zu | FPS: %.1f\n", 
                gameWorld.GetTanks().size(), gameWorld.GetBullets().size(), 
-               gameWorld.GetItems().size(), gameWorld.GetFX().size());
+               gameWorld.GetItems().size(), gameWorld.GetFX().size(), fps);
+        
+        frameCount = 0;
+        lastFrameTime = currentFrameTime;
     }
 }
 
