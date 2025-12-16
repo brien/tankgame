@@ -115,10 +115,9 @@ void GameTask::Update()
     static int debugCounter = 0;
     
     if (++debugCounter % 60 == 0) { // Log every 60 frames (~1 second at 60fps)
-        
-        printf("GameWorld entities - Tanks: %zu, Bullets: %zu, Items: %zu, Effects: %zu | FPS: %.1f\n", 
-               gameWorld.GetTanks().size(), gameWorld.GetBullets().size(), 
-               gameWorld.GetItems().size(), gameWorld.GetFX().size(), GlobalTimer::GetFPS());
+        Logger::Get().Write("GameWorld entities - Tanks: %zu, Bullets: %zu, Items: %zu, Effects: %zu | FPS: %.1f\n", 
+                           gameWorld.GetTanks().size(), gameWorld.GetBullets().size(), 
+                           gameWorld.GetItems().size(), gameWorld.GetFX().size(), GlobalTimer::GetFPS());
     }
 }
 
