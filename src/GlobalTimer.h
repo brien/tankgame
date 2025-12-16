@@ -24,7 +24,7 @@ public:
 
     void Reset();
     
-    // Get frames per second over the last second
+    // Calculate frames per second based on dT
     static float GetFPS();
 
     static inline unsigned long TimeToIndex(float t) { return (unsigned long)(t * 1000.0f); }
