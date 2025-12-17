@@ -1,4 +1,5 @@
 #include "IRenderer.h"
+#include "../Logger.h"
 #include <iostream>
 
 #ifdef _WIN32
@@ -15,26 +16,26 @@ void IRenderer::CheckGLError(const char* operation) const
 #ifdef DEBUG
     GLenum error = glGetError();
     if (error != GL_NO_ERROR) {
-        std::cerr << "OpenGL Error in " << operation << ": ";
+        const char* errorStr;
         
         switch (error) {
             case GL_INVALID_ENUM:
-                std::cerr << "GL_INVALID_ENUM";
+                errorStr = "GL_INVALID_ENUM";
                 break;
             case GL_INVALID_VALUE:
-                std::cerr << "GL_INVALID_VALUE";
+                errorStr = "GL_INVALID_VALUE";
                 break;
             case GL_INVALID_OPERATION:
-                std::cerr << "GL_INVALID_OPERATION";
+                errorStr = "GL_INVALID_OPERATION";
                 break;
             case GL_OUT_OF_MEMORY:
-                std::cerr << "GL_OUT_OF_MEMORY";
+                errorStr = "GL_OUT_OF_MEMORY";
                 break;
             default:
-                std::cerr << "Unknown error code: " << error;
-                break;
+                Logger::Get().Write("OpenGL Error in %s: Unknown error code: %d\n", operation, error);
+                return;
         }
-        std::cerr << std::endl;
+        Logger::Get().Write("OpenGL Error in %s: %s\n", operation, errorStr);
     }
 #else
     // In release builds, do nothing to avoid performance impact

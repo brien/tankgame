@@ -38,9 +38,9 @@ void App::Run(int argc, char *argv[])
 
     SDL_VERSION(&compiled);
     SDL_GetVersion(&linked);
-    printf("We compiled against SDL version %d.%d.%d ...\n",
+    Logger::Get().Write("We compiled against SDL version %d.%d.%d ...\n",
            compiled.major, compiled.minor, compiled.patch);
-    printf("But we are linking against SDL version %d.%d.%d.\n",
+    Logger::Get().Write("But we are linking against SDL version %d.%d.%d.\n",
            linked.major, linked.minor, linked.patch);
 
     videoTask = new VideoTask;

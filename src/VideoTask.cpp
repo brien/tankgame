@@ -23,7 +23,7 @@ bool VideoTask::Start()
     if (-1 == SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_JOYSTICK))
     {
         Logger::Get().Write("VideoTask::Start Failed:\n", SDL_GetError());
-        std::cerr << "VideoTask::Start: SDL_InitSubSystem failed." << std::endl;
+        Logger::Get().Write("VideoTask::Start: SDL_InitSubSystem failed.\n");
         return false;
     }
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
@@ -48,8 +48,8 @@ bool VideoTask::Start()
 
     if (!filein)
     {
-        std::cerr << "VideoTask::Start: Failed to open settings.txt" << std::endl;
-        std::cerr << "VideoTask::Start: Using default settings" << std::endl;
+        Logger::Get().Write("VideoTask::Start: Failed to open settings.txt\n");
+        Logger::Get().Write("VideoTask::Start: Using default settings\n");
 
         flags = SDL_WINDOW_OPENGL;
 
@@ -125,7 +125,7 @@ bool VideoTask::Start()
 
     if (!window)
     {
-        std::cerr << "VideoTask::Start: SDL_CreateWindow failed." << std::endl;
+        Logger::Get().Write("VideoTask::Start: SDL_CreateWindow failed.\n");
         return false;
     }
 

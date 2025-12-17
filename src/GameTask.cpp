@@ -8,18 +8,19 @@
 #include "FXHandler.h"
 #include "GameWorld.h"
 #include "PlayerManager.h"
+#include "Logger.h"
 #include "events/Events.h"
 
 void GameTask::SetUpGame()
 {
-    std::cout << "GameTask: Setting up new game..." << std::endl;
+    Logger::Get().Write("GameTask: Setting up new game...\n");
     LevelHandler::GetSingleton().Init();
     if (!LevelHandler::GetSingleton().Load("levels/level0@@.txt"))
     {
-        std::cerr << "LevelHandler failed to load level." << std::endl;
+        Logger::Get().Write("LevelHandler failed to load level.\n");
     }
     TankHandler::GetSingleton().Init();
-    std::cout << "GameTask: Game setup complete" << std::endl;
+    Logger::Get().Write("GameTask: Game setup complete\n");
 }
 
 GameTask::GameTask()
@@ -76,17 +77,17 @@ void GameTask::Visible(bool visible)
 
 void GameTask::OnResume()
 {
-    std::cout << "GameTask: OnResume - Initializing systems..." << std::endl;
+    Logger::Get().Write("GameTask: OnResume - Initializing systems...\n");
     TankHandler::GetSingleton().Init();
-    std::cout << "GameTask: Initializing PlayerManager..." << std::endl;
+    Logger::Get().Write("GameTask: Initializing PlayerManager...\n");
     playerManager.Initialize(&gameWorld);
     
     // Transfer player control from TankHandler to PlayerManager
-    std::cout << "GameTask: Activating PlayerManager control..." << std::endl;
+    Logger::Get().Write("GameTask: Activating PlayerManager control...\n");
     TankHandler::GetSingleton().SetPlayerManager(&playerManager);
     TankHandler::GetSingleton().SetPlayerManagerActive(true);
     
-    std::cout << "GameTask: OnResume complete" << std::endl;
+    Logger::Get().Write("GameTask: OnResume complete\n");
 }
 
 void GameTask::OnSuspend()
@@ -97,7 +98,7 @@ void GameTask::OnSuspend()
 void GameTask::Update()
 {
     HandleCommonState();
-    
+     
     switch (currentState)
     {
     case GameState::MENU:

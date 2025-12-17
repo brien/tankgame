@@ -101,19 +101,19 @@ void Player::HandleInput() {
     
     if (!controlledTank || !controlledTank->alive || !inputHandler) {
         if (inputLogCounter % 180 == 0) {
-            std::cout << "Player::HandleInput() - Player " << playerIndex 
-                      << " SKIP: tank=" << (controlledTank ? "valid" : "null") 
-                      << " alive=" << (controlledTank ? controlledTank->alive : false)
-                      << " inputHandler=" << (inputHandler ? "valid" : "null") << std::endl;
+            Logger::Get().Write("Player::HandleInput() - Player %d SKIP: tank=%s alive=%d inputHandler=%s\n",
+                              playerIndex,
+                              (controlledTank ? "valid" : "null"),
+                              (controlledTank ? controlledTank->alive : false),
+                              (inputHandler ? "valid" : "null"));
         }
         inputLogCounter++;
         return;
     }
     
     if (inputLogCounter % 180 == 0) { // Log every 3 seconds
-        std::cout << "Player::HandleInput() - Player " << playerIndex 
-                  << " processing input via NEW PlayerManager path (tank id=" 
-                  << controlledTank->id << ")" << std::endl;
+        Logger::Get().Write("Player::HandleInput() - Player %d processing input via NEW PlayerManager path (tank id=%d)\n",
+                          playerIndex, controlledTank->id);
     }
     
     // Delegate input handling to the input handler
@@ -177,7 +177,7 @@ void Player::Update() {
     // Handle input and physics if we have a tank
     if (controlledTank && controlledTank->alive) {
         if (logCounter % 120 == 0) { // Log every 2 seconds
-            std::cout << "Player " << playerIndex << " processing NextFrame + input for tank" << std::endl;
+            Logger::Get().Write("Player %d processing NextFrame + input for tank\n", playerIndex);
         }
         
         // Physics and game state update (was done by TankHandler::UpdatePlayerStates)
@@ -209,11 +209,11 @@ void Player::Update() {
             controlledTank->deadtime += GlobalTimer::dT;
             
             if (logCounter % 60 == 0) { // Log every 1 second
-                std::cout << "Player " << playerIndex << " tank dead - deadtime: " << controlledTank->deadtime << std::endl;
+                Logger::Get().Write("Player %d tank dead - deadtime: %d\n", playerIndex, controlledTank->deadtime);
             }
         } else {
             if (logCounter % 60 == 0) { // Log every 1 second
-                std::cout << "Player " << playerIndex << " has no tank - respawn needed" << std::endl;
+                Logger::Get().Write("Player %d has no tank - respawn needed\n", playerIndex);
             }
         }
     }

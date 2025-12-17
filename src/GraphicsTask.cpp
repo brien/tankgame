@@ -51,7 +51,7 @@ GraphicsTask::GraphicsTask()
     defaultFont = TTF_OpenFont(fontFilePath, 256);
     if (!defaultFont)
     {
-        printf("Unable to open font \n");
+        Logger::Get().Write("Unable to open font \n");
         Logger::Get().Write("GraphicsTask: failed loading file: %s  \n", fontFilePath);
         exit(1);
     }
@@ -1215,7 +1215,7 @@ void GraphicsTask::RenderText(const TTF_Font *Font, const GLubyte &R, const GLub
     error = glGetError();
     if (error == GL_INVALID_ENUM)
     {
-        printf("Invalid Enum");
+        Logger::Get().Write("Invalid Enum\n");
         exit(1);
     }
 

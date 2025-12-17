@@ -1,10 +1,11 @@
 #include "BaseRenderer.h"
+#include "../Logger.h"
 #include <iostream>
 
 bool BaseRenderer::Initialize()
 {
     if (isInitialized) {
-        std::cout << "BaseRenderer: Already initialized" << std::endl;
+        Logger::Get().Write("BaseRenderer: Already initialized\n");
         return true;
     }
     
@@ -32,7 +33,7 @@ void BaseRenderer::Cleanup()
 void BaseRenderer::SetupRenderState()
 {
     if (!isInitialized) {
-        std::cerr << "BaseRenderer: Attempting to setup render state on uninitialized renderer!" << std::endl;
+        Logger::Get().Write("BaseRenderer: Attempting to setup render state on uninitialized renderer!\n");
         return;
     }
     

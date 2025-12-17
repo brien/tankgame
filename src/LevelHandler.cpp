@@ -94,12 +94,11 @@ bool LevelHandler::Load(const char filePath[])
         if (!filein)
         {
             Logger::Get().Write("ERROR: LevelHandler: failed to open file: %s  \n", filePath);
-            std::cerr << "ERROR: LevelHandler: failed to open file: " << filePath << std::endl;
 
             errnum = errno;
-            fprintf(stderr, "Value of errno: %d\n", errno);
+            Logger::Get().Write("Value of errno: %d\n", errno);
             perror("Error printed by perror");
-            fprintf(stderr, "Error opening file: %s\n", strerror(errnum));
+            Logger::Get().Write("Error opening file: %s\n", strerror(errnum));
 
             Logger::Get().Write("ERROR: LevelHandler: errnum: %d", strerror(errnum));
 

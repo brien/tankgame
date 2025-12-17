@@ -15,15 +15,15 @@ constexpr int PlayerManager::MAX_PLAYERS;
 
 
 void PlayerManager::Initialize(GameWorld* world) {
-    std::cout << "PlayerManager: Initialize called with GameWorld" << std::endl;
+    Logger::Get().Write("PlayerManager: Initialize called with GameWorld\n");
     gameWorld = world;
     
     // Create initial player (but don't setup input yet)
-    std::cout << "PlayerManager: Creating initial player..." << std::endl;
+    Logger::Get().Write("PlayerManager: Creating initial player...\n");
     CreatePlayer(0);
     
     // Claim any existing tanks created by TankHandler AND setup input
-    std::cout << "PlayerManager: Claiming existing tanks from TankHandler..." << std::endl;
+    Logger::Get().Write("PlayerManager: Claiming existing tanks from TankHandler...\n");
     ClaimExistingTanks();
     
     Logger::Get().Write("PlayerManager initialized with %d players\n", numPlayers);
@@ -32,23 +32,23 @@ void PlayerManager::Initialize(GameWorld* world) {
 void PlayerManager::ClaimExistingTanks() {
     // Sync input preferences from TankHandler
     isInputJoy = TankHandler::GetSingleton().isInputJoy;
-    std::cout << "PlayerManager: Synced isInputJoy=" << isInputJoy << " from TankHandler" << std::endl;
+    Logger::Get().Write("PlayerManager: Synced isInputJoy=%d from TankHandler\n", isInputJoy);
     
     // Get tanks from TankHandler and assign them to our Players
     for (int i = 0; i < numPlayers && i < MAX_PLAYERS; i++) {
         if (players[i]) {
             Tank* existingTank = TankHandler::GetSingleton().GetPlayerTank(i);
             if (existingTank && existingTank->alive) {
-                std::cout << "PlayerManager: Player " << i << " claiming tank from TankHandler" << std::endl;
+                Logger::Get().Write("PlayerManager: Player %d claiming tank from TankHandler\n", i);
                 players[i]->TakeControlOf(existingTank);
             } else {
-                std::cout << "PlayerManager: No valid tank found for Player " << i << " in TankHandler" << std::endl;
+                Logger::Get().Write("PlayerManager: No valid tank found for Player %d in TankHandler\n", i);
             }
         }
     }
     
     // Set up input AFTER syncing preferences and claiming tanks
-    std::cout << "PlayerManager: Setting up controllers and input with synced preferences..." << std::endl;
+    Logger::Get().Write("PlayerManager: Setting up controllers and input with synced preferences...\n");
     DetectControllers();
     SetupPlayerControls();
 }
@@ -134,7 +134,7 @@ void PlayerManager::NextFrame() {
     for (int i = 0; i < numPlayers; i++) {
         if (players[i]) {
             if (frameCounter % 60 == 0) { // Log every 60 frames (~1 second)
-                std::cout << "PlayerManager: Processing Player " << i << " via NEW PlayerManager system" << std::endl;
+                Logger::Get().Write("PlayerManager: Processing Player %d via NEW PlayerManager system\n", i);
             }
             players[i]->Update();
         }
@@ -212,11 +212,11 @@ void PlayerManager::DetectControllers() {
     Logger::Get().Write("PlayerManager: Detected %d joysticks\n", numJoysticks);
     
     // Respect TankHandler's input preference instead of overriding
-    std::cout << "PlayerManager: Keeping TankHandler input preference isInputJoy=" << isInputJoy << std::endl;
+    Logger::Get().Write("PlayerManager: Keeping TankHandler input preference isInputJoy=%d\n", isInputJoy);
     Logger::Get().Write("PlayerManager: Using %s input (from TankHandler)\n", isInputJoy ? "joystick" : "keyboard/mouse");
     
     // Don't change player count - keep what was set by TankHandler
-    std::cout << "PlayerManager: Keeping numPlayers=" << numPlayers << " from initialization" << std::endl;
+    Logger::Get().Write("PlayerManager: Keeping numPlayers=%d from initialization\n", numPlayers);
 }
 
 void PlayerManager::SetupPlayerControls() {
@@ -295,31 +295,30 @@ void PlayerManager::SetupPlayerInputHandler(int playerIndex) {
     // Determine input mode and create appropriate handler
     InputMode inputMode;
     
-    std::cout << "PlayerManager: Setting up input for player " << playerIndex 
-              << " isInputJoy=" << isInputJoy 
-              << " assignedJoystick=" << assignedJoysticks[playerIndex] << std::endl;
+    Logger::Get().Write("PlayerManager: Setting up input for player %d isInputJoy=%d assignedJoystick=%d\n",
+                       playerIndex, isInputJoy, assignedJoysticks[playerIndex]);
     
     if (isInputJoy && assignedJoysticks[playerIndex] >= 0) {
         // Use assigned joystick
         inputMode = DetectControllerType(assignedJoysticks[playerIndex]);
-        std::cout << "PlayerManager: Player " << playerIndex << " using joystick input mode" << std::endl;
+        Logger::Get().Write("PlayerManager: Player %d using joystick input mode\n", playerIndex);
     } else if (playerIndex == 0) {
         // Player 1 defaults to keyboard/mouse
         inputMode = InputMode::MODE_KEYBOARD_MOUSE;
-        std::cout << "PlayerManager: Player " << playerIndex << " using keyboard/mouse input mode" << std::endl;
+        Logger::Get().Write("PlayerManager: Player %d using keyboard/mouse input mode\n", playerIndex);
     } else {
         // Player 2 needs a joystick if available
         inputMode = InputMode::MODE_JOYSTICK_GENERIC;
-        std::cout << "PlayerManager: Player " << playerIndex << " using generic joystick input mode" << std::endl;
+        Logger::Get().Write("PlayerManager: Player %d using generic joystick input mode\n", playerIndex);
     }
     
     // Create input handler
     auto inputHandler = InputHandlerFactory::CreateInputHandler(inputMode);
     if (inputHandler) {
-        std::cout << "PlayerManager: Input handler created successfully for player " << playerIndex << std::endl;
+        Logger::Get().Write("PlayerManager: Input handler created successfully for player %d\n", playerIndex);
         players[playerIndex]->SetInputHandler(std::move(inputHandler));
     } else {
-        std::cout << "PlayerManager: ERROR - Failed to create input handler for player " << playerIndex << std::endl;
+        Logger::Get().Write("PlayerManager: ERROR - Failed to create input handler for player %d\n", playerIndex);
     }
 }
 

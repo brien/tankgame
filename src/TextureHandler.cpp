@@ -15,6 +15,7 @@
 #endif
 
 #include "TextureHandler.h"
+#include "Logger.h"
 #include <stdlib.h>
 #include <cstdint>
 #include <iostream>
@@ -119,7 +120,7 @@ tImageTGA *TextureHandler::Load_TGA(const char *strfilename)
 
     if ((pFile = fopen(strfilename, "rb")) == NULL)
     {
-        std::cerr << "GraphicsTask:Load_TGA: Failed to open " << strfilename << std::endl;
+        Logger::Get().Write("GraphicsTask:Load_TGA: Failed to open %s\n", strfilename);
         // GuiTask::RenderSpacedBitmapString(30,30,10,(void *)GuiTask::font,"ERROR");
         return NULL;
     }

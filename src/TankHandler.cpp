@@ -17,6 +17,7 @@
 #include "math.h"
 #include "App.h"
 #include "GameWorld.h"
+#include "Logger.h"
 #include <string>
 #include <utility>
 #include <algorithm>
@@ -218,7 +219,7 @@ void TankHandler::LogControllerSetup() const
                 break;
         }
            
-        printf("Player %d: %s (JoyID: %d)\n", i + 1, inputModeStr.c_str(), player.jid);
+        Logger::Get().Write("Player %d: %s (JoyID: %d)\n", i + 1, inputModeStr.c_str(), player.jid);
         Logger::Get().Write("Player %d: %s (JoyID: %d)\n", i + 1, inputModeStr.c_str(), player.jid);
     }
 }
@@ -367,7 +368,7 @@ void TankHandler::NextFrame()
 {
     static int frameCounter = 0;
     if (frameCounter % 60 == 0) {
-        std::cout << "TankHandler::NextFrame() - Processing players through legacy system" << std::endl;
+        Logger::Get().Write("TankHandler::NextFrame() - Processing players through legacy system\n");
     }
     
     UpdatePlayerCombos();
@@ -413,7 +414,7 @@ void TankHandler::UpdatePlayerStates()
     // Skip player processing if PlayerManager is handling them
     if (playerManagerActive) {
         if (logCounter % 120 == 0) {
-            std::cout << "TankHandler: SKIPPING player processing - PlayerManager is active" << std::endl;
+            Logger::Get().Write("TankHandler: SKIPPING player processing - PlayerManager is active\n");
         }
         logCounter++;
         return;
@@ -424,7 +425,7 @@ void TankHandler::UpdatePlayerStates()
         if (players[i].alive)
         {
             if (logCounter % 120 == 0) {
-                std::cout << "TankHandler: LEGACY processing player " << i << " NextFrame + HandleInput" << std::endl;
+                Logger::Get().Write("TankHandler: LEGACY processing player %d NextFrame + HandleInput\n", i);
             }
             players[i].NextFrame();
             players[i].HandleInput();
@@ -630,11 +631,13 @@ const Tank* TankHandler::GetPlayerTank(int playerIndex) const {
 
 void TankHandler::SetPlayerManager(PlayerManager* pm) {
     playerManager = pm;
-    std::cout << "TankHandler: PlayerManager reference set" << std::endl;
+    Logger::Get().Write("TankHandler: PlayerManager reference set\n");
 }
 
 void TankHandler::SetPlayerManagerActive(bool active) {
     playerManagerActive = active;
-    std::cout << "TankHandler: PlayerManager " << (active ? "ACTIVATED" : "DEACTIVATED") << " - player processing " << (active ? "DISABLED" : "ENABLED") << std::endl;
+    Logger::Get().Write("TankHandler: PlayerManager %s - player processing %s\n", 
+                       active ? "ACTIVATED" : "DEACTIVATED", 
+                       active ? "DISABLED" : "ENABLED");
 }
 

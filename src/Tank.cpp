@@ -22,6 +22,7 @@
 #include "TankCollisionHelper.h"
 #include "InputHandlerFactory.h"
 #include "BulletHandler.h"
+#include "Logger.h"
 
 void Tank::SetType(TankType t1, TankType t2)
 {
@@ -1152,7 +1153,7 @@ void Tank::HandleInput()
     if (inputHandler)
     {
         if (inputLogCounter % 180 == 0 && isPlayer) { // Log every 3 seconds for players only
-            std::cout << "Tank::HandleInput() - Player tank " << id << " processing input via LEGACY TankHandler path" << std::endl;
+            Logger::Get().Write("Tank::HandleInput() - Player tank %d processing input via LEGACY TankHandler path\n", id);
         }
         inputHandler->HandleInput(*this);
     }

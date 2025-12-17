@@ -3,6 +3,7 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "SoundTask.h"
+#include "Logger.h"
 #include <iostream>
 #include <SDL2/SDL.h>
 
@@ -61,7 +62,7 @@ bool SoundTask::Start()
 
         if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
         {
-            printf("Unable to open audio!\n");
+            Logger::Get().Write("Unable to open audio!\n");
             exit(1);
         }
 
