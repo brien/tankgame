@@ -87,6 +87,13 @@ void FX::Update()
 {
 	time += GlobalTimer::dT;
 
+	// Check if effect has timed out
+	if (time > maxTime)
+	{
+		alive = false;
+		return;
+	}
+
 	if (type == FxType::TYPE_SMALL_RECTANGLE)
 	{
 		color.a -= 0.2 * GlobalTimer::dT;
@@ -138,13 +145,9 @@ void FXHandler::NextFrame()
 	}
 	
 	// Legacy update loop for fallback
+	// Note: FX entities now manage their own alive state in Update()
 	for (auto j = fx.begin(); j != fx.end();)
 	{
-		if (j->time > j->maxTime)
-		{
-			j->alive = false;
-		}
-
 		if (j->alive)
 		{
 			j->Update();
@@ -199,11 +202,9 @@ void FXHandler::CreateFX(FxType _type, float _x, float _y, float _z, float _dx, 
 
 void FXHandler::ClearFX()
 {
+	// Only clear the legacy FX vector
+	// GameWorld entities are managed separately by GameWorld::Clear()
 	fx.clear();
-	if (gameWorld)
-	{
-		gameWorld->Clear();
-	}
 }
 
 const std::vector<FX>& FXHandler::GetAllFX() const
