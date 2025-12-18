@@ -11,6 +11,7 @@
 
 class Tank;
 enum class TankType;
+enum class FxType;
 
 class Bullet : public Entity
 {
@@ -48,6 +49,17 @@ public:
     float GetVZ() const { return vz; }
     float GetRX() const { return rx; }
     float GetRY() const { return ry; }
+    
+    // GameWorld access for FX creation
+    void SetGameWorld(class GameWorld* world) { gameWorld = world; }
+    
+    // Descriptive FX helper methods (encapsulate effect creation logic)
+    void CreateWallImpactFX(float xpp, float zpp);
+    
+    // Low-level FX creation (used by helper methods)
+    void CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a);
+    void CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a);
+    
     float GetRZ() const { return rz; }
     float GetR() const { return primaryColor.r; }
     float GetG() const { return primaryColor.g; }
@@ -99,4 +111,6 @@ private:
     int maxbounces = 0;
 
     bool alive = true;
+    
+    class GameWorld* gameWorld = nullptr;
 };

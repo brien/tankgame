@@ -7,8 +7,8 @@
 #include "../Color.h"
 // Include Tank.h for TankType enum
 #include "../Tank.h"
-// Include FXHandler.h for FxType enum
-#include "../FXHandler.h"
+// Include FX.h for FxType enum
+#include "../FX.h"
 
 // Forward declaration for UI data
 struct UIRenderData;

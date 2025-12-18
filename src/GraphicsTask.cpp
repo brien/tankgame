@@ -35,8 +35,7 @@
 
 #include "App.h"
 #include "TankHandler.h"
-#include "BulletHandler.h"
-#include "FXHandler.h"
+#include "LevelHandler.h"
 #include "VideoTask.h"
 #include "GlobalTimer.h"
 #include "math.h"
@@ -258,11 +257,12 @@ void GraphicsTask::InitializeNewRenderingPipeline()
         }
 
         // Create SceneDataBuilder with references to game handlers
+        // Note: GameWorld is nullptr at this point (GameTask starts after GraphicsTask)
+        // Will be set via SetGameWorld() once GameWorld is initialized
         sceneDataBuilder = std::make_unique<SceneDataBuilder>(
             TankHandler::GetSingleton(),
             LevelHandler::GetSingleton(),
-            BulletHandler::GetSingleton(),
-            FXHandler::GetSingleton());
+            gameWorld);
 
         // Create RenderingPipeline with references to managers
         renderingPipeline = std::make_unique<RenderingPipeline>(
@@ -282,6 +282,20 @@ void GraphicsTask::InitializeNewRenderingPipeline()
     {
         Logger::Get().Write("ERROR: Exception during rendering pipeline initialization: %s\n", e.what());
     }
+}
+
+void GraphicsTask::SetGameWorld(GameWorld* world)
+{
+    // Set GameWorld pointer and recreate SceneDataBuilder with valid GameWorld
+    // Called by GameTask after GameWorld is initialized
+    Logger::Get().Write("GraphicsTask: Setting GameWorld and recreating SceneDataBuilder\n");
+    
+    gameWorld = world;
+    
+    sceneDataBuilder = std::make_unique<SceneDataBuilder>(
+        TankHandler::GetSingleton(),
+        LevelHandler::GetSingleton(),
+        gameWorld);
 }
 
 void GraphicsTask::CleanupNewRenderingPipeline()

@@ -25,7 +25,7 @@
 
 // Reordered member initializer list to match declaration order in TankHandler.h to fix -Wreorder warning
 TankHandler::TankHandler()
-    : players{}, combo{0, 0}, special{0, 0}, comboNum{0, 0}, hitCombo{0, 0}, wins{0, 0}, tanks(), closest(0.0f), isInputJoy(false), difficultySetting(0), numPlayers(1), numAttackingTanks(0)
+    : players{}, combo{0, 0}, special{0, 0}, comboNum{0, 0}, hitCombo{0, 0}, wins{0, 0}, closest(0.0f), isInputJoy(false), difficultySetting(0), numPlayers(1), numAttackingTanks(0)
 {
 }
 
@@ -277,25 +277,19 @@ InputMode TankHandler::DetectControllerType(int joyIndex)
 
 void TankHandler::InitializeEnemyTanks()
 {
-    tanks.clear();
     int enemyCount = LevelHandler::GetSingleton().GetEnemyCountForLevel(LevelHandler::GetSingleton().levelNumber);
     
     for (int i = 0; i < enemyCount; ++i)
     {
-        if (gameWorld) {
-            // Delegate to GameWorld - create enemy tank there
-            Tank* newTank = gameWorld->CreateTank();
-            if (newTank) {
-                newTank->Init();
-                newTank->isPlayer = false; // Ensure it's marked as enemy tank
-                newTank->id = i; // Set proper enemy tank ID
-                SetEnemyPosition(*newTank, i);
-                SetEnemyType(*newTank, i);
-                newTank->jumpCost = 0; // Enemy tanks don't pay jump cost
-            }
-        } else {
-            // Fallback to old system during transition
-            tanks.emplace_back(CreateEnemyTank(i));
+        // Delegate to GameWorld - create enemy tank there
+        Tank* newTank = gameWorld->CreateTank();
+        if (newTank) {
+            newTank->Init();
+            newTank->isPlayer = false; // Ensure it's marked as enemy tank
+            newTank->id = i; // Set proper enemy tank ID
+            SetEnemyPosition(*newTank, i);
+            SetEnemyType(*newTank, i);
+            newTank->jumpCost = 0; // Enemy tanks don't pay jump cost
         }
     }
 }
@@ -310,10 +304,8 @@ Tank TankHandler::CreateEnemyTank(int index)
     
     tank.jumpCost = 0;
     
-    // Set GameWorld reference if available
-    if (gameWorld) {
-        tank.SetGameWorld(gameWorld);
-    }
+    // Set GameWorld reference
+    tank.SetGameWorld(gameWorld);
     
     return tank;
 }
@@ -462,7 +454,13 @@ void TankHandler::UpdatePlayerTargeting()
     players[0].dist = INITIAL_PLAYER_DISTANCE;
     players[1].dist = INITIAL_PLAYER_DISTANCE;
 
-    if (!tanks.empty())
+    // Get enemy tanks from GameWorld
+    if (!gameWorld) {
+        return;
+    }
+    
+    const auto& enemyTanks = gameWorld->GetTanks();
+    if (!enemyTanks.empty())
     {
         auto update_player_target = [](Tank &player, const Tank &tank)
         {
@@ -481,10 +479,11 @@ void TankHandler::UpdatePlayerTargeting()
             }
         };
 
-        for (const auto& tank : tanks)
+        for (const auto& tankPtr : enemyTanks)
         {
-            if (tank.alive)
+            if (tankPtr && tankPtr->IsAlive())
             {
+                const Tank& tank = *tankPtr;
                 for (int p = 0; p < 2; ++p)
                 {
                     update_player_target(players[p], tank);
@@ -496,27 +495,9 @@ void TankHandler::UpdatePlayerTargeting()
 
 void TankHandler::UpdateEnemyTanks()
 {
-    if (gameWorld) {
-        // GameWorld handles enemy tank updates through EntityManager
-        // The enemy tanks are managed by GameWorld's EntityManager<Tank>
-        return;
-    }
-    
-    // Legacy update loop for fallback
-    for (auto it = tanks.begin(); it != tanks.end();)
-    {
-        if (it->alive)
-        {
-            it->AI();
-            it->NextFrame();
-            ++it;
-        }
-        else
-        {
-            it->Die();
-            it = tanks.erase(it);
-        }
-    }
+    // GameWorld handles enemy tank updates through EntityManager
+    // The enemy tanks are managed by GameWorld's EntityManager<Tank>
+    // This method is kept for API compatibility but is now a no-op
 }
 
 void TankHandler::UpdateVersusMode()
@@ -551,50 +532,29 @@ void TankHandler::UpdateVersusMode()
 }
 
 std::vector<const Tank*> TankHandler::GetAllEnemyTanks() const {
-    if (gameWorld) {
-        // Return unified view of both old enemy tanks and GameWorld enemy tanks
-        unifiedEnemyView.clear();
-        
-        // Add old system enemy tanks (as pointers)
-        for (const auto& tank : tanks) {
-            unifiedEnemyView.push_back(&tank);
+    // Return enemy tanks from GameWorld
+    std::vector<const Tank*> enemyTanks;
+    
+    const auto& worldTanks = gameWorld->GetTanks();
+    enemyTanks.reserve(worldTanks.size());
+    
+    for (const auto& tankPtr : worldTanks) {
+        if (tankPtr && tankPtr->IsAlive()) {
+            enemyTanks.push_back(tankPtr.get());
         }
-        
-        // Add GameWorld enemy tanks (already pointers)
-        const auto& worldTanks = gameWorld->GetTanks();
-        for (const auto& tankPtr : worldTanks) {
-            if (tankPtr && tankPtr->IsAlive()) {
-                unifiedEnemyView.push_back(tankPtr.get());
-            }
-        }
-        
-        return unifiedEnemyView;
-    } else {
-        // Fallback to old system - convert to pointers
-        unifiedEnemyView.clear();
-        for (const auto& tank : tanks) {
-            unifiedEnemyView.push_back(&tank);
-        }
-        return unifiedEnemyView;
     }
+    
+    return enemyTanks;
 }
-
 void TankHandler::SetGameWorld(GameWorld* world) {
     gameWorld = world;
     
     // Set GameWorld reference for all player tanks
-    if (gameWorld) {
-        for (int i = 0; i < numPlayers; i++) {
-            players[i].SetGameWorld(gameWorld);
-        }
-        
-        // Also set for enemy tanks if they exist
-        for (auto& enemy : tanks) {
-            enemy.SetGameWorld(gameWorld);
-        }
-        
-        RegisterPlayersWithCollisionSystem();
+    for (int i = 0; i < numPlayers; i++) {
+        players[i].SetGameWorld(gameWorld);
     }
+    
+    RegisterPlayersWithCollisionSystem();
 }
 
 void TankHandler::RegisterPlayersWithCollisionSystem() {

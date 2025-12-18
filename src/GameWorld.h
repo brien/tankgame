@@ -5,13 +5,12 @@
 #include "collision/CollisionSystem.h"
 #include "combat/CombatSystem.h"
 #include "Color.h"
+#include "FX.h"
 
 // Forward declarations for existing classes
 class Tank;
 class Bullet;
 class Item;
-class FX;
-enum class FxType;
 enum class TankType;
 
 /**

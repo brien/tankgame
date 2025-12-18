@@ -15,14 +15,57 @@
 #include "App.h"
 #include "GameWorld.h"
 #include "LevelHandler.h"
-#include "FXHandler.h"
 #include "TankHandler.h"
 #include "TankTypeManager.h"
 #include "InputHandler.h"
 #include "TankCollisionHelper.h"
 #include "InputHandlerFactory.h"
-#include "BulletHandler.h"
 #include "Logger.h"
+
+void Tank::CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a)
+{
+    gameWorld->CreateFX(type, x, y, z, rx, ry, rz, r, g, b, a);
+}
+
+void Tank::CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a)
+{
+    gameWorld->CreateFX(type, x, y, z, dx, dy, dz, rx, ry, rz, r, g, b, a);
+}
+
+void Tank::CreateDeathExplosionFX()
+{
+    // Get colors dynamically from tank types
+    Color primaryColor = GetPrimaryColor();
+    Color secondaryColor = GetSecondaryColor();
+    
+    // Central explosion with velocity
+    CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+
+    // Primary color debris
+    CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
+    CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 2, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
+    CreateFX(FxType::TYPE_DEATH, x + .5, y, z + .5, 0, .05, -3, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
+    CreateFX(FxType::TYPE_DEATH, x + .5, y, z + .5, 0, .05, 2, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
+
+    // Secondary color debris
+    CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 3, .05, 0, 2, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
+    CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .05, 0, 0, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
+    CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .01, 0, 0, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
+    CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .05, 0, -2, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
+
+    // Sparks/particles in primary color
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 0, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 0, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 2, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z + .5, 0, .01, -3, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z + .5, 0, .01, 2, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+
+    // Sparks/particles in secondary color
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 3, .01, 0, 2, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
+    CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, -2, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
+}
 
 void Tank::SetType(TankType t1, TankType t2)
 {
@@ -81,37 +124,7 @@ void Tank::Die()
 
     if (deadtime < 0.01)
     {
-        // Get colors dynamically from tank types
-        Color primaryColor = GetPrimaryColor();
-        Color secondaryColor = GetSecondaryColor();
-        
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 2, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z + .5, 0, .05, -3, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z + .5, 0, .05, 2, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, .15);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 3, .05, 0, 2, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .05, 0, 0, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .01, 0, 0, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_DEATH, x + .5, y, z - .5, 2, .05, 0, -2, ry, 0, secondaryColor.r, secondaryColor.g, secondaryColor.b, .15);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 0, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 0, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z + .5, 0, .01, 2, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z + .5, 0, .01, -3, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z + .5, 0, .01, 2, 0, ry, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 3, .01, 0, 2, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
-
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, 0, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, -2, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
+        CreateDeathExplosionFX();
     }
     if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 && id >= 0)
     {
@@ -142,16 +155,14 @@ void Tank::Fire(float dTpressed)
 
         float bulletMovRate = 33.0f;
 
-        if (gameWorld) {
-            Color primaryColor = GetPrimaryColor();
-            Color secondaryColor = GetSecondaryColor();
-            gameWorld->CreateBullet(id, attack, type1, type2, bounces,
-                        dTpressed, primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
-                        y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                        rtx + rx, rty + ry, rtz + rz);
-        }
+        Color primaryColor = GetPrimaryColor();
+        Color secondaryColor = GetSecondaryColor();
+        gameWorld->CreateBullet(id, attack, type1, type2, bounces,
+                    dTpressed, primaryColor, secondaryColor,
+                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                    y + .25,
+                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                    rtx + rx, rty + ry, rtz + rz);
 
         fireTimer = 0;
 
@@ -515,11 +526,9 @@ void Tank::CreateBullet(int id, float attack, TankType type1, TankType type2, in
                        const Color& primaryColor, const Color& secondaryColor,
                        float x, float y, float z, float rx, float ry, float rz)
 {
-    if (gameWorld) {
-        gameWorld->CreateBullet(id, attack, type1, type2, bounces, dTpressed,
-                               primaryColor, secondaryColor, 
-                               x, y, z, rx, ry, rz);
-    }
+    gameWorld->CreateBullet(id, attack, type1, type2, bounces, dTpressed,
+                           primaryColor, secondaryColor, 
+                           x, y, z, rx, ry, rz);
 }
 
 Tank::Tank(Tank&& other) noexcept
@@ -781,7 +790,7 @@ void Tank::Jump()
 
         // Jump damn it
         Color primaryColor = GetPrimaryColor();
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_JUMP, x, y - .2, z, 0, .5 * vy * GlobalTimer::dT, 0, rx, ry, rz, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+        CreateFX(FxType::TYPE_JUMP, x, y - .2, z, 0, .5 * vy * GlobalTimer::dT, 0, rx, ry, rz, primaryColor.r, primaryColor.g, primaryColor.b, 1);
         if (!isJumping && id < 0)
         {
             App::GetSingleton().soundTask->PlayChannel(4);
@@ -833,7 +842,7 @@ void Tank::NextFrame()
     // Smoke effect when health is low (was energy < maxEnergy / 2)
     if (health < maxHealth / 2)
     {
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x, y + .1, z, 0, .01, 0, 0, ry + rty, 90, .2, .2, .2, 1);
+        CreateFX(FxType::TYPE_SMOKE, x, y + .1, z, 0, .01, 0, 0, ry + rty, 90, .2, .2, .2, 1);
     }
 
     // Boundary checks
@@ -929,29 +938,29 @@ bool Tank::Move(float rate)
         {
             int xIndex = which * 3;
             int zIndex = xIndex + 2;
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+            CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
         }
         else
         {
             // Fallback to manual checking if helper doesn't find the point
             if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 0;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 1;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 2;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 3;
             }
         }
@@ -1045,12 +1054,12 @@ bool Tank::Move(bool forb)
         float treadPointX = 0.25f * std::cosf((ry + 45) * DTR);
         float treadPointZ = 0.25f * std::sinf((ry + 45) * DTR);
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+        CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
 
         treadPointX = 0.25f * std::cosf((ry + 315) * DTR);
         treadPointZ = 0.25f * std::sinf((ry + 315) * DTR);
 
-        FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+        CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
     }
 
     // Check for collision using helper (includes center point + four corner points)
@@ -1071,29 +1080,29 @@ bool Tank::Move(bool forb)
         {
             int xIndex = which * 3;
             int zIndex = xIndex + 2;
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+            CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[xIndex], y, z - vz + collisionPoints[zIndex], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
         }
         else
         {
             // Fallback to manual checking if helper doesn't find the point
             if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[0], y, z + collisionPoints[2]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[0], y, z - vz + collisionPoints[2], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 0;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[3], y, z + collisionPoints[5]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[3], y, z - vz + collisionPoints[5], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 1;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[6], y, z + collisionPoints[8]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[6], y, z - vz + collisionPoints[8], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 2;
             }
             else if (LevelHandler::GetSingleton().PointCollision(x + collisionPoints[9], y, z + collisionPoints[11]))
             {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+                CreateFX(FxType::TYPE_SMOKE, x - vx + collisionPoints[9], y, z - vz + collisionPoints[11], 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
                 which = 3;
             }
         }

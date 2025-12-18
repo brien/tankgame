@@ -11,7 +11,6 @@
 #include "RenderData.h"
 #include "../App.h"
 #include "../Logger.h"
-#include "../FXHandler.h"
 
 EffectRenderer::EffectRenderer() : 
     BaseRenderer(),

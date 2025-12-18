@@ -3,7 +3,6 @@
 #include "../Bullet.h"
 #include "../Tank.h"
 #include "../TankHandler.h"
-#include "../FXHandler.h"
 #include "../App.h"
 #include <cmath>
 

@@ -26,7 +26,6 @@
 
 #include "TankHandler.h"
 #include "LevelHandler.h"
-#include "FXHandler.h"
 
 void App::Run(int argc, char *argv[])
 {
@@ -52,7 +51,6 @@ void App::Run(int argc, char *argv[])
 
     new TankHandler();
     new LevelHandler();
-    new FXHandler();
 
     new TaskHandler();
 
@@ -85,7 +83,6 @@ void App::Run(int argc, char *argv[])
 
     delete TankHandler::GetSingletonPtr();
     delete LevelHandler::GetSingletonPtr();
-    delete FXHandler::GetSingletonPtr();
 
     delete TaskHandler::GetSingletonPtr();
 }

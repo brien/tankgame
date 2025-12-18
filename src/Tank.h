@@ -2,7 +2,6 @@
 
 #include "Entity.h"
 #include "igtl_qmesh.h"
-#include "BulletHandler.h"
 #include "TankTypeManager.h"
 
 #include <vector>
@@ -15,6 +14,7 @@ using namespace std;
 class TankRenderer;
 class InputHandler;
 class GameWorld;
+enum class FxType;
 
 enum class EnemyState
 {
@@ -175,8 +175,15 @@ public:
 
     void NextFrame();
     
-    // GameWorld access for bullet creation
+    // GameWorld access for bullet and FX creation
     void SetGameWorld(GameWorld* world) { gameWorld = world; }
+    
+    // Descriptive FX helper methods (encapsulate effect creation logic)
+    void CreateDeathExplosionFX();
+    
+    // Low-level FX creation (used by helper methods)
+    void CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a);
+    void CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a);
 
 private:
     // Helper method to create bullets through GameWorld

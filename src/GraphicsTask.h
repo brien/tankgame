@@ -96,6 +96,7 @@ public:
     
     // Centralized rendering methods
     void InitializeNewRenderingPipeline();
+    void SetGameWorld(class GameWorld* world);  // Set GameWorld pointer and recreate SceneDataBuilder
     void CleanupNewRenderingPipeline();
     void RenderWithNewPipeline();          // Main centralized rendering method
     
@@ -106,6 +107,8 @@ public:
     bool drawHUD = true;
     bool drawMenu = false;
 private:
+    class GameWorld* gameWorld = nullptr;  // Non-owning pointer to GameWorld (owned by GameTask)
+    
     igtl_QGLMesh bodymesh;
     igtl_QGLMesh turretmesh;
     igtl_QGLMesh cannonmesh;

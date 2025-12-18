@@ -57,8 +57,6 @@ public:
     std::array<int, MAX_PLAYERS> hitCombo{};
     std::array<int, MAX_PLAYERS> wins{};
 
-    std::vector<Tank> tanks;
-
     void CreateTank();
     void DestroyTank();
 

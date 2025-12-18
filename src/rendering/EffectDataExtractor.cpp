@@ -1,5 +1,4 @@
 #include "EffectDataExtractor.h"
-#include "../FXHandler.h"
 
 std::vector<EffectRenderData> EffectDataExtractor::ExtractEffectRenderData(const std::vector<FX>& effects) {
     std::vector<EffectRenderData> renderData;

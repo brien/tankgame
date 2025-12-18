@@ -24,10 +24,49 @@
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "Tank.h"
-#include "FXHandler.h"
 #include "App.h"
 #include "events/Events.h"
 #include "events/CollisionEvents.h"
+#include "GameWorld.h"
+
+void Bullet::CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a)
+{
+    gameWorld->CreateFX(type, x, y, z, rx, ry, rz, r, g, b, a);
+}
+
+void Bullet::CreateFX(FxType type, float x, float y, float z, float dx, float dy, float dz, float rx, float ry, float rz, float r, float g, float b, float a)
+{
+    gameWorld->CreateFX(type, x, y, z, dx, dy, dz, rx, ry, rz, r, g, b, a);
+}
+
+void Bullet::CreateWallImpactFX(float xpp, float zpp)
+{
+    // Determine impact orientation based on which axis changed
+    if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) == static_cast<int>(z))
+    {
+        // Horizontal wall impact (X-axis)
+        CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+    }
+    else if (static_cast<int>(z + zpp) != static_cast<int>(z) && static_cast<int>(x + xpp) == static_cast<int>(x))
+    {
+        // Vertical wall impact (Z-axis)
+        CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+    }
+    else if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) != static_cast<int>(z))
+    {
+        // Corner impact - determine primary collision axis
+        if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
+        {
+            // X-axis primary
+            CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+        }
+        else
+        {
+            // Z-axis primary
+            CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
+        }
+    }
+}
 
 Bullet::Bullet()
     : x(0.0f), y(0.0f), z(0.0f),
@@ -398,27 +437,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
         }
 
-        if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) == static_cast<int>(z))
-        {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-        }
-
-        if (static_cast<int>(z + zpp) != static_cast<int>(z) && static_cast<int>(x + xpp) == static_cast<int>(x))
-        {
-            FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-        }
-
-        if (static_cast<int>(x + xpp) != static_cast<int>(x) && static_cast<int>(z + zpp) != static_cast<int>(z))
-        {
-            if (LevelHandler::GetSingleton().PointCollision((x + xpp), y, z) && !LevelHandler::GetSingleton().PointCollision(x, y, z + zpp))
-            {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 0, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-            }
-            else
-            {
-                FXHandler::GetSingleton().CreateFX(FxType::TYPE_SMALL_SQUARE, x, y, z, 0, 0, 0, 0, 90, 90, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-            }
-        }
+        CreateWallImpactFX(xpp, zpp);
     }
 }
 

@@ -16,6 +16,7 @@ using namespace std;
 // Forward declarations
 struct TerrainRenderData;
 class GameWorld;
+enum class FxType;
 
 /**
  * Level metadata structure for JSON-based level configuration
@@ -45,8 +46,6 @@ public:
     LevelHandler();
     ~LevelHandler() = default;
 
-    vector<Item> items;
-
     void Init();
 
     bool Load(const char filepath[]);
@@ -71,8 +70,11 @@ public:
     // Interface to GameWorld
     void SetGameWorld(GameWorld* world) { gameWorld = world; }
     
-    // Get all items for rendering (combines old and new systems)
-    std::vector<const Item*> GetAllItems() const;
+    // Descriptive FX helper methods (encapsulate effect creation logic)
+    void CreateItemCollectionFX(float x, float y, float z, const Color& color);
+    
+    // Low-level FX creation (used by helper methods)
+    void CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a);
 
     bool HandlePointCollision(float &x, float &y, float &z, float &vx, float &vz);
     bool FallCollision(float x, float y, float z);
@@ -121,5 +123,4 @@ private:
     void PrintMetadata() const;
 
     GameWorld* gameWorld = nullptr; // Pointer to the GameWorld instance
-    mutable std::vector<const Item*> unifiedItemView; // Mutable for const GetAllItems()
 };

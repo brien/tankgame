@@ -62,8 +62,9 @@ bool SoundTask::Start()
 
         if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
         {
-            Logger::Get().Write("Unable to open audio!\n");
-            exit(1);
+            Logger::Get().Write("Unable to open audio! Running without sound.\n");
+            disable = true;
+            return true;
         }
 
         Mix_AllocateChannels(16);

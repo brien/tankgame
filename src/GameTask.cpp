@@ -5,7 +5,6 @@
 #include "InputTask.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
-#include "FXHandler.h"
 #include "GameWorld.h"
 #include "PlayerManager.h"
 #include "Logger.h"
@@ -57,9 +56,11 @@ bool GameTask::Start()
     // Initialize GameWorld with collision and combat systems
     gameWorld.Initialize();
     
+    // Pass GameWorld to GraphicsTask and recreate SceneDataBuilder
+    // (GraphicsTask starts before GameTask, so initial creation had nullptr gameWorld)
+    App::GetSingleton().graphicsTask->SetGameWorld(&gameWorld);
+    
     // Connect handlers to GameWorld (singletons are now initialized)
-    FXHandler::GetSingleton().SetGameWorld(&gameWorld);
-    BulletHandler::GetSingleton().SetGameWorld(&gameWorld);
     TankHandler::GetSingleton().SetGameWorld(&gameWorld);
     LevelHandler::GetSingleton().SetGameWorld(&gameWorld);
 
@@ -224,8 +225,6 @@ void GameTask::HandlePlayingState()
     
     // Legacy handler updates for systems not yet migrated
     TankHandler::GetSingleton().NextFrame();
-    BulletHandler::GetSingleton().NextFrame();
-    // FXHandler now delegates to GameWorld, so NextFrame() is effectively a no-op
 
     if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {

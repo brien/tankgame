@@ -1,7 +1,6 @@
 #include "GameWorld.h"
 #include "Tank.h"
 #include "Bullet.h"
-#include "FXHandler.h"
 #include "Item.h"
 #include "Logger.h"
 #include "events/Events.h"
@@ -70,8 +69,9 @@ Bullet* GameWorld::CreateBullet(int id, float attack, TankType type1, TankType t
                                float x, float y, float z, float rx, float ry, float rz) {
     Bullet* bullet = bullets.Create(id, attack, type1, type2, bounces, dTpressed, primaryColor, secondaryColor, x, y, z, rx, ry, rz);
     
-    // Register bullet with collision system
+    // Set GameWorld reference so bullet can create FX
     if (bullet) {
+        bullet->SetGameWorld(this);
         collisionSystem.RegisterEntity(bullet, CollisionShape3D(CollisionShape3D::SPHERE, 0.3f), CollisionLayer::BULLETS);
     }
     

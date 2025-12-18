@@ -3,12 +3,9 @@
 #include "../GameWorld.h"
 
 SceneDataBuilder::SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
-                                 const BulletHandler& bullets, const FXHandler& fx,
                                  const GameWorld* world)
     : tankHandler(tanks)
     , levelHandler(level)
-    , bulletHandler(bullets)
-    , fxHandler(fx)
     , gameWorld(world) {
 }
 
@@ -52,10 +49,19 @@ bool SceneDataBuilder::IsReady() const {
 std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
     std::vector<TankRenderData> allTanks;
     
+    // Extract player tank data from TankHandler (players not yet migrated to GameWorld)
+    auto playerTanks = TankDataExtractor::ExtractPlayerData(
+        tankHandler.players, 
+        tankHandler.special, 
+        tankHandler.numPlayers
+    );
+    
+    allTanks.reserve(playerTanks.size() + 20); // Reserve space for players + expected enemies
+    allTanks.insert(allTanks.end(), playerTanks.begin(), playerTanks.end());
+    
+    // Extract enemy tanks from GameWorld (if available)
     if (gameWorld) {
-        // NEW ARCHITECTURE: Extract all tanks from unified GameWorld
         const auto& worldTanks = gameWorld->GetTanks();
-        allTanks.reserve(worldTanks.size());
         
         for (const auto& tankPtr : worldTanks) {
             if (tankPtr && tankPtr->IsAlive()) {
@@ -63,22 +69,10 @@ std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
             }
         }
     } else {
-        // LEGACY ARCHITECTURE: Extract from TankHandler (fallback during transition)
-        // Extract player tank data using direct access to public members
-        auto playerTanks = TankDataExtractor::ExtractPlayerData(
-            tankHandler.players, 
-            tankHandler.special, 
-            tankHandler.numPlayers
-        );
-        
-        // Extract enemy tank data using unified view (combines old + GameWorld enemy tanks)
+        // Fallback: Extract enemy tanks from TankHandler legacy system
         auto enemyTanks = TankDataExtractor::ExtractEnemyData(
             tankHandler.GetAllEnemyTanks()
         );
-        
-        // Combine all tank data
-        allTanks.reserve(playerTanks.size() + enemyTanks.size());
-        allTanks.insert(allTanks.end(), playerTanks.begin(), playerTanks.end());
         allTanks.insert(allTanks.end(), enemyTanks.begin(), enemyTanks.end());
     }
     
@@ -86,43 +80,59 @@ std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
 }
 
 std::vector<BulletRenderData> SceneDataBuilder::ExtractBulletData() const {
-    // Check if BulletHandler has GameWorld reference, use it directly for better performance
-    if (auto* gameWorld = bulletHandler.GetGameWorld()) {
-        const auto& worldBullets = gameWorld->GetBullets();
-        std::vector<Bullet> bulletRefs;
-        bulletRefs.reserve(worldBullets.size());
-        
-        for (const auto& bulletPtr : worldBullets) {
-            if (bulletPtr && bulletPtr->IsAlive()) {
-                bulletRefs.push_back(*bulletPtr);
-            }
-        }
-        
-        return BulletDataExtractor::ExtractBulletRenderData(bulletRefs);
-    } else {
-        // Fallback to BulletHandler (should be empty now)
-        return BulletDataExtractor::ExtractBulletRenderData(bulletHandler.GetAllBullets());
+    // Extract bullets directly from GameWorld
+    if (!gameWorld) {
+        return {}; // Return empty if no GameWorld
     }
+    
+    const auto& worldBullets = gameWorld->GetBullets();
+    std::vector<Bullet> bulletRefs;
+    bulletRefs.reserve(worldBullets.size());
+    
+    for (const auto& bulletPtr : worldBullets) {
+        if (bulletPtr && bulletPtr->IsAlive()) {
+            bulletRefs.push_back(*bulletPtr);
+        }
+    }
+    
+    return BulletDataExtractor::ExtractBulletRenderData(bulletRefs);
 }
 
 std::vector<EffectRenderData> SceneDataBuilder::ExtractEffectData() const {
-    // Delegate to EffectDataExtractor using unified FX view (combines old + GameWorld FX)
-    return EffectDataExtractor::ExtractEffectRenderData(fxHandler.GetAllFX());
+    // Extract FX directly from GameWorld
+    if (!gameWorld) {
+        return {};
+    }
+    
+    const auto& worldFX = gameWorld->GetFX();
+    std::vector<FX> fxRefs;
+    fxRefs.reserve(worldFX.size());
+    
+    for (const auto& fxPtr : worldFX) {
+        if (fxPtr && fxPtr->IsAlive()) {
+            fxRefs.push_back(*fxPtr);
+        }
+    }
+    
+    return EffectDataExtractor::ExtractEffectRenderData(fxRefs);
 }
 
 std::vector<ItemRenderData> SceneDataBuilder::ExtractItemData() const {
-    // Use unified item view (combines old LevelHandler items + new GameWorld items)
-    auto allItems = levelHandler.GetAllItems();
+    // Extract items directly from GameWorld
+    if (!gameWorld) {
+        return {};
+    }
     
+    const auto& worldItems = gameWorld->GetItems();
     std::vector<ItemRenderData> itemData;
-    itemData.reserve(allItems.size());
+    itemData.reserve(worldItems.size());
     
-    for (const Item* item : allItems) {
-        if (item && item->IsAlive()) {
+    for (const auto& itemPtr : worldItems) {
+        if (itemPtr && itemPtr->IsAlive()) {
             ItemRenderData data;
-            data.position = Vector3{item->x, item->y, item->z};
-            data.rotationY = item->ry; // Use only Y rotation for spinning
-            data.itemType = item->type;
+            data.position = Vector3{itemPtr->x, itemPtr->y, itemPtr->z};
+            data.rotationY = itemPtr->ry; // Use only Y rotation for spinning
+            data.itemType = itemPtr->type;
             data.visible = true;
             itemData.push_back(data);
         }

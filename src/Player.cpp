@@ -7,7 +7,7 @@
 #include "InputHandlerFactory.h"
 #include "GlobalTimer.h"
 #include "App.h"
-#include "FXHandler.h"  // For FxType enum
+#include "FX.h"  // For FxType enum
 #include "SoundTask.h"  // For sound playback
 
 // Static constexpr definitions (required in C++14 when ODR-used by std::min/max)
@@ -33,9 +33,7 @@ void Player::TakeControlOf(Tank* tank) {
         SetupTankForPlayer(controlledTank);
         
         // Update collision layer through GameWorld
-        if (gameWorld) {
-            gameWorld->ReregisterTankCollision(controlledTank);
-        }
+        gameWorld->ReregisterTankCollision(controlledTank);
         
         Logger::Get().Write("Player %d took control of tank\n", playerIndex);
     }
@@ -46,9 +44,7 @@ void Player::ReleaseTank() {
         controlledTank->isPlayer = false;
         
         // Update collision layer to enemy tanks
-        if (gameWorld) {
-            gameWorld->ReregisterTankCollision(controlledTank);
-        }
+        gameWorld->ReregisterTankCollision(controlledTank);
         
         Logger::Get().Write("Player %d released tank control\n", playerIndex);
         controlledTank = nullptr;
