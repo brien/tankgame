@@ -32,6 +32,7 @@ public:
     // Camera setup and management
     void InitializeCameras();
     void UpdateCameras(const std::array<Tank, 2>& players, int numPlayers, bool gameStarted);
+    void UpdateCamerasFromPointers(const std::array<Tank*, 2>& players, int numPlayers, bool gameStarted);
     void UpdateCamera(int playerId, const Tank& tank);
     
     // Camera access

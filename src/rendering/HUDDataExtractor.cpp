@@ -1,6 +1,7 @@
 #include "HUDDataExtractor.h"
 #include "../Tank.h"
 #include "../TankHandler.h"
+#include "../PlayerManager.h"
 #include "../App.h"
 #include "../GlobalTimer.h"
 #include "RenderData.h"
@@ -58,20 +59,22 @@ HUDRenderData HUDDataExtractor::ExtractPlayerHUD(const Tank& player, int playerI
 }
 
 std::vector<HUDRenderData> HUDDataExtractor::ExtractAllPlayerHUDs(
-    const std::array<Tank, 2>& players, int numPlayers) {
+    const std::array<Tank*, 2>& playerTanks, int numPlayers) {
     
     std::vector<HUDRenderData> playerHUDs;
     playerHUDs.reserve(numPlayers);
     
     for (int i = 0; i < numPlayers && i < 2; ++i) {
-        playerHUDs.push_back(ExtractPlayerHUD(players[i], i));
+        if (playerTanks[i]) {  // Check for valid pointer
+            playerHUDs.push_back(ExtractPlayerHUD(*playerTanks[i], i));
+        }
     }
     
     return playerHUDs;
 }
 
 UIRenderData HUDDataExtractor::ExtractCompleteUIData(
-    const TankHandler& tankHandler,
+    const PlayerManager& playerMgr,
     bool gameStarted,
     bool isPaused,
     bool showMenu,
@@ -80,8 +83,10 @@ UIRenderData HUDDataExtractor::ExtractCompleteUIData(
     
     UIRenderData uiData;
     
-    // Extract player HUD data
-    uiData.playerHUDs = ExtractAllPlayerHUDs(tankHandler.players, tankHandler.numPlayers);
+    // Extract player HUD data from PlayerManager
+    Logger::Get().Write("HUDDataExtractor: Extracting HUD data (numPlayers=%d)\n", playerMgr.GetNumPlayers());
+    uiData.playerHUDs = ExtractAllPlayerHUDs(playerMgr.GetPlayerTanks(), playerMgr.GetNumPlayers());
+    uiData.numPlayers = playerMgr.GetNumPlayers();
     
     // Extract menu data
     uiData.menu = ExtractMenuData(menuState, showMenu);
@@ -92,7 +97,6 @@ UIRenderData HUDDataExtractor::ExtractCompleteUIData(
     // Set global UI state
     uiData.gameStarted = gameStarted;
     uiData.isPaused = isPaused;
-    uiData.numPlayers = tankHandler.numPlayers;
     
     return uiData;
 }
@@ -200,15 +204,21 @@ void HUDDataExtractor::SetHUDColors(const Tank& player, HUDRenderData& hudData) 
 }
 
 void HUDDataExtractor::ExtractComboAndSpecialData(const Tank& player, int playerId, HUDRenderData& hudData) {
-    // Access TankHandler singleton for combo and special data
+    // Get player data from PlayerManager instead of TankHandler arrays
     // Note: This uses the existing array indexing pattern from the original code
     int arrayIndex = (-1 * player.id) - 1; // Convert player ID to array index
     
+    // Access PlayerManager singleton for player data
+    PlayerManager* playerMgr = App::GetSingleton().gameTask->GetPlayerManager();
+    auto combos = playerMgr->GetCombos();
+    auto specials = playerMgr->GetSpecialCharges();
+    auto comboNumbers = playerMgr->GetComboNumbers();
+    
     // Safely access arrays with bounds checking
-    if (arrayIndex >= 0 && arrayIndex < TankHandler::GetSingleton().numPlayers) {
-        hudData.combo = TankHandler::GetSingleton().combo[arrayIndex];
-        hudData.special = TankHandler::GetSingleton().special[arrayIndex];
-        hudData.comboNumber = TankHandler::GetSingleton().comboNum[arrayIndex];
+    if (arrayIndex >= 0 && arrayIndex < playerMgr->GetNumPlayers()) {
+        hudData.combo = combos[arrayIndex];
+        hudData.special = specials[arrayIndex];
+        hudData.comboNumber = comboNumbers[arrayIndex];
         
         // Check if special ability is available
         hudData.hasSpecialAvailable = (hudData.special >= hudData.fireCost / 5.0f);

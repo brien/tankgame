@@ -12,6 +12,7 @@
 int VideoTask::scrWidth = 800;
 int VideoTask::scrHeight = 600;
 int VideoTask::scrBPP = 32;
+int VideoTask::difficultySetting = 1; // Default to normal difficulty
 
 VideoTask::VideoTask()
 {
@@ -56,7 +57,7 @@ bool VideoTask::Start()
         scrWidth = 1280;
         scrHeight = 720;
 
-        TankHandler::GetSingleton().difficultySetting = 0;
+        VideoTask::difficultySetting = 0;
         App::GetSingleton().soundTask->disable = false;
     }
     else
@@ -105,7 +106,7 @@ bool VideoTask::Start()
         fgets(line, 64, filein);
         fgets(line, 64, filein);
 
-        TankHandler::GetSingleton().difficultySetting = (line[0] - 48);
+        VideoTask::difficultySetting = (line[0] - 48);
 
         fgets(line, 64, filein);
         fgets(line, 64, filein);

@@ -82,6 +82,7 @@ void Player::AddCombo(float comboPoints, int comboNum) {
 void Player::ResetCombo() {
     combo = 0.0f;
     comboNumber = 0;
+    hitCombo = 0;
 }
 
 void Player::AddSpecialCharge(float charge) {
@@ -194,11 +195,11 @@ void Player::Update() {
             
             // Check respawn timing
             if (App::GetSingleton().gameTask->IsVersusMode()) {
-                if (controlledTank->deadtime > TankHandler::VERSUS_RESPAWN_DELAY) {
+                if (controlledTank->deadtime > VERSUS_RESPAWN_DELAY) {
                     LevelHandler::GetSingleton().NextLevel(true);
                 }
             } else {
-                if (controlledTank->deadtime > TankHandler::PLAYER_RESPAWN_DELAY) {
+                if (controlledTank->deadtime > PLAYER_RESPAWN_DELAY) {
                     LevelHandler::GetSingleton().NextLevel(false);
                 }
             }

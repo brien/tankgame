@@ -57,13 +57,17 @@ public:
     // Combo system
     float GetCombo() const { return combo; }
     int GetComboNumber() const { return comboNumber; }
+    int GetHitCombo() const { return hitCombo; }
     void AddCombo(float comboPoints, int comboNum);
+    void IncrementHitCombo() { hitCombo++; }
     void ResetCombo();
+    void ResetHitCombo() { hitCombo = 0; }
 
     // Special weapon charge
     float GetSpecialCharge() const { return specialCharge; }
     void AddSpecialCharge(float charge);
     void UseSpecialCharge(float cost);
+    void SetSpecialCharge(float charge) { specialCharge = charge; }
     bool CanUseSpecial(float cost) const { return specialCharge >= cost; }
 
     // Match statistics
@@ -130,6 +134,7 @@ private:
     // Combo system
     float combo = 0.0f;
     int comboNumber = 0;
+    int hitCombo = 0;  // Consecutive hits without missing
     
     // Special weapon system
     float specialCharge = 0.0f;
@@ -141,6 +146,8 @@ private:
     static constexpr float COMBO_DECAY_RATE = 1.0f;
     static constexpr float SPECIAL_CHARGE_MAX = 100.0f;
     static constexpr float RESPAWN_DELAY = 2.0f;
+    static constexpr float VERSUS_RESPAWN_DELAY = 3.0f;
+    static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
 
     // Helper methods
     void ApplyItemEffect(const class Item* item);

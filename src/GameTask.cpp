@@ -13,12 +13,23 @@
 void GameTask::SetUpGame()
 {
     Logger::Get().Write("GameTask: Setting up new game...\n");
+    
+    // Clear any pending events from previous level/game
+    Events::Clear();
+    Logger::Get().Write("GameTask: Cleared event queue\n");
+    
     LevelHandler::GetSingleton().Init();
     if (!LevelHandler::GetSingleton().Load("levels/level0@@.txt"))
     {
         Logger::Get().Write("LevelHandler failed to load level.\n");
     }
     TankHandler::GetSingleton().Init();
+    
+    // Spawn player tanks through PlayerManager
+    Logger::Get().Write("GameTask: Spawning player tanks via PlayerManager...\n");
+    playerManager.SpawnPlayerTanks();
+    Logger::Get().Write("GameTask: Player tanks spawned\n");
+    
     Logger::Get().Write("GameTask: Game setup complete\n");
 }
 
@@ -83,11 +94,6 @@ void GameTask::OnResume()
     Logger::Get().Write("GameTask: Initializing PlayerManager...\n");
     playerManager.Initialize(&gameWorld);
     
-    // Transfer player control from TankHandler to PlayerManager
-    Logger::Get().Write("GameTask: Activating PlayerManager control...\n");
-    TankHandler::GetSingleton().SetPlayerManager(&playerManager);
-    TankHandler::GetSingleton().SetPlayerManagerActive(true);
-    
     Logger::Get().Write("GameTask: OnResume complete\n");
 }
 
@@ -139,11 +145,15 @@ void GameTask::HandleMenuState()
 
     if (InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1))
     {
-        TankHandler::GetSingleton().isInputJoy = false;
+        // isInputJoy managed by PlayerManager
+        playerManager.SetInputJoystick(false);
         if (menuState > 0)
         {
-            TankHandler::GetSingleton().numPlayers = 2;
+            playerManager.SetNumPlayers(2);
         }
+        // Immediately clamp to prevent array bounds issues
+        int currentPlayers = playerManager.GetNumPlayers();
+        playerManager.SetNumPlayers(std::min(currentPlayers, 2));
         versus = (menuState == 2);
         SetUpGame();
         gameStarted = true;
@@ -158,7 +168,7 @@ void GameTask::HandleMenuState()
 
     if (InputTask::KeyDown(SDL_SCANCODE_2))
     {
-        TankHandler::GetSingleton().numPlayers = 2;
+        playerManager.SetNumPlayers(2);
     }
 
     if (menuState == 0)
@@ -223,8 +233,9 @@ void GameTask::HandlePlayingState()
     // Player management through PlayerManager
     playerManager.NextFrame();
     
-    // Legacy handler updates for systems not yet migrated
-    TankHandler::GetSingleton().NextFrame();
+    // Item management (TODO: move to GameWorld or ItemManager)
+    LevelHandler::GetSingleton().UpdateItems();
+    LevelHandler::GetSingleton().ItemCollision();
 
     if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {

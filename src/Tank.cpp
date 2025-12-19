@@ -12,10 +12,12 @@
 
 #include "Tank.h"
 
+#include <cmath>
 #include "App.h"
 #include "GameWorld.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
+#include "PlayerManager.h"
 #include "TankTypeManager.h"
 #include "InputHandler.h"
 #include "TankCollisionHelper.h"
@@ -134,22 +136,48 @@ void Tank::Die()
 
 void Tank::Fire(float dTpressed)
 {
-
+    // Safety: Dead tanks cannot fire
+    if (!alive) return;
+    
+    // Safety: Validate position is not NaN before creating bullets
+    if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
+        Logger::Get().Write("WARNING: Tank %d has NaN position, cannot fire\n", id);
+        return;
+    }
+    
+    // Safety: Validate rotation values are not NaN
+    if (std::isnan(ry) || std::isnan(rty) || std::isnan(rx) || std::isnan(rtx) || std::isnan(rz) || std::isnan(rtz)) {
+        Logger::Get().Write("WARNING: Tank %d has NaN rotation (ry=%.2f, rty=%.2f), cannot fire\n", id, ry, rty);
+        return;
+    }
+    
     if (energy >= fireCost && fireTimer > fireRate)
     {
-        float ratio = (z - TankHandler::GetSingleton().players[0].z) / (x - TankHandler::GetSingleton().players[0].x);
-        float ryp = toDegrees(atan(ratio));
+        Logger::Get().Write("Tank::Fire - id=%d, creating bullet at (%.2f, %.2f, %.2f)\n", id, x, y, z);
+        
+        // Get player tank from PlayerManager for audio positioning
+        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+        Tank* player0 = playerTanks[0];
+        
+        // Calculate audio positioning if player tank exists and is alive
+        if (player0 && player0->alive) {
+            float ratio = (z - player0->z) / (x - player0->x);
+            float ryp = toDegrees(atan(ratio));
 
-        if (TankHandler::GetSingleton().players[0].x < x)
-        {
-            ryp += 180;
+            if (player0->x < x)
+            {
+                ryp += 180;
+            }
+
+            ryp -= (player0->ry + player0->rty);
+
+            float dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
+
+            Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
+        } else {
+            // No valid player tank - use default audio positioning
+            Mix_SetPosition(2, 0, 0);
         }
-
-        ryp -= (TankHandler::GetSingleton().players[0].ry + TankHandler::GetSingleton().players[0].rty);
-
-        float dist = sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
-
-        Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
 
         App::GetSingleton().soundTask->PlayChannel(2);
 
@@ -172,20 +200,53 @@ void Tank::Fire(float dTpressed)
 
 void Tank::Special(float dTpressed)
 {
+    // Safety: Dead tanks cannot use special attacks
+    if (!alive) return;
+    
+    // Safety: Validate position is not NaN
+    if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
+        Logger::Get().Write("WARNING: Tank %d has NaN position, cannot use special\n", id);
+        return;
+    }
+    
+    // Safety: Validate rotation values are not NaN
+    if (std::isnan(ry) || std::isnan(rty) || std::isnan(rx) || std::isnan(rtx) || std::isnan(rz) || std::isnan(rtz)) {
+        Logger::Get().Write("WARNING: Tank %d has NaN rotation (ry=%.2f, rty=%.2f), cannot use special\n", id, ry, rty);
+        return;
+    }
+    
+    // Safety: Special() is only for player tanks (negative IDs)
+    if (id >= 0) {
+        Logger::Get().Write("WARNING: Tank::Special called for non-player tank (id=%d)\n", id);
+        return;
+    }
+    
+    // Safety: Validate array index for TankHandler::special (size 2)
+    // Get player from PlayerManager
+    Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(id);
+    if (!player) {
+        Logger::Get().Write("WARNING: Tank::Special - no player found for tank id=%d\n", id);
+        return;
+    }
 
-    if (TankHandler::GetSingleton().special[(-1 * id) - 1] >= fireCost / 5 && fireTimer > fireRate)
+    if (player->CanUseSpecial(fireCost / 5) && fireTimer > fireRate)
     {
-        float ratio = (z - TankHandler::GetSingleton().players[0].z) / (x - TankHandler::GetSingleton().players[0].x);
+        // Get player tank from PlayerManager for audio positioning
+        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+        Tank* player0 = playerTanks[0];
+        if (!player0 || !player0->alive) return; // No valid player tank available
+        
+        float ratio = (z - player0->z) / (x - player0->x);
         float ryp = toDegrees(atan(ratio));
 
-        if (TankHandler::GetSingleton().players[0].x < x)
+        if (player0->x < x)
         {
             ryp += 180;
         }
 
-        ryp -= (TankHandler::GetSingleton().players[0].ry + TankHandler::GetSingleton().players[0].rty);
+        ryp -= (player0->ry + player0->rty);
 
-        float dist = sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
+        float dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
 
         Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
 
@@ -338,7 +399,7 @@ void Tank::Special(float dTpressed)
 
         fireTimer = 0;
 
-        TankHandler::GetSingleton().special[(-1 * id) - 1] -= fireCost / 5;
+        player->UseSpecialCharge(fireCost / 5);
     }
 }
 
@@ -361,6 +422,13 @@ void Tank::Fall()
     vy -= (fallRate * GlobalTimer::dT);
 
     float dy = vy * GlobalTimer::dT;
+    
+    // Debug logging for player tanks (only log occasionally)
+    static int fallLogCounter = 0;
+    if (id < 0 && fallLogCounter++ % 60 == 0 && !isGrounded) {
+        Logger::Get().Write("Tank %d FALL: y=%.3f vy=%.3f dy=%.3f isJumping=%d\n", 
+                          id, y, vy, dy, isJumping);
+    }
 
     if (dy > 10.0f * GlobalTimer::dT)
     {
@@ -648,21 +716,20 @@ void Tank::Init()
 
     alive = true;
     
-    // === REFACTORED: Initialize clear two-concept system ===
     // Health system (survival)  
-    health = 1000;          // Was: energy = 1000 (but energy was actually health)
-    maxHealth = 1000;       // Was: maxEnergy = 1000
-    healthRegen = 100;      // Was: energyRegen = 100 (slow health regen)
+    health = 100; // Was 1000. temporarily set lower for testing
+    maxHealth = 100; // Was 1000. temporarily set lower for testing
+    healthRegen = 10;      // Was 100. slow health regen
     
     // Energy system (actions)
-    energy = 100;           // Was: charge = 100 (now clearly for actions)
-    maxEnergy = 100;        // Was: maxCharge = 100
-    energyRegen = 50;       // Was: chargeRegen = 50 (fast energy regen)
+    energy = 100;
+    maxEnergy = 100;
+    energyRegen = 50;
 
     moveCost = 0;
     jumpCost = 150;
-    fireCost = maxEnergy / 2;  // Was: maxCharge / 2
-    specialCost = 200;         // Was: chargeCost = 200
+    fireCost = maxEnergy / 2;
+    specialCost = 200;
 
     bounces = 2;
 
@@ -707,10 +774,10 @@ void Tank::Init()
     rty = 0;
     rtz = 0;
 
-    rotRate = 75;
+    rotRate = 150;
     movRate = 5;
     fallRate = 2;
-    jumpRate = .3;
+    jumpRate = .5;
 }
 
 void Tank::SetPosition(float _x, float _y, float _z)
@@ -770,13 +837,26 @@ void Tank::Jump()
 {
     if (energy > 0)
     {
+        // On first frame of jump, give strong upward velocity
+        if (jumpTime < 0.01f) {
+            vy = 0.4f;  // Strong initial jump velocity to overcome gravity
+            isJumping = true;
+            
+            // Debug logging for player tanks
+            if (id < 0) {
+                Logger::Get().Write("Tank %d JUMP START: vy=%.3f energy=%.1f y=%.3f\n", 
+                                  id, vy, energy, y);
+            }
+        }
+        
         jumpTime += GlobalTimer::dT;
-
         energy -= jumpCost * GlobalTimer::dT;
-
+        
+        // Continue jump if we have energy
         if (energy > 5)
         {
-            vy = (jumpRate * jumpTime);
+            // Add slight upward boost during jump for height control
+            vy += (jumpRate * GlobalTimer::dT);
         }
 
         // y += vy*GlobalTimer::dT;
@@ -818,12 +898,18 @@ void Tank::NextFrame()
         hitAlpha -= 1 * GlobalTimer::dT;
     }
 
-    if (TankHandler::GetSingleton().hitCombo[(-1 * id) - 1] != hitNum)
-    {
-        hitAlpha = 1.0;
+    // Safety: Only update hitCombo for player tanks (negative IDs)
+    if (id < 0) {
+        Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(id);
+        if (player) {
+            int currentHitCombo = player->GetHitCombo();
+            if (currentHitCombo != hitNum)
+            {
+                hitAlpha = 1.0;
+            }
+            hitNum = currentHitCombo;
+        }
     }
-
-    hitNum = TankHandler::GetSingleton().hitCombo[(-1 * id) - 1];
 
     // === REFACTORED: Update health and energy systems ===
     
@@ -864,13 +950,10 @@ void Tank::NextFrame()
         alive = false;
         if (id < 0 && App::GetSingleton().gameTask->IsVersusMode())
         {
-            if (id == -1)
-            {
-                TankHandler::GetSingleton().wins[1]++;
-            }
-            else
-            {
-                TankHandler::GetSingleton().wins[0]++;
+            // Award win to the other player in versus mode
+            Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(id);
+            if (player) {
+                player->AddWin();
             }
         }
     }
@@ -1172,14 +1255,16 @@ void Tank::HandleInput()
     // Common debug controls that apply to all input modes
     if (InputTask::KeyDown(SDL_SCANCODE_I) && App::GetSingleton().gameTask->IsDebugMode())
     {
-        TankHandler::GetSingleton().special[0] += 100;
+        Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayer(0);
+        if (player) player->AddSpecialCharge(100);
         health += maxHealth * 20;
         energy += maxEnergy * 20;
     }
 
     if (InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->IsDebugMode())
     {
-        TankHandler::GetSingleton().special[0] = 10;
+        Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayer(0);
+        if (player) player->SetSpecialCharge(10);
         health = maxHealth;
         energy = maxEnergy;
     }
@@ -1197,20 +1282,30 @@ void Tank::AI()
 
     bool p2target = false;
 
-    dist = sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z));
+    // Get player tanks from PlayerManager for AI targeting
+    auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+    Tank* player0 = playerTanks[0];
+    Tank* player1 = playerTanks[1];
+    
+    if (!player0 || !player0->alive) return; // No valid player tank to target
 
-    if (TankHandler::GetSingleton().numPlayers > 1 && TankHandler::GetSingleton().players[1].alive)
+    float dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
+
+    dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
+
+    int numPlayers = App::GetSingleton().gameTask->GetPlayerManager()->GetNumPlayers();
+    if (numPlayers > 1 && player1 && player1->alive)
     {
-        float dist2 = sqrt((x - TankHandler::GetSingleton().players[1].x) * (x - TankHandler::GetSingleton().players[1].x) + (z - TankHandler::GetSingleton().players[1].z) * (z - TankHandler::GetSingleton().players[1].z));
+        float dist2 = sqrt((x - player1->x) * (x - player1->x) + (z - player1->z) * (z - player1->z));
 
-        if (dist2 < dist || !TankHandler::GetSingleton().players[1].alive)
+        if (dist2 < dist || !player0->alive)
         {
             p2target = true;
             dist = dist2;
         }
     }
 
-    if (!TankHandler::GetSingleton().players[1].alive)
+    if (!player1 || !player1->alive)
         p2target = false;
 
     if (dist > (15 + 3 * (LevelHandler::GetSingleton().levelNumber - 48)))
@@ -1254,13 +1349,13 @@ void Tank::AI()
         RotBody(true);
         break;
     case EnemyState::STATE_HUNT:
-        if (p2target)
+        if (p2target && player1)
         {
-            Hunt(TankHandler::GetSingleton().players[1]);
+            Hunt(*player1);
         }
-        else
+        else if (player0)
         {
-            Hunt(TankHandler::GetSingleton().players[0]);
+            Hunt(*player0);
         }
 
     default:
@@ -1297,12 +1392,17 @@ void Tank::Fear()
 {
     // Note: recharge flag removed - energy regeneration is now automatic
 
+    // Get player tank from PlayerManager
+    auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+    Tank* player0 = playerTanks[0];
+    if (!player0 || !player0->alive) return; // No valid player tank to fear
+
     double ratio;
 
-    ratio = (double)(z - TankHandler::GetSingleton().players[0].z) / (double)(x - TankHandler::GetSingleton().players[0].x);
+    ratio = (double)(z - player0->z) / (double)(x - player0->x);
     float ryp = toDegrees(atan(ratio));
 
-    if (TankHandler::GetSingleton().players[0].x < x)
+    if (player0->x < x)
     {
         ryp += 180;
     }
@@ -1321,11 +1421,11 @@ void Tank::Fear()
         }
     }
 
-    ratio = (double)(z - TankHandler::GetSingleton().players[0].z) / (double)(x - TankHandler::GetSingleton().players[0].x);
+    ratio = (double)(z - player0->z) / (double)(x - player0->x);
 
     float rtyp = toDegrees(atan(ratio)) - ry;
 
-    if (TankHandler::GetSingleton().players[0].x < x)
+    if (player0->x < x)
     {
         rtyp += 180;
     }
@@ -1360,6 +1460,8 @@ void Tank::Fear()
 
 void Tank::Hunt(Tank &player)
 {
+    // Safety: Don't hunt dead players
+    if (!player.alive) return;
 
     // Note: recharge flag removed - energy regeneration is now automatic
 

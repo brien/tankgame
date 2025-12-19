@@ -22,6 +22,10 @@ public:
     bool IsPaused() const { return paused; }
     bool IsVersusMode() const { return versus; }
     int GetMenuState() const { return menuState; }
+    
+    // Access to player management
+    PlayerManager* GetPlayerManager() { return &playerManager; }
+    const PlayerManager* GetPlayerManager() const { return &playerManager; }
 
 private:
     enum class GameState { MENU, PLAYING, GAME_OVER };

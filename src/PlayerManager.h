@@ -35,6 +35,11 @@ public:
     void SetNumPlayers(int count);
     void SetDifficulty(int difficulty);
     int GetDifficulty() const { return difficulty; }
+    void SetInputJoystick(bool useJoystick) { isInputJoy = useJoystick; }
+    bool GetInputJoystick() const { return isInputJoy; }
+    
+    // Ensure player tanks have correct setup (called after level load)
+    void EnsurePlayerTankSetup();
     
     // Input handling
     void HandleInput();
@@ -76,6 +81,13 @@ public:
     const std::array<float, MAX_PLAYERS> GetSpecialCharges() const;
     const std::array<int, MAX_PLAYERS> GetScores() const;
     const std::array<int, MAX_PLAYERS> GetWins() const;
+    const std::array<float, MAX_PLAYERS> GetCombos() const;
+    const std::array<int, MAX_PLAYERS> GetComboNumbers() const;
+    const std::array<int, MAX_PLAYERS> GetHitCombos() const;
+    
+    // Helper methods for accessing player data via tank ID (negative for players)
+    Player* GetPlayerByTankId(int tankId);
+    void ResetHitComboByTankId(int tankId);
 
 private:
     // Player instances

@@ -212,6 +212,6 @@ Bullet* bullet = gameWorld.CreateBullet(id, attack, ...);
 No automated tests currently. Validate changes by:
 1. Build with `./build.sh` from `src/`
 2. Run from `runtime/` directory
-3. Check `applog.txt` for errors/warnings
+3. Check `applog.txt` for errors/warnings and other log messages
 4. Test gameplay: menu navigation, tank movement, shooting, split-screen
 5. Verify no OpenGL errors (check console output)

@@ -15,6 +15,7 @@
 #include "LevelHandler.h"
 #include "GameWorld.h"
 #include "TankHandler.h"
+#include "PlayerManager.h"
 #include "App.h"
 #include "Logger.h"
 #include "rendering/RenderData.h"
@@ -358,19 +359,26 @@ void LevelHandler::ItemCollision()
         
         const Item& item = *itemPtr; // Dereference the unique_ptr
         
-        for (int i = 0; i < TankHandler::GetSingleton().numPlayers; i++)
+        // Check item collision with player tanks from PlayerManager
+        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+        int numPlayers = App::GetSingleton().gameTask->GetPlayerManager()->GetNumPlayers();
+        
+        for (int i = 0; i < numPlayers && i < 2; i++)
         {
-            if (TankHandler::GetSingleton().players[i].PointCollision(item.x, item.y, item.z))
+            Tank* playerTank = playerTanks[i];
+            if (!playerTank) continue;
+            
+            if (playerTank->PointCollision(item.x, item.y, item.z))
             {
-                TankHandler::GetSingleton().players[i].SetType(item.type, TankHandler::GetSingleton().players[i].type1);
+                playerTank->SetType(item.type, playerTank->type1);
 
-                if (item.type == TankHandler::GetSingleton().players[i].type1)
-                    TankHandler::GetSingleton().players[i].energy += TankHandler::GetSingleton().players[i].maxEnergy;
+                if (item.type == playerTank->type1)
+                    playerTank->energy += playerTank->maxEnergy;
                 else
-                    TankHandler::GetSingleton().players[i].energy += TankHandler::GetSingleton().players[i].maxEnergy / 2;
+                    playerTank->energy += playerTank->maxEnergy / 2;
 
-                if (TankHandler::GetSingleton().players[i].energy > TankHandler::GetSingleton().players[i].maxEnergy)
-                    TankHandler::GetSingleton().players[i].energy = TankHandler::GetSingleton().players[i].maxEnergy;
+                if (playerTank->energy > playerTank->maxEnergy)
+                    playerTank->energy = playerTank->maxEnergy;
 
                 CreateItemCollectionFX(item.x, item.y, item.z, item.color);
 

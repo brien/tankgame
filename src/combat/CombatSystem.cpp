@@ -3,6 +3,7 @@
 #include "../Bullet.h"
 #include "../Tank.h"
 #include "../TankHandler.h"
+#include "../PlayerManager.h"
 #include "../App.h"
 #include <cmath>
 
@@ -164,54 +165,77 @@ void CombatSystem::ApplyTankDamage(Tank* tank, float damage, Bullet* source) {
 }
 
 void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bullet) {
-    if (playerIndex < 0 || playerIndex >= 4) return;
+    // Safety: Validate playerIndex bounds for TankHandler arrays (size 2)
+    if (playerIndex < 0 || playerIndex >= 2) {
+        Logger::Get().Write("WARNING: UpdatePlayerCombos - invalid playerIndex=%d\n", playerIndex);
+        return;
+    }
     
-    TankHandler& handler = TankHandler::GetSingleton();
+    Logger::Get().Write("CombatSystem::UpdatePlayerCombos - playerIndex=%d, bulletId=%d, targetHealth=%.2f\n", 
+                       playerIndex, bullet->GetTankId(), target->health);
     
-    handler.hitCombo[playerIndex]++;
-    handler.combo[playerIndex] += static_cast<float>(handler.hitCombo[playerIndex]) / 10.0f;
+    // Get player from PlayerManager
+    Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayer(playerIndex);
+    if (!player) {
+        Logger::Get().Write("WARNING: UpdatePlayerCombos - no player found for index=%d\n", playerIndex);
+        return;
+    }
+    
+    // Increment hit combo
+    player->IncrementHitCombo();
+    
+    // Add to combo based on hit streak
+    float comboBonus = static_cast<float>(player->GetHitCombo()) / 10.0f;
+    player->AddCombo(comboBonus, player->GetComboNumber());
     
     if (target->health <= 0) {
-        // Tank was killed
-        float distx = bullet->GetX() - handler.players[playerIndex].x;
-        float distz = bullet->GetZ() - handler.players[playerIndex].z;
+        // Tank was killed - get player tank for position
+        Tank* playerTank = player->GetControlledTank();
+        if (!playerTank) return; // No player tank available
+        
+        float distx = bullet->GetX() - playerTank->x;
+        float distz = bullet->GetZ() - playerTank->z;
         float dist = std::sqrt(distx * distx + distz * distz);
         
         // Combo bonuses based on conditions
-        if (handler.hitCombo[playerIndex] > 9) {
-            handler.combo[playerIndex] += handler.comboNum[playerIndex] / 2.0f;
-            handler.players[playerIndex].bonus = 23;
-            handler.players[playerIndex].bonusTime = 0;
+        if (player->GetHitCombo() > 9) {
+            player->AddCombo(player->GetComboNumber() / 2.0f, player->GetComboNumber());
+            playerTank->bonus = 23;
+            playerTank->bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
-                handler.players[playerIndex].x, handler.players[playerIndex].y, handler.players[playerIndex].z,
+                playerTank->x, playerTank->y, playerTank->z,
                 0, .01f, 0, 0, 0, 90, 0.5f, 0.5f, 0, 1));
         }
         
         if (dist > 20) {
-            handler.combo[playerIndex] += dist / 10.0f;
-            handler.players[playerIndex].bonus = 21;
-            handler.players[playerIndex].bonusTime = 0;
+            player->AddCombo(dist / 10.0f, player->GetComboNumber());
+            playerTank->bonus = 21;
+            playerTank->bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
-                handler.players[playerIndex].x, handler.players[playerIndex].y, handler.players[playerIndex].z,
+                playerTank->x, playerTank->y, playerTank->z,
                 0, .01f, 0, 0, 0, 90, 0, 1, 1, 1));
         }
         
         if (bullet->GetBounces() > 0 && bullet->GetDT() < 10.0f) {
-            handler.combo[playerIndex] += (1 + bullet->GetDT() / 2.0f);
-            handler.players[playerIndex].bonus = 22;
-            handler.players[playerIndex].bonusTime = 0;
+            player->AddCombo(1 + bullet->GetDT() / 2.0f, player->GetComboNumber());
+            playerTank->bonus = 22;
+            playerTank->bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
-                handler.players[playerIndex].x, handler.players[playerIndex].y, handler.players[playerIndex].z,
+                playerTank->x, playerTank->y, playerTank->z,
                 0, .01f, 0, 0, 0, 90, 0.5f, 0.5f, 0, 1));
         }
         
-        handler.combo[playerIndex] += (10.0f / (handler.combo[playerIndex] / 10.0f + 1.0f));
+        // Add kill bonus
+        float currentCombo = player->GetCombo();
+        player->AddCombo(10.0f / (currentCombo / 10.0f + 1.0f), player->GetComboNumber());
         
-        if (handler.combo[playerIndex] > handler.special[playerIndex]) {
-            handler.special[playerIndex] = handler.combo[playerIndex];
+        // Update special charge if combo is higher
+        if (player->GetCombo() > player->GetSpecialCharge()) {
+            player->SetSpecialCharge(player->GetCombo());
         }
         
-        handler.comboNum[playerIndex]++;
+        // Increment combo number (kill count)
+        player->AddCombo(0, player->GetComboNumber() + 1);
     }
 }
 
@@ -224,5 +248,8 @@ void CombatSystem::CreateCollisionEffects(float x, float y, float z, float r, fl
 
 void CombatSystem::ResetPlayerCombo(int playerIndex) {
     if (playerIndex < 0 || playerIndex >= 4) return;
-    TankHandler::GetSingleton().hitCombo[playerIndex] = 0;
+    Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayer(playerIndex);
+    if (player) {
+        player->ResetHitCombo();
+    }
 }

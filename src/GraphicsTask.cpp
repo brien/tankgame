@@ -179,12 +179,16 @@ void GraphicsTask::Update()
     // Essential buffer clearing and basic setup
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    static int lastnumPlayers = TankHandler::GetSingleton().numPlayers;
+    static int lastnumPlayers = 1; // Default to 1, will be updated dynamically
+    
+    // Get current player count from PlayerManager (via GameTask)
+    int numPlayers = (App::GetSingleton().gameTask && App::GetSingleton().gameTask->GetPlayerManager()) 
+        ? App::GetSingleton().gameTask->GetPlayerManager()->GetNumPlayers() 
+        : 1;
 
-    if (lastnumPlayers != TankHandler::GetSingleton().numPlayers)
+    if (lastnumPlayers != numPlayers)
     {
         // Configure viewports when player count changes - delegate to rendering pipeline
-        int numPlayers = TankHandler::GetSingleton().numPlayers;
         if (renderingPipeline)
         {
             renderingPipeline->ConfigureViewports(numPlayers, VideoTask::scrWidth, VideoTask::scrHeight);
@@ -221,9 +225,10 @@ void GraphicsTask::Update()
 
     if (App::GetSingleton().gameTask->IsGameStarted())
     {
-        // Update cameras using CameraManager
-        int numPlayers = TankHandler::GetSingleton().numPlayers;
-        cameraManager.UpdateCameras(TankHandler::GetSingleton().players, numPlayers, true);
+        // Update cameras using CameraManager with player tanks from PlayerManager
+        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+        int numPlayers = App::GetSingleton().gameTask->GetPlayerManager()->GetNumPlayers();
+        cameraManager.UpdateCamerasFromPointers(playerTanks, numPlayers, true);
 
         // Copy camera data to the old cams array for backward compatibility
         for (int i = 0; i < numPlayers && i < 4; i++)
@@ -262,7 +267,8 @@ void GraphicsTask::InitializeNewRenderingPipeline()
         sceneDataBuilder = std::make_unique<SceneDataBuilder>(
             TankHandler::GetSingleton(),
             LevelHandler::GetSingleton(),
-            gameWorld);
+            gameWorld,
+            App::GetSingleton().gameTask ? App::GetSingleton().gameTask->GetPlayerManager() : nullptr);
 
         // Create RenderingPipeline with references to managers
         renderingPipeline = std::make_unique<RenderingPipeline>(
@@ -295,7 +301,8 @@ void GraphicsTask::SetGameWorld(GameWorld* world)
     sceneDataBuilder = std::make_unique<SceneDataBuilder>(
         TankHandler::GetSingleton(),
         LevelHandler::GetSingleton(),
-        gameWorld);
+        gameWorld,
+        App::GetSingleton().gameTask ? App::GetSingleton().gameTask->GetPlayerManager() : nullptr);
 }
 
 void GraphicsTask::CleanupNewRenderingPipeline()
@@ -332,10 +339,16 @@ void GraphicsTask::RenderWithNewPipeline()
     {
         // Build scene data from current game state
         SceneData sceneData = sceneDataBuilder->BuildScene();
+        
+        Logger::Get().Write("RenderWithNewPipeline: Building scene data (numPlayers=%d)...\n", sceneData.numPlayers);
 
+        Logger::Get().Write("RenderWithNewPipeline: Scene built, extracting camera data...\n");
+        
         // Extract camera data for split-screen support
         sceneData.cameras = sceneDataBuilder->ExtractCameraData();
 
+        Logger::Get().Write("RenderWithNewPipeline: Rendering all player views...\n");
+        
         // Add game state information
         sceneData.gameStarted = App::GetSingleton().gameTask->IsGameStarted();
         sceneData.paused = App::GetSingleton().gameTask->IsPaused();
@@ -344,6 +357,8 @@ void GraphicsTask::RenderWithNewPipeline()
         // Render the complete scene using the centralized pipeline
         renderingPipeline->RenderAllPlayerViews(sceneData);
 
+        Logger::Get().Write("RenderWithNewPipeline: Render complete\n");
+        
         // UI rendering is now handled by the RenderingPipeline
         // All HUD, Menu, and Debug rendering is data-driven and centralized
     }
@@ -371,6 +386,18 @@ void GraphicsTask::DrawSky()
 
 void GraphicsTask::DrawHUD(Tank &player)
 {
+    // Safety: Calculate array index and validate bounds
+    int arrayIndex = (-1 * player.id) - 1;
+    
+    // Skip HUD rendering if array index is invalid
+    if (arrayIndex < 0 || arrayIndex >= 2) {
+        Logger::Get().Write("WARNING: DrawHUD skipped - invalid player.id=%d (arrayIndex=%d)\n", player.id, arrayIndex);
+        return;
+    }
+    
+    // Legacy HUD rendering (deprecated - new pipeline handles HUD via HUDRenderer)
+    // This code path should not be reached when using RenderingPipeline
+    
     static int times2 = 1;
 
     if (times2 > 60000)
@@ -589,12 +616,15 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glEnd();
 
-    if (TankHandler::GetSingleton().special[(-1 * player.id) - 1] < player.fireCost / 5)
+    Player* currentPlayer = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(player.id);
+    if (!currentPlayer) return; // Safety check
+    
+    if (currentPlayer->GetSpecialCharge() < player.fireCost / 5)
         glEnable(GL_BLEND);
 
     glBegin(GL_QUADS);
 
-    float test = TankHandler::GetSingleton().combo[(-1 * player.id) - 1];
+    float test = currentPlayer->GetCombo();
     test = test / 100;
 
     // if(test>1)test=1;
@@ -605,7 +635,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     glVertex3f(0.50f + 0.01f, -0.37f + test, 0);
     glVertex3f(0.50f + 0.01f, -0.37f, 0);
 
-    float spec = TankHandler::GetSingleton().special[(-1 * player.id) - 1];
+    float spec = currentPlayer->GetSpecialCharge();
     spec = spec / 100;
 
     glColor4f(0.5f, spec, 1.0f, 0.02f);
@@ -649,7 +679,7 @@ void GraphicsTask::DrawHUD(Tank &player)
      glEnable(GL_BLEND);
 
 
-     glBindTexture(GL_TEXTURE_2D, textureArray[TankHandler::GetSingleton().comboNum[(-1*player.id)-1]%10 ]);
+     glBindTexture(GL_TEXTURE_2D, textureArray[currentPlayer->GetComboNumber()%10 ]);
 
 
      glBegin(GL_QUADS);
@@ -672,7 +702,7 @@ void GraphicsTask::DrawHUD(Tank &player)
      //{
      glTranslatef(-0.04,0.0,0.0);
 
-     glBindTexture(GL_TEXTURE_2D, textureArray[(int)TankHandler::GetSingleton().comboNum[(-1*player.id)-1]/10 ]);
+     glBindTexture(GL_TEXTURE_2D, textureArray[(int)currentPlayer->GetComboNumber()/10 ]);
 
      glBegin(GL_QUADS);
 
@@ -736,7 +766,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glEnable(GL_BLEND);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().hitCombo[(-1 * player.id) - 1] % 10]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[currentPlayer->GetHitCombo() % 10]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -758,7 +788,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     //{
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().hitCombo[(-1 * player.id) - 1] / 10]);
+    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)currentPlayer->GetHitCombo() / 10]);
 
     glBegin(GL_QUADS);
 
@@ -865,9 +895,14 @@ void GraphicsTask::DrawHUD(Tank &player)
         glPopMatrix();
     }
 
-    if (App::GetSingleton().gameTask->IsVersusMode() && (!TankHandler::GetSingleton().players[0].alive || !TankHandler::GetSingleton().players[1].alive))
-    {
-        glPushMatrix();
+    // Check versus mode player death status from PlayerManager
+    if (App::GetSingleton().gameTask->IsVersusMode()) {
+        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+        bool player0Dead = !playerTanks[0] || !playerTanks[0]->alive;
+        bool player1Dead = !playerTanks[1] || !playerTanks[1]->alive;
+        if (player0Dead || player1Dead)
+        {
+            glPushMatrix();
         glLoadIdentity();
         glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[24]);
         glTranslatef(0.0, 0.2, -1.0);
@@ -887,7 +922,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
         glTranslatef(0.08, -0.05, 0.0);
 
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().wins[(-1 * player.id) - 1] % 10]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[currentPlayer->GetWins() % 10]);
 
         glBegin(GL_QUADS);
         glTexCoord2f(0, 1);
@@ -907,7 +942,7 @@ void GraphicsTask::DrawHUD(Tank &player)
         //---------
         glTranslatef(-0.08, 0.0, 0.0);
 
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().wins[(-1 * player.id) - 1] / 10]);
+        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)currentPlayer->GetWins() / 10]);
 
         glBegin(GL_QUADS);
 
@@ -925,6 +960,7 @@ void GraphicsTask::DrawHUD(Tank &player)
         glEnd();
 
         glPopMatrix();
+        }
     }
 
     glPushMatrix();

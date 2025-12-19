@@ -10,6 +10,7 @@ public:
     ~VideoTask() = default;
 
     static int scrWidth, scrHeight, scrBPP;
+    static int difficultySetting; // 0=easy, 1=normal, 2=hard (read from settings file)
 
     bool Start();
     void Update();

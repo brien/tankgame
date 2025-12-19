@@ -23,6 +23,7 @@
 #include "math.h"
 #include "LevelHandler.h"
 #include "TankHandler.h"
+#include "PlayerManager.h"
 #include "Tank.h"
 #include "App.h"
 #include "events/Events.h"
@@ -175,7 +176,9 @@ void Bullet::NextFrame()
     
     // Check level collision first
     PointCollisionQuery levelQuery(x, y, z, CollisionLayer::LEVEL, this);
+    Logger::Get().Write("Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (%.2f, %.2f, %.2f)\n", x, y, z);
     Events::GetBus().Publish(levelQuery);
+    Logger::Get().Write("Bullet::CheckForCollisions - PointCollisionQuery result=%d\n", levelQuery.result);
     
     if (levelQuery.result) {
         // Post level collision event for CombatSystem to handle
@@ -274,7 +277,13 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             }
         }
 
-        int dist = static_cast<int>(sqrt((x - TankHandler::GetSingleton().players[0].x) * (x - TankHandler::GetSingleton().players[0].x) + (z - TankHandler::GetSingleton().players[0].z) * (z - TankHandler::GetSingleton().players[0].z)));
+        // Get player tank from PlayerManager for audio volume calculation
+        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
+        Tank* player0 = playerTanks[0];
+        int dist = 128; // Default max distance
+        if (player0) {
+            dist = static_cast<int>(sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z)));
+        }
 
         if (dist > 128)
         {
@@ -434,7 +443,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
         if (tankId < 0)
         {
-            TankHandler::GetSingleton().hitCombo[(-1 * tankId) - 1] = 0;
+            App::GetSingleton().gameTask->GetPlayerManager()->ResetHitComboByTankId(tankId);
         }
 
         CreateWallImpactFX(xpp, zpp);

@@ -33,6 +33,19 @@ void CameraManager::UpdateCameras(const std::array<Tank, 2>& players, int numPla
     }
 }
 
+void CameraManager::UpdateCamerasFromPointers(const std::array<Tank*, 2>& players, int numPlayers, bool gameStarted) {
+    if (!gameStarted) {
+        return;
+    }
+    
+    // Update cameras for all active players
+    for (int i = 0; i < numPlayers && i < MAX_CAMERAS; ++i) {
+        if (players[i]) {
+            UpdateCamera(i, *players[i]);
+        }
+    }
+}
+
 void CameraManager::UpdateCamera(int playerId, const Tank& tank) {
     if (!IsValidPlayerId(playerId)) {
         return;

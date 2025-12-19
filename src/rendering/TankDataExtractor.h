@@ -32,6 +32,18 @@ public:
         int numPlayers);
     
     /**
+     * Extracts rendering data from player tanks (pointer version for PlayerManager).
+     * @param players Array of pointers to player Tank objects
+     * @param special Array of special charge values for players
+     * @param numPlayers Number of active players
+     * @return Vector of TankRenderData structures for rendering
+     */
+    static std::vector<TankRenderData> ExtractPlayerDataFromPointers(
+        const std::array<Tank*, TankHandler::MAX_PLAYERS>& players,
+        const std::array<float, TankHandler::MAX_PLAYERS>& special,
+        int numPlayers);
+    
+    /**
      * Extracts rendering data from enemy tanks vector.
      * @param enemyTanks Vector of enemy Tank objects
      * @return Vector of TankRenderData structures for rendering

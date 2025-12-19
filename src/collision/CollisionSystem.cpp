@@ -5,12 +5,15 @@
 #include "../Item.h"
 #include "../Bullet.h"
 #include "../Tank.h"
+#include "../Logger.h"
 #include <cmath>
 
 CollisionSystem::CollisionSystem() {
 }
 
 void CollisionSystem::Initialize() {
+    Logger::Get().Write("CollisionSystem::Initialize() - Subscribing to collision query events\n");
+    
     // Subscribe to collision query events
     Events::GetBus().Subscribe<PointCollisionQuery>([this](const PointCollisionQuery& query) {
         OnPointCollisionQuery(query);
@@ -23,6 +26,8 @@ void CollisionSystem::Initialize() {
     Events::GetBus().Subscribe<GetLevelBoundsQuery>([this](const GetLevelBoundsQuery& query) {
         OnGetLevelBoundsQuery(query);
     });
+    
+    Logger::Get().Write("CollisionSystem::Initialize() - Subscriptions complete\n");
 }
 
 void CollisionSystem::Update() {
@@ -126,7 +131,11 @@ std::vector<Entity*> CollisionSystem::CheckSphereCollision(float x, float y, flo
 }
 
 void CollisionSystem::OnPointCollisionQuery(const PointCollisionQuery& query) {
+    Logger::Get().Write("CollisionSystem::OnPointCollisionQuery - pos=(%.2f, %.2f, %.2f)\n", query.x, query.y, query.z);
+    
     query.result = CheckPointCollision(query.x, query.y, query.z, query.layerMask, query.excludeEntity);
+    
+    Logger::Get().Write("CollisionSystem::OnPointCollisionQuery - result=%d\n", query.result);
     
     if (query.result) {
         // Find which entity was hit (for more detailed queries)
@@ -148,7 +157,12 @@ void CollisionSystem::OnPointCollisionQuery(const PointCollisionQuery& query) {
 }
 
 void CollisionSystem::OnSphereCollisionQuery(const SphereCollisionQuery& query) {
+    Logger::Get().Write("CollisionSystem::OnSphereCollisionQuery - pos=(%.2f, %.2f, %.2f) radius=%.2f\n", 
+                       query.x, query.y, query.z, query.radius);
+    
     query.results = CheckSphereCollision(query.x, query.y, query.z, query.radius, query.layerMask, query.excludeEntity);
+    
+    Logger::Get().Write("CollisionSystem::OnSphereCollisionQuery - found %zu entities\n", query.results.size());
 }
 
 void CollisionSystem::OnGetLevelBoundsQuery(const GetLevelBoundsQuery& query) {

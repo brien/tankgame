@@ -9,6 +9,8 @@
 GameWorld::GameWorld() = default;
 
 void GameWorld::Initialize() {
+    Logger::Get().Write("GameWorld::Initialize() - Starting\n");
+    
     // Initialize systems
     collisionSystem.Initialize();
     combatSystem.Initialize();
@@ -25,6 +27,10 @@ void GameWorld::Shutdown() {
 }
 
 void GameWorld::Update() {
+    Logger::Get().Write("GameWorld::Update - tanks=%zu, bullets=%zu, effects=%zu, items=%zu\n",
+                       tanks.GetEntities().size(), bullets.GetEntities().size(), 
+                       effects.GetEntities().size(), items.GetEntities().size());
+    
     // Update collision system first
     collisionSystem.Update();
     
@@ -37,6 +43,8 @@ void GameWorld::Update() {
     // Handle interactions
     HandleCollisions();
     HandleItemCollection();
+    
+    Logger::Get().Write("GameWorld::Update complete\n");
 }
 
 void GameWorld::Clear() {
@@ -67,6 +75,8 @@ void GameWorld::Clear() {
 Bullet* GameWorld::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
                                const Color& primaryColor, const Color& secondaryColor,
                                float x, float y, float z, float rx, float ry, float rz) {
+    Logger::Get().Write("GameWorld::CreateBullet - tankId=%d, pos=(%.2f, %.2f, %.2f)\n", id, x, y, z);
+    
     Bullet* bullet = bullets.Create(id, attack, type1, type2, bounces, dTpressed, primaryColor, secondaryColor, x, y, z, rx, ry, rz);
     
     // Set GameWorld reference so bullet can create FX
@@ -142,6 +152,20 @@ void GameWorld::SetupEventHandlers() {
     });
 }
 
+// Helper functions to check if entity should be kept around despite being dead
+namespace {
+    template<typename T>
+    bool ShouldKeepDeadEntity(T* entity) {
+        return false;  // Default: remove dead entities
+    }
+    
+    // Specialization for Tank - keep dead player tanks for respawn logic
+    template<>
+    bool ShouldKeepDeadEntity<Tank>(Tank* entity) {
+        return entity->isPlayer;  // Keep dead player tanks
+    }
+}
+
 template<typename T>
 void GameWorld::UpdateEntitiesWithCleanup(EntityManager<T>& manager) {
     auto& entities = const_cast<std::vector<std::unique_ptr<T>>&>(manager.GetEntities());
@@ -158,6 +182,11 @@ void GameWorld::UpdateEntitiesWithCleanup(EntityManager<T>& manager) {
         std::remove_if(entities.begin(), entities.end(),
             [this](const auto& entity) {
                 if (!entity->IsAlive()) {
+                    // Check if we should keep this dead entity around
+                    if (ShouldKeepDeadEntity(entity.get())) {
+                        return false;
+                    }
+                    
                     // Unregister from collision system before destroying
                     collisionSystem.UnregisterEntity(entity.get());
                     entity->OnDestroy();  // Call cleanup

@@ -28,16 +28,16 @@ public:
     
     /**
      * Extract HUD data for all active players
-     * @param players Array of player tanks
+     * @param playerTanks Array of player tank pointers from PlayerManager
      * @param numPlayers Number of active players
      * @return Vector of HUD render data for all players
      */
     static std::vector<HUDRenderData> ExtractAllPlayerHUDs(
-        const std::array<Tank, 2>& players, int numPlayers);
+        const std::array<Tank*, 2>& playerTanks, int numPlayers);
     
     /**
      * Extract complete UI data including HUDs, menus, and debug info
-     * @param tankHandler Reference to tank handler for player data
+     * @param playerMgr Reference to player manager for player data
      * @param gameStarted Whether the game has started
      * @param isPaused Whether the game is paused
      * @param showMenu Whether menu should be displayed
@@ -46,7 +46,7 @@ public:
      * @return Complete UI render data
      */
     static UIRenderData ExtractCompleteUIData(
-        const TankHandler& tankHandler,
+        const class PlayerManager& playerMgr,
         bool gameStarted = true,
         bool isPaused = false,
         bool showMenu = false,

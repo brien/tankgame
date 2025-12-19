@@ -1,12 +1,14 @@
 #include "SceneDataBuilder.h"
 #include "../App.h"
 #include "../GameWorld.h"
+#include "../PlayerManager.h"
 
 SceneDataBuilder::SceneDataBuilder(const TankHandler& tanks, const LevelHandler& level, 
-                                 const GameWorld* world)
+                                 const GameWorld* world, const PlayerManager* playerMgr)
     : tankHandler(tanks)
     , levelHandler(level)
-    , gameWorld(world) {
+    , gameWorld(world)
+    , playerManager(playerMgr) {
 }
 
 SceneData SceneDataBuilder::BuildScene() const {
@@ -49,11 +51,15 @@ bool SceneDataBuilder::IsReady() const {
 std::vector<TankRenderData> SceneDataBuilder::ExtractTankData() const {
     std::vector<TankRenderData> allTanks;
     
-    // Extract player tank data from TankHandler (players not yet migrated to GameWorld)
-    auto playerTanks = TankDataExtractor::ExtractPlayerData(
-        tankHandler.players, 
-        tankHandler.special, 
-        tankHandler.numPlayers
+    // Extract player tank data from PlayerManager
+    auto playerTankPtrs = playerManager ? playerManager->GetPlayerTanks() : std::array<Tank*, 2>{nullptr, nullptr};
+    auto special = playerManager ? playerManager->GetSpecialCharges() : std::array<float, 2>{0.0f, 0.0f};
+    int numPlayers = playerManager ? playerManager->GetNumPlayers() : 0;
+    
+    auto playerTanks = TankDataExtractor::ExtractPlayerDataFromPointers(
+        playerTankPtrs, 
+        special, 
+        numPlayers
     );
     
     allTanks.reserve(playerTanks.size() + 20); // Reserve space for players + expected enemies
@@ -163,7 +169,7 @@ TerrainRenderData SceneDataBuilder::ExtractTerrainData() const {
 std::vector<CameraData> SceneDataBuilder::ExtractCameraData() const {
     std::vector<CameraData> cameras;
     
-    int numPlayers = tankHandler.numPlayers;
+    int numPlayers = playerManager->GetNumPlayers();
     cameras.reserve(numPlayers);
     
     // Extract camera data for each player
@@ -187,12 +193,12 @@ std::vector<CameraData> SceneDataBuilder::ExtractCameraData() const {
 }
 
 void SceneDataBuilder::ExtractGameState(SceneData& scene) const {
-    // Extract game state from various handlers using actual available members
-    scene.numPlayers = tankHandler.numPlayers;
+    // Extract game state from PlayerManager and GameTask
+    scene.numPlayers = playerManager->GetNumPlayers();
     scene.gameStarted = App::GetSingleton().gameTask->IsGameStarted();
     scene.paused = App::GetSingleton().gameTask->IsPaused();
-    // Note: TankHandler doesn't seem to have versusMode as a method, use a reasonable fallback
-    scene.versusMode = (tankHandler.numPlayers > 1); // Simple heuristic
+    // Versus mode when multiple players
+    scene.versusMode = (scene.numPlayers > 1);
     
     // Debug mode could be extracted from a global setting or App state
     scene.debugMode = false; // TODO: Implement debug mode detection
@@ -280,8 +286,13 @@ std::unique_ptr<UIRenderData> SceneDataBuilder::ExtractUIData() const {
     int menuState = App::GetSingleton().gameTask->GetMenuState();
     bool showDebug = App::GetSingleton().gameTask->IsDebugMode();
     
-    UIRenderData uiData = HUDDataExtractor::ExtractCompleteUIData(
-        tankHandler, gameStarted, isPaused, showMenu, menuState, showDebug);
+    // Use PlayerManager if available, otherwise create empty UI data
+    if (playerManager) {
+        UIRenderData uiData = HUDDataExtractor::ExtractCompleteUIData(
+            *playerManager, gameStarted, isPaused, showMenu, menuState, showDebug);
+        return std::make_unique<UIRenderData>(std::move(uiData));
+    }
     
-    return std::make_unique<UIRenderData>(std::move(uiData));
+    // Fallback: return empty UI data
+    return std::make_unique<UIRenderData>();
 }

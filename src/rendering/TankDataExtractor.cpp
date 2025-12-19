@@ -1,4 +1,5 @@
 #include "TankDataExtractor.h"
+#include "../Logger.h"
 
 TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     TankRenderData data;
@@ -50,13 +51,52 @@ std::vector<TankRenderData> TankDataExtractor::ExtractPlayerData(
     int numPlayers) {
     
     std::vector<TankRenderData> renderData;
-    renderData.reserve(numPlayers);
     
-    for (int i = 0; i < numPlayers; ++i) {
+    // Safety: Clamp numPlayers to prevent array bounds errors
+    int safeNumPlayers = std::min(numPlayers, static_cast<int>(TankHandler::MAX_PLAYERS));
+    if (safeNumPlayers != numPlayers) {
+        Logger::Get().Write("WARNING: TankDataExtractor numPlayers=%d clamped to %d\n", numPlayers, safeNumPlayers);
+    }
+    
+    renderData.reserve(safeNumPlayers);
+    
+    for (int i = 0; i < safeNumPlayers; ++i) {
         if (players[i].alive) {
+            // Validate tank ID before extraction
+            int tankId = players[i].id;
+            if (tankId >= 0 || tankId < -2) {
+                Logger::Get().Write("WARNING: TankDataExtractor - player %d has invalid id=%d, skipping\n", i, tankId);
+                continue;
+            }
+            
             TankRenderData data = ExtractRenderData(players[i]);
             // Add special charge information for players
             // Note: special array might be used for additional effects
+            renderData.push_back(data);
+        }
+    }
+    
+    return renderData;
+}
+
+std::vector<TankRenderData> TankDataExtractor::ExtractPlayerDataFromPointers(
+    const std::array<Tank*, TankHandler::MAX_PLAYERS>& players,
+    const std::array<float, TankHandler::MAX_PLAYERS>& special,
+    int numPlayers) {
+    
+    std::vector<TankRenderData> renderData;
+    
+    // Safety: Clamp numPlayers to prevent array bounds errors
+    int safeNumPlayers = std::min(numPlayers, static_cast<int>(TankHandler::MAX_PLAYERS));
+    if (safeNumPlayers != numPlayers) {
+        Logger::Get().Write("WARNING: TankDataExtractor numPlayers=%d clamped to %d\\n", numPlayers, safeNumPlayers);
+    }
+    
+    renderData.reserve(safeNumPlayers);
+    
+    for (int i = 0; i < safeNumPlayers; ++i) {
+        if (players[i] && players[i]->alive) {
+            TankRenderData data = ExtractRenderData(*players[i]);
             renderData.push_back(data);
         }
     }

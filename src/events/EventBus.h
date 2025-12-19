@@ -65,8 +65,13 @@ public:
         }
     }
     
-    // Clear all handlers (useful for testing)
+    // Clear queued events only (keeps subscriptions intact)
     void Clear() {
+        eventQueue.clear();
+    }
+    
+    // Clear all handlers and queued events (use sparingly!)
+    void ClearAll() {
         handlers.clear();
         eventQueue.clear();
     }
