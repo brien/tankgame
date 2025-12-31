@@ -78,7 +78,7 @@ Bullet::Bullet()
       secondaryColor(0.5f, 0.5f, 0.5f, 1.0f),
       moveRate(33.0f), power(0.0f),
       isSpecial(false),
-      id(0), tankId(0),
+      id(0), ownerIdentity(TankIdentity::Enemy(0)),
       type1(), type2(),
       dT(0.0f), maxdT(100.0f),
       numbounces(0), maxbounces(0),
@@ -86,7 +86,7 @@ Bullet::Bullet()
 {
 }
 
-Bullet::Bullet(int tid, float power,
+Bullet::Bullet(const TankIdentity& ownerIdentity, float power,
                TankType type1, TankType type2,
                int maxbounces,
                float dTpressed,
@@ -102,7 +102,7 @@ Bullet::Bullet(int tid, float power,
       secondaryColor(secondaryColor),
       moveRate(33.0f), power(power),
       isSpecial(false),
-      id(1), tankId(tid),
+      id(1), ownerIdentity(ownerIdentity),
       type1(type1), type2(type2),
       dT(0.0f), maxdT(100.0f),
       numbounces(0), maxbounces(maxbounces),
@@ -195,11 +195,11 @@ void Bullet::NextFrame()
         // Filter out the tank that fired this bullet
         for (Entity* entity : tankQuery.results) {
             Tank* tank = dynamic_cast<Tank*>(entity);
-            if (tank && tank->id != tankId) {
+            if (tank && tank->identity != ownerIdentity) {
                 // Found a valid target (not the firing tank)
                 Events::GetBus().Post(BulletCollisionEvent(this, tank, x, y, z));
                 return; // CombatSystem will handle the collision response
-            } else if (tank && tank->id == tankId && dT > 0.5f) {
+            } else if (tank && tank->identity == ownerIdentity && dT > 0.5f) {
                 // Allow collision with firing tank only after 0.5 seconds (for healing/self-damage)
                 Events::GetBus().Post(BulletCollisionEvent(this, tank, x, y, z));
                 return;
@@ -216,11 +216,11 @@ void Bullet::NextFrame()
             // Filter out the tank that fired this bullet
             for (Entity* entity : prevQuery.results) {
                 Tank* tank = dynamic_cast<Tank*>(entity);
-                if (tank && tank->id != tankId) {
+                if (tank && tank->identity != ownerIdentity) {
                     // Found a valid target (not the firing tank)
                     Events::GetBus().Post(BulletCollisionEvent(this, tank, x - xpp / 2, y, z - zpp / 2));
                     return;
-                } else if (tank && tank->id == tankId && dT > 0.5f) {
+                } else if (tank && tank->identity == ownerIdentity && dT > 0.5f) {
                     // Allow collision with firing tank only after 0.5 seconds (for healing/self-damage)
                     Events::GetBus().Post(BulletCollisionEvent(this, tank, x - xpp / 2, y, z - zpp / 2));
                     return;
@@ -305,7 +305,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             }
         }
 
-        if (tankId < 0 && isSpecial && type1 == TankType::TYPE_YELLOW)
+        if (ownerIdentity.IsPlayer() && isSpecial && type1 == TankType::TYPE_YELLOW)
         {
             if (type2 == TankType::TYPE_RED)
             {
@@ -314,7 +314,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                     Bullet temp;
 
-                    temp.tankId = tankId;
+                    temp.ownerIdentity = ownerIdentity;
 
                     temp.x = x;
                     temp.y = y;
@@ -348,7 +348,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                     Bullet temp;
 
-                    temp.tankId = tankId;
+                    temp.ownerIdentity = ownerIdentity;
 
                     temp.rx = rx;
                     temp.ry = ry;
@@ -380,7 +380,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                 Bullet temp;
 
-                temp.tankId = tankId;
+                temp.ownerIdentity = ownerIdentity;
 
                 temp.x = x;
                 temp.y = y;
@@ -406,7 +406,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                 Bullet temp;
 
-                temp.tankId = tankId;
+                temp.ownerIdentity = ownerIdentity;
 
                 temp.x = x;
                 temp.y = y;
@@ -441,9 +441,9 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
     {
         alive = false;
 
-        if (tankId < 0)
+        if (ownerIdentity.IsPlayer())
         {
-            App::GetSingleton().gameTask->GetPlayerManager()->ResetHitComboByTankId(tankId);
+            App::GetSingleton().gameTask->GetPlayerManager()->ResetHitComboByTankId(ownerIdentity.GetLegacyId());
         }
 
         CreateWallImpactFX(xpp, zpp);

@@ -107,7 +107,7 @@ void Tank::Die()
 
     if (!alive && deadtime < 0.01)
     {
-        if (id < 0)
+        if (identity.IsPlayer())
         {
             App::GetSingleton().soundTask->PlayChannel(7);
         }
@@ -119,7 +119,7 @@ void Tank::Die()
 
     TankHandler::GetSingleton().numAttackingTanks--;
 
-    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() != 1 && id >= 0)
+    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() != 1 && identity.IsEnemy())
     {
         LevelHandler::GetSingleton().AddItem(x, y + .2, z, type1);
     }
@@ -128,7 +128,7 @@ void Tank::Die()
     {
         CreateDeathExplosionFX();
     }
-    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 && id >= 0)
+    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 && identity.IsEnemy())
     {
         LevelHandler::GetSingleton().SetTerrainHeight(static_cast<int>(x), static_cast<int>(z), -20);
     }
@@ -141,19 +141,20 @@ void Tank::Fire(float dTpressed)
     
     // Safety: Validate position is not NaN before creating bullets
     if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
-        Logger::Get().Write("WARNING: Tank %d has NaN position, cannot fire\n", id);
+        Logger::Get().Write("WARNING: Tank %d has NaN position, cannot fire\n", identity.GetLegacyId());
         return;
     }
     
     // Safety: Validate rotation values are not NaN
     if (std::isnan(ry) || std::isnan(rty) || std::isnan(rx) || std::isnan(rtx) || std::isnan(rz) || std::isnan(rtz)) {
-        Logger::Get().Write("WARNING: Tank %d has NaN rotation (ry=%.2f, rty=%.2f), cannot fire\n", id, ry, rty);
+        Logger::Get().Write("WARNING: Tank %d has NaN rotation (rx=%.2f/%.2f, ry=%.2f/%.2f, rz=%.2f/%.2f), cannot fire\n",
+            identity.GetLegacyId(), rx, rtx, ry, rty, rz, rtz);
         return;
     }
     
     if (energy >= fireCost && fireTimer > fireRate)
     {
-        Logger::Get().Write("Tank::Fire - id=%d, creating bullet at (%.2f, %.2f, %.2f)\n", id, x, y, z);
+        Logger::Get().Write("Tank::Fire - id=%d, creating bullet at (%.2f, %.2f, %.2f)\n", identity.GetLegacyId(), x, y, z);
         
         // Get player tank from PlayerManager for audio positioning
         auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
@@ -161,17 +162,27 @@ void Tank::Fire(float dTpressed)
         
         // Calculate audio positioning if player tank exists and is alive
         if (player0 && player0->alive) {
-            float ratio = (z - player0->z) / (x - player0->x);
-            float ryp = toDegrees(atan(ratio));
+            float dx = x - player0->x;
+            float dz = z - player0->z;
+            float ryp;
+            
+            // Safety: Check for division by zero
+            if (std::abs(dx) < 0.001f) {
+                // Vertically aligned - angle is 90 or -90 degrees
+                ryp = (dz > 0.0f ? 90.0f : -90.0f);
+            } else {
+                float ratio = dz / dx;
+                ryp = toDegrees(atan(ratio));
 
-            if (player0->x < x)
-            {
-                ryp += 180;
+                if (player0->x < x)
+                {
+                    ryp += 180;
+                }
             }
 
             ryp -= (player0->ry + player0->rty);
 
-            float dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
+            float dist = sqrt(dx * dx + dz * dz);
 
             Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
         } else {
@@ -185,7 +196,7 @@ void Tank::Fire(float dTpressed)
 
         Color primaryColor = GetPrimaryColor();
         Color secondaryColor = GetSecondaryColor();
-        gameWorld->CreateBullet(id, attack, type1, type2, bounces,
+        gameWorld->CreateBullet(identity, attack, type1, type2, bounces,
                     dTpressed, primaryColor, secondaryColor,
                     x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                     y + .25,
@@ -205,27 +216,27 @@ void Tank::Special(float dTpressed)
     
     // Safety: Validate position is not NaN
     if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
-        Logger::Get().Write("WARNING: Tank %d has NaN position, cannot use special\n", id);
+        Logger::Get().Write("WARNING: Tank %d has NaN position, cannot use special\n", identity.GetLegacyId());
         return;
     }
     
     // Safety: Validate rotation values are not NaN
     if (std::isnan(ry) || std::isnan(rty) || std::isnan(rx) || std::isnan(rtx) || std::isnan(rz) || std::isnan(rtz)) {
-        Logger::Get().Write("WARNING: Tank %d has NaN rotation (ry=%.2f, rty=%.2f), cannot use special\n", id, ry, rty);
+        Logger::Get().Write("WARNING: Tank %d has NaN rotation (ry=%.2f, rty=%.2f), cannot use special\n", identity.GetLegacyId(), ry, rty);
         return;
     }
     
-    // Safety: Special() is only for player tanks (negative IDs)
-    if (id >= 0) {
-        Logger::Get().Write("WARNING: Tank::Special called for non-player tank (id=%d)\n", id);
+    // Safety: Special() is only for player tanks
+    if (identity.IsEnemy()) {
+        Logger::Get().Write("WARNING: Tank::Special called for non-player tank (id=%d)\n", identity.GetLegacyId());
         return;
     }
     
     // Safety: Validate array index for TankHandler::special (size 2)
     // Get player from PlayerManager
-    Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(id);
+    Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(identity.GetLegacyId());
     if (!player) {
-        Logger::Get().Write("WARNING: Tank::Special - no player found for tank id=%d\n", id);
+        Logger::Get().Write("WARNING: Tank::Special - no player found for tank id=%d\n", identity.GetLegacyId());
         return;
     }
 
@@ -236,17 +247,26 @@ void Tank::Special(float dTpressed)
         Tank* player0 = playerTanks[0];
         if (!player0 || !player0->alive) return; // No valid player tank available
         
-        float ratio = (z - player0->z) / (x - player0->x);
-        float ryp = toDegrees(atan(ratio));
+        float dx = x - player0->x;
+        float dz = z - player0->z;
+        float ryp;
+        
+        // Safety: Check for division by zero
+        if (std::abs(dx) < 0.001f) {
+            ryp = (dz > 0.0f ? 90.0f : -90.0f);
+        } else {
+            float ratio = dz / dx;
+            ryp = toDegrees(atan(ratio));
 
-        if (player0->x < x)
-        {
-            ryp += 180;
+            if (player0->x < x)
+            {
+                ryp += 180;
+            }
         }
 
         ryp -= (player0->ry + player0->rty);
 
-        float dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
+        float dist = sqrt(dx * dx + dz * dz);
 
         Mix_SetPosition(2, ryp, 10 * static_cast<int>(dist));
 
@@ -258,7 +278,7 @@ void Tank::Special(float dTpressed)
         Color primaryColor = GetPrimaryColor();
         Color secondaryColor = GetSecondaryColor();
         
-        Bullet temp(id, attack, type1, type2, bounces,
+        Bullet temp(identity, attack, type1, type2, bounces,
                     dTpressed,
                     primaryColor, secondaryColor,
                     x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -274,7 +294,7 @@ void Tank::Special(float dTpressed)
             
             for (int i = 0; i < 10; i++)
             {
-                CreateBullet(id, attack, type1, type2, 0,
+                CreateBullet(identity, attack, type1, type2, 0,
                             dTpressed,
                             Color(1.0, 0.0, 0.0), // Red for TYPE_RED bullets
                             Color(0.5, 0.5, 0.5), // Grey secondary
@@ -284,7 +304,7 @@ void Tank::Special(float dTpressed)
                             rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
             }
 
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -292,7 +312,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
             
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -300,7 +320,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry - 10, rtz + rz);
 
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -315,7 +335,7 @@ void Tank::Special(float dTpressed)
 
             if (type2 != TankType::TYPE_RED)
             {
-                CreateBullet(id, attack, type1, type2, bounces,
+                CreateBullet(identity, attack, type1, type2, bounces,
                             dTpressed,
                             primaryColor, secondaryColor,
                             x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -324,7 +344,7 @@ void Tank::Special(float dTpressed)
                             rtx + rx, rty + ry, rtz + rz);
             }
 
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR) + .2 * std::cosf((rty + ry + 90) * DTR),
@@ -340,7 +360,7 @@ void Tank::Special(float dTpressed)
             
             if (type2 != TankType::TYPE_YELLOW)
             {
-                CreateBullet(id, attack, type1, type2, 4,
+                CreateBullet(identity, attack, type1, type2, 4,
                             dTpressed,
                             primaryColor, secondaryColor,
                             x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -350,7 +370,7 @@ void Tank::Special(float dTpressed)
             }
 
             // Note: This was creating the same bullet twice - likely a bug. Keeping for compatibility.
-            CreateBullet(id, attack, type1, type2, 4,
+            CreateBullet(identity, attack, type1, type2, 4,
                         dTpressed,
                         primaryColor, secondaryColor,
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -364,7 +384,7 @@ void Tank::Special(float dTpressed)
             Color primaryColor = GetPrimaryColor();
             Color secondaryColor = GetSecondaryColor();
             
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -372,7 +392,7 @@ void Tank::Special(float dTpressed)
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz);
 
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -380,7 +400,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry - 90, rtz + rz);
 
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -388,7 +408,7 @@ void Tank::Special(float dTpressed)
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
                          rtx + rx, rty + ry + 180, rtz + rz);
 
-            CreateBullet(id, attack, type1, type2, bounces,
+            CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
@@ -425,9 +445,9 @@ void Tank::Fall()
     
     // Debug logging for player tanks (only log occasionally)
     static int fallLogCounter = 0;
-    if (id < 0 && fallLogCounter++ % 60 == 0 && !isGrounded) {
+    if (identity.IsPlayer() && fallLogCounter++ % 60 == 0 && !isGrounded) {
         Logger::Get().Write("Tank %d FALL: y=%.3f vy=%.3f dy=%.3f isJumping=%d\n", 
-                          id, y, vy, dy, isJumping);
+                          identity.GetLegacyId(), y, vy, dy, isJumping);
     }
 
     if (dy > 10.0f * GlobalTimer::dT)
@@ -469,7 +489,7 @@ void Tank::Fall()
             {
                 energy += maxEnergy / 3;
             }
-            if (id < 0)
+            if (identity.IsPlayer())
             {
                 App::GetSingleton().soundTask->PlayChannel(5);
             }
@@ -487,7 +507,7 @@ void Tank::Fall()
         highest = TankCollisionHelper::FindHighestTerrainHeight(*this);
         y = static_cast<float>(highest);
 
-        if (highest < -10 && (id == -1 || id == -2))
+        if (highest < -10 && identity.IsPlayer())
         {
             LevelHandler::GetSingleton().NextLevel(true);
             x = LevelHandler::GetSingleton().start[0];
@@ -499,7 +519,7 @@ void Tank::Fall()
             vy = 0;
             if (!isGrounded)
             {
-                if (id < 0)
+                if (identity.IsPlayer())
                     App::GetSingleton().soundTask->PlayChannel(5);
             }
         }
@@ -532,7 +552,7 @@ Tank::Tank()
 
     jid = 0;
     inputMode = InputMode::MODE_KEYBOARD_MOUSE;
-    id = 0;
+    identity = TankIdentity::Enemy(0);  // Default to enemy, will be overridden
     hitNum = 0;
     hitAlpha = 0.0f;
 
@@ -590,11 +610,11 @@ Tank::~Tank()
     // The InputHandler's destructor will be called automatically
 }
 
-void Tank::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
+void Tank::CreateBullet(const TankIdentity& ownerIdentity, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
                        const Color& primaryColor, const Color& secondaryColor,
                        float x, float y, float z, float rx, float ry, float rz)
 {
-    gameWorld->CreateBullet(id, attack, type1, type2, bounces, dTpressed,
+    gameWorld->CreateBullet(ownerIdentity, attack, type1, type2, bounces, dTpressed,
                            primaryColor, secondaryColor, 
                            x, y, z, rx, ry, rz);
 }
@@ -616,7 +636,7 @@ Tank::Tank(Tank&& other) noexcept
       bounces(other.bounces),
       attack(other.attack),
       alive(other.alive),
-      id(other.id),
+      identity(other.identity),
       x(other.x), y(other.y), z(other.z),
       vx(other.vx), vy(other.vy), vz(other.vz),
       collisionRadius(other.collisionRadius),
@@ -667,7 +687,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         bounces = other.bounces;
         attack = other.attack;
         alive = other.alive;
-        id = other.id;
+        identity = other.identity;
         x = other.x; y = other.y; z = other.z;
         vx = other.vx; vy = other.vy; vz = other.vz;
         collisionRadius = other.collisionRadius;
@@ -843,9 +863,9 @@ void Tank::Jump()
             isJumping = true;
             
             // Debug logging for player tanks
-            if (id < 0) {
+            if (identity.IsPlayer()) {
                 Logger::Get().Write("Tank %d JUMP START: vy=%.3f energy=%.1f y=%.3f\n", 
-                                  id, vy, energy, y);
+                                  identity.GetLegacyId(), vy, energy, y);
             }
         }
         
@@ -871,7 +891,7 @@ void Tank::Jump()
         // Jump damn it
         Color primaryColor = GetPrimaryColor();
         CreateFX(FxType::TYPE_JUMP, x, y - .2, z, 0, .5 * vy * GlobalTimer::dT, 0, rx, ry, rz, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-        if (!isJumping && id < 0)
+        if (!isJumping && identity.IsPlayer())
         {
             App::GetSingleton().soundTask->PlayChannel(4);
         }
@@ -898,9 +918,9 @@ void Tank::NextFrame()
         hitAlpha -= 1 * GlobalTimer::dT;
     }
 
-    // Safety: Only update hitCombo for player tanks (negative IDs)
-    if (id < 0) {
-        Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(id);
+    // Safety: Only update hitCombo for player tanks
+    if (identity.IsPlayer()) {
+        Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(identity.GetLegacyId());
         if (player) {
             int currentHitCombo = player->GetHitCombo();
             if (currentHitCombo != hitNum)
@@ -948,10 +968,10 @@ void Tank::NextFrame()
     if (health <= 0 && alive)
     {
         alive = false;
-        if (id < 0 && App::GetSingleton().gameTask->IsVersusMode())
+        if (identity.IsPlayer() && App::GetSingleton().gameTask->IsVersusMode())
         {
             // Award win to the other player in versus mode
-            Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(id);
+            Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(identity.GetLegacyId());
             if (player) {
                 player->AddWin();
             }
@@ -1245,7 +1265,7 @@ void Tank::HandleInput()
     if (inputHandler)
     {
         if (inputLogCounter % 180 == 0 && isPlayer) { // Log every 3 seconds for players only
-            Logger::Get().Write("Tank::HandleInput() - Player tank %d processing input via LEGACY TankHandler path\n", id);
+            Logger::Get().Write("Tank::HandleInput() - Player tank %d processing input via LEGACY TankHandler path\n", identity.GetLegacyId());
         }
         inputHandler->HandleInput(*this);
     }
@@ -1398,13 +1418,21 @@ void Tank::Fear()
     if (!player0 || !player0->alive) return; // No valid player tank to fear
 
     double ratio;
+    float dx = x - player0->x;
+    float dz = z - player0->z;
+    float ryp;
+    
+    // Safety: Check for division by zero
+    if (std::abs(dx) < 0.001f) {
+        ryp = (dz > 0.0f ? 90.0f : -90.0f);
+    } else {
+        ratio = (double)dz / (double)dx;
+        ryp = toDegrees(atan(ratio));
 
-    ratio = (double)(z - player0->z) / (double)(x - player0->x);
-    float ryp = toDegrees(atan(ratio));
-
-    if (player0->x < x)
-    {
-        ryp += 180;
+        if (player0->x < x)
+        {
+            ryp += 180;
+        }
     }
 
     ryp -= 180;
@@ -1421,16 +1449,29 @@ void Tank::Fear()
         }
     }
 
-    ratio = (double)(z - player0->z) / (double)(x - player0->x);
+    // Calculate turret rotation using already calculated dx/dz
+    if (std::abs(dx) < 0.001f) {
+        // Tanks are vertically aligned - point directly up or down
+        float rtyp = (dz > 0.0f ? 90.0f : -90.0f) - ry;
+        rty = rtyp;
+    } else {
+        ratio = (double)dz / (double)dx;
+        float rtyp = toDegrees(atan(ratio)) - ry;
 
-    float rtyp = toDegrees(atan(ratio)) - ry;
+        if (player0->x < x)
+        {
+            rtyp += 180;
+        }
 
-    if (player0->x < x)
-    {
-        rtyp += 180;
+        rty = rtyp;
+        
+        // Validate result
+        if (std::isnan(rty)) {
+            Logger::Get().Write("ERROR: Tank %d Fear calculated NaN rty! dx=%.2f, dz=%.2f, ratio=%.4f, rtyp=%.2f\n",
+                identity.GetLegacyId(), dx, dz, ratio, rtyp);
+            rty = 0.0f; // Fallback to safe value
+        }
     }
-
-    rty = rtyp;
 
     float angle = 30;
     float frames = 20;
@@ -1487,16 +1528,32 @@ void Tank::Hunt(Tank &player)
             RotBody(true);
     }
 
-    ratio = (double)(z - player.z) / (double)(x - player.x);
+    // Safety: Check for division by zero
+    float dx = x - player.x;
+    float dz = z - player.z;
+    
+    if (std::abs(dx) < 0.001f) {
+        // Tanks are vertically aligned - point directly up or down
+        float rtyp = (dz > 0.0f ? 90.0f : -90.0f) - ry;
+        rty = rtyp;
+    } else {
+        ratio = (double)dz / (double)dx;
+        float rtyp = toDegrees(atan(ratio)) - ry;
 
-    float rtyp = toDegrees(atan(ratio)) - ry;
+        if (player.x < x)
+        {
+            rtyp += 180;
+        }
 
-    if (player.x < x)
-    {
-        rtyp += 180;
+        rty = rtyp;
+        
+        // Validate result
+        if (std::isnan(rty)) {
+            Logger::Get().Write("ERROR: Tank %d Hunt calculated NaN rty! dx=%.2f, dz=%.2f, ratio=%.4f, rtyp=%.2f\n",
+                identity.GetLegacyId(), dx, dz, ratio, rtyp);
+            rty = 0.0f; // Fallback to safe value
+        }
     }
-
-    rty = rtyp;
 
     xpp = x + (GlobalTimer::dT * 10 * movRate) * std::cosf(ry * DTR);
     zpp = z + (GlobalTimer::dT * 10 * movRate) * std::sinf(ry * DTR);

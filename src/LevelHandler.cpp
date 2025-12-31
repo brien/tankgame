@@ -215,8 +215,12 @@ bool LevelHandler::Load(const char filePath[])
 
 void LevelHandler::NextLevel(bool forb)
 {
+    Logger::Get().Write("\n========== LevelHandler::NextLevel(%s) called ==========\n", forb ? "true" : "false");
+    
     // Clear GameWorld entities (bullets, effects, items) 
+    Logger::Get().Write("LevelHandler: Clearing GameWorld...\n");
     gameWorld->Clear();
+    Logger::Get().Write("LevelHandler: GameWorld cleared\n");
 
     levelNumber = fileName[12];
 

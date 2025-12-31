@@ -104,7 +104,7 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
     }
 
     // Camera controls via hat switch
-    auto& cam = App::GetSingleton().graphicsTask->cams[-1 * (tank.id + 1)];
+    auto& cam = App::GetSingleton().graphicsTask->cams[tank.identity.GetPlayerIndex()];
     if (SDL_JoystickGetHat(InputTask::joysticks[tank.jid], 0) == SDL_HAT_UP)
     {
         cam.ydist = 0.8;

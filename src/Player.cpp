@@ -52,19 +52,32 @@ void Player::ReleaseTank() {
 }
 
 Tank* Player::CreatePlayerTank(float x, float y, float z) {
-    if (!gameWorld) return nullptr;
+    Logger::Get().Write(">>> CreatePlayerTank called for player %d at (%.2f, %.2f, %.2f)\n", playerIndex, x, y, z);
+    
+    if (!gameWorld) {
+        Logger::Get().Write("ERROR: Player %d CreatePlayerTank - gameWorld is null!\n", playerIndex);
+        return nullptr;
+    }
     
     // Create tank through GameWorld
     Tank* tank = gameWorld->CreateTank();
+    Logger::Get().Write("Player %d: GameWorld::CreateTank returned tank=%p\n", playerIndex, (void*)tank);
+    
     if (tank) {
         // Set position
         tank->SetPosition(x, y, z);
+        Logger::Get().Write("Player %d: Tank position set to (%.2f, %.2f, %.2f)\n", playerIndex, tank->x, tank->y, tank->z);
         
         // Initialize tank for player use
         tank->Init();
+        Logger::Get().Write("Player %d: Tank::Init() completed\n", playerIndex);
         
         // Take control
         TakeControlOf(tank);
+        Logger::Get().Write("Player %d: TakeControlOf completed - identity set to %s\n", 
+            playerIndex, tank->identity.IsPlayer() ? "PLAYER" : "ENEMY");
+    } else {
+        Logger::Get().Write("ERROR: Player %d CreatePlayerTank - GameWorld::CreateTank returned null!\n", playerIndex);
     }
     
     return tank;
@@ -110,7 +123,7 @@ void Player::HandleInput() {
     
     if (inputLogCounter % 180 == 0) { // Log every 3 seconds
         Logger::Get().Write("Player::HandleInput() - Player %d processing input via NEW PlayerManager path (tank id=%d)\n",
-                          playerIndex, controlledTank->id);
+                          playerIndex, controlledTank->identity.GetLegacyId());
     }
     
     // Delegate input handling to the input handler
@@ -189,28 +202,50 @@ void Player::Update() {
     
     // Handle respawn if tank is dead
     if (!controlledTank || !controlledTank->alive) {
-        if (controlledTank) {
+        if (controlledTank && !controlledTank->alive) {
             // Handle death logic (was in TankHandler::UpdatePlayerStates)
             controlledTank->Die();
             
             // Check respawn timing
+            bool shouldRespawn = false;
             if (App::GetSingleton().gameTask->IsVersusMode()) {
                 if (controlledTank->deadtime > VERSUS_RESPAWN_DELAY) {
+                    Logger::Get().Write("===== Player %d: Respawn timer expired in versus mode (deadtime=%.2f) - calling NextLevel(true) =====\n", playerIndex, controlledTank->deadtime);
+                    shouldRespawn = true;
+                    ReleaseTank();  // Release before NextLevel to avoid dangling pointer
+                    Logger::Get().Write("Player %d: Tank released, controlledTank is now null\n", playerIndex);
                     LevelHandler::GetSingleton().NextLevel(true);
+                    Logger::Get().Write("Player %d: NextLevel(true) completed\n", playerIndex);
                 }
             } else {
                 if (controlledTank->deadtime > PLAYER_RESPAWN_DELAY) {
+                    Logger::Get().Write("===== Player %d: Respawn timer expired (deadtime=%.2f) - calling NextLevel(false) =====\n", playerIndex, controlledTank->deadtime);
+                    shouldRespawn = true;
+                    ReleaseTank();  // Release before NextLevel to avoid dangling pointer
+                    Logger::Get().Write("Player %d: Tank released, controlledTank is now null\n", playerIndex);
                     LevelHandler::GetSingleton().NextLevel(false);
+                    Logger::Get().Write("Player %d: NextLevel(false) completed\n", playerIndex);
                 }
             }
-            controlledTank->deadtime += GlobalTimer::dT;
             
-            if (logCounter % 60 == 0) { // Log every 1 second
-                Logger::Get().Write("Player %d tank dead - deadtime: %d\n", playerIndex, controlledTank->deadtime);
+            // Only increment deadtime and log if we didn't respawn (tank still exists)
+            if (!shouldRespawn && controlledTank) {
+                controlledTank->deadtime += GlobalTimer::dT;
+                
+                if (logCounter % 60 == 0) { // Log every 1 second
+                    Logger::Get().Write("Player %d tank dead - deadtime: %.2f\n", playerIndex, controlledTank->deadtime);
+                }
             }
         } else {
-            if (logCounter % 60 == 0) { // Log every 1 second
-                Logger::Get().Write("Player %d has no tank - respawn needed\n", playerIndex);
+            // No tank at all - respawn immediately
+            Logger::Get().Write("***** Player %d has no tank - calling Respawn() *****\n", playerIndex);
+            Respawn();
+            if (controlledTank) {
+                Logger::Get().Write("Player %d: Respawn() completed - new tank created at (%.2f, %.2f, %.2f), identity=%s\n", 
+                    playerIndex, controlledTank->x, controlledTank->y, controlledTank->z,
+                    controlledTank->identity.IsPlayer() ? "PLAYER" : "ENEMY");
+            } else {
+                Logger::Get().Write("Player %d: WARNING - Respawn() completed but controlledTank is still null!\n", playerIndex);
             }
         }
     }
@@ -228,7 +263,10 @@ void Player::OnTankDestroyed() {
 }
 
 void Player::Respawn() {
+    Logger::Get().Write(">>> Player::Respawn() called for player %d\n", playerIndex);
+    
     if (controlledTank && controlledTank->alive) {
+        Logger::Get().Write("Player %d already has living tank - skipping respawn\n", playerIndex);
         return; // Already have a living tank
     }
     
@@ -237,10 +275,17 @@ void Player::Respawn() {
     float spawnZ = LevelHandler::GetSingleton().start[1];
     float spawnY = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(spawnX), static_cast<int>(spawnZ));
     
-    // Create new tank
-    CreatePlayerTank(spawnX, spawnY, spawnZ);
+    Logger::Get().Write("Player %d spawning at position (%.2f, %.2f, %.2f)\n", playerIndex, spawnX, spawnY, spawnZ);
     
-    Logger::Get().Write("Player %d respawned\n", playerIndex);
+    // Create new tank
+    Tank* newTank = CreatePlayerTank(spawnX, spawnY, spawnZ);
+    
+    if (newTank) {
+        Logger::Get().Write("Player %d respawn SUCCESS - tank created with identity=%s, isPlayer=%d\n", 
+            playerIndex, newTank->identity.IsPlayer() ? "PLAYER" : "ENEMY", newTank->isPlayer);
+    } else {
+        Logger::Get().Write("Player %d respawn FAILED - CreatePlayerTank returned null!\n", playerIndex);
+    }
 }
 
 void Player::ApplyDifficultySettings(int difficulty) {
@@ -308,7 +353,7 @@ void Player::SetupTankForPlayer(Tank* tank) {
     if (!tank) return;
     
     tank->isPlayer = true;
-    tank->id = -(playerIndex + 1); // Negative IDs for players (legacy system)
+    tank->identity = TankIdentity::Player(playerIndex);
     
     // Set up input handler ID for tank
     tank->jid = playerIndex; // Joystick ID matches player index

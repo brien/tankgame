@@ -206,7 +206,7 @@ void HUDDataExtractor::SetHUDColors(const Tank& player, HUDRenderData& hudData) 
 void HUDDataExtractor::ExtractComboAndSpecialData(const Tank& player, int playerId, HUDRenderData& hudData) {
     // Get player data from PlayerManager instead of TankHandler arrays
     // Note: This uses the existing array indexing pattern from the original code
-    int arrayIndex = (-1 * player.id) - 1; // Convert player ID to array index
+    int arrayIndex = player.identity.GetPlayerIndex(); // Get player index directly
     
     // Access PlayerManager singleton for player data
     PlayerManager* playerMgr = App::GetSingleton().gameTask->GetPlayerManager();

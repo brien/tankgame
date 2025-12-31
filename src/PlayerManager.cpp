@@ -125,11 +125,11 @@ void PlayerManager::EnsurePlayerTankSetup() {
         if (players[i]) {
             Tank* tank = players[i]->GetControlledTank();
             if (tank) {
-                // Ensure tank has correct ID (negative for players)
-                tank->id = -(i + 1);
+                // Ensure tank has correct identity
+                tank->identity = TankIdentity::Player(i);
                 tank->isPlayer = true;
                 tank->jid = i;
-                Logger::Get().Write("PlayerManager: Re-validated tank ID for Player %d (id=%d)\n", i, tank->id);
+                Logger::Get().Write("PlayerManager: Re-validated tank ID for Player %d (id=%d)\n", i, tank->identity.GetLegacyId());
             }
         }
     }
@@ -183,19 +183,36 @@ void PlayerManager::NextFrame() {
                     if (frameCounter % 60 == 0) {
                         Logger::Get().Write("PlayerManager: Player %d tank is DEAD (deadtime=%.2f)\n", i, tank->deadtime);
                     }
+                    
+                    // Increment deadtime FIRST, before checking respawn
+                    tank->deadtime += GlobalTimer::dT;
                     tank->Die();
+                    
                     if (versusMode) {
                         if (tank->deadtime > VERSUS_RESPAWN_DELAY) {
-                            Logger::Get().Write("PlayerManager: Calling NextLevel for versus mode\n");
+                            Logger::Get().Write("PlayerManager: Calling NextLevel for versus mode (deadtime=%.2f)\n", tank->deadtime);
                             LevelHandler::GetSingleton().NextLevel(true);
+                            // Tank pointer is now invalid after NextLevel - don't use it again
+                            break; // Exit the loop to avoid using stale pointers
                         }
                     } else {
                         if (tank->deadtime > PLAYER_RESPAWN_DELAY) {
                             Logger::Get().Write("PlayerManager: Calling NextLevel for player respawn (deadtime=%.2f)\n", tank->deadtime);
+                            
+                            // Release the old dead tank before NextLevel clears it
+                            players[i]->ReleaseTank();
+                            
                             LevelHandler::GetSingleton().NextLevel(false);
+                            
+                            // After NextLevel, create new player tank at spawn position
+                            Logger::Get().Write("PlayerManager: Creating new player tank after respawn\n");
+                            SetPlayerSpawnPosition(players[i].get(), i);
+                            Logger::Get().Write("PlayerManager: Player %d respawned with new tank\n", i);
+                            
+                            // Exit the loop to avoid using stale pointers
+                            break;
                         }
                     }
-                    tank->deadtime += GlobalTimer::dT;
                 }
             } else {
                 if (frameCounter % 60 == 0) {

@@ -62,8 +62,8 @@ void CombatSystem::OnBulletOutOfBounds(const BulletOutOfBoundsEvent& event) {
     if (!bullet) return;
     
     // Reset combo if it's a player bullet
-    if (bullet->GetTankId() < 0) {
-        ResetPlayerCombo((-1 * bullet->GetTankId()) - 1);
+    if (bullet->GetOwnerIdentity().IsPlayer()) {
+        ResetPlayerCombo(bullet->GetOwnerIdentity().GetPlayerIndex());
     }
     
     bullet->Kill();
@@ -74,15 +74,15 @@ void CombatSystem::OnBulletTimeout(const BulletTimeoutEvent& event) {
     if (!bullet) return;
     
     // Reset combo if it's a player bullet
-    if (bullet->GetTankId() < 0) {
-        ResetPlayerCombo((-1 * bullet->GetTankId()) - 1);
+    if (bullet->GetOwnerIdentity().IsPlayer()) {
+        ResetPlayerCombo(bullet->GetOwnerIdentity().GetPlayerIndex());
     }
     
     bullet->Kill();
 }
 
 void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
-    if (tank->id == bullet->GetTankId()) {
+    if (tank->identity == bullet->GetOwnerIdentity()) {
         // Self-collision (friendly fire or ricochet)
         if (bullet->GetDT() > 0.5f) {
             if (tank->health < tank->maxHealth * 2) {
@@ -96,13 +96,13 @@ void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
         ApplyTankDamage(tank, bullet->GetPower(), bullet);
         
         // Update combos if bullet is from a player
-        if (bullet->GetTankId() < 0) {
-            int playerIndex = (-1 * bullet->GetTankId()) - 1;
+        if (bullet->GetOwnerIdentity().IsPlayer()) {
+            int playerIndex = bullet->GetOwnerIdentity().GetPlayerIndex();
             UpdatePlayerCombos(playerIndex, tank, bullet);
         }
         
         // Special bullet behavior (Blue type keeps going)
-        if (bullet->GetTankId() < 0 && bullet->GetIsSpecial() && bullet->GetType1() == TankType::TYPE_BLUE) {
+        if (bullet->GetOwnerIdentity().IsPlayer() && bullet->GetIsSpecial() && bullet->GetType1() == TankType::TYPE_BLUE) {
             // Blue special bullets don't die on hit, they get stronger
             bullet->SetAlive(true);
             bullet->SetPower(bullet->GetPower() + 100);
@@ -115,7 +115,7 @@ void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
 }
 
 void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
-    if (bullet->GetTankId() == player->id) {
+    if (bullet->GetOwnerIdentity() == player->identity) {
         // Self-collision
         if (bullet->GetDT() > 0.5f) {
             App::GetSingleton().soundTask->PlayChannel(3);
@@ -128,7 +128,7 @@ void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
         return;
     }
     
-    if (bullet->GetTankId() < 0 && !App::GetSingleton().gameTask->IsVersusMode()) {
+    if (bullet->GetOwnerIdentity().IsPlayer() && !App::GetSingleton().gameTask->IsVersusMode()) {
         // Friendly fire in non-versus mode (healing)
         App::GetSingleton().soundTask->PlayChannel(3);
         if (player->health < player->maxHealth * 2) {
@@ -151,7 +151,7 @@ void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
         App::GetSingleton().soundTask->PlayChannel(8);
         
         // Update attacker combos
-        if (bullet->GetTankId() >= 0) {  // Enemy bullet hit player
+        if (bullet->GetOwnerIdentity().IsEnemy()) {  // Enemy bullet hit player
             // Could implement enemy combo system here if needed
         }
     }

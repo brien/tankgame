@@ -28,7 +28,7 @@ public:
 
     // Entity creation interfaces (for handlers to use)
     Tank* CreateTank();
-    Bullet* CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
+    Bullet* CreateBullet(const TankIdentity& ownerIdentity, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
                         const Color& primaryColor, const Color& secondaryColor,
                         float x, float y, float z, float rx, float ry, float rz);
     FX* CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a);

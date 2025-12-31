@@ -387,11 +387,11 @@ void GraphicsTask::DrawSky()
 void GraphicsTask::DrawHUD(Tank &player)
 {
     // Safety: Calculate array index and validate bounds
-    int arrayIndex = (-1 * player.id) - 1;
+    int arrayIndex = player.identity.GetPlayerIndex();
     
     // Skip HUD rendering if array index is invalid
     if (arrayIndex < 0 || arrayIndex >= 2) {
-        Logger::Get().Write("WARNING: DrawHUD skipped - invalid player.id=%d (arrayIndex=%d)\n", player.id, arrayIndex);
+        Logger::Get().Write("WARNING: DrawHUD skipped - invalid player index=%d\n", arrayIndex);
         return;
     }
     
@@ -616,7 +616,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glEnd();
 
-    Player* currentPlayer = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(player.id);
+    Player* currentPlayer = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(player.identity.GetLegacyId());
     if (!currentPlayer) return; // Safety check
     
     if (currentPlayer->GetSpecialCharge() < player.fireCost / 5)

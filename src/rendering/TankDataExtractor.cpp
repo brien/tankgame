@@ -24,8 +24,8 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     
     // Extract status
     data.alive = tank.alive;
-    data.playerId = tank.id;
-    data.isPlayer = (tank.id < 0); // Players have negative IDs
+    data.playerId = tank.identity.GetLegacyId();
+    data.isPlayer = tank.identity.IsPlayer();
     
     // Extract tank types
     data.type1 = tank.type1;
@@ -63,7 +63,7 @@ std::vector<TankRenderData> TankDataExtractor::ExtractPlayerData(
     for (int i = 0; i < safeNumPlayers; ++i) {
         if (players[i].alive) {
             // Validate tank ID before extraction
-            int tankId = players[i].id;
+            int tankId = players[i].identity.GetLegacyId();
             if (tankId >= 0 || tankId < -2) {
                 Logger::Get().Write("WARNING: TankDataExtractor - player %d has invalid id=%d, skipping\n", i, tankId);
                 continue;

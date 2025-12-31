@@ -72,12 +72,12 @@ void GameWorld::Clear() {
     items.Clear();
 }
 
-Bullet* GameWorld::CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
+Bullet* GameWorld::CreateBullet(const TankIdentity& ownerIdentity, float attack, TankType type1, TankType type2, int bounces, float dTpressed, 
                                const Color& primaryColor, const Color& secondaryColor,
                                float x, float y, float z, float rx, float ry, float rz) {
-    Logger::Get().Write("GameWorld::CreateBullet - tankId=%d, pos=(%.2f, %.2f, %.2f)\n", id, x, y, z);
+    Logger::Get().Write("GameWorld::CreateBullet - tankId=%d, pos=(%.2f, %.2f, %.2f)\n", ownerIdentity.GetLegacyId(), x, y, z);
     
-    Bullet* bullet = bullets.Create(id, attack, type1, type2, bounces, dTpressed, primaryColor, secondaryColor, x, y, z, rx, ry, rz);
+    Bullet* bullet = bullets.Create(ownerIdentity, attack, type1, type2, bounces, dTpressed, primaryColor, secondaryColor, x, y, z, rx, ry, rz);
     
     // Set GameWorld reference so bullet can create FX
     if (bullet) {

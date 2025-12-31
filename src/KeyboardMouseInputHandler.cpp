@@ -116,16 +116,16 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
     // Camera controls
     if (InputTask::KeyStillDown(SDL_SCANCODE_UP))
     {
-        App::GetSingleton().graphicsTask->cams[-1 * (tank.id + 1)].ydist += 10 * GlobalTimer::dT;
+        App::GetSingleton().graphicsTask->cams[tank.identity.GetPlayerIndex()].ydist += 10 * GlobalTimer::dT;
     }
     if (InputTask::KeyStillDown(SDL_SCANCODE_DOWN))
     {
-        App::GetSingleton().graphicsTask->cams[-1 * (tank.id + 1)].ydist -= 10 * GlobalTimer::dT;
+        App::GetSingleton().graphicsTask->cams[tank.identity.GetPlayerIndex()].ydist -= 10 * GlobalTimer::dT;
     }
 
     if (InputTask::KeyDown(SDL_SCANCODE_C))
     {
-        auto& cam = App::GetSingleton().graphicsTask->cams[-1 * (tank.id + 1)];
+        auto& cam = App::GetSingleton().graphicsTask->cams[tank.identity.GetPlayerIndex()];
         if (cam.xzdist > 20)
         {
             cam.xzdist = 0.1;

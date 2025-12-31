@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "igtl_qmesh.h"
 #include "TankTypeManager.h"
+#include "TankIdentity.h"
 
 #include <vector>
 #include <queue>
@@ -93,14 +94,17 @@ public:
 
     bool alive;
 
-    int id;
+    TankIdentity identity;
+    
+    // Backward-compatible accessor for gradual migration
+    int GetId() const { return identity.GetLegacyId(); }
     
     // Entity interface implementation
     void Update() override { 
-        if (!isPlayer && id >= 0) {
-            // Enemy tanks (id >= 0, isPlayer = false) need AI updates
+        if (!isPlayer && identity.IsEnemy()) {
+            // Enemy tanks (identity.IsEnemy(), isPlayer = false) need AI updates
             // Debug: Uncomment this to verify enemy tanks are updating
-            // printf("Enemy tank %d updating (isPlayer=%d, id=%d)\n", id, isPlayer, id);
+            // printf("Enemy tank %d updating (isPlayer=%d)\n", identity.GetEnemyIndex(), isPlayer);
             AI(); 
         }
         NextFrame(); 
@@ -187,7 +191,7 @@ public:
 
 private:
     // Helper method to create bullets through GameWorld
-    void CreateBullet(int id, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
+    void CreateBullet(const TankIdentity& ownerIdentity, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
                      const Color& primaryColor, const Color& secondaryColor,
                      float x, float y, float z, float rx, float ry, float rz);
 

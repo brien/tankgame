@@ -8,6 +8,7 @@
 
 #include "Entity.h"
 #include "Color.h"
+#include "TankIdentity.h"
 
 class Tank;
 enum class TankType;
@@ -18,7 +19,7 @@ class Bullet : public Entity
 
 public:
     Bullet();
-    Bullet(int tid, float power,
+    Bullet(const TankIdentity& ownerIdentity, float power,
            TankType type1, TankType type2,
            int maxbounces,
            float dTpressed,
@@ -72,7 +73,8 @@ public:
     float GetPower() const { return power; }
     TankType GetType1() const { return type1; }
     TankType GetType2() const { return type2; }
-    int GetTankId() const { return tankId; }
+    const TankIdentity& GetOwnerIdentity() const { return ownerIdentity; }
+    int GetTankId() const { return ownerIdentity.GetLegacyId(); }  // Backward compatibility
     float GetMoveRate() const { return moveRate; }
     int GetBounces() const { return maxbounces; }
     float GetDT() const { return dT; }
@@ -99,7 +101,7 @@ private:
     bool isSpecial = false;
 
     int id = 0;
-    int tankId = 0;
+    TankIdentity ownerIdentity = TankIdentity::Enemy(0);  // Tank that fired this bullet
 
     TankType type1;
     TankType type2;

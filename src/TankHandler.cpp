@@ -51,7 +51,7 @@ void TankHandler::InitializeEnemyTanks()
         if (newTank) {
             newTank->Init();
             newTank->isPlayer = false; // Ensure it's marked as enemy tank
-            newTank->id = i; // Set proper enemy tank ID
+            newTank->identity = TankIdentity::Enemy(i);
             SetEnemyPosition(*newTank, i);
             SetEnemyType(*newTank, i);
             newTank->jumpCost = 0; // Enemy tanks don't pay jump cost
@@ -90,7 +90,7 @@ void TankHandler::SetEnemyPosition(Tank& tank, int index)
     
     tank.y = LevelHandler::GetSingleton().GetTerrainHeight((int)tank.x, (int)tank.z);
     tank.ry = index * ROTATION_STEP_DEGREES;
-    tank.id = index;
+    tank.identity = TankIdentity::Enemy(index);
 }
 
 void TankHandler::SetEnemyType(Tank& tank, int index)
@@ -102,7 +102,7 @@ void TankHandler::SetEnemyType(Tank& tank, int index)
         tank.SetType(static_cast<TankType>(1 + index % 3), TankType::TYPE_GREY);
         if (tank.type1 == TankType::TYPE_BLUE)
             tank.SetType(TankType::TYPE_YELLOW, TankType::TYPE_GREY);
-        if (tank.id == 4)
+        if (tank.identity.GetEnemyIndex() == 4)
         {
             tank.SetType(TankType::TYPE_BLUE, TankType::TYPE_GREY);
             tank.attack = tank.attack / 3;
