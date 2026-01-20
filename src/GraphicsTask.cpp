@@ -340,14 +340,8 @@ void GraphicsTask::RenderWithNewPipeline()
         // Build scene data from current game state
         SceneData sceneData = sceneDataBuilder->BuildScene();
         
-        Logger::Get().Write("RenderWithNewPipeline: Building scene data (numPlayers=%d)...\n", sceneData.numPlayers);
-
-        Logger::Get().Write("RenderWithNewPipeline: Scene built, extracting camera data...\n");
-        
         // Extract camera data for split-screen support
         sceneData.cameras = sceneDataBuilder->ExtractCameraData();
-
-        Logger::Get().Write("RenderWithNewPipeline: Rendering all player views...\n");
         
         // Add game state information
         sceneData.gameStarted = App::GetSingleton().gameTask->IsGameStarted();
@@ -356,8 +350,6 @@ void GraphicsTask::RenderWithNewPipeline()
 
         // Render the complete scene using the centralized pipeline
         renderingPipeline->RenderAllPlayerViews(sceneData);
-
-        Logger::Get().Write("RenderWithNewPipeline: Render complete\n");
         
         // UI rendering is now handled by the RenderingPipeline
         // All HUD, Menu, and Debug rendering is data-driven and centralized

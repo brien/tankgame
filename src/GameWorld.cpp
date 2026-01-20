@@ -27,10 +27,6 @@ void GameWorld::Shutdown() {
 }
 
 void GameWorld::Update() {
-    Logger::Get().Write("GameWorld::Update - tanks=%zu, bullets=%zu, effects=%zu, items=%zu\n",
-                       tanks.GetEntities().size(), bullets.GetEntities().size(), 
-                       effects.GetEntities().size(), items.GetEntities().size());
-    
     // Update collision system first
     collisionSystem.Update();
     
@@ -43,8 +39,6 @@ void GameWorld::Update() {
     // Handle interactions
     HandleCollisions();
     HandleItemCollection();
-    
-    Logger::Get().Write("GameWorld::Update complete\n");
 }
 
 void GameWorld::Clear() {

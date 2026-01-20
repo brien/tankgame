@@ -84,7 +84,6 @@ UIRenderData HUDDataExtractor::ExtractCompleteUIData(
     UIRenderData uiData;
     
     // Extract player HUD data from PlayerManager
-    Logger::Get().Write("HUDDataExtractor: Extracting HUD data (numPlayers=%d)\n", playerMgr.GetNumPlayers());
     uiData.playerHUDs = ExtractAllPlayerHUDs(playerMgr.GetPlayerTanks(), playerMgr.GetNumPlayers());
     uiData.numPlayers = playerMgr.GetNumPlayers();
     
