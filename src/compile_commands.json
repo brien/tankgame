@@ -1,0 +1,249 @@
+[
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "Bullet.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/Bullet.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "Camera.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/Camera.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "DisplayList.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/DisplayList.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "FXHandler.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/FXHandler.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "GameTask.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/GameTask.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "GlobalTimer.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/GlobalTimer.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "GraphicsTask.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/GraphicsTask.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "igtl_qmesh.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/igtl_qmesh.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "InputTask.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/InputTask.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "Item.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/Item.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "LevelHandler.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/LevelHandler.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "Logger.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/Logger.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "main.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/main.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "SoundTask.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/SoundTask.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "Tank.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/Tank.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "TankHandler.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/TankHandler.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "TaskHandler.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/TaskHandler.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "TextureHandler.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/TextureHandler.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/g++",
+      "-c",
+      "-std=c++20",
+      "-o",
+      "tankgame",
+      "VideoTask.cpp"
+    ],
+    "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/VideoTask.cpp",
+    "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
+  }
+]
