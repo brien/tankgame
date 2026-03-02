@@ -29,6 +29,8 @@ public:
 protected:
     
 private:
+    // Per-renderer animation phase for player tank effects.
+    float animationDrift;
     
     /**
      * Renders a player tank with full effects and UI.

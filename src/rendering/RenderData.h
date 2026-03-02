@@ -1,5 +1,4 @@
-#ifndef RENDERDATA_H
-#define RENDERDATA_H
+#pragma once
 
 #include <vector>
 
@@ -305,5 +304,3 @@ struct SceneData {
         cameras.clear();
     }
 };
-
-#endif // RENDERDATA_H

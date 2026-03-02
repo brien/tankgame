@@ -47,7 +47,7 @@ bool RenderingPipeline::Initialize()
     {
         success = false;
     }
-    Logger::Get().Write("RenderingPipeline Initialized Successfully: %b\n", success);
+    Logger::Get().Write("RenderingPipeline Initialized Successfully: %d\n", static_cast<int>(success));
     return success;
 }
 

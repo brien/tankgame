@@ -11,7 +11,7 @@
 #include "PlayerTankRenderer.h"
 #include "../App.h"
 
-TankRenderer::TankRenderer() {
+TankRenderer::TankRenderer() : animationDrift(0.0f) {
     // Constructor - base class handles initialization
 }
 
@@ -83,20 +83,19 @@ void TankRenderer::CleanupRenderState() {
 }
 
 void TankRenderer::RenderPlayerTank(const TankRenderData& tank) {
-    // Calculate drift for animations (static to maintain continuity)
-    static float drift = 0;
-    drift += 0.016f; // Approximate 60 FPS delta time
-    if (drift > 1.0f) drift = 0;
+    // Update per-instance drift for animations.
+    animationDrift += 0.016f; // Approximate 60 FPS delta time
+    if (animationDrift > 1.0f) animationDrift = 0.0f;
     
     // Delegate to PlayerTankRenderer for all player tank rendering
-    PlayerTankRenderer::RenderPlayerTank(tank, drift);
+    PlayerTankRenderer::RenderPlayerTank(tank, animationDrift);
 
-    PlayerTankRenderer::RenderPlayerEffects(tank, drift);
+    PlayerTankRenderer::RenderPlayerEffects(tank, animationDrift);
     
     // Render targeting UI (assume enemies exist for now - could be improved)
     bool hasEnemyTargets = true; // TODO: Pass this information from game logic
 
-    PlayerTankRenderer::RenderTargetingUI(tank, drift, hasEnemyTargets);
+    PlayerTankRenderer::RenderTargetingUI(tank, animationDrift, hasEnemyTargets);
 }
 
 void TankRenderer::RenderEnemyTank(const TankRenderData& tank) {
