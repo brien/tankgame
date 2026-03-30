@@ -40,12 +40,14 @@ set(TEST_SOURCES
     ../src/TankTypeManager.cpp
     ../src/InputTask.cpp
     ../src/VideoTask.cpp
+    ../src/rendering/TankDataExtractor.cpp
 )
 
 # Create test executable
 add_executable(tankgame_tests
     test_main.cpp
     test_player.cpp
+    test_tank_data_extractor.cpp
     ${TEST_SOURCES}
 )
 
