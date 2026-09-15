@@ -1,2 +1,7 @@
 # tankgame
-A simple 3D video game for Mac OS/Linux/Windows using OpenGL and SDL. This project was originally started around 2003 and serves mostly as a playground. Other libs used: SDL_ttf and SDL_mixer.
+
+A small cross-platform 3D tank game built with C++, OpenGL, and SDL.
+
+Originally started around 2003, this is a long-running personal project that I still revisit periodically for experimentation, refactoring, modernization, and testing.
+
+Supports macOS, Linux, and Windows. Also uses SDL_ttf and SDL_mixer.
