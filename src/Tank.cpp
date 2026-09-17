@@ -274,18 +274,6 @@ void Tank::Special(float dTpressed)
 
         float bulletMovRate = 33.0f;
 
-        // Create bullet with color structs
-        Color primaryColor = GetPrimaryColor();
-        Color secondaryColor = GetSecondaryColor();
-        
-        Bullet temp(identity, attack, type1, type2, bounces,
-                    dTpressed,
-                    primaryColor, secondaryColor,
-                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
-                    y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                    rtx + rx, rty + ry, rtz + rz);
-
         if (type1 == TankType::TYPE_RED)
         {
             // Get colors for this tank
@@ -301,7 +289,7 @@ void Tank::Special(float dTpressed)
                             x,
                             y + .25,
                             z,
-                            rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz);
+                            rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz, true);
             }
 
             CreateBullet(identity, attack, type1, type2, bounces,
@@ -310,7 +298,7 @@ void Tank::Special(float dTpressed)
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                        rtx + rx, rty + ry, rtz + rz);
+                        rtx + rx, rty + ry, rtz + rz, true);
             
             CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
@@ -318,7 +306,7 @@ void Tank::Special(float dTpressed)
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                        rtx + rx, rty + ry - 10, rtz + rz);
+                        rtx + rx, rty + ry - 10, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
@@ -326,7 +314,7 @@ void Tank::Special(float dTpressed)
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                         rtx + rx, rty + ry + 20, rtz + rz);
+                         rtx + rx, rty + ry + 20, rtz + rz, true);
         }
         if (type1 == TankType::TYPE_BLUE)
         {
@@ -341,7 +329,7 @@ void Tank::Special(float dTpressed)
                             x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                             y + .50,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                            rtx + rx, rty + ry, rtz + rz);
+                            rtx + rx, rty + ry, rtz + rz, true);
             }
 
             CreateBullet(identity, attack, type1, type2, bounces,
@@ -350,7 +338,7 @@ void Tank::Special(float dTpressed)
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR) + .2 * std::cosf((rty + ry + 90) * DTR),
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR) + .2 * std::sinf((rty + ry + 90) * DTR),
-                        rtx + rx, rty + ry, rtz + rz);
+                        rtx + rx, rty + ry, rtz + rz, true);
         }
 
         if (type1 == TankType::TYPE_YELLOW)
@@ -366,7 +354,7 @@ void Tank::Special(float dTpressed)
                             x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                             y + .25,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                            rtx + rx, rty + ry, rtz + rz);
+                            rtx + rx, rty + ry, rtz + rz, true);
             }
 
             // Note: This was creating the same bullet twice - likely a bug. Keeping for compatibility.
@@ -376,7 +364,7 @@ void Tank::Special(float dTpressed)
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                        rtx + rx, rty + ry, rtz + rz);
+                        rtx + rx, rty + ry, rtz + rz, true);
         }
 
         if (type1 == TankType::TYPE_PURPLE)
@@ -390,7 +378,7 @@ void Tank::Special(float dTpressed)
                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                         y + .25,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                        rtx + rx, rty + ry, rtz + rz);
+                        rtx + rx, rty + ry, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
@@ -398,7 +386,7 @@ void Tank::Special(float dTpressed)
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                         rtx + rx, rty + ry - 90, rtz + rz);
+                         rtx + rx, rty + ry - 90, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
@@ -406,7 +394,7 @@ void Tank::Special(float dTpressed)
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                         rtx + rx, rty + ry + 180, rtz + rz);
+                         rtx + rx, rty + ry + 180, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
@@ -414,7 +402,7 @@ void Tank::Special(float dTpressed)
                          x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
                          y + .25,
                          z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
-                         rtx + rx, rty + ry + 90, rtz + rz);
+                         rtx + rx, rty + ry + 90, rtz + rz, true);
         }
 
         fireTimer = 0;
@@ -612,11 +600,11 @@ Tank::~Tank()
 
 void Tank::CreateBullet(const TankIdentity& ownerIdentity, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
                        const Color& primaryColor, const Color& secondaryColor,
-                       float x, float y, float z, float rx, float ry, float rz)
+                       float x, float y, float z, float rx, float ry, float rz, bool isSpecial)
 {
     gameWorld->CreateBullet(ownerIdentity, attack, type1, type2, bounces, dTpressed,
                            primaryColor, secondaryColor, 
-                           x, y, z, rx, ry, rz);
+                           x, y, z, rx, ry, rz, isSpecial);
 }
 
 Tank::Tank(Tank&& other) noexcept

@@ -26,7 +26,8 @@ private:
     void OnBulletTimeout(const BulletTimeoutEvent& event);
     
     // Combat logic helpers
-    void HandleBulletTankCollision(class Bullet* bullet, class Tank* tank);
+    enum class CollisionOutcome { Consume, Continue };
+    CollisionOutcome HandleBulletTankCollision(class Bullet* bullet, class Tank* tank);
     void HandleBulletPlayerCollision(class Bullet* bullet, class Tank* player);
     void ApplyTankDamage(class Tank* tank, float damage, class Bullet* source);
     void UpdatePlayerCombos(int playerIndex, class Tank* target, class Bullet* bullet);

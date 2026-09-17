@@ -26,7 +26,7 @@ public:
            const Color& primaryColor,
            const Color& secondaryColor,
            float x, float y, float z,
-           float rx, float ry, float rz);
+           float rx, float ry, float rz, bool isSpecial = false);
     ~Bullet() = default;
     
     // Entity interface implementation

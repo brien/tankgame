@@ -14,37 +14,11 @@ FetchContent_MakeAvailable(googletest)
 enable_testing()
 
 # Collect source files needed for testing (exclude main.cpp)
-set(TEST_SOURCES
-    ../src/Player.cpp
-    ../src/Tank.cpp
-    ../src/GameWorld.cpp
-    ../src/Logger.cpp
-    ../src/Camera.cpp
-    ../src/Bullet.cpp
-    ../src/Item.cpp
-    ../src/FX.cpp
-    ../src/GlobalTimer.cpp
-    ../src/collision/CollisionSystem.cpp
-    ../src/combat/CombatSystem.cpp
-    ../src/TankCollisionHelper.cpp
-    ../src/DisplayList.cpp
-    ../src/TextureHandler.cpp
-    ../src/LevelHandler.cpp
-    ../src/TankHandler.cpp
-    ../src/PlayerManager.cpp
-    ../src/SoundTask.cpp
-    ../src/InputHandlerFactory.cpp
-    ../src/KeyboardMouseInputHandler.cpp
-    ../src/GameCubeInputHandler.cpp
-    ../src/GenericJoystickInputHandler.cpp
-    ../src/TankTypeManager.cpp
-    ../src/InputTask.cpp
-    ../src/VideoTask.cpp
-    ../src/rendering/TankDataExtractor.cpp
-)
+set(TEST_SOURCES ${GAME_SOURCES})
 
 # Create test executable
 add_executable(tankgame_tests
+    test_bullet_special.cpp
     test_main.cpp
     test_player.cpp
     test_tank_data_extractor.cpp

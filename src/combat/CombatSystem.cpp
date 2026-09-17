@@ -39,14 +39,16 @@ void CombatSystem::OnBulletCollision(const BulletCollisionEvent& event) {
     // Determine if it's a player or enemy tank
     bool isPlayer = tank->isPlayer;
     
+    CollisionOutcome outcome = CollisionOutcome::Consume;
     if (isPlayer) {
         HandleBulletPlayerCollision(bullet, tank);
     } else {
-        HandleBulletTankCollision(bullet, tank);
+        outcome = HandleBulletTankCollision(bullet, tank);
     }
     
-    // Mark bullet as dead
-    bullet->Kill();
+    if (outcome == CollisionOutcome::Consume) {
+        bullet->Kill();
+    }
 }
 
 void CombatSystem::OnBulletLevelCollision(const BulletLevelCollisionEvent& event) {
@@ -81,7 +83,7 @@ void CombatSystem::OnBulletTimeout(const BulletTimeoutEvent& event) {
     bullet->Kill();
 }
 
-void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
+CombatSystem::CollisionOutcome CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
     if (tank->identity == bullet->GetOwnerIdentity()) {
         // Self-collision (friendly fire or ricochet)
         if (bullet->GetDT() > 0.5f) {
@@ -89,9 +91,10 @@ void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
                 tank->health += bullet->GetPower() / 2;
             }
         }
-        return;
+        return CollisionOutcome::Consume;
     }
     
+    CollisionOutcome outcome = CollisionOutcome::Consume;
     if (tank->health > 0) {
         ApplyTankDamage(tank, bullet->GetPower(), bullet);
         
@@ -104,7 +107,7 @@ void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
         // Special bullet behavior (Blue type keeps going)
         if (bullet->GetOwnerIdentity().IsPlayer() && bullet->GetIsSpecial() && bullet->GetType1() == TankType::TYPE_BLUE) {
             // Blue special bullets don't die on hit, they get stronger
-            bullet->SetAlive(true);
+            outcome = CollisionOutcome::Continue;
             bullet->SetPower(bullet->GetPower() + 100);
         }
         
@@ -112,6 +115,7 @@ void CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
         CreateCollisionEffects(bullet->GetX(), bullet->GetY(), bullet->GetZ(), 
                              bullet->GetR(), bullet->GetG(), bullet->GetB(), tank->ry);
     }
+    return outcome;
 }
 
 void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {

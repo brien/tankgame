@@ -6,6 +6,10 @@ file(GLOB_RECURSE SOURCES
 # Remove example files that shouldn't be compiled
 list(FILTER SOURCES EXCLUDE REGEX ".*_example\\.cpp$")
 
+set(GAME_SOURCES ${SOURCES})
+list(FILTER GAME_SOURCES EXCLUDE REGEX "/main\\.cpp$")
+set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
+
 # Set executable name based on platform
 if(APPLE)
     set(EXECUTABLE_NAME "tankgame-mac")

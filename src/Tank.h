@@ -193,7 +193,7 @@ private:
     // Helper method to create bullets through GameWorld
     void CreateBullet(const TankIdentity& ownerIdentity, float attack, TankType type1, TankType type2, int bounces, float dTpressed,
                      const Color& primaryColor, const Color& secondaryColor,
-                     float x, float y, float z, float rx, float ry, float rz);
+                     float x, float y, float z, float rx, float ry, float rz, bool isSpecial = false);
 
 public:
     // === COMPATIBILITY LAYER (temporary) ===
