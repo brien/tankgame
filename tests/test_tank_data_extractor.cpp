@@ -89,3 +89,89 @@ TEST(TankDataExtractorRegression, ExtractRenderData_MapsCoreFields) {
     EXPECT_FLOAT_EQ(data.secondaryColor.b, expectedSecondary.b);
     EXPECT_FLOAT_EQ(data.secondaryColor.a, expectedSecondary.a);
 }
+
+TEST(TankDataExtractorRegression, ExtractPlayerDataFromPointers_FiltersDead) {
+    Tank aliveTank;
+    aliveTank.alive = true;
+    aliveTank.x = 1.0f;
+    aliveTank.identity = TankIdentity::Player(0);
+
+    Tank deadTank;
+    deadTank.alive = false;
+    deadTank.x = 2.0f;
+    deadTank.identity = TankIdentity::Player(1);
+
+    std::array<Tank*, TankHandler::MAX_PLAYERS> players = {&aliveTank, &deadTank};
+    std::array<float, TankHandler::MAX_PLAYERS> special = {0.0f, 0.0f};
+
+    std::vector<TankRenderData> data = TankDataExtractor::ExtractPlayerDataFromPointers(
+        players, special, TankHandler::MAX_PLAYERS);
+
+    ASSERT_EQ(data.size(), 1u);
+    EXPECT_FLOAT_EQ(data[0].position.x, 1.0f);
+    EXPECT_TRUE(data[0].isPlayer);
+    EXPECT_EQ(data[0].playerId, -1);
+}
+
+TEST(TankDataExtractorRegression, ExtractPlayerDataFromPointers_FiltersNull) {
+    Tank aliveTank;
+    aliveTank.alive = true;
+    aliveTank.x = 5.0f;
+    aliveTank.identity = TankIdentity::Player(1);
+
+    // A missing first player must not hide the live second player.
+    std::array<Tank*, TankHandler::MAX_PLAYERS> players = {nullptr, &aliveTank};
+    std::array<float, TankHandler::MAX_PLAYERS> special = {};
+
+    auto data = TankDataExtractor::ExtractPlayerDataFromPointers(
+        players, special, TankHandler::MAX_PLAYERS);
+
+    ASSERT_EQ(data.size(), 1u);
+    EXPECT_FLOAT_EQ(data[0].position.x, 5.0f);
+    EXPECT_TRUE(data[0].isPlayer);
+    EXPECT_EQ(data[0].playerId, -2);
+}
+
+TEST(TankDataExtractorRegression, ExtractPlayerDataFromPointers_PreservesAliveOrder) {
+    Tank p0;
+    p0.alive = true;
+    p0.x = 11.0f;
+    p0.identity = TankIdentity::Player(0);
+
+    Tank p1;
+    p1.alive = true;
+    p1.x = 22.0f;
+    p1.identity = TankIdentity::Player(1);
+
+    std::array<Tank*, TankHandler::MAX_PLAYERS> players = {&p0, &p1};
+    std::array<float, TankHandler::MAX_PLAYERS> special = {0.0f, 0.0f};
+
+    std::vector<TankRenderData> data = TankDataExtractor::ExtractPlayerDataFromPointers(
+        players, special, TankHandler::MAX_PLAYERS);
+
+    ASSERT_EQ(data.size(), 2u);
+    EXPECT_FLOAT_EQ(data[0].position.x, 11.0f);
+    EXPECT_FLOAT_EQ(data[1].position.x, 22.0f);
+}
+
+TEST(TankDataExtractorRegression, ExtractPlayerDataFromPointers_ClampsNumPlayersSafely) {
+    Tank p0;
+    p0.alive = true;
+    p0.x = 3.0f;
+    p0.identity = TankIdentity::Player(0);
+
+    Tank p1;
+    p1.alive = true;
+    p1.x = 4.0f;
+    p1.identity = TankIdentity::Player(1);
+
+    std::array<Tank*, TankHandler::MAX_PLAYERS> players = {&p0, &p1};
+    std::array<float, TankHandler::MAX_PLAYERS> special = {0.0f, 0.0f};
+
+    std::vector<TankRenderData> data = TankDataExtractor::ExtractPlayerDataFromPointers(
+        players, special, TankHandler::MAX_PLAYERS + 10);
+
+    ASSERT_EQ(data.size(), static_cast<size_t>(TankHandler::MAX_PLAYERS));
+    EXPECT_FLOAT_EQ(data[0].position.x, 3.0f);
+    EXPECT_FLOAT_EQ(data[1].position.x, 4.0f);
+}
