@@ -337,8 +337,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                     temp.id = 1;
                     temp.alive = true;
-                    //TODO: Special handling needs to be reimplemented after the bullet refactor
-                    //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                    gameWorld->CreateBullet(temp);
                 }
             }
             else if (type2 == TankType::TYPE_BLUE)
@@ -371,8 +370,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     temp.id = 1;
                     temp.alive = true;
 
-                    //TODO: Special handling needs to be reimplemented after the bullet refactor
-                    //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                    gameWorld->CreateBullet(temp);
                 }
             }
             else if (type2 == TankType::TYPE_YELLOW || type2 == TankType::TYPE_GREY)
@@ -395,11 +393,13 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 temp.primaryColor = primaryColor;
                 temp.secondaryColor = secondaryColor;
 
+                // Preserve the original default-constructed grey child types.
+                temp.type1 = TankType::TYPE_GREY;
+                temp.type2 = TankType::TYPE_GREY;
                 temp.maxbounces = 4;
                 temp.alive = true;
 
-                //TODO: Special handling needs to be reimplemented after the bullet refactor
-                //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                gameWorld->CreateBullet(temp);
             }
             else if (type2 == TankType::TYPE_PURPLE)
             {
@@ -430,8 +430,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 
                 temp.id = 1;
                 temp.alive = true;
-                //TODO: Special handling needs to be reimplemented after the bullet refactor
-                //TankHandler::GetSingleton().players[(-1 * tankId) - 1].bulletq.push(temp);
+                gameWorld->CreateBullet(temp);
             }
         }
 

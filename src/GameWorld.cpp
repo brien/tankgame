@@ -71,8 +71,15 @@ Bullet* GameWorld::CreateBullet(const TankIdentity& ownerIdentity, float attack,
                                float x, float y, float z, float rx, float ry, float rz, bool isSpecial) {
     Logger::Get().Write("GameWorld::CreateBullet - tankId=%d, pos=(%.2f, %.2f, %.2f)\n", ownerIdentity.GetLegacyId(), x, y, z);
     
-    Bullet* bullet = bullets.Create(ownerIdentity, attack, type1, type2, bounces, dTpressed, primaryColor, secondaryColor, x, y, z, rx, ry, rz, isSpecial);
-    
+    return RegisterBullet(bullets.Create(ownerIdentity, attack, type1, type2, bounces, dTpressed,
+                                         primaryColor, secondaryColor, x, y, z, rx, ry, rz, isSpecial));
+}
+
+Bullet* GameWorld::CreateBullet(const Bullet& prototype) {
+    return RegisterBullet(bullets.Create(prototype));
+}
+
+Bullet* GameWorld::RegisterBullet(Bullet* bullet) {
     // Set GameWorld reference so bullet can create FX
     if (bullet) {
         bullet->SetGameWorld(this);
