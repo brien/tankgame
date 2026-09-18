@@ -1,5 +1,97 @@
 # Special-attack bullet restoration
 
+## Session handoff — 2026-09-18
+
+Status: the original restoration plan and both subsequently requested follow-ups
+are complete. No implementation task is currently in progress or assigned for
+the next session. The user reported that manual gameplay testing seemed to work
+correctly; that was user validation, not an automated visual check.
+
+### Completed plan
+
+- [x] Propagate special status through Bullet, GameWorld, and Tank creation;
+  retain ordinary-shot defaults and existing firing patterns/costs/cooldowns.
+- [x] Restore blue enemy piercing and activate existing purple acceleration.
+- [x] Restore all yellow bounce children through world-owned prototype copies,
+  retaining their identity, damage, types, colors, motion, and bounce limits.
+- [x] Keep child bullets non-special and preserve queued collision timing.
+- [x] Add seven headless bullet tests using real gameplay classes and the shared
+  CMake source list; cover both player identities and world lifecycle behavior.
+- [x] Fix the sanitizer-discovered Tank collision-array initialization bug.
+- [x] Complete manual gameplay validation (user report).
+- [x] Add explicit event unsubscription for CollisionSystem, CombatSystem, and
+  GameWorld; support safe removal during dispatch and automatic destructor cleanup.
+- [x] Add eight event-bus/lifecycle tests and remove the bullet fixture's reliance
+  on `ClearAll()` for subscription cleanup.
+- [x] Verify the full build, 57 CTest tests, and three shuffled full-suite runs
+  both normally and under ASan/UBSan with leak detection.
+
+### Delivered commits
+
+| Commit | Result |
+| --- | --- |
+| `df3ef65` | Special status, blue collision survival, and initial bullet tests |
+| `d17c98f` | Yellow secondary spawning, child/lifecycle tests, implementation note |
+| `25aa90f` | Zero-initialize all 21 tank collision points; remove out-of-bounds write |
+| `b34124b` | Event subscription cleanup, safe dispatch, and eight lifecycle tests |
+
+### Resume here
+
+Read this note and inspect `git status --short` before making changes. All known
+follow-ups raised in this conversation are resolved; obtain the next task from
+the user rather than repeating the restoration or starting an unrelated refactor.
+
+Preserve existing unrelated workspace content: `runtime/applog.txt` is modified,
+and the checkout contains pre-existing untracked notes, documentation, IDE files,
+screenshots, runtime executables, and other runtime files. Do not bulk-stage or
+clean these up as part of this task.
+
+Compatibility boundaries remain intentional: no weapon rebalance, grey-primary
+special, BulletHandler restoration, rendering changes, or respawn redesign.
+Event subscriptions now have explicit ownership, but event payloads still contain
+raw entity pointers and level transitions still clear pending events. The cleanup
+change does not provide ownership of queued payloads or per-world event routing.
+
+### Verification to reproduce
+
+```sh
+cmake -S . -B build
+cmake --build build -j4
+ctest --test-dir build --output-on-failure
+./runtime/tankgame_tests --gtest_shuffle --gtest_random_seed=381 --gtest_repeat=3
+```
+
+Latest result: 57/57 tests passed; all three shuffled runs passed (seeds 381–383).
+The relevant new test files are `tests/test_bullet_special.cpp` and
+`tests/test_event_lifecycle.cpp`.
+
+An isolated sanitizer build exists in `build/sanitize`, with its test executable
+at `/tmp/tankgame-special-sanitize/tankgame_tests`. Recreate it if temporary files
+or build outputs are missing:
+
+```sh
+cmake -S . -B build/sanitize -DCMAKE_BUILD_TYPE=Debug \
+  '-DCMAKE_CXX_FLAGS=-fsanitize=address,undefined -fno-omit-frame-pointer' \
+  '-DCMAKE_EXE_LINKER_FLAGS=-fsanitize=address,undefined' \
+  -DCMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG=/tmp/tankgame-special-sanitize \
+  -DFETCHCONTENT_SOURCE_DIR_GOOGLETEST="$PWD/build/_deps/googletest-src"
+cmake --build build/sanitize --target tankgame_tests -j4
+env ASAN_OPTIONS=halt_on_error=1 UBSAN_OPTIONS=halt_on_error=1:print_stacktrace=1 \
+  /tmp/tankgame-special-sanitize/tankgame_tests \
+  --gtest_shuffle --gtest_random_seed=381 --gtest_repeat=3
+```
+
+The sanitizer build's test-discovery step and test execution need to run outside
+the process-tracing sandbox: LeakSanitizer fails under ptrace. Request tool
+escalation if needed; do not disable leak detection to conceal that limitation.
+All 57 tests passed three sanitizer runs with halt-on-error and leak detection
+active. Last-run logs, if still present, are `/tmp/tankgame-event-build.log`,
+`/tmp/tankgame-event-ctest.log`, `/tmp/tankgame-event-shuffle.log`,
+`/tmp/tankgame-event-sanitize-build.log`, and
+`/tmp/tankgame-event-sanitize-run.log`.
+
+## Implementation details
+
 `fae5714` moved tank-owned bullets into `BulletHandler` and disabled the four
 secondary-spawn paths. `275715f` subsequently migrated bullets into `GameWorld`.
 This implementation uses current world ownership and collision events; it does
@@ -36,7 +128,7 @@ Firing patterns (including overlapping yellow shots), charge costs, cooldowns,
 damage calculations/limits, and repeated enemy-hit behavior are preserved. No
 grey-primary special was added.
 
-## Verification
+## Restoration verification history
 
 The headless fixture links real gameplay sources, initializes `App`, `GameTask`,
 a separate world and player-manager connection, clears queued events (subscription
