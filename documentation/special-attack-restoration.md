@@ -49,13 +49,14 @@ positive/negative/zero acceleration.
 
 - Full configure/build and CTest suite: 49/49 passed.
 - New tests shuffled three times: seeds 173, 174, 175 passed.
-- ASan/UBSan: the four yellow/lifecycle/purple tests passed three shuffled runs
-  with halt-on-error enabled, including leak detection. Running all seven tests
-  stops on the pre-existing `Tank::Tank()` write to `collisionPoints[21]` in a
-  21-element array (`src/Tank.cpp:589`). That constructor bug is a follow-up,
-  outside this restoration. The sanitizer executable was built separately in
-  `build/sanitize` with `-fsanitize=address,undefined -fno-omit-frame-pointer`;
-  it ran outside the sandbox because LeakSanitizer cannot run under ptrace.
+- Follow-up (2026-09-18): `Tank::collisionPoints` now uses zero initialization
+  at its declaration; the constructor's out-of-bounds write to index 21 was
+  removed. Full game/test builds and all 49 CTest tests pass after the fix.
+- ASan/UBSan: all seven bullet tests now pass three shuffled runs (seeds 173,
+  174, 175) with halt-on-error enabled and leak detection active. The sanitizer
+  executable was built separately in `build/sanitize` with
+  `-fsanitize=address,undefined -fno-omit-frame-pointer`; it ran outside the
+  sandbox because LeakSanitizer cannot run under ptrace.
 - Interactive validation remains pending: all yellow wall combinations, blue
   enemy piercing, purple curves, and ownership for both players. No interactive
   gameplay control tool was available in this session.

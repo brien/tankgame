@@ -119,7 +119,7 @@ public:
     float vx, vy, vz;
     void SetPosition(float _x, float _y, float _z);
 
-    float collisionPoints[21];
+    float collisionPoints[21] = {};
     float collisionRadius;
 
     int control;

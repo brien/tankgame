@@ -586,8 +586,6 @@ Tank::Tank()
     alive = true;
     isPlayer = false;
 
-    collisionPoints[21] = {0};
-    
     // Initialize input handler after setting inputMode
     inputHandler = InputHandlerFactory::CreateInputHandler(inputMode);
 }
