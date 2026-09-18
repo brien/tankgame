@@ -7,27 +7,32 @@
 #include "../App.h"
 #include <cmath>
 
+CombatSystem::~CombatSystem() {
+    Shutdown();
+}
+
 void CombatSystem::Initialize() {
+    Events::GetBus().Unsubscribe(this);
     // Subscribe to collision events
     Events::GetBus().Subscribe<BulletCollisionEvent>([this](const BulletCollisionEvent& event) {
         OnBulletCollision(event);
-    });
+    }, this);
     
     Events::GetBus().Subscribe<BulletLevelCollisionEvent>([this](const BulletLevelCollisionEvent& event) {
         OnBulletLevelCollision(event);
-    });
+    }, this);
     
     Events::GetBus().Subscribe<BulletOutOfBoundsEvent>([this](const BulletOutOfBoundsEvent& event) {
         OnBulletOutOfBounds(event);
-    });
+    }, this);
     
     Events::GetBus().Subscribe<BulletTimeoutEvent>([this](const BulletTimeoutEvent& event) {
         OnBulletTimeout(event);
-    });
+    }, this);
 }
 
 void CombatSystem::Shutdown() {
-    // Event system will automatically unsubscribe when destroyed
+    Events::GetBus().Unsubscribe(this);
 }
 
 void CombatSystem::OnBulletCollision(const BulletCollisionEvent& event) {

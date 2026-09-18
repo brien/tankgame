@@ -16,10 +16,14 @@ public:
     
     // Convenience methods that delegate to the global bus
     template<typename EventType>
-    static void Subscribe(std::function<void(const EventType&)> handler) {
-        GetBus().Subscribe<EventType>(handler);
+    static void Subscribe(std::function<void(const EventType&)> handler, const void* owner = nullptr) {
+        GetBus().Subscribe<EventType>(handler, owner);
     }
     
+    static void Unsubscribe(const void* owner) {
+        GetBus().Unsubscribe(owner);
+    }
+
     template<typename EventType>
     static void Publish(const EventType& event) {
         GetBus().Publish<EventType>(event);

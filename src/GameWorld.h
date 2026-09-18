@@ -21,7 +21,9 @@ enum class TankType;
 class GameWorld {
 public:
     GameWorld();
-    ~GameWorld() = default;
+    ~GameWorld();
+    GameWorld(const GameWorld&) = delete;
+    GameWorld& operator=(const GameWorld&) = delete;
     
     void Update();
     void Clear();

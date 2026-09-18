@@ -11,21 +11,26 @@
 CollisionSystem::CollisionSystem() {
 }
 
+CollisionSystem::~CollisionSystem() {
+    Shutdown();
+}
+
 void CollisionSystem::Initialize() {
+    Events::GetBus().Unsubscribe(this);
     Logger::Get().Write("CollisionSystem::Initialize() - Subscribing to collision query events\n");
     
     // Subscribe to collision query events
     Events::GetBus().Subscribe<PointCollisionQuery>([this](const PointCollisionQuery& query) {
         OnPointCollisionQuery(query);
-    });
+    }, this);
     
     Events::GetBus().Subscribe<SphereCollisionQuery>([this](const SphereCollisionQuery& query) {
         OnSphereCollisionQuery(query);
-    });
+    }, this);
     
     Events::GetBus().Subscribe<GetLevelBoundsQuery>([this](const GetLevelBoundsQuery& query) {
         OnGetLevelBoundsQuery(query);
-    });
+    }, this);
     
     Logger::Get().Write("CollisionSystem::Initialize() - Subscriptions complete\n");
 }
@@ -39,7 +44,9 @@ void CollisionSystem::Update() {
 }
 
 void CollisionSystem::Shutdown() {
+    Events::GetBus().Unsubscribe(this);
     registeredEntities.clear();
+    boundsValid = false;
 }
 
 void CollisionSystem::RegisterEntity(Entity* entity, const CollisionShape3D& shape, CollisionLayer layer) {

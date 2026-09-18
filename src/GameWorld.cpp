@@ -8,7 +8,12 @@
 
 GameWorld::GameWorld() = default;
 
+GameWorld::~GameWorld() {
+    Shutdown();
+}
+
 void GameWorld::Initialize() {
+    Events::GetBus().Unsubscribe(this);
     Logger::Get().Write("GameWorld::Initialize() - Starting\n");
     
     // Initialize systems
@@ -22,6 +27,7 @@ void GameWorld::Initialize() {
 }
 
 void GameWorld::Shutdown() {
+    Events::GetBus().Unsubscribe(this);
     combatSystem.Shutdown();
     collisionSystem.Shutdown();
 }
@@ -150,7 +156,7 @@ void GameWorld::SetupEventHandlers() {
     // Handle FX creation events from combat system
     Events::GetBus().Subscribe<CreateFXEvent>([this](const CreateFXEvent& event) {
         OnCreateFXEvent(event);
-    });
+    }, this);
 }
 
 // Helper functions to check if entity should be kept around despite being dead

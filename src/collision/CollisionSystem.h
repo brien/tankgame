@@ -22,7 +22,9 @@ struct CollisionShape3D {
 class CollisionSystem {
 public:
     CollisionSystem();
-    ~CollisionSystem() = default;
+    ~CollisionSystem();
+    CollisionSystem(const CollisionSystem&) = delete;
+    CollisionSystem& operator=(const CollisionSystem&) = delete;
     
     void Initialize();
     void Update();  // Update spatial grid and detect collisions

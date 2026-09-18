@@ -39,8 +39,8 @@ grey-primary special was added.
 ## Verification
 
 The headless fixture links real gameplay sources, initializes `App`, `GameTask`,
-a separate world and player-manager connection, clears global event handlers and
-queues, initializes both level grids with `Load(nullptr)` then flattens terrain,
+a separate world and player-manager connection, clears queued events (subscription
+cleanup is now owned by each world/system), initializes both level grids with `Load(nullptr)` then flattens terrain,
 fixes/restores delta time, and disables sound. It never starts the graphical app.
 Tests cover both player identities and every yellow combination, child values,
 full bounce allowances, non-recursion, special eligibility, queued wall events,
@@ -57,11 +57,32 @@ positive/negative/zero acceleration.
   executable was built separately in `build/sanitize` with
   `-fsanitize=address,undefined -fno-omit-frame-pointer`; it ran outside the
   sandbox because LeakSanitizer cannot run under ptrace.
-- Interactive validation remains pending: all yellow wall combinations, blue
-  enemy piercing, purple curves, and ownership for both players. No interactive
-  gameplay control tool was available in this session.
+- Manual gameplay validation: the user reported that testing was working
+  correctly after the constructor fix.
 
-Follow-up outside this change: collision-system shutdown does not remove its
-event subscriptions. The fixture clears the bus before teardown and setup to
-avoid retaining callbacks to destroyed worlds; this change does not redesign
-event subscription ownership.
+## Event-subscription cleanup follow-up (2026-09-18)
+
+`EventBus::Subscribe` accepts an optional owner, and `Unsubscribe(owner)` removes
+only that owner's callbacks across event types. Existing unowned subscriptions
+remain supported. CollisionSystem, CombatSystem, and GameWorld's FX handler now
+register their owners, unsubscribe during shutdown, and call shutdown from their
+destructors. Repeated initialization replaces callbacks without duplication;
+repeated shutdown is safe. These subscribers cannot be copied or moved because
+their callbacks capture their addresses.
+
+Synchronous and queued dispatch share a callback snapshot. Removing a subscription
+marks it inactive so it cannot run later in that snapshot; its callable remains
+alive while an in-flight callback finishes. New subscriptions participate in the
+next dispatch, including nested publishes. Shutdown preserves other subscribers
+and queued events. Event payload lifetimes and level-transition queue clearing
+remain unchanged.
+
+Eight new tests cover owner isolation, removal during dispatch, nested dispatch,
+local-bus clearing, repeated world shutdown/destruction, queued delivery after
+destruction, reinitialization, standalone systems, and another live world's
+subscriptions. The global lifecycle fixture does not clear subscriptions or the
+queue; the bullet fixture no longer uses `ClearAll()` either.
+
+Verification: full game/test build and all 57 CTest tests pass. The entire suite
+also passed three shuffled runs (seeds 381–383), both normally and with ASan/UBSan
+halt-on-error and leak detection enabled.

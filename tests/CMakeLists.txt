@@ -18,6 +18,7 @@ set(TEST_SOURCES ${GAME_SOURCES})
 
 # Create test executable
 add_executable(tankgame_tests
+    test_event_lifecycle.cpp
     test_bullet_special.cpp
     test_main.cpp
     test_player.cpp

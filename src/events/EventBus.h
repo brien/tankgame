@@ -1,5 +1,6 @@
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <vector>
 #include <unordered_map>
@@ -18,7 +19,7 @@ public:
     
     // Subscribe to events of a specific type
     template<typename EventType>
-    void Subscribe(std::function<void(const EventType&)> handler) {
+    void Subscribe(std::function<void(const EventType&)> handler, const void* owner = nullptr) {
         auto typeIndex = std::type_index(typeid(EventType));
         
         // Wrap the typed handler in a type-erased handler
@@ -26,22 +27,35 @@ public:
             handler(static_cast<const EventType&>(event));
         };
         
-        handlers[typeIndex].push_back(wrappedHandler);
+        handlers[typeIndex].push_back(std::make_shared<Subscription>(Subscription{wrappedHandler, owner, true}));
     }
     
-    // Publish an event immediately (synchronous)
-    template<typename EventType>
-    void Publish(const EventType& event) {
-        auto typeIndex = std::type_index(typeid(EventType));
-        auto it = handlers.find(typeIndex);
-        
-        if (it != handlers.end()) {
-            for (auto& handler : it->second) {
-                handler(event);
+    // Remove only this owner's callbacks. Unowned subscriptions remain until ClearAll().
+    // Owners must unsubscribe before destruction and keep a stable address while subscribed.
+    void Unsubscribe(const void* owner) {
+        if (!owner) return;
+        for (auto it = handlers.begin(); it != handlers.end();) {
+            auto& subscriptions = it->second;
+            subscriptions.erase(std::remove_if(subscriptions.begin(), subscriptions.end(),
+                [owner](const std::shared_ptr<Subscription>& subscription) {
+                    if (subscription->owner != owner) return false;
+                    subscription->active = false;
+                    return true;
+                }), subscriptions.end());
+            if (subscriptions.empty()) {
+                it = handlers.erase(it);
+            } else {
+                ++it;
             }
         }
     }
-    
+
+    // Publish an event immediately (synchronous)
+    template<typename EventType>
+    void Publish(const EventType& event) {
+        Dispatch(std::type_index(typeid(EventType)), event);
+    }
+
     // Post an event to be processed later (asynchronous)
     template<typename EventType>
     void Post(const EventType& event) {
@@ -54,14 +68,7 @@ public:
         eventQueue.clear();
         
         for (auto& event : currentQueue) {
-            auto typeIndex = std::type_index(event->GetType());
-            auto it = handlers.find(typeIndex);
-            
-            if (it != handlers.end()) {
-                for (auto& handler : it->second) {
-                    handler(*event);
-                }
-            }
+            Dispatch(std::type_index(event->GetType()), *event);
         }
     }
     
@@ -72,11 +79,37 @@ public:
     
     // Clear all handlers and queued events (use sparingly!)
     void ClearAll() {
+        for (auto& entry : handlers) {
+            for (auto& subscription : entry.second) {
+                subscription->active = false;
+            }
+        }
         handlers.clear();
         eventQueue.clear();
     }
 
 private:
-    std::unordered_map<std::type_index, std::vector<EventHandler>> handlers;
+    struct Subscription {
+        EventHandler handler;
+        const void* owner;
+        bool active;
+    };
+
+    void Dispatch(std::type_index type, const Event& event) {
+        auto it = handlers.find(type);
+        if (it == handlers.end()) return;
+
+        // A callback may subscribe, unsubscribe, or destroy another subscriber.
+        // Keep callbacks alive until dispatch ends, but skip any removed callbacks.
+        // New subscriptions start with the next dispatch (including nested publishes).
+        auto snapshot = it->second;
+        for (const auto& subscription : snapshot) {
+            if (subscription->active) {
+                subscription->handler(event);
+            }
+        }
+    }
+
+    std::unordered_map<std::type_index, std::vector<std::shared_ptr<Subscription>>> handlers;
     std::vector<std::unique_ptr<Event>> eventQueue;
 };

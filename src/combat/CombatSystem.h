@@ -13,7 +13,9 @@
 class CombatSystem {
 public:
     CombatSystem() = default;
-    ~CombatSystem() = default;
+    ~CombatSystem();
+    CombatSystem(const CombatSystem&) = delete;
+    CombatSystem& operator=(const CombatSystem&) = delete;
     
     void Initialize();
     void Shutdown();

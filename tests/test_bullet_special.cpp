@@ -14,7 +14,7 @@ protected:
     float oldDT = GlobalTimer::dT;
 
     void SetUp() override {
-        Events::GetBus().ClearAll();
+        Events::GetBus().Clear();
         app.gameTask = &task;
         app.soundTask = &sound;
         sound.disable = true;
@@ -28,7 +28,7 @@ protected:
         task.GetPlayerManager()->SetNumPlayers(2);
     }
     void TearDown() override {
-        Events::GetBus().ClearAll();
+        Events::GetBus().Clear();
         task.GetPlayerManager()->Shutdown();
         world.Clear();
         world.Shutdown();
