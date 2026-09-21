@@ -46,8 +46,23 @@ else()
     )
 endif()
 
-# Try to find SDL2_ttf
-find_library(SDL2_TTF_LIBRARY SDL2_ttf REQUIRED)
+# SDL2_ttf follows the same dependency boundary as SDL2_mixer: desktop
+# toolchains use their installed library, while Emscripten supplies a port
+# whose compile and link settings must travel with every consumer.
+add_library(tankgame_sdl2_ttf INTERFACE)
+if(EMSCRIPTEN)
+    target_compile_options(tankgame_sdl2_ttf INTERFACE
+        "-sUSE_SDL_TTF=2"
+    )
+    target_link_options(tankgame_sdl2_ttf INTERFACE
+        "-sUSE_SDL_TTF=2"
+    )
+else()
+    find_library(SDL2_TTF_LIBRARY SDL2_ttf REQUIRED)
+    target_link_libraries(tankgame_sdl2_ttf INTERFACE
+        ${SDL2_TTF_LIBRARY}
+    )
+endif()
 
 # macOS specific OpenGL silence flag
 if(APPLE)
