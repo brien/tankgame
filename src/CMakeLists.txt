@@ -25,7 +25,6 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${SDL2_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIR}
-    ${ASSIMP_INCLUDE_DIRS}
 )
 
 # Link libraries
@@ -35,7 +34,6 @@ target_link_libraries(${EXECUTABLE_NAME}
     ${SDL2_MIXER_LIBRARY}
     ${SDL2_TTF_LIBRARY}
     ${OPENGL_LIBRARIES}
-    ${ASSIMP_LIBRARIES}
     ${CMAKE_DL_LIBS}
 )
 
