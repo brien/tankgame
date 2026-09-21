@@ -30,6 +30,7 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
 
 # Link libraries
 target_link_libraries(${EXECUTABLE_NAME}
+    nlohmann_json::nlohmann_json
     ${SDL2_LIBRARIES}
     ${SDL2_MIXER_LIBRARY}
     ${SDL2_TTF_LIBRARY}
