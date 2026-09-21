@@ -15,7 +15,7 @@ flatpak-spawn --host distrobox enter cpp-dev -- bash -c "
     echo \"\$CPP_FILES\"
     echo ''
     
-    g++ -std=c++14 -Wall -o $EXECUTABLE_NAME \$CPP_FILES -lSDL2 -lSDL2_mixer -lSDL2_ttf -lGL -lGLU -ldl -lassimp
+    g++ -std=c++14 -Wall -o $EXECUTABLE_NAME \$CPP_FILES -lSDL2 -lSDL2_mixer -lSDL2_ttf -lGL -lGLU -ldl
     
     if [ \$? -eq 0 ]; then
         mv ./$EXECUTABLE_NAME ../runtime/

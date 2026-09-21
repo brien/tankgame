@@ -25,7 +25,6 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/runtime)
 # Find required packages
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
-find_package(assimp REQUIRED)
 
 # Try to find SDL2_mixer and SDL2_ttf
 find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
