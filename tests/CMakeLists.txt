@@ -41,7 +41,7 @@ target_link_libraries(tankgame_tests
     nlohmann_json::nlohmann_json
     ${SDL2_LIBRARIES}
     tankgame_sdl2_mixer
-    ${SDL2_TTF_LIBRARY}
+    tankgame_sdl2_ttf
     ${OPENGL_LIBRARIES}
     ${CMAKE_DL_LIBS}
 )
