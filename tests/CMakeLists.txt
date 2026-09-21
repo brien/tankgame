@@ -39,6 +39,7 @@ target_include_directories(tankgame_tests PRIVATE
 target_link_libraries(tankgame_tests
     GTest::gtest
     GTest::gtest_main
+    nlohmann_json::nlohmann_json
     ${SDL2_LIBRARIES}
     ${SDL2_MIXER_LIBRARY}
     ${SDL2_TTF_LIBRARY}
