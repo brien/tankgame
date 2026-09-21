@@ -198,9 +198,9 @@ void Tank::Fire(float dTpressed)
         Color secondaryColor = GetSecondaryColor();
         gameWorld->CreateBullet(identity, attack, type1, type2, bounces,
                     dTpressed, primaryColor, secondaryColor,
-                    x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                    x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                     y + .25,
-                    z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                    z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                     rtx + rx, rty + ry, rtz + rz);
 
         fireTimer = 0;
@@ -295,25 +295,25 @@ void Tank::Special(float dTpressed)
             CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz, true);
             
             CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                         rtx + rx, rty + ry - 10, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                          rtx + rx, rty + ry + 20, rtz + rz, true);
         }
         if (type1 == TankType::TYPE_BLUE)
@@ -326,18 +326,18 @@ void Tank::Special(float dTpressed)
                 CreateBullet(identity, attack, type1, type2, bounces,
                             dTpressed,
                             primaryColor, secondaryColor,
-                            x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                            x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                             y + .50,
-                            z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                            z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz, true);
             }
 
             CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR) + .2 * std::cosf((rty + ry + 90) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR) + .2 * std::cos((rty + ry + 90) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR) + .2 * std::sinf((rty + ry + 90) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR) + .2 * std::sin((rty + ry + 90) * DTR),
                         rtx + rx, rty + ry, rtz + rz, true);
         }
 
@@ -351,9 +351,9 @@ void Tank::Special(float dTpressed)
                 CreateBullet(identity, attack, type1, type2, 4,
                             dTpressed,
                             primaryColor, secondaryColor,
-                            x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                            x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                             y + .25,
-                            z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                            z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz, true);
             }
 
@@ -361,9 +361,9 @@ void Tank::Special(float dTpressed)
             CreateBullet(identity, attack, type1, type2, 4,
                         dTpressed,
                         primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz, true);
         }
 
@@ -375,33 +375,33 @@ void Tank::Special(float dTpressed)
             CreateBullet(identity, attack, type1, type2, bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                         y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                          rtx + rx, rty + ry - 90, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                          rtx + rx, rty + ry + 180, rtz + rz, true);
 
             CreateBullet(identity, attack, type1, type2, bounces,
                          dTpressed,
                          primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cosf((rty + ry) * DTR),
+                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
                          y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sinf((rty + ry) * DTR),
+                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                          rtx + rx, rty + ry + 90, rtz + rz, true);
         }
 
@@ -1002,8 +1002,8 @@ bool Tank::Move(float rate)
 
     bool moved = true;
 
-    vx = rate * (GlobalTimer::dT * movRate) * std::cosf(ry * DTR);
-    vz = rate * (GlobalTimer::dT * movRate) * std::sinf(ry * DTR);
+    vx = rate * (GlobalTimer::dT * movRate) * std::cos(ry * DTR);
+    vz = rate * (GlobalTimer::dT * movRate) * std::sin(ry * DTR);
 
     x += vx;
     z += vz;
@@ -1108,8 +1108,8 @@ bool Tank::Move(bool forb)
     Color primaryColor = GetPrimaryColor();
     bool moved;
 
-    vx = (GlobalTimer::dT * movRate) * std::cosf(ry * DTR);
-    vz = (GlobalTimer::dT * movRate) * std::sinf(ry * DTR);
+    vx = (GlobalTimer::dT * movRate) * std::cos(ry * DTR);
+    vz = (GlobalTimer::dT * movRate) * std::sin(ry * DTR);
 
     if (forb)
     {
@@ -1140,13 +1140,13 @@ bool Tank::Move(bool forb)
 
     if (isPlayer && isGrounded)
     {
-        float treadPointX = 0.25f * std::cosf((ry + 45) * DTR);
-        float treadPointZ = 0.25f * std::sinf((ry + 45) * DTR);
+        float treadPointX = 0.25f * std::cos((ry + 45) * DTR);
+        float treadPointZ = 0.25f * std::sin((ry + 45) * DTR);
 
         CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
 
-        treadPointX = 0.25f * std::cosf((ry + 315) * DTR);
-        treadPointZ = 0.25f * std::sinf((ry + 315) * DTR);
+        treadPointX = 0.25f * std::cos((ry + 315) * DTR);
+        treadPointZ = 0.25f * std::sin((ry + 315) * DTR);
 
         CreateFX(FxType::TYPE_SMALL_RECTANGLE, x - vx + treadPointX, y - 0.18, z - vz + treadPointZ, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
     }
@@ -1373,11 +1373,11 @@ void Tank::Wander()
 {
     float angle = 20;
     float frames = 15;
-    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry - angle) * DTR);
-    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry - angle) * DTR);
+    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry - angle) * DTR);
+    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry - angle) * DTR);
 
-    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry + angle) * DTR);
-    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry + angle) * DTR);
+    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry + angle) * DTR);
+    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry + angle) * DTR);
 
     Move(true);
 
@@ -1461,11 +1461,11 @@ void Tank::Fear()
 
     float angle = 30;
     float frames = 20;
-    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry - angle) * DTR);
-    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry - angle) * DTR);
+    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry - angle) * DTR);
+    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry - angle) * DTR);
 
-    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cosf((ry + angle) * DTR);
-    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sinf((ry + angle) * DTR);
+    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry + angle) * DTR);
+    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry + angle) * DTR);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
@@ -1541,8 +1541,8 @@ void Tank::Hunt(Tank &player)
         }
     }
 
-    xpp = x + (GlobalTimer::dT * 10 * movRate) * std::cosf(ry * DTR);
-    zpp = z + (GlobalTimer::dT * 10 * movRate) * std::sinf(ry * DTR);
+    xpp = x + (GlobalTimer::dT * 10 * movRate) * std::cos(ry * DTR);
+    zpp = z + (GlobalTimer::dT * 10 * movRate) * std::sin(ry * DTR);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp))
     {
