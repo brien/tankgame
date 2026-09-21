@@ -29,10 +29,21 @@ add_executable(tankgame_tests
 
 # Include directories for tests
 target_include_directories(tankgame_tests PRIVATE
-    ${CMAKE_SOURCE_DIR}/src
     ${SDL2_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIR}
 )
+
+# Keep the project's math.h available to quoted includes without allowing it
+# to shadow the C library <math.h> used by Emscripten's libc++ headers.
+if(EMSCRIPTEN)
+    target_compile_options(tankgame_tests PRIVATE
+        "-iquote${CMAKE_SOURCE_DIR}/src"
+    )
+else()
+    target_include_directories(tankgame_tests PRIVATE
+        ${CMAKE_SOURCE_DIR}/src
+    )
+endif()
 
 # Link test executable with gtest and required libraries
 target_link_libraries(tankgame_tests
@@ -46,8 +57,9 @@ target_link_libraries(tankgame_tests
     ${CMAKE_DL_LIBS}
 )
 
-# Add GLU on Linux
-if(UNIX AND NOT APPLE)
+# Add GLU on native Linux/Unix desktops. Emscripten also reports UNIX, but
+# WebAssembly targets must not discover or link the host desktop GLU library.
+if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
     find_library(GLU_LIBRARY GLU REQUIRED)
     target_link_libraries(tankgame_tests ${GLU_LIBRARY})
 endif()

@@ -22,10 +22,21 @@ add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
 # Include directories
 target_include_directories(${EXECUTABLE_NAME} PRIVATE
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${SDL2_INCLUDE_DIRS}
     ${OPENGL_INCLUDE_DIR}
 )
+
+# Keep the project's math.h available to quoted includes without allowing it
+# to shadow the C library <math.h> used by Emscripten's libc++ headers.
+if(EMSCRIPTEN)
+    target_compile_options(${EXECUTABLE_NAME} PRIVATE
+        "-iquote${CMAKE_CURRENT_SOURCE_DIR}"
+    )
+else()
+    target_include_directories(${EXECUTABLE_NAME} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}
+    )
+endif()
 
 # Link libraries
 target_link_libraries(${EXECUTABLE_NAME}
@@ -37,8 +48,9 @@ target_link_libraries(${EXECUTABLE_NAME}
     ${CMAKE_DL_LIBS}
 )
 
-# Add GLU on Linux
-if(UNIX AND NOT APPLE)
+# Add GLU on native Linux/Unix desktops. Emscripten also reports UNIX, but
+# WebAssembly targets must not discover or link the host desktop GLU library.
+if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
     find_library(GLU_LIBRARY GLU REQUIRED)
     target_link_libraries(${EXECUTABLE_NAME} ${GLU_LIBRARY})
 endif()
