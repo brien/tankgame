@@ -40,7 +40,7 @@ target_link_libraries(tankgame_tests
     GTest::gtest_main
     nlohmann_json::nlohmann_json
     ${SDL2_LIBRARIES}
-    ${SDL2_MIXER_LIBRARY}
+    tankgame_sdl2_mixer
     ${SDL2_TTF_LIBRARY}
     ${OPENGL_LIBRARIES}
     ${CMAKE_DL_LIBS}

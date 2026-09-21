@@ -26,8 +26,27 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/runtime)
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
-# Try to find SDL2_mixer and SDL2_ttf
-find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
+# SDL2_mixer is a normal installed library on desktop platforms. Emscripten
+# supplies it as a port, which must be enabled while compiling (for its
+# headers) and linking. Only Ogg support is needed beyond SDL_mixer's WAV
+# loader by the audio files that the game currently loads.
+add_library(tankgame_sdl2_mixer INTERFACE)
+if(EMSCRIPTEN)
+    target_compile_options(tankgame_sdl2_mixer INTERFACE
+        "-sUSE_SDL_MIXER=2"
+    )
+    target_link_options(tankgame_sdl2_mixer INTERFACE
+        "-sUSE_SDL_MIXER=2"
+        "-sSDL2_MIXER_FORMATS=[\"ogg\"]"
+    )
+else()
+    find_library(SDL2_MIXER_LIBRARY SDL2_mixer REQUIRED)
+    target_link_libraries(tankgame_sdl2_mixer INTERFACE
+        ${SDL2_MIXER_LIBRARY}
+    )
+endif()
+
+# Try to find SDL2_ttf
 find_library(SDL2_TTF_LIBRARY SDL2_ttf REQUIRED)
 
 # macOS specific OpenGL silence flag
