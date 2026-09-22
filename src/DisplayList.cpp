@@ -1,31 +1,65 @@
+#include "DisplayList.h"
+
+#include <cstdio>
+#include <cstdlib>
+
+#ifndef __EMSCRIPTEN__
 #ifdef _WIN32
-// If building in windows:
 #pragma warning(disable : 4996)
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
 #elif __APPLE__
-// If building on macOS:
 #include <OpenGL/gl.h>
 #include <OpenGL/glu.h>
 #else
-// If building on Linux:
 #include <GL/gl.h>
 #include <GL/glu.h>
 #endif
+#endif
 
-#include "DisplayList.h"
+class DisplayList::Implementation
+{
+public:
+#ifdef __EMSCRIPTEN__
+    explicit Implementation(int count) : count(count) {}
+
+    int count;
+#else
+    explicit Implementation(int count)
+        : count(count), first(count > 0 ? glGenLists(count) : 0), current(first)
+    {
+    }
+
+    ~Implementation()
+    {
+        if (first != 0)
+            glDeleteLists(first, count);
+    }
+
+    int count;
+    GLuint first;
+    GLuint current;
+#endif
+};
+
+#ifdef __EMSCRIPTEN__
+namespace
+{
+[[noreturn]] void UnsupportedDisplayListOperation(const char* operation)
+{
+    std::fprintf(stderr,
+        "DisplayList::%s cannot run on WebGL: geometry must be converted to "
+        "backend-neutral vertex data first.\n",
+        operation);
+    std::abort();
+}
+}
+#endif
 
 DisplayList::DisplayList(int num)
+    : implementation(std::make_shared<Implementation>(num))
 {
-    enumIdx = 0;
-    this->num = num;
-    // Only call glGenLists if num > 0 and OpenGL context exists
-    if (num > 0) {
-        idx = glGenLists(num);
-    } else {
-        idx = 0;
-    }
 }
 
 void DisplayList::BeginNewList()
@@ -36,43 +70,66 @@ void DisplayList::BeginNewList()
 
 void DisplayList::NextNewList()
 {
+#ifdef __EMSCRIPTEN__
+    UnsupportedDisplayListOperation("NextNewList");
+#else
     glEndList();
-    enumIdx++;
-    if (enumIdx >= idx + num || enumIdx < idx)
-    {
-        // Can't create new list. Index out of bound.
+    ++implementation->current;
+    if (implementation->current >= implementation->first + implementation->count ||
+        implementation->current < implementation->first)
         return;
-    }
-    glNewList(enumIdx, GL_COMPILE);
+    glNewList(implementation->current, GL_COMPILE);
+#endif
 }
 
 void DisplayList::EndNewList()
 {
+#ifdef __EMSCRIPTEN__
+    UnsupportedDisplayListOperation("EndNewList");
+#else
     glEndList();
+#endif
 }
 
 void DisplayList::ResetList()
 {
-    enumIdx = idx;
+#ifdef __EMSCRIPTEN__
+    // Resetting the cursor does not claim that the resource can be rendered.
+#else
+    implementation->current = implementation->first;
+#endif
 }
 
 void DisplayList::NewList()
 {
-    glNewList(enumIdx, GL_COMPILE);
+#ifdef __EMSCRIPTEN__
+    UnsupportedDisplayListOperation("NewList");
+#else
+    glNewList(implementation->current, GL_COMPILE);
+#endif
 }
 
 void DisplayList::EndList()
 {
+#ifdef __EMSCRIPTEN__
+    UnsupportedDisplayListOperation("EndList");
+#else
     glEndList();
-    enumIdx++;
+    ++implementation->current;
+#endif
 }
 
 void DisplayList::Call(int i)
 {
-    glCallList(idx + i);
+#ifdef __EMSCRIPTEN__
+    (void)i;
+    UnsupportedDisplayListOperation("Call");
+#else
+    glCallList(implementation->first + i);
+#endif
 }
 
 void DisplayList::Close()
 {
-    glDeleteLists(idx, num);
+    implementation.reset();
 }
