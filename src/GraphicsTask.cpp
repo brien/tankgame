@@ -1307,36 +1307,15 @@ void GraphicsTask::BuildDisplayLists()
 
     // bodylistEx=cubelist1+3;
     bodylistEx = DisplayList(1);
-
-    // glNewList(cubelist1+3, GL_COMPILE);
-    bodylistEx.BeginNewList();
-
-    bodymesh.DrawTrianglesExtruded(.01);
-
-    // glEndList();
-    bodylistEx.EndNewList();
+    bodylistEx.SetGeometry(bodymesh.CreateTriangleExtrudedGeometry(.01f));
 
     // turretlistEx=cubelist1+4;
     turretlistEx = DisplayList(1);
-
-    // glNewList(cubelist1+4, GL_COMPILE);
-    turretlistEx.BeginNewList();
-
-    turretmesh.DrawTrianglesExtruded(.01);
-
-    // glEndList();
-    turretlistEx.EndNewList();
+    turretlistEx.SetGeometry(turretmesh.CreateTriangleExtrudedGeometry(.01f));
 
     // cannonlistEx=cubelist1+5;
     cannonlistEx = DisplayList(1);
-
-    // glNewList(cubelist1+5, GL_COMPILE);
-    cannonlistEx.BeginNewList();
-
-    cannonmesh.DrawTrianglesExtruded(.01);
-
-    // glEndList();
-    cannonlistEx.EndNewList();
+    cannonlistEx.SetGeometry(cannonmesh.CreateTriangleExtrudedGeometry(.01f));
 
     // bodylist=cubelist1+6;
     bodylist = DisplayList(1);
@@ -1388,7 +1367,6 @@ void GraphicsTask::BuildDisplayLists()
     cannonlistEx2.EndNewList();
 
     itemlist = DisplayList(1);
-    itemlist.BeginNewList();
 
     // itemlist=cubelist1+14;
 
@@ -1396,13 +1374,12 @@ void GraphicsTask::BuildDisplayLists()
 
     // glBegin(GL_LINE_LOOP);
 
-    itemmesh.DrawTrianglesExtruded(.01);
+    itemlist.SetGeometry(itemmesh.CreateTriangleExtrudedGeometry(.01f));
     // itemmesh.DrawEdges();
     //
     ////glEnd();
     //
     // glEndList();
-    itemlist.EndNewList();
 
     return;
 }

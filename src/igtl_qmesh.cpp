@@ -1055,52 +1055,30 @@ Geometry igtl_QGLMesh::CreateTriangleGeometry() const {
     return geometry;
 }
 
-void igtl_QGLMesh::DrawTrianglesExtruded(float f){
-    
-    glBegin(GL_TRIANGLES);
-    
-    unsigned int i = 0;
-    
-    while( i < m_triangles.size() ){
-        
-        //glColor3f( m_triangles[i].m_r,m_triangles[i].m_g,m_triangles[i].m_b );
-        
-        //Vertex 0
-        glNormal3f( m_verticies[m_triangles[i].m_v1].m_nx,
-                   m_verticies[m_triangles[i].m_v1].m_ny,
-                   m_verticies[m_triangles[i].m_v1].m_nz);
-        glTexCoord2f( m_verticies[m_triangles[i].m_v1].m_u,
-                     m_verticies[m_triangles[i].m_v1].m_v);
-        glVertex3f( m_verticies[m_triangles[i].m_v1].m_x + f*m_triangles[i].m_fx,
-                   m_verticies[m_triangles[i].m_v1].m_y + f*m_triangles[i].m_fy,
-                   m_verticies[m_triangles[i].m_v1].m_z + f*m_triangles[i].m_fz);
-        
-        //Vertex 1
-        glNormal3f( m_verticies[m_triangles[i].m_v2].m_nx,
-                   m_verticies[m_triangles[i].m_v2].m_ny,
-                   m_verticies[m_triangles[i].m_v2].m_nz);
-        glTexCoord2f( m_verticies[m_triangles[i].m_v2].m_u,
-                     m_verticies[m_triangles[i].m_v2].m_v);
-        glVertex3f( m_verticies[m_triangles[i].m_v2].m_x + f*m_triangles[i].m_fx,
-                   m_verticies[m_triangles[i].m_v2].m_y + f*m_triangles[i].m_fy,
-                   m_verticies[m_triangles[i].m_v2].m_z + f*m_triangles[i].m_fz);
-        
-        //Vertex 2
-        glNormal3f( m_verticies[m_triangles[i].m_v3].m_nx,
-                   m_verticies[m_triangles[i].m_v3].m_ny,
-                   m_verticies[m_triangles[i].m_v3].m_nz);
-        glTexCoord2f( m_verticies[m_triangles[i].m_v3].m_u,
-                     m_verticies[m_triangles[i].m_v3].m_v);
-        glVertex3f( m_verticies[m_triangles[i].m_v3].m_x + f*m_triangles[i].m_fx,
-                   m_verticies[m_triangles[i].m_v3].m_y + f*m_triangles[i].m_fy,
-                   m_verticies[m_triangles[i].m_v3].m_z + f*m_triangles[i].m_fz);
-        
-        //Go to next vertex
-        i++;
+Geometry igtl_QGLMesh::CreateTriangleExtrudedGeometry(float amount) const {
+    Geometry geometry;
+    geometry.topology = PrimitiveTopology::TRIANGLES;
+    geometry.hasNormals = true;
+    geometry.hasTextureCoordinates = true;
+    geometry.vertices.reserve(m_triangles.size() * 3);
+
+    // Legacy "extrusion" only offsets each original face along its facet
+    // normal. It does not create a back surface or connecting side faces.
+    for (const igtl_QGLTriangle& triangle : m_triangles) {
+        const unsigned int indices[] = {triangle.m_v1, triangle.m_v2, triangle.m_v3};
+        for (const unsigned int index : indices) {
+            const igtl_QGLVertex& vertex = m_verticies[index];
+            geometry.vertices.push_back({
+                vertex.m_x + amount * triangle.m_fx,
+                vertex.m_y + amount * triangle.m_fy,
+                vertex.m_z + amount * triangle.m_fz,
+                vertex.m_u, vertex.m_v,
+                vertex.m_nx, vertex.m_ny, vertex.m_nz
+            });
+        }
     }
-    
-    glEnd();
-    
+
+    return geometry;
 }
 
 void igtl_QGLMesh::DrawTrianglesColored(){

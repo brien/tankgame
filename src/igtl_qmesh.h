@@ -130,7 +130,7 @@ public:
     //#ifdef IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
     
     Geometry CreateTriangleGeometry() const;//Extracts ordinary filled triangles without rendering.
-    void DrawTrianglesExtruded(float f);//DrawTriangles(), but extruded by factor f. No coloring.
+    Geometry CreateTriangleExtrudedGeometry(float amount) const;//Extracts triangles offset along each facet normal.
     void DrawTrianglesColored();//Just draws the triangles. That's it. No coloring.
     void DrawTrianglesColoredExtruded(float f);//DrawTriangles(), but extruded by factor f. No coloring.
     void DrawEdges();//Draws all edges (With colors)
