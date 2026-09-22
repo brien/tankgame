@@ -136,3 +136,55 @@ TEST(GeometryTest, MeshTriangleExtractionPreservesVertexAttributesAndOrder)
     EXPECT_FLOAT_EQ(geometry.vertices[0].u, 0.0f);
     EXPECT_FLOAT_EQ(geometry.vertices[0].v, 0.25f);
 }
+
+TEST(GeometryTest, MeshTriangleExtrusionPreservesLegacyFaceOffsetContract)
+{
+    igtl_QGLMesh mesh;
+    igtl_QGLVertex vertices[] = {
+        {1.0f, 2.0f, 3.0f, 0.1f, 0.2f, 0.3f, 0.25f, 0.5f},
+        {4.0f, 5.0f, 6.0f, 0.4f, 0.5f, 0.6f, 0.75f, 1.0f},
+        {7.0f, 8.0f, 9.0f, 0.7f, 0.8f, 0.9f, 0.0f, 0.25f}
+    };
+    for (igtl_QGLVertex& vertex : vertices)
+        mesh.AddVertex(vertex);
+
+    igtl_QGLTriangle triangle = {2, 0, 1, 2.0f, -3.0f, 4.0f,
+                                 0.0f, 0.0f, 0.0f, 0};
+    mesh.AddTriangle(triangle);
+    igtl_QGLTriangle second = {2, 1, 0, -2.0f, 1.0f, 0.5f,
+                               0.0f, 0.0f, 0.0f, 0};
+    mesh.AddTriangle(second);
+
+    const Geometry geometry = mesh.CreateTriangleExtrudedGeometry(0.5f);
+
+    ASSERT_EQ(geometry.topology, PrimitiveTopology::TRIANGLES);
+    ASSERT_EQ(geometry.vertices.size(), 6u);
+    EXPECT_TRUE(geometry.hasNormals);
+    EXPECT_TRUE(geometry.hasTextureCoordinates);
+
+    // Winding and vertex duplication match the source triangle exactly; the
+    // legacy path emits no back face or side faces.
+    EXPECT_FLOAT_EQ(geometry.vertices[0].x, 8.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].y, 6.5f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].z, 11.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[1].x, 2.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[1].y, 0.5f);
+    EXPECT_FLOAT_EQ(geometry.vertices[1].z, 5.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[2].x, 5.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[2].y, 3.5f);
+    EXPECT_FLOAT_EQ(geometry.vertices[2].z, 8.0f);
+
+    // A shared source vertex is emitted again and offset by the second face's
+    // facet normal rather than shared or welded in the output.
+    EXPECT_FLOAT_EQ(geometry.vertices[3].x, 6.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[3].y, 8.5f);
+    EXPECT_FLOAT_EQ(geometry.vertices[3].z, 9.25f);
+
+    // Facet normals control positions, while submitted normals and UVs remain
+    // the original per-vertex attributes.
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalX, 0.7f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalY, 0.8f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalZ, 0.9f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].u, 0.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].v, 0.25f);
+}
