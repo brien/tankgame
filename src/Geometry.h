@@ -5,7 +5,8 @@
 enum class PrimitiveTopology
 {
     QUADS,
-    LINE_LOOP
+    LINE_LOOP,
+    TRIANGLES
 };
 
 struct GeometryVertex
@@ -34,4 +35,5 @@ Geometry CreateCube(float halfExtent = 0.5f);
 Geometry CreateHorizontalSquare(float halfExtent = 0.5f,
                                 PrimitiveTopology topology = PrimitiveTopology::QUADS);
 Geometry CreateVerticalSquare(float halfExtent = 0.5f);
+Geometry CreateBullet();
 }

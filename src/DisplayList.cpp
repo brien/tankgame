@@ -129,6 +129,8 @@ void DisplayList::SetGeometry(const Geometry& geometry)
     GLenum mode = GL_QUADS;
     if (geometry.topology == PrimitiveTopology::LINE_LOOP)
         mode = GL_LINE_LOOP;
+    else if (geometry.topology == PrimitiveTopology::TRIANGLES)
+        mode = GL_TRIANGLES;
 
     glBegin(mode);
     for (const GeometryVertex& vertex : geometry.vertices)

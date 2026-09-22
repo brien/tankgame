@@ -47,3 +47,40 @@ TEST(GeometryTest, PrimitiveScaleIsAppliedToCpuPositions)
     EXPECT_FLOAT_EQ(square.vertices.front().x, -1.0f);
     EXPECT_FLOAT_EQ(square.vertices.front().z, 0.0f);
 }
+
+TEST(GeometryTest, BulletPreservesTriangleAttributesAndLegacyOrdering)
+{
+    const Geometry bullet = SimpleGeometry::CreateBullet();
+
+    ASSERT_EQ(bullet.topology, PrimitiveTopology::TRIANGLES);
+    ASSERT_EQ(bullet.vertices.size(), 24u);
+    EXPECT_TRUE(bullet.hasTextureCoordinates);
+    EXPECT_TRUE(bullet.hasNormals);
+
+    const GeometryVertex& topFrontLeft = bullet.vertices[0];
+    EXPECT_FLOAT_EQ(topFrontLeft.x, -0.3f);
+    EXPECT_FLOAT_EQ(topFrontLeft.y, 0.1f);
+    EXPECT_FLOAT_EQ(topFrontLeft.z, -0.025f);
+    EXPECT_FLOAT_EQ(topFrontLeft.u, 0.0f);
+    EXPECT_FLOAT_EQ(topFrontLeft.v, -0.707107f);
+    EXPECT_FLOAT_EQ(topFrontLeft.normalX, 0.0f);
+    EXPECT_FLOAT_EQ(topFrontLeft.normalY, 1.0f);
+    EXPECT_FLOAT_EQ(topFrontLeft.normalZ, 0.0f);
+
+    const GeometryVertex& lowerRidge = bullet.vertices[7];
+    EXPECT_FLOAT_EQ(lowerRidge.x, 0.0f);
+    EXPECT_FLOAT_EQ(lowerRidge.y, 0.0f);
+    EXPECT_FLOAT_EQ(lowerRidge.z, 0.0f);
+    EXPECT_FLOAT_EQ(lowerRidge.normalY, -0.707107f);
+    EXPECT_FLOAT_EQ(lowerRidge.normalZ, -0.707107f);
+
+    const GeometryVertex& rightFace = bullet.vertices[15];
+    EXPECT_FLOAT_EQ(rightFace.normalX, 1.0f);
+    EXPECT_FLOAT_EQ(rightFace.normalY, 0.0f);
+    EXPECT_FLOAT_EQ(rightFace.normalZ, 0.0f);
+
+    EXPECT_FLOAT_EQ(bullet.vertices[18].normalZ, 0.707107f);
+    EXPECT_FLOAT_EQ(bullet.vertices[18].x, bullet.vertices[21].x);
+    EXPECT_FLOAT_EQ(bullet.vertices[18].y, bullet.vertices[21].y);
+    EXPECT_FLOAT_EQ(bullet.vertices[18].z, bullet.vertices[21].z);
+}

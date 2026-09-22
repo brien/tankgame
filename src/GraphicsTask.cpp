@@ -1303,73 +1303,7 @@ void GraphicsTask::BuildDisplayLists()
         0.5f, PrimitiveTopology::LINE_LOOP));
 
     bulletlist = DisplayList(1);
-    bulletlist.BeginNewList();
-
-    // glNewList(cubelist1+2,GL_COMPILE);
-
-    // LevelHandler::GetSingleton().DrawTerrain();
-
-    glBegin(GL_TRIANGLES);
-    glNormal3f(0.000000, 1.000000, 0.000000);
-    glTexCoord2f(0.000000, -0.707107);
-    glVertex3f(-0.3, 0.1, -0.025f);
-    glTexCoord2f(0.000000, 0.000000);
-    glVertex3f(0.5, 0.1, -0.025f);
-    glTexCoord2f(1.000000, 0.000000);
-    glVertex3f(0.5, 0.1, 0.025f);
-    glNormal3f(0.000000, 1.000000, 0.000000);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3f(-0.3, 0.1, -0.025f);
-    glTexCoord2f(0.000000, 0.000000);
-    glVertex3f(0.5, 0.1, 0.025f);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3f(-0.3, 0.1, 0.025f);
-    glNormal3f(0.000000, -0.707107, -0.707107);
-    glTexCoord2f(0.000000, 1.000000);
-    glVertex3f(-0.3, 0.1, -0.025f);
-    glTexCoord2f(0.000000, 0.000000);
-    glVertex3i(-0.3, 0, 0);
-    glTexCoord2f(0.000000, 1.000000);
-    glVertex3i(0.5, 0, 0);
-    glNormal3f(0.000000, -0.707107, -0.707107);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3f(-0.3, 0.1, -0.025f);
-    glTexCoord2f(0.000000, 0.000000);
-    glVertex3i(0.5, 0, 0);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3f(0.5, 0.1, -0.025f);
-    glNormal3f(-1.000000, 0.000000, 0.000000);
-    glTexCoord2f(1.000000, 0.000000);
-    glVertex3f(-0.3, 0.1, -0.025f);
-    glTexCoord2f(0.000000, 0.000000);
-    glVertex3f(-0.3, 0.1, 0.025f);
-    glTexCoord2f(0.000000, 1.000000);
-    glVertex3i(-0.3, 0, 0);
-    glNormal3f(1.000000, 0.000000, 0.000000);
-    glTexCoord2f(0.000000, 1.000000);
-    glVertex3f(0.5, 0.1, -0.025f);
-    glTexCoord2f(1.000000, 0.000000);
-    glVertex3i(0.5, 0, 0);
-    glTexCoord2f(1.000000, 0.000000);
-    glVertex3f(0.5, 0.1, 0.025f);
-    glNormal3f(0.000000, -0.707107, 0.707107);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3f(-0.3, 0.1, 0.025f);
-    glTexCoord2f(0.000000, 1.000000);
-    glVertex3f(0.5, 0.1, 0.025f);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3i(0.5, 0, 0);
-    glNormal3f(0.000000, -0.707107, 0.707107);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3f(-0.3, 0.1, 0.025f);
-    glTexCoord2f(0.000000, 1.000000);
-    glVertex3i(0.5, 0, 0);
-    glTexCoord2f(1.000000, 1.000000);
-    glVertex3i(-0.3, 0, 0);
-    glEnd();
-
-    // glEndList();
-    bulletlist.EndNewList();
+    bulletlist.SetGeometry(SimpleGeometry::CreateBullet());
 
     // bodylistEx=cubelist1+3;
     bodylistEx = DisplayList(1);
