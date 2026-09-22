@@ -131,7 +131,7 @@ public:
     
     Geometry CreateTriangleGeometry() const;//Extracts ordinary filled triangles without rendering.
     Geometry CreateTriangleExtrudedGeometry(float amount) const;//Extracts triangles offset along each facet normal.
-    void DrawTrianglesColored();//Just draws the triangles. That's it. No coloring.
+    Geometry CreateTriangleColoredGeometry() const;//Extracts triangles with their per-face colors.
     void DrawTrianglesColoredExtruded(float f);//DrawTriangles(), but extruded by factor f. No coloring.
     void DrawEdges();//Draws all edges (With colors)
     void DrawEdgesExtruded(float f);//Draws all edges (With colors)

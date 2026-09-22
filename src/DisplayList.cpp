@@ -135,6 +135,8 @@ void DisplayList::SetGeometry(const Geometry& geometry)
     glBegin(mode);
     for (const GeometryVertex& vertex : geometry.vertices)
     {
+        if (geometry.hasColors)
+            glColor3f(vertex.red, vertex.green, vertex.blue);
         if (geometry.hasNormals)
             glNormal3f(vertex.normalX, vertex.normalY, vertex.normalZ);
         if (geometry.hasTextureCoordinates)
