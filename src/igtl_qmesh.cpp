@@ -8,19 +8,9 @@
 #ifndef IGTL_3D_GENERIC_QUICK_MESH_CPP
 #define IGTL_3D_GENERIC_QUICK_MESH_CPP
 
-#ifdef _WIN32
-    // If building in windows:
-    #include <windows.h>
-    #include <GL/gl.h>
-#elif __APPLE__
-    // If building on macOS:
-    #include <OpenGL/gl.h>
-#else
-    // If building on Linux:
-    #include <GL/gl.h>
-    #include <cstdio>
-    #include <string.h>
-#endif
+#include <cstdio>
+#include <cstdint>
+#include <string.h>
 
 #include <iostream>
 #include <fstream>
@@ -1108,212 +1098,66 @@ Geometry igtl_QGLMesh::CreateTriangleColoredGeometry() const {
     return geometry;
 }
 
-void igtl_QGLMesh::DrawTrianglesColoredExtruded(float f){
-    
-    glBegin(GL_TRIANGLES);
-    
-    unsigned int i = 0;
-    
-    while( i < m_triangles.size() ){
-        
-        glColor3f( m_triangles[i].m_r,m_triangles[i].m_g,m_triangles[i].m_b );
-        
-        //Vertex 0
-        glNormal3f( m_verticies[m_triangles[i].m_v1].m_nx,
-                   m_verticies[m_triangles[i].m_v1].m_ny,
-                   m_verticies[m_triangles[i].m_v1].m_nz);
-        glTexCoord2f( m_verticies[m_triangles[i].m_v1].m_u,
-                     m_verticies[m_triangles[i].m_v1].m_v);
-        glVertex3f( m_verticies[m_triangles[i].m_v1].m_x + f*m_triangles[i].m_fx,
-                   m_verticies[m_triangles[i].m_v1].m_y + f*m_triangles[i].m_fy,
-                   m_verticies[m_triangles[i].m_v1].m_z + f*m_triangles[i].m_fz);
-        
-        //Vertex 1
-        glNormal3f( m_verticies[m_triangles[i].m_v2].m_nx,
-                   m_verticies[m_triangles[i].m_v2].m_ny,
-                   m_verticies[m_triangles[i].m_v2].m_nz);
-        glTexCoord2f( m_verticies[m_triangles[i].m_v2].m_u,
-                     m_verticies[m_triangles[i].m_v2].m_v);
-        glVertex3f( m_verticies[m_triangles[i].m_v2].m_x + f*m_triangles[i].m_fx,
-                   m_verticies[m_triangles[i].m_v2].m_y + f*m_triangles[i].m_fy,
-                   m_verticies[m_triangles[i].m_v2].m_z + f*m_triangles[i].m_fz);
-        
-        //Vertex 2
-        glNormal3f( m_verticies[m_triangles[i].m_v3].m_nx,
-                   m_verticies[m_triangles[i].m_v3].m_ny,
-                   m_verticies[m_triangles[i].m_v3].m_nz);
-        glTexCoord2f( m_verticies[m_triangles[i].m_v3].m_u,
-                     m_verticies[m_triangles[i].m_v3].m_v);
-        glVertex3f( m_verticies[m_triangles[i].m_v3].m_x + f*m_triangles[i].m_fx,
-                   m_verticies[m_triangles[i].m_v3].m_y + f*m_triangles[i].m_fy,
-                   m_verticies[m_triangles[i].m_v3].m_z + f*m_triangles[i].m_fz);
-        
-        //Go to next vertex
-        i++;
+Geometry igtl_QGLMesh::CreateTriangleColoredExtrudedGeometry(float amount) const {
+    Geometry geometry = CreateTriangleExtrudedGeometry(amount);
+    geometry.hasColors = true;
+    for (size_t triangleIndex = 0; triangleIndex < m_triangles.size(); ++triangleIndex) {
+        const igtl_QGLTriangle& triangle = m_triangles[triangleIndex];
+        for (size_t vertexIndex = 0; vertexIndex < 3; ++vertexIndex) {
+            GeometryVertex& vertex = geometry.vertices[triangleIndex * 3 + vertexIndex];
+            vertex.red = triangle.m_r;
+            vertex.green = triangle.m_g;
+            vertex.blue = triangle.m_b;
+        }
     }
-    
-    glEnd();
-    
+    return geometry;
 }
 
-void igtl_QGLMesh::DrawEdges(){
-    
-    //Draw a edge here
-    glBegin(GL_LINES);
-    
-    unsigned int i = 0;
-    
-    while( i < m_edges.size() ){
-        
-        //glColor3f( m_edges[i].m_r,m_edges[i].m_g,m_edges[i].m_b );
-        
-        if( m_edges[i].m_flag ){
-            
-            //Vertex 0
-            glNormal3f( m_verticies[m_edges[i].m_v1].m_nx,
-                       m_verticies[m_edges[i].m_v1].m_ny,
-                       m_verticies[m_edges[i].m_v1].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v1].m_u,
-                         m_verticies[m_edges[i].m_v1].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v1].m_x,
-                       m_verticies[m_edges[i].m_v1].m_y,
-                       m_verticies[m_edges[i].m_v1].m_z);
-            
-            //Vertex 1
-            glNormal3f( m_verticies[m_edges[i].m_v2].m_nx,
-                       m_verticies[m_edges[i].m_v2].m_ny,
-                       m_verticies[m_edges[i].m_v2].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v2].m_u,
-                         m_verticies[m_edges[i].m_v2].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v2].m_x,
-                       m_verticies[m_edges[i].m_v2].m_y,
-                       m_verticies[m_edges[i].m_v2].m_z);
-        }
-        //Go to next vertex
-        i++;
-    }
-    
-    glEnd();
+Geometry igtl_QGLMesh::CreateEdgeGeometry() const {
+    return CreateEdgeGeometry(0.0f, false);
 }
 
-void igtl_QGLMesh::DrawEdgesExtruded(float f){
-    
-    //Draw a edge here
-    glBegin(GL_LINES);
-    
-    unsigned int i = 0;
-    
-    while( i < m_edges.size() ){
-        
-        //glColor3f( m_edges[i].m_r,m_edges[i].m_g,m_edges[i].m_b );
-        
-        if( m_edges[i].m_flag ){
-            
-            //Vertex 0
-            glNormal3f( m_verticies[m_edges[i].m_v1].m_nx,
-                       m_verticies[m_edges[i].m_v1].m_ny,
-                       m_verticies[m_edges[i].m_v1].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v1].m_u,
-                         m_verticies[m_edges[i].m_v1].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v1].m_x + f*m_edges[i].m_nx,
-                       m_verticies[m_edges[i].m_v1].m_y + f*m_edges[i].m_ny,
-                       m_verticies[m_edges[i].m_v1].m_z + f*m_edges[i].m_nz);
-            
-            //Vertex 1
-            glNormal3f( m_verticies[m_edges[i].m_v2].m_nx,
-                       m_verticies[m_edges[i].m_v2].m_ny,
-                       m_verticies[m_edges[i].m_v2].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v2].m_u,
-                         m_verticies[m_edges[i].m_v2].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v2].m_x + f*m_edges[i].m_nx,
-                       m_verticies[m_edges[i].m_v2].m_y + f*m_edges[i].m_ny,
-                       m_verticies[m_edges[i].m_v2].m_z + f*m_edges[i].m_nz);
-        }
-        //Go to next vertex
-        i++;
-    }
-    
-    glEnd();
+Geometry igtl_QGLMesh::CreateEdgeExtrudedGeometry(float amount) const {
+    return CreateEdgeGeometry(amount, false);
 }
 
-void igtl_QGLMesh::DrawEdgesColored(){
-    
-    //Draw a edge here
-    glBegin(GL_LINES);
-    
-    unsigned int i = 0;
-    
-    while( i < m_edges.size() ){
-        
-        glColor3f( m_edges[i].m_r,m_edges[i].m_g,m_edges[i].m_b );
-        
-        if( m_edges[i].m_flag ){
-            
-            //Vertex 0
-            glNormal3f( m_verticies[m_edges[i].m_v1].m_nx,
-                       m_verticies[m_edges[i].m_v1].m_ny,
-                       m_verticies[m_edges[i].m_v1].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v1].m_u,
-                         m_verticies[m_edges[i].m_v1].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v1].m_x,
-                       m_verticies[m_edges[i].m_v1].m_y,
-                       m_verticies[m_edges[i].m_v1].m_z);
-            
-            //Vertex 1
-            glNormal3f( m_verticies[m_edges[i].m_v2].m_nx,
-                       m_verticies[m_edges[i].m_v2].m_ny,
-                       m_verticies[m_edges[i].m_v2].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v2].m_u,
-                         m_verticies[m_edges[i].m_v2].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v2].m_x,
-                       m_verticies[m_edges[i].m_v2].m_y,
-                       m_verticies[m_edges[i].m_v2].m_z);
-        }
-        //Go to next vertex
-        i++;
-    }
-    
-    glEnd();
+Geometry igtl_QGLMesh::CreateEdgeColoredGeometry() const {
+    return CreateEdgeGeometry(0.0f, true);
 }
 
-void igtl_QGLMesh::DrawEdgesColoredExtruded(float f){
-    
-    //Draw a edge here
-    glBegin(GL_LINES);
-    
-    unsigned int i = 0;
-    
-    while( i < m_edges.size() ){
-        
-        glColor3f( m_edges[i].m_r,m_edges[i].m_g,m_edges[i].m_b );
-        
-        if( m_edges[i].m_flag ){
-            
-            //Vertex 0
-            glNormal3f( m_verticies[m_edges[i].m_v1].m_nx,
-                       m_verticies[m_edges[i].m_v1].m_ny,
-                       m_verticies[m_edges[i].m_v1].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v1].m_u,
-                         m_verticies[m_edges[i].m_v1].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v1].m_x + f*m_edges[i].m_nx,
-                       m_verticies[m_edges[i].m_v1].m_y + f*m_edges[i].m_ny,
-                       m_verticies[m_edges[i].m_v1].m_z + f*m_edges[i].m_nz);
-            
-            //Vertex 1
-            glNormal3f( m_verticies[m_edges[i].m_v2].m_nx,
-                       m_verticies[m_edges[i].m_v2].m_ny,
-                       m_verticies[m_edges[i].m_v2].m_nz);
-            glTexCoord2f( m_verticies[m_edges[i].m_v2].m_u,
-                         m_verticies[m_edges[i].m_v2].m_v);
-            glVertex3f( m_verticies[m_edges[i].m_v2].m_x + f*m_edges[i].m_nx,
-                       m_verticies[m_edges[i].m_v2].m_y + f*m_edges[i].m_ny,
-                       m_verticies[m_edges[i].m_v2].m_z + f*m_edges[i].m_nz);
+Geometry igtl_QGLMesh::CreateEdgeColoredExtrudedGeometry(float amount) const {
+    return CreateEdgeGeometry(amount, true);
+}
+
+Geometry igtl_QGLMesh::CreateEdgeGeometry(float amount, bool colored) const {
+    Geometry geometry;
+    geometry.topology = PrimitiveTopology::LINES;
+    geometry.hasNormals = true;
+    geometry.hasTextureCoordinates = true;
+    geometry.hasColors = colored;
+    geometry.vertices.reserve(m_edges.size() * 2);
+
+    for (const igtl_QGLEdge& edge : m_edges) {
+        if (!edge.m_flag)
+            continue;
+
+        const unsigned int indices[] = {
+            static_cast<unsigned int>(edge.m_v1),
+            static_cast<unsigned int>(edge.m_v2)
+        };
+        for (const unsigned int index : indices) {
+            const igtl_QGLVertex& source = m_verticies[index];
+            geometry.vertices.push_back({
+                source.m_x + amount * edge.m_nx,
+                source.m_y + amount * edge.m_ny,
+                source.m_z + amount * edge.m_nz,
+                source.m_u, source.m_v,
+                source.m_nx, source.m_ny, source.m_nz,
+                edge.m_r, edge.m_g, edge.m_b
+            });
         }
-        //Go to next vertex
-        i++;
     }
-    
-    glEnd();
+    return geometry;
 }
 
 bool igtl_QGLMesh::SaveOBJ(const std::string& objFile) {

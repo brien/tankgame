@@ -240,3 +240,101 @@ TEST(GeometryTest, ColoredMeshTrianglesPreservePerFaceColorsAndVertexOrder)
         EXPECT_FLOAT_EQ(geometry.vertices[i].blue, 0.375f);
     }
 }
+
+TEST(GeometryTest, ColoredExtrudedTrianglesCombineFaceOffsetAndColor)
+{
+    igtl_QGLMesh mesh;
+    igtl_QGLVertex vertices[] = {
+        {1, 2, 3, .1f, .2f, .3f, .25f, .5f},
+        {4, 5, 6, .4f, .5f, .6f, .75f, 1},
+        {7, 8, 9, .7f, .8f, .9f, 0, .25f}
+    };
+    for (igtl_QGLVertex& vertex : vertices)
+        mesh.AddVertex(vertex);
+    igtl_QGLTriangle triangle = {2, 0, 1, 2, -3, 4, .125f, .25f, .5f, 3};
+    mesh.AddTriangle(triangle);
+
+    const Geometry geometry = mesh.CreateTriangleColoredExtrudedGeometry(.5f);
+
+    ASSERT_EQ(geometry.topology, PrimitiveTopology::TRIANGLES);
+    ASSERT_EQ(geometry.vertices.size(), 3u);
+    EXPECT_TRUE(geometry.hasNormals);
+    EXPECT_TRUE(geometry.hasTextureCoordinates);
+    EXPECT_TRUE(geometry.hasColors);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].x, 8);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].y, 6.5f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].z, 11);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalX, .7f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].u, 0);
+    for (const GeometryVertex& vertex : geometry.vertices) {
+        EXPECT_FLOAT_EQ(vertex.red, .125f);
+        EXPECT_FLOAT_EQ(vertex.green, .25f);
+        EXPECT_FLOAT_EQ(vertex.blue, .5f);
+    }
+}
+
+TEST(GeometryTest, MeshEdgesPreserveFlagsOrderingAndVertexAttributes)
+{
+    igtl_QGLMesh mesh;
+    igtl_QGLVertex vertices[] = {
+        {1, 2, 3, .1f, .2f, .3f, .25f, .5f},
+        {4, 5, 6, .4f, .5f, .6f, .75f, 1},
+        {7, 8, 9, .7f, .8f, .9f, 0, .25f}
+    };
+    for (igtl_QGLVertex& vertex : vertices)
+        mesh.AddVertex(vertex);
+    igtl_QGLEdge disabled = {0, 2, 9, 8, 7, .9f, .8f, .7f, 0};
+    igtl_QGLEdge first = {2, 0, 2, -3, 4, .125f, .25f, .5f, 1};
+    igtl_QGLEdge second = {1, 2, -2, 1, .5f, .75f, .625f, .375f, 1};
+    mesh.AddEdge(disabled);
+    mesh.AddEdge(first);
+    mesh.AddEdge(second);
+
+    const Geometry geometry = mesh.CreateEdgeGeometry();
+
+    ASSERT_EQ(geometry.topology, PrimitiveTopology::LINES);
+    ASSERT_EQ(geometry.vertices.size(), 4u);
+    EXPECT_TRUE(geometry.hasNormals);
+    EXPECT_TRUE(geometry.hasTextureCoordinates);
+    EXPECT_FALSE(geometry.hasColors);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].x, 7);
+    EXPECT_FLOAT_EQ(geometry.vertices[1].x, 1);
+    EXPECT_FLOAT_EQ(geometry.vertices[2].x, 4);
+    EXPECT_FLOAT_EQ(geometry.vertices[3].x, 7);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalZ, .9f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].u, 0);
+    EXPECT_FLOAT_EQ(geometry.vertices[1].v, .5f);
+}
+
+TEST(GeometryTest, ExtrudedAndColoredEdgesPreserveEdgeNormalOffsetAndColor)
+{
+    igtl_QGLMesh mesh;
+    igtl_QGLVertex firstVertex = {1, 2, 3, .1f, .2f, .3f, .25f, .5f};
+    igtl_QGLVertex secondVertex = {4, 5, 6, .4f, .5f, .6f, .75f, 1};
+    mesh.AddVertex(firstVertex);
+    mesh.AddVertex(secondVertex);
+    igtl_QGLEdge edge = {1, 0, 2, -3, 4, .125f, .25f, .5f, 1};
+    mesh.AddEdge(edge);
+
+    const Geometry extruded = mesh.CreateEdgeExtrudedGeometry(.5f);
+    const Geometry colored = mesh.CreateEdgeColoredGeometry();
+    const Geometry combined = mesh.CreateEdgeColoredExtrudedGeometry(.5f);
+
+    ASSERT_EQ(combined.vertices.size(), 2u);
+    EXPECT_FLOAT_EQ(combined.vertices[0].x, 5);
+    EXPECT_FLOAT_EQ(combined.vertices[0].y, 3.5f);
+    EXPECT_FLOAT_EQ(combined.vertices[0].z, 8);
+    EXPECT_FLOAT_EQ(combined.vertices[1].x, 2);
+    EXPECT_FLOAT_EQ(combined.vertices[1].y, .5f);
+    EXPECT_FLOAT_EQ(combined.vertices[1].z, 5);
+    EXPECT_FLOAT_EQ(combined.vertices[0].red, .125f);
+    EXPECT_FLOAT_EQ(combined.vertices[0].green, .25f);
+    EXPECT_FLOAT_EQ(combined.vertices[0].blue, .5f);
+    EXPECT_TRUE(combined.hasColors);
+    EXPECT_FALSE(extruded.hasColors);
+    EXPECT_FLOAT_EQ(extruded.vertices[0].x, combined.vertices[0].x);
+    EXPECT_TRUE(colored.hasColors);
+    EXPECT_FLOAT_EQ(colored.vertices[0].x, 4);
+    EXPECT_FLOAT_EQ(colored.vertices[0].y, 5);
+    EXPECT_FLOAT_EQ(colored.vertices[0].z, 6);
+}

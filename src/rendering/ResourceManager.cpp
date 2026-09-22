@@ -139,13 +139,13 @@ void ResourceManager::BuildTankDisplayLists() {
     // Build tank body display lists using loaded meshes
     if (meshesLoaded) {
         // bodyListEx - enhanced body
-        bodyListEx.SetGeometry(bodyMesh.CreateTriangleGeometry());
+        bodyListEx.SetGeometry(bodyMesh.CreateTriangleExtrudedGeometry(.01f));
         
         // turretListEx - enhanced turret
-        turretListEx.SetGeometry(turretMesh.CreateTriangleGeometry());
+        turretListEx.SetGeometry(turretMesh.CreateTriangleExtrudedGeometry(.01f));
         
         // cannonListEx - enhanced cannon
-        cannonListEx.SetGeometry(cannonMesh.CreateTriangleGeometry());
+        cannonListEx.SetGeometry(cannonMesh.CreateTriangleExtrudedGeometry(.01f));
         
         // Standard body, turret, cannon lists (simplified versions)
         bodyList.SetGeometry(bodyMesh.CreateTriangleGeometry());
@@ -155,17 +155,17 @@ void ResourceManager::BuildTankDisplayLists() {
         cannonList.SetGeometry(cannonMesh.CreateTriangleGeometry());
         
         // Extended variants (bodyListEx2, turretListEx2, cannonListEx2)
-        bodyListEx2.SetGeometry(bodyMesh.CreateTriangleGeometry());
+        bodyListEx2.SetGeometry(bodyMesh.CreateEdgeExtrudedGeometry(.01f));
         
-        turretListEx2.SetGeometry(turretMesh.CreateTriangleGeometry());
+        turretListEx2.SetGeometry(turretMesh.CreateEdgeExtrudedGeometry(.01f));
         
-        cannonListEx2.SetGeometry(cannonMesh.CreateTriangleGeometry());
+        cannonListEx2.SetGeometry(cannonMesh.CreateEdgeExtrudedGeometry(.01f));
     }
 }
 
 void ResourceManager::BuildItemList() {
     if (meshesLoaded) {
-        itemList.SetGeometry(itemMesh.CreateTriangleGeometry());
+        itemList.SetGeometry(itemMesh.CreateTriangleExtrudedGeometry(.01f));
     } else {
         itemList.SetGeometry(SimpleGeometry::CreateItemFallback());
     }
