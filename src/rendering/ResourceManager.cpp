@@ -139,53 +139,33 @@ void ResourceManager::BuildTankDisplayLists() {
     // Build tank body display lists using loaded meshes
     if (meshesLoaded) {
         // bodyListEx - enhanced body
-        bodyListEx.BeginNewList();
-        bodyMesh.DrawTriangles();
-        bodyListEx.EndNewList();
+        bodyListEx.SetGeometry(bodyMesh.CreateTriangleGeometry());
         
         // turretListEx - enhanced turret
-        turretListEx.BeginNewList();
-        turretMesh.DrawTriangles();
-        turretListEx.EndNewList();
+        turretListEx.SetGeometry(turretMesh.CreateTriangleGeometry());
         
         // cannonListEx - enhanced cannon
-        cannonListEx.BeginNewList();
-        cannonMesh.DrawTriangles();
-        cannonListEx.EndNewList();
+        cannonListEx.SetGeometry(cannonMesh.CreateTriangleGeometry());
         
         // Standard body, turret, cannon lists (simplified versions)
-        bodyList.BeginNewList();
-        bodyMesh.DrawTriangles();
-        bodyList.EndNewList();
+        bodyList.SetGeometry(bodyMesh.CreateTriangleGeometry());
         
-        turretList.BeginNewList();
-        turretMesh.DrawTriangles();
-        turretList.EndNewList();
+        turretList.SetGeometry(turretMesh.CreateTriangleGeometry());
         
-        cannonList.BeginNewList();
-        cannonMesh.DrawTriangles();
-        cannonList.EndNewList();
+        cannonList.SetGeometry(cannonMesh.CreateTriangleGeometry());
         
         // Extended variants (bodyListEx2, turretListEx2, cannonListEx2)
-        bodyListEx2.BeginNewList();
-        bodyMesh.DrawTriangles();
-        bodyListEx2.EndNewList();
+        bodyListEx2.SetGeometry(bodyMesh.CreateTriangleGeometry());
         
-        turretListEx2.BeginNewList();
-        turretMesh.DrawTriangles();
-        turretListEx2.EndNewList();
+        turretListEx2.SetGeometry(turretMesh.CreateTriangleGeometry());
         
-        cannonListEx2.BeginNewList();
-        cannonMesh.DrawTriangles();
-        cannonListEx2.EndNewList();
+        cannonListEx2.SetGeometry(cannonMesh.CreateTriangleGeometry());
     }
 }
 
 void ResourceManager::BuildItemList() {
     if (meshesLoaded) {
-        itemList.BeginNewList();
-        itemMesh.DrawTriangles();
-        itemList.EndNewList();
+        itemList.SetGeometry(itemMesh.CreateTriangleGeometry());
     } else {
         itemList.SetGeometry(SimpleGeometry::CreateItemFallback());
     }
