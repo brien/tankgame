@@ -19,6 +19,9 @@ struct GeometryVertex
     float normalX;
     float normalY;
     float normalZ;
+    float red;
+    float green;
+    float blue;
 };
 
 struct Geometry
@@ -27,6 +30,7 @@ struct Geometry
     std::vector<GeometryVertex> vertices;
     bool hasTextureCoordinates = false;
     bool hasNormals = false;
+    bool hasColors = false;
 };
 
 namespace SimpleGeometry

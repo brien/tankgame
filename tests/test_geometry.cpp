@@ -188,3 +188,55 @@ TEST(GeometryTest, MeshTriangleExtrusionPreservesLegacyFaceOffsetContract)
     EXPECT_FLOAT_EQ(geometry.vertices[0].u, 0.0f);
     EXPECT_FLOAT_EQ(geometry.vertices[0].v, 0.25f);
 }
+
+TEST(GeometryTest, ColoredMeshTrianglesPreservePerFaceColorsAndVertexOrder)
+{
+    igtl_QGLMesh mesh;
+    igtl_QGLVertex vertices[] = {
+        {1.0f, 2.0f, 3.0f, 0.1f, 0.2f, 0.3f, 0.25f, 0.5f},
+        {4.0f, 5.0f, 6.0f, 0.4f, 0.5f, 0.6f, 0.75f, 1.0f},
+        {7.0f, 8.0f, 9.0f, 0.7f, 0.8f, 0.9f, 0.0f, 0.25f}
+    };
+    for (igtl_QGLVertex& vertex : vertices)
+        mesh.AddVertex(vertex);
+
+    igtl_QGLTriangle first = {2, 0, 1, 0.0f, 0.0f, 1.0f,
+                              0.125f, 0.25f, 0.5f, 3};
+    igtl_QGLTriangle second = {2, 1, 0, 0.0f, 1.0f, 0.0f,
+                               0.75f, 0.625f, 0.375f, 7};
+    mesh.AddTriangle(first);
+    mesh.AddTriangle(second);
+
+    const Geometry geometry = mesh.CreateTriangleColoredGeometry();
+
+    ASSERT_EQ(geometry.topology, PrimitiveTopology::TRIANGLES);
+    ASSERT_EQ(geometry.vertices.size(), 6u);
+    EXPECT_TRUE(geometry.hasNormals);
+    EXPECT_TRUE(geometry.hasTextureCoordinates);
+    EXPECT_TRUE(geometry.hasColors);
+
+    // Triangle winding and shared-source duplication are unchanged.
+    EXPECT_FLOAT_EQ(geometry.vertices[0].x, 7.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[1].x, 1.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[2].x, 4.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[3].x, 7.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[4].x, 4.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[5].x, 1.0f);
+
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalX, 0.7f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalY, 0.8f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].normalZ, 0.9f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].u, 0.0f);
+    EXPECT_FLOAT_EQ(geometry.vertices[0].v, 0.25f);
+
+    for (size_t i = 0; i < 3; ++i) {
+        EXPECT_FLOAT_EQ(geometry.vertices[i].red, 0.125f);
+        EXPECT_FLOAT_EQ(geometry.vertices[i].green, 0.25f);
+        EXPECT_FLOAT_EQ(geometry.vertices[i].blue, 0.5f);
+    }
+    for (size_t i = 3; i < 6; ++i) {
+        EXPECT_FLOAT_EQ(geometry.vertices[i].red, 0.75f);
+        EXPECT_FLOAT_EQ(geometry.vertices[i].green, 0.625f);
+        EXPECT_FLOAT_EQ(geometry.vertices[i].blue, 0.375f);
+    }
+}
