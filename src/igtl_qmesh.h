@@ -132,11 +132,11 @@ public:
     Geometry CreateTriangleGeometry() const;//Extracts ordinary filled triangles without rendering.
     Geometry CreateTriangleExtrudedGeometry(float amount) const;//Extracts triangles offset along each facet normal.
     Geometry CreateTriangleColoredGeometry() const;//Extracts triangles with their per-face colors.
-    void DrawTrianglesColoredExtruded(float f);//DrawTriangles(), but extruded by factor f. No coloring.
-    void DrawEdges();//Draws all edges (With colors)
-    void DrawEdgesExtruded(float f);//Draws all edges (With colors)
-    void DrawEdgesColored();//Draws all edges (With colors)
-    void DrawEdgesColoredExtruded(float f);//Draws all edges (With colors)
+    Geometry CreateTriangleColoredExtrudedGeometry(float amount) const;
+    Geometry CreateEdgeGeometry() const;
+    Geometry CreateEdgeExtrudedGeometry(float amount) const;
+    Geometry CreateEdgeColoredGeometry() const;
+    Geometry CreateEdgeColoredExtrudedGeometry(float amount) const;
     
     //#endif //IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
     
@@ -150,6 +150,7 @@ public:
     igtl_QGLTriangle m_dt;
     
 private:
+    Geometry CreateEdgeGeometry(float amount, bool colored) const;
     
     vector<igtl_QGLVertex> m_verticies;
     vector<igtl_QGLEdge> m_edges;

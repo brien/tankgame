@@ -6,6 +6,7 @@ enum class PrimitiveTopology
 {
     QUADS,
     LINE_LOOP,
+    LINES,
     TRIANGLES
 };
 
