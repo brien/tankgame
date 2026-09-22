@@ -182,25 +182,13 @@ void ResourceManager::BuildTankDisplayLists() {
 }
 
 void ResourceManager::BuildItemList() {
-    itemList.BeginNewList();
-    
     if (meshesLoaded) {
+        itemList.BeginNewList();
         itemMesh.DrawTriangles();
+        itemList.EndNewList();
     } else {
-        // Fallback to simple geometry if mesh loading failed
-        glBegin(GL_QUADS);
-        glScalef(0.2f, 0.2f, 0.2f);
-        
-        // Simple item representation
-        glVertex3f(-1.0f, -1.0f,  1.0f);
-        glVertex3f( 1.0f, -1.0f,  1.0f);
-        glVertex3f( 1.0f,  1.0f,  1.0f);
-        glVertex3f(-1.0f,  1.0f,  1.0f);
-        
-        glEnd();
+        itemList.SetGeometry(SimpleGeometry::CreateItemFallback());
     }
-    
-    itemList.EndNewList();
 }
 
 void ResourceManager::BuildSquareLists() {
