@@ -16,6 +16,7 @@
 
 
 #include "math.h"			//Needed for sqrt, sin, cos
+#include "Geometry.h"
 
 #include <cstdio>
 #include <string>
@@ -128,7 +129,7 @@ public:
     //Define this to enable automatic simple OpenGLdrawing
     //#ifdef IGTL_3D_GENERIC_QUICK_MESH_USE_OPENGL
     
-    void DrawTriangles();//Just draws the triangles. That's it. No coloring.
+    Geometry CreateTriangleGeometry() const;//Extracts ordinary filled triangles without rendering.
     void DrawTrianglesExtruded(float f);//DrawTriangles(), but extruded by factor f. No coloring.
     void DrawTrianglesColored();//Just draws the triangles. That's it. No coloring.
     void DrawTrianglesColoredExtruded(float f);//DrawTriangles(), but extruded by factor f. No coloring.

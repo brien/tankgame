@@ -1342,33 +1342,18 @@ void GraphicsTask::BuildDisplayLists()
     bodylist = DisplayList(1);
 
     // glNewList(cubelist1+6, GL_COMPILE);
-    bodylist.BeginNewList();
-
-    bodymesh.DrawTriangles();
-
-    // glEndList();
-    bodylist.EndNewList();
+    bodylist.SetGeometry(bodymesh.CreateTriangleGeometry());
 
     // turretlist=cubelist1+7;
     turretlist = DisplayList(1);
 
     // glNewList(cubelist1+7, GL_COMPILE);
-    turretlist.BeginNewList();
-
-    turretmesh.DrawTriangles();
-
-    // glEndList();
-    turretlist.EndNewList();
+    turretlist.SetGeometry(turretmesh.CreateTriangleGeometry());
 
     // cannonlist=cubelist1+8;
 
     // glNewList(cubelist1+8, GL_COMPILE);
-    cannonlist.BeginNewList();
-
-    cannonmesh.DrawTriangles();
-
-    // glEndList();
-    cannonlist.EndNewList();
+    cannonlist.SetGeometry(cannonmesh.CreateTriangleGeometry());
 
     // bodylistEx2=cubelist1+9;
 
