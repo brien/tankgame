@@ -25,6 +25,7 @@ public:
     explicit Implementation(int count) : count(count) {}
 
     int count;
+    Geometry geometry;
 #else
     explicit Implementation(int count)
         : count(count), first(count > 0 ? glGenLists(count) : 0), current(first)
@@ -40,6 +41,7 @@ public:
     int count;
     GLuint first;
     GLuint current;
+    Geometry geometry;
 #endif
 };
 
@@ -116,6 +118,29 @@ void DisplayList::EndList()
 #else
     glEndList();
     ++implementation->current;
+#endif
+}
+
+void DisplayList::SetGeometry(const Geometry& geometry)
+{
+    implementation->geometry = geometry;
+#ifndef __EMSCRIPTEN__
+    BeginNewList();
+    GLenum mode = GL_QUADS;
+    if (geometry.topology == PrimitiveTopology::LINE_LOOP)
+        mode = GL_LINE_LOOP;
+
+    glBegin(mode);
+    for (const GeometryVertex& vertex : geometry.vertices)
+    {
+        if (geometry.hasNormals)
+            glNormal3f(vertex.normalX, vertex.normalY, vertex.normalZ);
+        if (geometry.hasTextureCoordinates)
+            glTexCoord2f(vertex.u, vertex.v);
+        glVertex3f(vertex.x, vertex.y, vertex.z);
+    }
+    glEnd();
+    EndNewList();
 #endif
 }
 

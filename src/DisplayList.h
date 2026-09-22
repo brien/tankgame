@@ -2,6 +2,8 @@
 
 #include <memory>
 
+#include "Geometry.h"
+
 // A renderer resource facade.  The desktop backend currently stores an OpenGL
 // display list behind Implementation; no OpenGL handle or type is exposed to
 // callers.  A future renderer can replace Implementation with buffered
@@ -17,6 +19,9 @@ public:
     void ResetList();
     void NewList();
     void EndList();
+    // Owns the CPU geometry and prepares the native renderer resource. On
+    // Emscripten this intentionally stops at the CPU/backend boundary.
+    void SetGeometry(const Geometry& geometry);
     void Call(int i);
     void Close();
 

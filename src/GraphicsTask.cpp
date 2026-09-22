@@ -1292,71 +1292,15 @@ void GraphicsTask::RenderText(const TTF_Font *Font, const GLubyte &R, const GLub
 
 void GraphicsTask::BuildDisplayLists()
 {
-    // cubelist1=glGenLists(32);
-    // cubelist1 = 1;
     cubelist1 = DisplayList(1);
+    cubelist1.SetGeometry(SimpleGeometry::CreateCube());
 
-    // glNewList(cubelist1,GL_COMPILE);
-    cubelist1.BeginNewList();
+    squarelist = DisplayList(1);
+    squarelist.SetGeometry(SimpleGeometry::CreateHorizontalSquare());
 
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f); // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f); // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f); // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f); // Top Right Of The Texture and Quad
-    // Bottom Face
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f); // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); // Bottom Right Of The Texture and Quad
-    // Front Face
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f); // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f); // Top Left Of The Texture and Quad
-    // Back Face
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f); // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f); // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); // Bottom Left Of The Texture and Quad
-    // Right face
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, -0.5f); // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, -0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, 0.5f, 0.5f); // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, -0.5f, 0.5f); // Bottom Left Of The Texture and Quad
-    // Left Face
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, -0.5f); // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, -0.5f, 0.5f); // Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, 0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(-0.5f, 0.5f, -0.5f); // Top Left Of The Texture and Quad
-    glEnd();
-
-    // glEndList();
-    cubelist1.EndNewList();
+    squarelist2 = DisplayList(1);
+    squarelist2.SetGeometry(SimpleGeometry::CreateHorizontalSquare(
+        0.5f, PrimitiveTopology::LINE_LOOP));
 
     bulletlist = DisplayList(1);
     bulletlist.BeginNewList();
@@ -1523,50 +1467,6 @@ void GraphicsTask::BuildDisplayLists()
 
     // glEndList();
     cannonlistEx2.EndNewList();
-
-    // squarelist=cubelist1+12;
-    squarelist = DisplayList(1);
-
-    // glNewList(cubelist1+12, GL_COMPILE);
-    squarelist.BeginNewList();
-
-    glBegin(GL_QUADS);
-
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.0f, -0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, 0.0f, -0.5f); // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, 0.0f, 0.5f); // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, 0.0f, 0.5f); // Bottom Right Of The Texture and Quad
-
-    glEnd();
-
-    // glEndList();
-    squarelist.EndNewList();
-
-    // squarelist2=cubelist1+13;
-    squarelist2 = DisplayList(1);
-
-    // glNewList(cubelist1+13, GL_COMPILE);
-    squarelist2.BeginNewList();
-
-    glBegin(GL_LINE_LOOP);
-
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(-0.5f, 0.0f, -0.5f); // Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f);
-    glVertex3f(0.5f, 0.0f, -0.5f); // Top Left Of The Texture and Quad
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(0.5f, 0.0f, 0.5f); // Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(-0.5f, 0.0f, 0.5f); // Bottom Right Of The Texture and Quad
-
-    glEnd();
-
-    // glEndList();
-    squarelist2.EndNewList();
 
     itemlist = DisplayList(1);
     itemlist.BeginNewList();
