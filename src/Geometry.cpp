@@ -97,3 +97,18 @@ Geometry SimpleGeometry::CreateBullet()
     };
     return geometry;
 }
+
+Geometry SimpleGeometry::CreateItemFallback()
+{
+    Geometry geometry;
+    // The legacy glScalef call occurred inside the vertex submission block,
+    // where OpenGL rejects and ignores it, so the rendered fallback used
+    // these unscaled coordinates.
+    geometry.vertices = {
+        Vertex(-1.0f, -1.0f, 1.0f, 0.0f, 0.0f),
+        Vertex(1.0f, -1.0f, 1.0f, 0.0f, 0.0f),
+        Vertex(1.0f, 1.0f, 1.0f, 0.0f, 0.0f),
+        Vertex(-1.0f, 1.0f, 1.0f, 0.0f, 0.0f)
+    };
+    return geometry;
+}

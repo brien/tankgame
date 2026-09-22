@@ -36,4 +36,5 @@ Geometry CreateHorizontalSquare(float halfExtent = 0.5f,
                                 PrimitiveTopology topology = PrimitiveTopology::QUADS);
 Geometry CreateVerticalSquare(float halfExtent = 0.5f);
 Geometry CreateBullet();
+Geometry CreateItemFallback();
 }

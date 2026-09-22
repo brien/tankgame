@@ -84,3 +84,20 @@ TEST(GeometryTest, BulletPreservesTriangleAttributesAndLegacyOrdering)
     EXPECT_FLOAT_EQ(bullet.vertices[18].y, bullet.vertices[21].y);
     EXPECT_FLOAT_EQ(bullet.vertices[18].z, bullet.vertices[21].z);
 }
+
+TEST(GeometryTest, ItemFallbackPreservesLegacyQuad)
+{
+    const Geometry item = SimpleGeometry::CreateItemFallback();
+
+    ASSERT_EQ(item.topology, PrimitiveTopology::QUADS);
+    ASSERT_EQ(item.vertices.size(), 4u);
+    EXPECT_FALSE(item.hasTextureCoordinates);
+    EXPECT_FALSE(item.hasNormals);
+
+    EXPECT_FLOAT_EQ(item.vertices[0].x, -1.0f);
+    EXPECT_FLOAT_EQ(item.vertices[0].y, -1.0f);
+    EXPECT_FLOAT_EQ(item.vertices[0].z, 1.0f);
+    EXPECT_FLOAT_EQ(item.vertices[1].x, 1.0f);
+    EXPECT_FLOAT_EQ(item.vertices[2].y, 1.0f);
+    EXPECT_FLOAT_EQ(item.vertices[3].x, -1.0f);
+}
