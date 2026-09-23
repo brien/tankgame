@@ -25,6 +25,7 @@
 #include "rendering/ResourceManager.h"
 #include "rendering/SceneDataBuilder.h"
 #include "rendering/RenderingPipeline.h"
+#include "rendering/RenderContext.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <iostream>
@@ -64,10 +65,15 @@ bool GraphicsTask::Start()
 
     // Setup viewport and projection (needed before pipeline initialization)
     glViewport(0, 0, VideoTask::scrWidth, VideoTask::scrHeight);
+#ifdef __EMSCRIPTEN__
+    const float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
+    RenderContext::Current().SetProjection(Matrix4::Perspective(45.0f, ratio, 0.1f, 1024.0f));
+#else
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
     gluPerspective(45.0, ratio, 0.1, 1024.0);
+#endif
 
     // Enable essential OpenGL features
     glEnable(GL_DEPTH_TEST);
@@ -76,7 +82,9 @@ bool GraphicsTask::Start()
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
 
-    // Setup basic lighting
+    // Desktop retains its fixed-function lighting/material setup. WebGL uses
+    // explicit shader state and intentionally has no fixed-function analogue.
+#ifndef __EMSCRIPTEN__
     GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
     GLfloat LightPosition[] = {0.0f, 1.0f, 0.0f, 0.0f};
     glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
@@ -94,6 +102,7 @@ bool GraphicsTask::Start()
     glEnable(GL_COLOR_MATERIAL);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_TEXTURE_2D);
+#endif
 
     // Load textures
     textureHandler.LoadTextures();
@@ -201,16 +210,23 @@ void GraphicsTask::Update()
                 viewportManager.SetupSinglePlayer(VideoTask::scrWidth, VideoTask::scrHeight);
             }
 
+            float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
+#ifdef __EMSCRIPTEN__
+            RenderContext::Current().SetProjection(
+                Matrix4::Perspective(45.0f, ratio, 0.1f, 1024.0f));
+#else
             glMatrixMode(GL_PROJECTION);
             glLoadIdentity();
-            float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
             gluPerspective(45.0, ratio, 0.1, 1024.0);
+#endif
         }
 
         lastnumPlayers = numPlayers;
     }
 
-    // Basic OpenGL state setup for both pipelines
+    // Basic desktop compatibility state. Browser transforms and colors are
+    // supplied through RenderContext to the migrated shader-backed paths.
+#ifndef __EMSCRIPTEN__
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -218,6 +234,7 @@ void GraphicsTask::Update()
     glShadeModel(GL_SMOOTH);
 
     glDisable(GL_LIGHTING);
+#endif
 
     if (App::GetSingleton().gameTask->IsGameStarted())
     {
