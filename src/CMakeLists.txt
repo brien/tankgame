@@ -5,10 +5,21 @@ file(GLOB_RECURSE SOURCES
 
 # Remove example files that shouldn't be compiled
 list(FILTER SOURCES EXCLUDE REGEX ".*_example\\.cpp$")
+list(FILTER SOURCES EXCLUDE REGEX "/rendering/BrowserDeferredRenderers\\.cpp$")
 
 set(GAME_SOURCES ${SOURCES})
 list(FILTER GAME_SOURCES EXCLUDE REGEX "/main\\.cpp$")
 set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
+
+# These renderers still use desktop compatibility OpenGL throughout their
+# implementations.  The browser milestone deliberately links explicit
+# deferred implementations instead of pulling unsupported APIs into WebGL.
+if(EMSCRIPTEN)
+    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(EffectRenderer|HUDRenderer|MenuRenderer|TankRenderer|TerrainRenderer)\\.cpp$")
+    list(APPEND SOURCES
+        "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
+    )
+endif()
 
 # Set executable name based on platform
 if(APPLE)

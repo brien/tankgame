@@ -90,8 +90,11 @@ void RenderingPipeline::SetupRenderState()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Enable smooth shading
+    // Smooth shading and attribute stacks only exist on desktop compatibility
+    // OpenGL. Browser shaders and explicit state replace them.
+#ifndef __EMSCRIPTEN__
     glShadeModel(GL_SMOOTH);
+#endif
 
     // Set clear color (dark blue/black for space-like background)
     glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
@@ -192,6 +195,10 @@ void RenderingPipeline::ClearBuffers()
 
 void RenderingPipeline::SetupLighting(const SceneData &scene)
 {
+#ifdef __EMSCRIPTEN__
+    (void)scene;
+    // Lighting is deferred until the browser shader-lighting milestone.
+#else
     // Enable lighting
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);
@@ -213,6 +220,7 @@ void RenderingPipeline::SetupLighting(const SceneData &scene)
 
     // Keep lighting simple and consistent for all levels
     // Let the terrain colors from JSON metadata be the primary color source
+#endif
 }
 
 void RenderingPipeline::RenderSkybox(const SceneData &scene)
@@ -235,8 +243,13 @@ void RenderingPipeline::RenderSkybox(const SceneData &scene)
 
 void RenderingPipeline::RenderTerrain(const TerrainRenderData &terrain)
 {
+#ifdef __EMSCRIPTEN__
+    (void)terrain;
+    // Terrain remains a desktop-only compatibility renderer for this milestone.
+#else
     // Delegate to terrain renderer - let it handle its own state management
     terrainRenderer.RenderTerrain(terrain);
+#endif
 }
 
 void RenderingPipeline::RenderGameObjects(const SceneData &scene)
@@ -255,6 +268,12 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
 
 void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex)
 {
+#ifdef __EMSCRIPTEN__
+    (void)scene;
+    (void)playerIndex;
+    // HUD and menus are intentionally deferred rather than submitted to WebGL.
+    return;
+#else
     // Only render UI if we have UI data
     if (!scene.uiData) {
         return;
@@ -276,10 +295,15 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
     if (playerIndex == 0 && uiData.debug.showDebugInfo) {
         hudRenderer.RenderDebugInfo(uiData.debug);
     }
+#endif
 }
 
 void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
 {
+#ifdef __EMSCRIPTEN__
+    (void)tanks;
+    return;
+#else
     if (tanks.empty() || !tankRenderer)
     {
         return;
@@ -287,6 +311,7 @@ void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
 
     tankRenderer->RenderMultiple(tanks);
     renderStats.tanksRendered = static_cast<int>(tanks.size());
+#endif
 }
 
 void RenderingPipeline::RenderBullets(const std::vector<BulletRenderData> &bullets)
@@ -305,6 +330,10 @@ void RenderingPipeline::RenderBullets(const std::vector<BulletRenderData> &bulle
 
 void RenderingPipeline::RenderEffects(const std::vector<EffectRenderData> &effects)
 {
+#ifdef __EMSCRIPTEN__
+    (void)effects;
+    return;
+#else
     if (effects.empty())
     {
         return;
@@ -315,6 +344,7 @@ void RenderingPipeline::RenderEffects(const std::vector<EffectRenderData> &effec
     effectRenderer.CleanupRenderState();
 
     renderStats.effectsRendered = static_cast<int>(effects.size());
+#endif
 }
 
 void RenderingPipeline::RenderItems(const std::vector<ItemRenderData> &items)
@@ -332,24 +362,33 @@ void RenderingPipeline::RenderItems(const std::vector<ItemRenderData> &items)
 
 void RenderingPipeline::UpdateRenderStats(const SceneData &scene)
 {
+#ifdef __EMSCRIPTEN__
+    renderStats.tanksRendered = 0;
+    renderStats.effectsRendered = 0;
+#else
     renderStats.tanksRendered = static_cast<int>(scene.tanks.size());
-    renderStats.bulletsRendered = static_cast<int>(scene.bullets.size());
     renderStats.effectsRendered = static_cast<int>(scene.effects.size());
+#endif
+    renderStats.bulletsRendered = static_cast<int>(scene.bullets.size());
     renderStats.itemsRendered = static_cast<int>(scene.items.size());
 }
 
 void RenderingPipeline::PushRenderState()
 {
+#ifndef __EMSCRIPTEN__
     // Save current OpenGL state
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glPushMatrix();
+#endif
 }
 
 void RenderingPipeline::PopRenderState()
 {
+#ifndef __EMSCRIPTEN__
     // Restore previous OpenGL state
     glPopMatrix();
     glPopAttrib();
+#endif
 }
 
 bool RenderingPipeline::ShouldRenderObject(const Vector3 &position, const Vector3 &cameraPos, float maxDistance)

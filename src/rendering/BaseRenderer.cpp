@@ -69,8 +69,11 @@ void BaseRenderer::Setup3DRenderState()
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
     
-    // Enable smooth shading
+    // Smooth shading is fixed-function desktop state; browser shaders define
+    // interpolation explicitly.
+#ifndef __EMSCRIPTEN__
     glShadeModel(GL_SMOOTH);
+#endif
     
     // Disable blending by default (can be enabled per-object)
     glDisable(GL_BLEND);
@@ -94,12 +97,16 @@ void BaseRenderer::Setup2DRenderState()
 
 void BaseRenderer::SetLighting(bool enable)
 {
+#ifdef __EMSCRIPTEN__
+    (void)enable;
+#else
     if (enable) {
         glEnable(GL_LIGHTING);
         glEnable(GL_NORMALIZE); // Normalize normals after scaling
     } else {
         glDisable(GL_LIGHTING);
     }
+#endif
     
     CheckGLError("BaseRenderer::SetLighting");
 }
@@ -118,18 +125,27 @@ void BaseRenderer::SetBlending(bool enable)
 
 void BaseRenderer::PushMatrix()
 {
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
+#endif
     CheckGLError("BaseRenderer::PushMatrix");
 }
 
 void BaseRenderer::PopMatrix()
 {
+#ifndef __EMSCRIPTEN__
     glPopMatrix();
+#endif
     CheckGLError("BaseRenderer::PopMatrix");
 }
 
 void BaseRenderer::StoreRenderState()
 {
+#ifdef __EMSCRIPTEN__
+    // WebGL state used by migrated draws is established explicitly. Do not
+    // query desktop-only lighting or matrix-stack state.
+    stateStored = false;
+#else
     // Store current OpenGL state
     previousState.depthTestEnabled = glIsEnabled(GL_DEPTH_TEST);
     previousState.lightingEnabled = glIsEnabled(GL_LIGHTING);
@@ -138,11 +154,16 @@ void BaseRenderer::StoreRenderState()
     glGetIntegerv(GL_MATRIX_MODE, &previousState.matrixMode);
     
     stateStored = true;
+#endif
     CheckGLError("BaseRenderer::StoreRenderState");
 }
 
 void BaseRenderer::RestoreRenderState()
 {
+#ifdef __EMSCRIPTEN__
+    stateStored = false;
+    return;
+#else
     if (!stateStored) {
         return;
     }
@@ -176,4 +197,5 @@ void BaseRenderer::RestoreRenderState()
     
     stateStored = false;
     CheckGLError("BaseRenderer::RestoreRenderState");
+#endif
 }

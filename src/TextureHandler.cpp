@@ -1,4 +1,6 @@
-#ifdef _WIN32
+#ifdef __EMSCRIPTEN__
+#include <GLES2/gl2.h>
+#elif defined(_WIN32)
 // If building in windows:
 #pragma warning(disable : 4996)
 #include <windows.h>
@@ -80,13 +82,28 @@ void TextureHandler::TGA_Texture(unsigned int textureArray[], const char *strFil
     int textureType = GL_RGB;
     if (pBitMap->channels == 4)
         textureType = GL_RGBA;
+#ifdef __EMSCRIPTEN__
+    // WebGL has no GLU. Upload the decoded TGA directly and ask WebGL to
+    // generate the mip chain. Shaders do not sample these textures yet, but
+    // keeping resource preparation valid avoids a second browser-only loader.
+    glTexImage2D(GL_TEXTURE_2D, 0, textureType, pBitMap->size_x, pBitMap->size_y,
+                 0, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+    glGenerateMipmap(GL_TEXTURE_2D);
+#else
     gluBuild2DMipmaps(GL_TEXTURE_2D, pBitMap->channels, pBitMap->size_x, pBitMap->size_y, textureType, GL_UNSIGNED_BYTE, pBitMap->data);
+#endif
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     if (!wrap)
     {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,
+#ifdef __EMSCRIPTEN__
+                        GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+#else
+                        GL_CLAMP);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+#endif
     }
     else
     {
