@@ -27,8 +27,14 @@ bool VideoTask::Start()
         Logger::Get().Write("VideoTask::Start: SDL_InitSubSystem failed.\n");
         return false;
     }
+#ifdef __EMSCRIPTEN__
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
+#else
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+#endif
 
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -58,7 +64,9 @@ bool VideoTask::Start()
         scrHeight = 720;
 
         VideoTask::difficultySetting = 0;
+#ifndef __EMSCRIPTEN__
         App::GetSingleton().soundTask->disable = false;
+#endif
     }
     else
     {
@@ -74,8 +82,10 @@ bool VideoTask::Start()
             flags = SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN;
         }
 
+#ifndef __EMSCRIPTEN__
         SDL_ShowCursor(SDL_DISABLE);
         SDL_SetRelativeMouseMode(SDL_TRUE);
+#endif
 
         fgets(line, 64, filein);
         fgets(line, 64, filein);
@@ -111,24 +121,34 @@ bool VideoTask::Start()
         fgets(line, 64, filein);
         fgets(line, 64, filein);
 
+#ifndef __EMSCRIPTEN__
         App::GetSingleton().soundTask->disable = (bool)(line[0] - 48);
+#endif
         fclose(filein);
     }
 
     window = SDL_CreateWindow("tankgame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
-    // sdlRenderer = SDL_CreateRenderer(window, -1, 0);
-    glContext = SDL_GL_CreateContext(window);
-    
-    // Ensure the OpenGL context is current (important for macOS)
-    SDL_GL_MakeCurrent(window, glContext);
-
-    SDL_GL_SetSwapInterval(1);
-
     if (!window)
     {
-        Logger::Get().Write("VideoTask::Start: SDL_CreateWindow failed.\n");
+        Logger::Get().Write("VideoTask::Start: SDL_CreateWindow failed: %s\n", SDL_GetError());
         return false;
     }
+
+    glContext = SDL_GL_CreateContext(window);
+    if (!glContext)
+    {
+        Logger::Get().Write("VideoTask::Start: WebGL/OpenGL context creation failed: %s\n", SDL_GetError());
+        return false;
+    }
+
+    if (SDL_GL_MakeCurrent(window, glContext) != 0)
+    {
+        Logger::Get().Write("VideoTask::Start: context activation failed: %s\n", SDL_GetError());
+        return false;
+    }
+
+    SDL_GL_SetSwapInterval(1);
+    Logger::Get().Write("VideoTask::Start: graphics context ready at %dx%d.\n", scrWidth, scrHeight);
 
     return true;
 }

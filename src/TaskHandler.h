@@ -19,6 +19,8 @@ public:
     ~TaskHandler() = default;
     
     int Execute();
+    bool Tick();
+    bool HasTasks() const;
     
     bool AddTask(ITask *t);
     void SuspendTask(ITask *t);

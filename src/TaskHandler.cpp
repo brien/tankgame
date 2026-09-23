@@ -9,39 +9,46 @@
 
 TaskHandler::TaskHandler()
 {
-    
-
 }
 
 
 int TaskHandler::Execute()
 {
-    while(!taskList.empty())
+    while (Tick()) {}
+
+    return 0;
+}
+
+bool TaskHandler::Tick()
+{
+    for (auto* task : taskList)
     {
-        for(auto* task : taskList)
+        if (!task->canKill)
         {
-            if(!task->canKill)
-            {
-                task->Update();
-            }
-        }
-        
-        for(auto it = taskList.begin(); it != taskList.end();)
-        {
-            if((*it)->canKill)
-            {
-                (*it)->Stop();
-                delete (*it);
-                it = taskList.erase(it);
-            }
-            else
-            {
-                ++it;
-            }
+            task->Update();
         }
     }
-    
-    return 0;
+
+    for (auto it = taskList.begin(); it != taskList.end();)
+    {
+        if ((*it)->canKill)
+        {
+            (*it)->Stop();
+            delete (*it);
+            it = taskList.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    return HasTasks();
+}
+
+bool TaskHandler::HasTasks() const
+{
+    return !taskList.empty();
 }
 
 bool TaskHandler::AddTask(ITask *t)
