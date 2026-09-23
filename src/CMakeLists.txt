@@ -60,6 +60,10 @@ if(EMSCRIPTEN)
         "--preload-file=${CMAKE_SOURCE_DIR}/runtime/cannon.gsm@/cannon.gsm"
         "--preload-file=${CMAKE_SOURCE_DIR}/runtime/body.gsm@/body.gsm"
         "-sALLOW_MEMORY_GROWTH=1"
+        # SceneData contains 128 KiB of terrain maps, and BuildScene also
+        # needs a terrain temporary. The default 64 KiB WASM stack overflows
+        # on the first frame; memory growth only grows the heap, not the stack.
+        "-sSTACK_SIZE=1048576"
     )
 endif()
 
