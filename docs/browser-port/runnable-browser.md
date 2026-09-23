@@ -89,3 +89,87 @@ deferred. Bullet and item submissions use the migrated backend when those
 entities exist, but the initial menu state need not contain either one. The
 next renderer milestone should begin only after this bootstrap page has been
 manually checked in a real browser.
+
+## First-frame stack overflow diagnosis
+
+The initial bootstrap build reached loop registration but trapped on its first
+frame. The original Release artifacts reproduced these exact offsets in a
+locally HTTP-served Chromium window:
+
+| WASM offset | Resolved function |
+| --- | --- |
+| `0x2e36` | `Logger::Get()` |
+| `0xbb955` | `GraphicsTask::Update()` (inlined scene/terrain construction) |
+| `0xfb6fd` | `BrowserFrame(void*)` (inlined `App::Tick` / `TaskHandler::Tick`) |
+
+Relinking with `--emit-symbol-map` changes optimized function ordering; its
+indices cannot be applied directly to the old binary. Matching the original
+and symbolized functions' instruction sequences resolves the offsets above.
+An unoptimized build with stack checks exposes the earlier failure:
+
+```text
+BrowserFrame
+  App::Tick
+    TaskHandler::Tick
+      GraphicsTask::Update
+        GraphicsTask::RenderWithNewPipeline
+          stack overflow while reserving the local SceneData
+```
+
+`SceneData::terrain` contains two `int[128][128]` arrays (131,072 bytes
+combined). WASM disassembly shows a 131,248-byte stack frame for
+`RenderWithNewPipeline` and a nested 131,232-byte frame in
+`SceneDataBuilder::BuildScene` for the terrain temporary. These are bounded
+allocations, not recursion or a dangling callback. They exceed Emscripten
+3.1.64's default 65,536-byte stack. Terrain data is still constructed even
+though terrain drawing is deferred.
+
+Without stack checks, the original optimized build writes below its stack
+into static data. Its eventual trap is in `Logger::Get`, called by the
+inlined `LevelHandler::populateTerrainRenderData` color diagnostic, after
+scene/terrain initialization has already corrupted memory. With
+`STACK_OVERFLOW_CHECK=2`, execution aborts at the render function's stack
+reservation, before that corruption.
+
+At the original trap, the logger initialization guard at address 439364 and
+the stream-construction table entry at address 413764 both read zero. The
+instruction at `0x2e36` loads through that table entry minus 12, producing the
+invalid address `0xfffffff4`. With the stack fix, the guard is 1 and the table
+entry remains 413788. The logger is the victim of the overflow.
+
+The browser target now explicitly reserves a 1 MiB stack, accommodating the
+roughly 257 KiB of nested render frames plus callers and library work.
+`ALLOW_MEMORY_GROWTH` does not enlarge the stack. This target-only link setting
+preserves the native code, lifecycle, and rendering scope. No task priority,
+input handling, timing, or renderer implementation changes are needed. Update
+order remains timer (10), game (60), sound (70), graphics (80), input (90),
+and swap (100); the callback's `App` remains heap-allocated.
+
+### Debug reproduction
+
+With the SDK activated, configure a separate build directory:
+
+```sh
+emcmake cmake -S . -B build-browser-debug \
+  -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Debug \
+  '-DCMAKE_CXX_FLAGS_DEBUG=-O0 -gsource-map -g' \
+  '-DCMAKE_EXE_LINKER_FLAGS=-sASSERTIONS=2 -sSTACK_OVERFLOW_CHECK=2 -gsource-map -g'
+cmake --build build-browser-debug -j4
+python3 -m http.server 8000 --directory runtime
+```
+
+Both build directories write to `runtime/`; the last linked configuration is
+the one served. Keep the `.wasm.map` alongside its matching WASM file. The
+debug flags supply function names, debug information, a source map, and
+checks on stack-pointer changes; SAFE_HEAP is not needed for this diagnosis.
+Removing only the explicit `STACK_SIZE` link setting reproduces the overflow.
+Restore it before verification.
+
+Verification after the fix: the native Linux game and test executable build,
+and all 77 CTest tests pass. A headed Chromium run of the instrumented Debug
+build completed 1,709 frames over approximately 30 seconds without a WASM
+exception or stack-check failure. The first-frame diagnostic appeared once,
+and visual inspection confirmed the expected 1280x720 dark-blue canvas.
+The optimized Release build also ran over 1,700 frames without an exception.
+Pressing Escape exercised task cleanup and callback cancellation; the frame
+counter remained at 1,736 on subsequent samples.
