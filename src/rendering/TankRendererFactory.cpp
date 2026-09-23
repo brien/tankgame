@@ -9,7 +9,14 @@ std::unique_ptr<ITankRenderer> TankRendererFactory::CreateRenderer(RendererType 
             return std::make_unique<PlayerTankRendererImpl>();
             
         case RendererType::ENEMY_TANK:
+#ifdef __EMSCRIPTEN__
+            // Enemy rendering is part of the deliberately deferred browser
+            // tank renderer. Keep factory callers valid without linking the
+            // desktop immediate-mode implementation.
+            return std::make_unique<TankRenderer>();
+#else
             return std::make_unique<EnemyTankRendererImpl>();
+#endif
             
         case RendererType::UNIFIED:
         default:

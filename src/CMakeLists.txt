@@ -15,7 +15,7 @@ set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
 # implementations.  The browser milestone deliberately links explicit
 # deferred implementations instead of pulling unsupported APIs into WebGL.
 if(EMSCRIPTEN)
-    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(EffectRenderer|HUDRenderer|MenuRenderer|TankRenderer|TerrainRenderer)\\.cpp$")
+    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(EffectRenderer|EnemyTankRendererImpl|HUDRenderer|MenuRenderer|TankRenderer|TerrainRenderer)\\.cpp$")
     list(APPEND SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
     )
@@ -30,6 +30,38 @@ endif()
 
 # Create the executable
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
+
+if(EMSCRIPTEN)
+    # An .html executable suffix asks Emscripten to emit its standard canvas
+    # shell together with the JavaScript, WebAssembly, and preload data files.
+    set_target_properties(${EXECUTABLE_NAME} PROPERTIES SUFFIX ".html")
+
+    # file_packager uses '@' to separate host and virtual paths, while the
+    # shipped level filenames themselves contain '@@'. Stage just the two
+    # required levels in a directory so that delimiter is never ambiguous.
+    set(BROWSER_LEVEL_ASSETS "${CMAKE_CURRENT_BINARY_DIR}/browser-assets/levels")
+    file(MAKE_DIRECTORY "${BROWSER_LEVEL_ASSETS}")
+    foreach(BROWSER_LEVEL_FILE
+            "title@@.txt" "title@@.json" "level0@@.txt" "level0@@.json")
+        configure_file(
+            "${CMAKE_SOURCE_DIR}/runtime/levels/${BROWSER_LEVEL_FILE}"
+            "${BROWSER_LEVEL_ASSETS}/${BROWSER_LEVEL_FILE}"
+            COPYONLY
+        )
+    endforeach()
+
+    target_link_options(${EXECUTABLE_NAME} PRIVATE
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/fonts@/fonts"
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/texture@/texture"
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/settings.txt@/settings.txt"
+        "--preload-file=${BROWSER_LEVEL_ASSETS}@/levels"
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/nowbody.gsm@/nowbody.gsm"
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/nowturret.gsm@/nowturret.gsm"
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/cannon.gsm@/cannon.gsm"
+        "--preload-file=${CMAKE_SOURCE_DIR}/runtime/body.gsm@/body.gsm"
+        "-sALLOW_MEMORY_GROWTH=1"
+    )
+endif()
 
 # Include directories
 target_include_directories(${EXECUTABLE_NAME} PRIVATE

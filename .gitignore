@@ -473,3 +473,9 @@ FodyWeavers.xsd
 *.sln.iml
 .DS_Store
 src/build.sh
+
+# Generated Emscripten browser application artifacts
+/runtime/tankgame-linux.html
+/runtime/tankgame-linux.js
+/runtime/tankgame-linux.wasm
+/runtime/tankgame-linux.data

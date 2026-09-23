@@ -43,7 +43,9 @@ GameTask::GameTask()
     paused = false;
     debug = false;
     currentState = GameState::MENU;
+#ifndef __EMSCRIPTEN__
     SDL_SetRelativeMouseMode(SDL_TRUE);
+#endif
 }
 
 GameTask::~GameTask()
