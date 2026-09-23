@@ -12,8 +12,8 @@ list(FILTER GAME_SOURCES EXCLUDE REGEX "/main\\.cpp$")
 set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
 
 # These renderers still use desktop compatibility OpenGL throughout their
-# implementations.  The browser milestone deliberately links explicit
-# deferred implementations instead of pulling unsupported APIs into WebGL.
+# implementations. The browser links deferred implementations for them while
+# retaining the separate browser-safe player tank renderer.
 if(EMSCRIPTEN)
     list(FILTER SOURCES EXCLUDE REGEX "/rendering/(EffectRenderer|EnemyTankRendererImpl|HUDRenderer|MenuRenderer|TankRenderer|TerrainRenderer)\\.cpp$")
     list(APPEND SOURCES

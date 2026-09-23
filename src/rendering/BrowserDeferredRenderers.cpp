@@ -62,7 +62,7 @@ TankRenderer::TankRenderer() : animationDrift(0.0f) {}
 
 bool TankRenderer::Initialize()
 {
-    LogDeferred("tank rendering");
+    LogDeferred("enemy tank rendering");
     return BaseRenderer::Initialize();
 }
 

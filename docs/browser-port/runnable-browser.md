@@ -83,12 +83,47 @@ creation, deferred renderer notices, successful pipeline/game initialization,
 registration of the non-blocking loop, and the one-time first-frame message.
 There should be no fatal asset, shader, or context error.
 
-Terrain, player/enemy tanks, effects, HUD, menus, texture sampling, lighting,
-audio, polished pointer lock, and responsive/high-DPI canvas resizing remain
-deferred. Bullet and item submissions use the migrated backend when those
-entities exist, but the initial menu state need not contain either one. The
-next renderer milestone should begin only after this bootstrap page has been
-manually checked in a real browser.
+The player tank is rendered after starting a game; see the player-tank
+milestone below. Terrain, enemy tanks, effects, HUD, menus, texture sampling,
+lighting, audio, polished pointer lock, and responsive/high-DPI canvas resizing
+remain deferred. Bullet and item submissions use the migrated backend when
+those entities exist.
+
+## Player-tank browser milestone
+
+The Emscripten pipeline now asks `TankRendererFactory` for
+`PlayerTankRendererImpl` rather than the unified desktop `TankRenderer`. It
+filters the scene's tank data to alive players before dispatch, so enemy data
+remains available to the simulation but cannot enter a rendering path. The
+legacy `TankRenderer.cpp` and `EnemyTankRendererImpl.cpp` implementations stay
+excluded from the browser target.
+
+`PlayerTankRendererImpl` submits the real `nowbody.gsm` body and
+`nowturret.gsm` turret resources. The body model applies world position, the
+existing height offset, and body rotations. The turret model inherits that
+body matrix, then applies its local height and rotations. `RenderContext`
+combines each model with the active camera as `projection * view * model`, and
+`DisplayList::Call()` draws the corresponding VBO using the tank's secondary
+(body) or primary (turret) fallback color. The current player design does not
+draw `cannon.gsm` separately; it is therefore not added just for the browser.
+
+Depth testing, depth writes, back-face culling, and opaque blending state are
+the only relevant browser state. Desktop lighting, texture enable state,
+fixed-function matrix stacks, and polygon/line state are neither emulated nor
+needed by the flat-color shader. The legacy additive body/turret effect and
+textured targeting/ready indicators are intentionally omitted: they are
+effects/UI rather than parts of the opaque player mesh and need later texture
+and transparent-rendering work.
+
+To validate manually, build and serve as above, open the page, click the canvas
+if needed to focus it, and press Enter once. The title state intentionally has
+no player: Enter uses the existing menu transition to load `level0@@.txt` and
+spawn the player. Expect a stable dark-blue canvas containing a flat-colored
+body and turret in the normal gameplay position/orientation. Terrain, enemies,
+effects, HUD/menu, textures, and lighting should remain absent. Move/rotate the
+tank with the existing keyboard controls to confirm that body and turret
+transforms update over repeated frames; Escape returns to the menu and a second
+Escape cleanly stops the browser loop.
 
 ## First-frame stack overflow diagnosis
 

@@ -19,6 +19,10 @@ pieces, and items. Their legacy transform call order is reproduced explicitly,
 and every call supplies its fallback RGBA color. Geometry with vertex colors
 continues to take priority in the WebGL shader through `uHasColor`.
 
+The browser pipeline now dispatches alive player records to that migrated path
+and filters out enemy records. It draws the opaque body and turret; the player
+model has no separate cannon draw in the existing renderer. Its additive mesh
+overlay and textured targeting indicators remain deferred with effects/UI.
 Enemy tanks remain immediate-mode geometry and are not migrated. Terrain,
 standalone effects, sky, HUD, and menus also retain their fixed-function paths.
 Those boundaries intentionally remain visible for later renderer milestones.
