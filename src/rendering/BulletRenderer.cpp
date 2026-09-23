@@ -11,6 +11,7 @@
 #include "RenderData.h"
 #include "../App.h"
 #include "../Logger.h"
+#include "RenderContext.h"
 
 BulletRenderer::BulletRenderer() : 
     BaseRenderer(),
@@ -90,6 +91,26 @@ void BulletRenderer::RenderStandardBullet(const BulletRenderData& bullet) {
 }
 
 void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float yOffset, float zOffset, float rotationX, float scaleZ) {
+#ifdef __EMSCRIPTEN__
+    Matrix4 model = Matrix4::Translation(bullet.position.x, bullet.position.y + yOffset,
+                                          bullet.position.z) *
+        Matrix4::Rotation(bullet.rotation.x, 1, 0, 0) *
+        Matrix4::Rotation(-bullet.rotation.y, 0, 1, 0) *
+        Matrix4::Rotation(bullet.rotation.z, 0, 0, 1) *
+        Matrix4::Translation(0, 0, zOffset) *
+        Matrix4::Rotation(rotationX, 1, 0, 0) *
+        Matrix4::Scale(1, 1, scaleZ);
+    if (App::GetSingleton().graphicsTask) {
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist2, model,
+            bullet.primaryColor.r, bullet.primaryColor.g, bullet.primaryColor.b);
+    }
+    float alpha = 0.1f + bullet.power /
+        (bullet.type1 == TankType::TYPE_BLUE ? 500.0f : 1000.0f);
+    if (App::GetSingleton().graphicsTask) {
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
+            bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha);
+    }
+#else
     glPushMatrix();
     
     // Position the bullet
@@ -140,6 +161,7 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
     RestoreBlendMode();
     
     glPopMatrix();
+#endif
 }
 
 void BulletRenderer::SetupBulletRendering() {

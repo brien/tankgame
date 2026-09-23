@@ -2,7 +2,31 @@
 #include "../Tank.h"
 #include "../App.h"
 #include "../GlobalTimer.h"
+#include "RenderContext.h"
 
+namespace
+{
+Matrix4 PlayerBodyModel(const TankRenderData& tank)
+{
+    return Matrix4::Translation(tank.position.x,
+                                tank.position.y + PlayerTankRenderer::TANK_HEIGHT_OFFSET,
+                                tank.position.z) *
+        Matrix4::Rotation(tank.bodyRotation.x, 1, 0, 0) *
+        Matrix4::Rotation(-tank.bodyRotation.y - 90, 0, 1, 0) *
+        Matrix4::Rotation(tank.bodyRotation.z, 0, 0, 1);
+}
+
+Matrix4 PlayerTurretModel(const TankRenderData& tank)
+{
+    return PlayerBodyModel(tank) *
+        Matrix4::Translation(0, PlayerTankRenderer::TURRET_HEIGHT_OFFSET, 0) *
+        Matrix4::Rotation(tank.turretRotation.x, 1, 0, 0) *
+        Matrix4::Rotation(-tank.turretRotation.y + 180, 0, 1, 0) *
+        Matrix4::Rotation(tank.turretRotation.z, 0, 0, 1);
+}
+}
+
+#ifndef __EMSCRIPTEN__
 void PlayerTankRenderer::DrawPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
                                         const std::array<float, TankHandler::MAX_PLAYERS>& special,
                                         int numPlayers,
@@ -215,17 +239,54 @@ void PlayerTankRenderer::RenderReadyIndicator(const Tank& player, float drift)
     App::GetSingleton().graphicsTask->squarelist.Call(0);
     glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
 }
+#endif
+
+#ifdef __EMSCRIPTEN__
+void PlayerTankRenderer::SetupPlayerTankRenderState()
+{
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
+}
+
+void PlayerTankRenderer::SetupPlayerEffectsRenderState()
+{
+    glEnable(GL_DEPTH_TEST);
+    glDepthMask(GL_FALSE);
+    glDepthFunc(GL_LEQUAL);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+}
+
+void PlayerTankRenderer::SetupTargetingUIRenderState()
+{
+    glEnable(GL_BLEND);
+    glEnable(GL_DEPTH_TEST);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    glDepthMask(GL_FALSE);
+}
+
+void PlayerTankRenderer::RestoreRenderState()
+{
+    glDisable(GL_BLEND);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_CULL_FACE);
+}
+#endif
 
 // ===== TankRenderData Interface Implementations =====
 
 void PlayerTankRenderer::RenderPlayerTank(const TankRenderData& tank, float drift)
 {
     SetupPlayerTankRenderState();
-    
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
+#endif
     RenderTankBody(tank);
     RenderTankTurret(tank);
+#ifndef __EMSCRIPTEN__
     glPopMatrix();
+#endif
     
     RestoreRenderState();
 }
@@ -233,7 +294,10 @@ void PlayerTankRenderer::RenderPlayerTank(const TankRenderData& tank, float drif
 void PlayerTankRenderer::RenderPlayerEffects(const TankRenderData& tank, float drift)
 {
     SetupPlayerEffectsRenderState();
-    
+#ifdef __EMSCRIPTEN__
+    RenderEffectBody(tank);
+    RenderEffectTurret(tank);
+#else
     // Awesome effects are performed using the texture matrix stack
     glMatrixMode(GL_TEXTURE);
     glPushMatrix();
@@ -254,6 +318,7 @@ void PlayerTankRenderer::RenderPlayerEffects(const TankRenderData& tank, float d
 
     glDepthMask(GL_TRUE);
     glPopMatrix();
+#endif
 }
 
 void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float drift, bool hasEnemyTargets)
@@ -262,6 +327,11 @@ void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float dri
     
     SetupTargetingUIRenderState();
     
+#ifdef __EMSCRIPTEN__
+    RenderTargetingIndicator(tank);
+    if (tank.charge >= tank.fireCost)
+        RenderReadyIndicator(tank, drift);
+#else
     glPushMatrix();
     glTranslatef(tank.position.x, tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z);
     glRotatef(-tank.targetRotation, 0, 1, 0);
@@ -277,12 +347,18 @@ void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float dri
     glRotatef(tank.targetRotation, 0, 1, 0);
     glTranslatef(-tank.position.x, -tank.position.y + TARGETING_HEIGHT_OFFSET, -tank.position.z);
     glPopMatrix();
+#endif
 }
 
 // TankRenderData helper methods
 
 void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
 {
+#ifdef __EMSCRIPTEN__
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
+        PlayerBodyModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
+        tank.secondaryColor.b);
+#else
     glPushMatrix();
     glTranslatef(tank.position.x, tank.position.y + TANK_HEIGHT_OFFSET, tank.position.z);
     glRotatef(tank.bodyRotation.x, 1, 0, 0);
@@ -292,10 +368,16 @@ void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
     glFrontFace(GL_CCW);
     glColor3f(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b);
     App::GetSingleton().graphicsTask->bodylist.Call(0);
+#endif
 }
 
 void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
 {
+#ifdef __EMSCRIPTEN__
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
+        PlayerTurretModel(tank), tank.primaryColor.r, tank.primaryColor.g,
+        tank.primaryColor.b);
+#else
     // Draw turret (continuing from body transformation)
     glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
     glRotatef(tank.turretRotation.x, 1, 0, 0);
@@ -307,10 +389,15 @@ void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
 
     glFrontFace(GL_CW);
     glPopMatrix();
+#endif
 }
 
 void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
 {
+#ifdef __EMSCRIPTEN__
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
+        PlayerBodyModel(tank), tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b);
+#else
     glDisable(GL_LIGHTING);
     glTranslatef(tank.position.x, tank.position.y + TANK_HEIGHT_OFFSET, tank.position.z);
     glRotatef(tank.bodyRotation.x, 1, 0, 0);
@@ -319,10 +406,17 @@ void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
 
     glFrontFace(GL_CCW);
     App::GetSingleton().graphicsTask->bodylist.Call(0);
+#endif
 }
 
 void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 {
+#ifdef __EMSCRIPTEN__
+    if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
+            PlayerTurretModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
+            tank.secondaryColor.b);
+#else
     // Draw effect turret
     glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
     glRotatef(tank.turretRotation.x, 1, 0, 0);
@@ -337,17 +431,36 @@ void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
     }
 
     glFrontFace(GL_CW);
+#endif
 }
 
 void PlayerTankRenderer::RenderTargetingIndicator(const TankRenderData& tank)
 {
+#ifdef __EMSCRIPTEN__
+    const Matrix4 model = Matrix4::Translation(tank.position.x,
+        tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z) *
+        Matrix4::Rotation(-tank.targetRotation, 0, 1, 0);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
+                                  1.0f, tank.health / 50.0f, 0.1f, 1.0f);
+#else
     glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
     glColor4f(1.0f, tank.health / 50.0f, 0.1f, 1.0); // Use health as distance approximation
     App::GetSingleton().graphicsTask->squarelist.Call(0);
+#endif
 }
 
 void PlayerTankRenderer::RenderReadyIndicator(const TankRenderData& tank, float drift)
 {
+#ifdef __EMSCRIPTEN__
+    const Matrix4 model = Matrix4::Translation(tank.position.x,
+        tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z) *
+        Matrix4::Rotation(-tank.targetRotation, 0, 1, 0) *
+        Matrix4::Translation(0, TARGETING_EFFECT_OFFSET, 0) *
+        Matrix4::Rotation(ROTATION_EFFECT_SPEED * drift, 0, 1, 0) *
+        Matrix4::Scale(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
+                                  1.0f, 1.0f, 1.0f, 1.0f);
+#else
     glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
     glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
 
@@ -357,4 +470,5 @@ void PlayerTankRenderer::RenderReadyIndicator(const TankRenderData& tank, float 
     glScalef(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
     App::GetSingleton().graphicsTask->squarelist.Call(0);
     glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
+#endif
 }
