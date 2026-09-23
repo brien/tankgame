@@ -9,6 +9,7 @@
 
 #include "ItemRenderer.h"
 #include "../App.h"
+#include "RenderContext.h"
 
 ItemRenderer::ItemRenderer() {
     // Constructor - base class handles initialization
@@ -49,6 +50,13 @@ void ItemRenderer::RenderItem(const ItemRenderData& item) {
         return;
     }
     
+#ifdef __EMSCRIPTEN__
+    const Matrix4 model = Matrix4::Translation(item.position.x, item.position.y, item.position.z) *
+        Matrix4::Rotation(-item.rotationY, 0, 1, 0) * Matrix4::Rotation(90, 0, 0, 1);
+    const Color color = GetItemColor(item.itemType);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->itemlist, model,
+                                  color.r, color.g, color.b);
+#else
     glPushMatrix();
     
     // Apply transformations
@@ -64,6 +72,17 @@ void ItemRenderer::RenderItem(const ItemRenderData& item) {
     App::GetSingleton().graphicsTask->itemlist.Call(0);
     
     glPopMatrix();
+#endif
+}
+
+Color ItemRenderer::GetItemColor(TankType itemType) {
+    switch (itemType) {
+        case TankType::TYPE_RED: return Color(1.0f, 0.0f, 0.0f);
+        case TankType::TYPE_BLUE: return Color(0.0f, 0.0f, 1.0f);
+        case TankType::TYPE_YELLOW: return Color(1.0f, 1.0f, 0.0f);
+        case TankType::TYPE_PURPLE: return Color(1.0f, 0.0f, 1.0f);
+        default: return Color(0.5f, 0.5f, 0.5f);
+    }
 }
 
 void ItemRenderer::SetItemColor(TankType itemType) {

@@ -35,4 +35,5 @@ private:
      * @param itemType The type of item/power-up
      */
     void SetItemColor(TankType itemType);
+    static Color GetItemColor(TankType itemType);
 };

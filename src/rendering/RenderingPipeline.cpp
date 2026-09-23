@@ -1,5 +1,6 @@
 #include "RenderingPipeline.h"
 #include "../App.h"
+#include "RenderContext.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -153,6 +154,14 @@ void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIn
         const CameraData &camData = scene.cameras[playerIndex];
 
         // Set up camera matrices
+#ifdef __EMSCRIPTEN__
+        const Viewport &viewport = viewportManager.GetViewport(playerIndex);
+        RenderContext::Current().SetProjection(
+            Matrix4::Perspective(45.0f, viewport.GetAspectRatio(), 0.1f, 1000.0f));
+        RenderContext::Current().SetView(Matrix4::LookAt(
+            camData.position.x, camData.position.y, camData.position.z,
+            camData.focus.x, camData.focus.y, camData.focus.z, 0.0f, 1.0f, 0.0f));
+#else
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
 
@@ -169,6 +178,7 @@ void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIn
             camData.focus.x, camData.focus.y, camData.focus.z,
             0.0f, 1.0f, 0.0f // Standard up vector
         );
+#endif
     }
 
     // Setup lighting for the scene
