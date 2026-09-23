@@ -38,8 +38,15 @@ bool RenderingPipeline::Initialize()
     success &= hudRenderer.Initialize();
     success &= menuRenderer.Initialize();
 
-    // Create tank renderer using factory
+    // The desktop unified renderer also owns the legacy enemy path.  The
+    // browser selects the already-migrated player-only renderer instead so
+    // TankRenderer.cpp (and its immediate-mode geometry) stays out of WebGL.
+#ifdef __EMSCRIPTEN__
+    tankRenderer = TankRendererFactory::CreateRenderer(
+        TankRendererFactory::RendererType::PLAYER_TANK);
+#else
     tankRenderer = TankRendererFactory::CreateUnifiedRenderer();
+#endif
     if (tankRenderer)
     {
         success &= tankRenderer->Initialize();
@@ -301,8 +308,25 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
 void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
 {
 #ifdef __EMSCRIPTEN__
-    (void)tanks;
-    return;
+    if (tanks.empty() || !tankRenderer)
+    {
+        return;
+    }
+
+    // Enemy render data remains in the scene for simulation and later
+    // milestones, but must never reach the player-only WebGL renderer.
+    int playersRendered = 0;
+    tankRenderer->SetupRenderState();
+    for (const TankRenderData& tank : tanks)
+    {
+        if (tank.alive && tank.isPlayer)
+        {
+            tankRenderer->Render(tank);
+            ++playersRendered;
+        }
+    }
+    tankRenderer->CleanupRenderState();
+    renderStats.tanksRendered = playersRendered;
 #else
     if (tanks.empty() || !tankRenderer)
     {
@@ -363,7 +387,6 @@ void RenderingPipeline::RenderItems(const std::vector<ItemRenderData> &items)
 void RenderingPipeline::UpdateRenderStats(const SceneData &scene)
 {
 #ifdef __EMSCRIPTEN__
-    renderStats.tanksRendered = 0;
     renderStats.effectsRendered = 0;
 #else
     renderStats.tanksRendered = static_cast<int>(scene.tanks.size());

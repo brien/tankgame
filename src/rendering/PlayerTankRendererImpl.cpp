@@ -37,10 +37,12 @@ void PlayerTankRendererImpl::Render(const TankRenderData& data) {
     // Delegate to existing PlayerTankRenderer static methods for now
     // TODO: Implement native rendering when PlayerTankRenderer is fully refactored
     PlayerTankRenderer::RenderPlayerTank(data, animationDrift);
-    
+
+#ifndef __EMSCRIPTEN__
     // Render additional player-specific elements
     RenderPlayerEffects(data);
     RenderTargetingUI(data, true); // TODO: Get actual enemy presence from game state
+#endif
 }
 
 void PlayerTankRendererImpl::SetupRenderState() {
@@ -64,12 +66,16 @@ void PlayerTankRendererImpl::RenderTargetingUI(const TankRenderData& tank, bool 
 
 void PlayerTankRendererImpl::SetupPlayerTankRenderState() {
     // Standard player tank rendering state
+#ifndef __EMSCRIPTEN__
     glEnable(GL_LIGHTING);
+#endif
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
     glDisable(GL_BLEND);
+#ifndef __EMSCRIPTEN__
     glDisable(GL_TEXTURE_2D);
+#endif
     glFrontFace(GL_CW);
 }
 
