@@ -1,0 +1,1353 @@
+{
+  "baseline-repeat": {
+    "browser": "153.0.8010.12",
+    "gpu": {
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "width": 1280,
+      "height": 720,
+      "visibility": "visible"
+    },
+    "samples": [
+      {
+        "state": "idle",
+        "seconds": 20.000473994,
+        "lines": 1294,
+        "linesPerSecond": 64.69846666574956,
+        "frames": 150,
+        "measuredMs": 18411.4,
+        "fps": 8.147126237005333,
+        "avgMs": 122.74266666666668,
+        "tickMs": 116.41185333333334,
+        "reports": [
+          {
+            "fps": 17.21,
+            "avg_ms": 58.094,
+            "recent_ms": 56.1,
+            "max_ms": 77.2,
+            "tick_ms": 54.933,
+            "frames": 18,
+            "interval_ms": 1045.7
+          },
+          {
+            "fps": 15.5,
+            "avg_ms": 64.531,
+            "recent_ms": 61,
+            "max_ms": 70.9,
+            "tick_ms": 60.781,
+            "frames": 16,
+            "interval_ms": 1032.5
+          },
+          {
+            "fps": 14.22,
+            "avg_ms": 70.333,
+            "recent_ms": 67.8,
+            "max_ms": 78.8,
+            "tick_ms": 66.213,
+            "frames": 15,
+            "interval_ms": 1055
+          },
+          {
+            "fps": 6.37,
+            "avg_ms": 156.871,
+            "recent_ms": 314.6,
+            "max_ms": 314.6,
+            "tick_ms": 174.514,
+            "frames": 7,
+            "interval_ms": 1098.1
+          },
+          {
+            "fps": 4.32,
+            "avg_ms": 231.58,
+            "recent_ms": 189.3,
+            "max_ms": 264.6,
+            "tick_ms": 243.34,
+            "frames": 5,
+            "interval_ms": 1157.9
+          },
+          {
+            "fps": 3.64,
+            "avg_ms": 274.7,
+            "recent_ms": 203.2,
+            "max_ms": 342.4,
+            "tick_ms": 257.725,
+            "frames": 4,
+            "interval_ms": 1098.8
+          },
+          {
+            "fps": 4.33,
+            "avg_ms": 230.88,
+            "recent_ms": 250.8,
+            "max_ms": 314.8,
+            "tick_ms": 201.14,
+            "frames": 5,
+            "interval_ms": 1154.4
+          },
+          {
+            "fps": 6.49,
+            "avg_ms": 154.029,
+            "recent_ms": 100.6,
+            "max_ms": 258,
+            "tick_ms": 176.343,
+            "frames": 7,
+            "interval_ms": 1078.2
+          },
+          {
+            "fps": 6.45,
+            "avg_ms": 155.086,
+            "recent_ms": 109.7,
+            "max_ms": 415,
+            "tick_ms": 107.729,
+            "frames": 7,
+            "interval_ms": 1085.6
+          },
+          {
+            "fps": 8.11,
+            "avg_ms": 123.311,
+            "recent_ms": 142.4,
+            "max_ms": 142.4,
+            "tick_ms": 115.422,
+            "frames": 9,
+            "interval_ms": 1109.8
+          },
+          {
+            "fps": 8.39,
+            "avg_ms": 119.233,
+            "recent_ms": 115.8,
+            "max_ms": 144.2,
+            "tick_ms": 110.422,
+            "frames": 9,
+            "interval_ms": 1073.1
+          },
+          {
+            "fps": 8.43,
+            "avg_ms": 118.6,
+            "recent_ms": 115.2,
+            "max_ms": 139.2,
+            "tick_ms": 109.622,
+            "frames": 9,
+            "interval_ms": 1067.4
+          },
+          {
+            "fps": 7.93,
+            "avg_ms": 126.137,
+            "recent_ms": 163.3,
+            "max_ms": 163.3,
+            "tick_ms": 117.063,
+            "frames": 8,
+            "interval_ms": 1009.1
+          },
+          {
+            "fps": 7.55,
+            "avg_ms": 132.375,
+            "recent_ms": 167.2,
+            "max_ms": 167.2,
+            "tick_ms": 124.962,
+            "frames": 8,
+            "interval_ms": 1059
+          },
+          {
+            "fps": 7.15,
+            "avg_ms": 139.85,
+            "recent_ms": 139,
+            "max_ms": 173.1,
+            "tick_ms": 133.337,
+            "frames": 8,
+            "interval_ms": 1118.8
+          },
+          {
+            "fps": 6.4,
+            "avg_ms": 156.229,
+            "recent_ms": 141.2,
+            "max_ms": 205.4,
+            "tick_ms": 143.471,
+            "frames": 7,
+            "interval_ms": 1093.6
+          },
+          {
+            "fps": 7.45,
+            "avg_ms": 134.3,
+            "recent_ms": 131.5,
+            "max_ms": 149.4,
+            "tick_ms": 127.188,
+            "frames": 8,
+            "interval_ms": 1074.4
+          }
+        ]
+      },
+      {
+        "state": "firing",
+        "seconds": 20.001072972000003,
+        "lines": 716,
+        "linesPerSecond": 35.79807948315304,
+        "frames": 12,
+        "measuredMs": 18205.9,
+        "fps": 0.6591269863066368,
+        "avgMs": 1517.1583333333335,
+        "tickMs": 1543.8833333333332,
+        "reports": [
+          {
+            "fps": 0.95,
+            "avg_ms": 1051.4,
+            "recent_ms": 1140.9,
+            "max_ms": 1140.9,
+            "tick_ms": 1056.95,
+            "frames": 2,
+            "interval_ms": 2102.8
+          },
+          {
+            "fps": 0.98,
+            "avg_ms": 1020.7,
+            "recent_ms": 1020.7,
+            "max_ms": 1020.7,
+            "tick_ms": 1529.1,
+            "frames": 1,
+            "interval_ms": 1020.7
+          },
+          {
+            "fps": 0.64,
+            "avg_ms": 1560.8,
+            "recent_ms": 1560.8,
+            "max_ms": 1560.8,
+            "tick_ms": 1680.8,
+            "frames": 1,
+            "interval_ms": 1560.8
+          },
+          {
+            "fps": 0.58,
+            "avg_ms": 1715,
+            "recent_ms": 1715,
+            "max_ms": 1715,
+            "tick_ms": 1494.6,
+            "frames": 1,
+            "interval_ms": 1715
+          },
+          {
+            "fps": 0.65,
+            "avg_ms": 1527.1,
+            "recent_ms": 1527.1,
+            "max_ms": 1527.1,
+            "tick_ms": 2291.7,
+            "frames": 1,
+            "interval_ms": 1527.1
+          },
+          {
+            "fps": 0.43,
+            "avg_ms": 2327.7,
+            "recent_ms": 2327.7,
+            "max_ms": 2327.7,
+            "tick_ms": 1728.7,
+            "frames": 1,
+            "interval_ms": 2327.7
+          },
+          {
+            "fps": 0.56,
+            "avg_ms": 1774,
+            "recent_ms": 1774,
+            "max_ms": 1774,
+            "tick_ms": 1546.4,
+            "frames": 1,
+            "interval_ms": 1774
+          },
+          {
+            "fps": 0.63,
+            "avg_ms": 1582.7,
+            "recent_ms": 1582.7,
+            "max_ms": 1582.7,
+            "tick_ms": 1634,
+            "frames": 1,
+            "interval_ms": 1582.7
+          },
+          {
+            "fps": 0.6,
+            "avg_ms": 1670.6,
+            "recent_ms": 1670.6,
+            "max_ms": 1670.6,
+            "tick_ms": 1223.5,
+            "frames": 1,
+            "interval_ms": 1670.6
+          },
+          {
+            "fps": 0.79,
+            "avg_ms": 1260.8,
+            "recent_ms": 1260.8,
+            "max_ms": 1260.8,
+            "tick_ms": 1615,
+            "frames": 1,
+            "interval_ms": 1260.8
+          },
+          {
+            "fps": 0.6,
+            "avg_ms": 1663.7,
+            "recent_ms": 1663.7,
+            "max_ms": 1663.7,
+            "tick_ms": 1668.9,
+            "frames": 1,
+            "interval_ms": 1663.7
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "validationNote": "Numerical samples completed; original harness expected one Escape to exit and timed out afterward."
+  },
+  "after": {
+    "browser": "153.0.8010.12",
+    "gpu": {
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "width": 1280,
+      "height": 720,
+      "visibility": "visible"
+    },
+    "samples": [
+      {
+        "state": "idle",
+        "seconds": 20.000901636,
+        "lines": 286,
+        "linesPerSecond": 14.299355359321563,
+        "frames": 1137,
+        "measuredMs": 19017.100000000002,
+        "fps": 59.788295796940645,
+        "avgMs": 16.72568161829376,
+        "tickMs": 0.49039313984168875,
+        "reports": [
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.36,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.338,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.293,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.8,
+            "tick_ms": 0.51,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.613,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 58.94,
+            "avg_ms": 16.966,
+            "recent_ms": 16.7,
+            "max_ms": 49.1,
+            "tick_ms": 1.181,
+            "frames": 59,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.8,
+            "tick_ms": 0.33,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.332,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.382,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.91,
+            "avg_ms": 16.692,
+            "recent_ms": 17.3,
+            "max_ms": 17.3,
+            "tick_ms": 0.367,
+            "frames": 60,
+            "interval_ms": 1001.5
+          },
+          {
+            "fps": 59.99,
+            "avg_ms": 16.67,
+            "recent_ms": 16.6,
+            "max_ms": 17.1,
+            "tick_ms": 0.338,
+            "frames": 60,
+            "interval_ms": 1000.2
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.36,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 17.1,
+            "tick_ms": 0.375,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.478,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.5,
+            "max_ms": 16.8,
+            "tick_ms": 0.642,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 57.94,
+            "avg_ms": 17.259,
+            "recent_ms": 16.7,
+            "max_ms": 61.2,
+            "tick_ms": 1.391,
+            "frames": 58,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 18.3,
+            "tick_ms": 0.338,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.343,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.388,
+            "frames": 60,
+            "interval_ms": 1000.9
+          }
+        ]
+      },
+      {
+        "state": "firing",
+        "seconds": 20.000949546000005,
+        "lines": 58,
+        "linesPerSecond": 2.8998623223665616,
+        "frames": 1137,
+        "measuredMs": 19016.999999999996,
+        "fps": 59.788610190881855,
+        "avgMs": 16.72559366754617,
+        "tickMs": 0.5555408970976252,
+        "reports": [
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.493,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.8,
+            "tick_ms": 0.505,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 56.95,
+            "avg_ms": 17.56,
+            "recent_ms": 16.6,
+            "max_ms": 74.8,
+            "tick_ms": 1.67,
+            "frames": 57,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.372,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.432,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.8,
+            "max_ms": 16.8,
+            "tick_ms": 0.48,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.46,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.437,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.492,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.532,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.545,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.592,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.583,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.8,
+            "tick_ms": 0.547,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.49,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.503,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.508,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.48,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.5,
+            "max_ms": 16.9,
+            "tick_ms": 0.49,
+            "frames": 60,
+            "interval_ms": 1000.8
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "validationNote": "Numerical samples completed; original harness expected one Escape to exit and timed out afterward."
+  },
+  "after-verified": {
+    "browser": "153.0.8010.12",
+    "gpu": {
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "width": 1280,
+      "height": 720,
+      "visibility": "visible"
+    },
+    "samples": [
+      {
+        "state": "idle",
+        "start": 6205.818281,
+        "end": 26207.067681,
+        "stdoutLines": 76,
+        "seconds": 20.0012494,
+        "lines": 285,
+        "linesPerSecond": 14.249109858107163,
+        "frames": 1137,
+        "measuredMs": 19016.7,
+        "fps": 59.78955339254445,
+        "avgMs": 16.725329815303432,
+        "tickMs": 0.4834986807387862,
+        "reports": [
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.36,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.8,
+            "max_ms": 16.8,
+            "tick_ms": 0.332,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.8,
+            "max_ms": 16.8,
+            "tick_ms": 0.322,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.8,
+            "max_ms": 17,
+            "tick_ms": 0.55,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.8,
+            "max_ms": 16.9,
+            "tick_ms": 0.608,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 58.94,
+            "avg_ms": 16.966,
+            "recent_ms": 16.8,
+            "max_ms": 49.2,
+            "tick_ms": 1.1,
+            "frames": 59,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.96,
+            "avg_ms": 16.678,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.317,
+            "frames": 60,
+            "interval_ms": 1000.7
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.355,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.378,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.338,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.348,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.353,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.363,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.492,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 17.2,
+            "tick_ms": 0.633,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 57.96,
+            "avg_ms": 17.253,
+            "recent_ms": 16.6,
+            "max_ms": 56.5,
+            "tick_ms": 1.331,
+            "frames": 58,
+            "interval_ms": 1000.7
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.327,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.353,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.365,
+            "frames": 60,
+            "interval_ms": 1000.8
+          }
+        ]
+      },
+      {
+        "state": "firing",
+        "start": 29318.977571,
+        "end": 49320.137305,
+        "stdoutLines": 58,
+        "seconds": 20.001159733999998,
+        "lines": 58,
+        "linesPerSecond": 2.8998318483205616,
+        "frames": 1138,
+        "measuredMs": 19032.1,
+        "fps": 59.79371693086943,
+        "avgMs": 16.724165202108964,
+        "tickMs": 0.5577583479789104,
+        "reports": [
+          {
+            "fps": 60.02,
+            "avg_ms": 16.661,
+            "recent_ms": 16.8,
+            "max_ms": 17.5,
+            "tick_ms": 0.562,
+            "frames": 61,
+            "interval_ms": 1016.3
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.8,
+            "tick_ms": 0.51,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 56.95,
+            "avg_ms": 17.558,
+            "recent_ms": 16.7,
+            "max_ms": 73.4,
+            "tick_ms": 1.651,
+            "frames": 57,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.377,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.438,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.465,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.462,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.467,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.482,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.8,
+            "max_ms": 16.8,
+            "tick_ms": 0.523,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.7,
+            "max_ms": 17.6,
+            "tick_ms": 0.553,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.6,
+            "max_ms": 16.9,
+            "tick_ms": 0.562,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.572,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.93,
+            "avg_ms": 16.685,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.563,
+            "frames": 60,
+            "interval_ms": 1001.1
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.8,
+            "max_ms": 16.8,
+            "tick_ms": 0.495,
+            "frames": 60,
+            "interval_ms": 1000.8
+          },
+          {
+            "fps": 59.96,
+            "avg_ms": 16.678,
+            "recent_ms": 16.5,
+            "max_ms": 16.8,
+            "tick_ms": 0.487,
+            "frames": 60,
+            "interval_ms": 1000.7
+          },
+          {
+            "fps": 59.94,
+            "avg_ms": 16.683,
+            "recent_ms": 16.8,
+            "max_ms": 16.9,
+            "tick_ms": 0.498,
+            "frames": 60,
+            "interval_ms": 1001
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.682,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.502,
+            "frames": 60,
+            "interval_ms": 1000.9
+          },
+          {
+            "fps": 59.95,
+            "avg_ms": 16.68,
+            "recent_ms": 16.7,
+            "max_ms": 16.9,
+            "tick_ms": 0.483,
+            "frames": 60,
+            "interval_ms": 1000.8
+          }
+        ]
+      }
+    ],
+    "errors": [],
+    "stopped": true
+  },
+  "initial-baseline": {
+    "samples": [
+      {
+        "state": "idle",
+        "seconds": 20.001497844,
+        "lines": 1322,
+        "linesPerSecond": 66.09504999629668,
+        "frames": 87,
+        "measuredMs": 19053.9,
+        "fps": 4.565994363358682,
+        "avgMs": 219.01034482758624,
+        "tickMs": 210.2850804597701,
+        "reports": [
+          {
+            "fps": 7.39,
+            "avg_ms": 135.25,
+            "recent_ms": 161,
+            "max_ms": 161,
+            "tick_ms": 131.962,
+            "frames": 8,
+            "interval_ms": 1082
+          },
+          {
+            "fps": 6.54,
+            "avg_ms": 152.929,
+            "recent_ms": 156.6,
+            "max_ms": 159.5,
+            "tick_ms": 148.286,
+            "frames": 7,
+            "interval_ms": 1070.5
+          },
+          {
+            "fps": 5.9,
+            "avg_ms": 169.567,
+            "recent_ms": 172.6,
+            "max_ms": 174.3,
+            "tick_ms": 167.85,
+            "frames": 6,
+            "interval_ms": 1017.4
+          },
+          {
+            "fps": 3.43,
+            "avg_ms": 291.8,
+            "recent_ms": 369.8,
+            "max_ms": 369.8,
+            "tick_ms": 284.325,
+            "frames": 4,
+            "interval_ms": 1167.2
+          },
+          {
+            "fps": 3.34,
+            "avg_ms": 299.075,
+            "recent_ms": 395.5,
+            "max_ms": 395.5,
+            "tick_ms": 319.75,
+            "frames": 4,
+            "interval_ms": 1196.3
+          },
+          {
+            "fps": 3.09,
+            "avg_ms": 323.65,
+            "recent_ms": 333.1,
+            "max_ms": 366.6,
+            "tick_ms": 280.4,
+            "frames": 4,
+            "interval_ms": 1294.6
+          },
+          {
+            "fps": 3.99,
+            "avg_ms": 250.425,
+            "recent_ms": 326.9,
+            "max_ms": 326.9,
+            "tick_ms": 265.05,
+            "frames": 4,
+            "interval_ms": 1001.7
+          },
+          {
+            "fps": 3.73,
+            "avg_ms": 268.375,
+            "recent_ms": 273.9,
+            "max_ms": 342.9,
+            "tick_ms": 252.875,
+            "frames": 4,
+            "interval_ms": 1073.5
+          },
+          {
+            "fps": 3.74,
+            "avg_ms": 267.3,
+            "recent_ms": 284.5,
+            "max_ms": 356,
+            "tick_ms": 259.925,
+            "frames": 4,
+            "interval_ms": 1069.2
+          },
+          {
+            "fps": 3.57,
+            "avg_ms": 280.3,
+            "recent_ms": 312,
+            "max_ms": 365.2,
+            "tick_ms": 274.975,
+            "frames": 4,
+            "interval_ms": 1121.2
+          },
+          {
+            "fps": 3.39,
+            "avg_ms": 294.75,
+            "recent_ms": 310,
+            "max_ms": 380.5,
+            "tick_ms": 282.575,
+            "frames": 4,
+            "interval_ms": 1179
+          },
+          {
+            "fps": 3.37,
+            "avg_ms": 296.6,
+            "recent_ms": 318.4,
+            "max_ms": 381.7,
+            "tick_ms": 290.2,
+            "frames": 4,
+            "interval_ms": 1186.4
+          },
+          {
+            "fps": 3.39,
+            "avg_ms": 295.075,
+            "recent_ms": 327.9,
+            "max_ms": 403.5,
+            "tick_ms": 281.75,
+            "frames": 4,
+            "interval_ms": 1180.3
+          },
+          {
+            "fps": 3.61,
+            "avg_ms": 276.78,
+            "recent_ms": 501.5,
+            "max_ms": 501.5,
+            "tick_ms": 235.86,
+            "frames": 5,
+            "interval_ms": 1383.9
+          },
+          {
+            "fps": 6.92,
+            "avg_ms": 144.529,
+            "recent_ms": 133.5,
+            "max_ms": 180,
+            "tick_ms": 136.4,
+            "frames": 7,
+            "interval_ms": 1011.7
+          },
+          {
+            "fps": 7,
+            "avg_ms": 142.914,
+            "recent_ms": 142.6,
+            "max_ms": 160.7,
+            "tick_ms": 133.643,
+            "frames": 7,
+            "interval_ms": 1000.4
+          },
+          {
+            "fps": 6.87,
+            "avg_ms": 145.514,
+            "recent_ms": 139.5,
+            "max_ms": 162.3,
+            "tick_ms": 136.729,
+            "frames": 7,
+            "interval_ms": 1018.6
+          }
+        ]
+      },
+      {
+        "state": "firing",
+        "seconds": 20.001177336999994,
+        "lines": 674,
+        "linesPerSecond": 33.69801630392895,
+        "frames": 12,
+        "measuredMs": 16694.7,
+        "fps": 0.7187909935488508,
+        "avgMs": 1391.2250000000001,
+        "tickMs": 1384.875,
+        "reports": [
+          {
+            "fps": 0.92,
+            "avg_ms": 1088.7,
+            "recent_ms": 1088.7,
+            "max_ms": 1088.7,
+            "tick_ms": 1055.1,
+            "frames": 1,
+            "interval_ms": 1088.7
+          },
+          {
+            "fps": 0.92,
+            "avg_ms": 1087.3,
+            "recent_ms": 1087.3,
+            "max_ms": 1087.3,
+            "tick_ms": 1310.8,
+            "frames": 1,
+            "interval_ms": 1087.3
+          },
+          {
+            "fps": 0.74,
+            "avg_ms": 1352.7,
+            "recent_ms": 1352.7,
+            "max_ms": 1352.7,
+            "tick_ms": 1337.8,
+            "frames": 1,
+            "interval_ms": 1352.7
+          },
+          {
+            "fps": 0.72,
+            "avg_ms": 1381.8,
+            "recent_ms": 1381.8,
+            "max_ms": 1381.8,
+            "tick_ms": 1716.1,
+            "frames": 1,
+            "interval_ms": 1381.8
+          },
+          {
+            "fps": 0.57,
+            "avg_ms": 1752.8,
+            "recent_ms": 1752.8,
+            "max_ms": 1752.8,
+            "tick_ms": 1648.3,
+            "frames": 1,
+            "interval_ms": 1752.8
+          },
+          {
+            "fps": 0.59,
+            "avg_ms": 1684.6,
+            "recent_ms": 1684.6,
+            "max_ms": 1684.6,
+            "tick_ms": 1331.5,
+            "frames": 1,
+            "interval_ms": 1684.6
+          },
+          {
+            "fps": 0.73,
+            "avg_ms": 1369.2,
+            "recent_ms": 1369.2,
+            "max_ms": 1369.2,
+            "tick_ms": 1348.9,
+            "frames": 1,
+            "interval_ms": 1369.2
+          },
+          {
+            "fps": 0.72,
+            "avg_ms": 1385.6,
+            "recent_ms": 1385.6,
+            "max_ms": 1385.6,
+            "tick_ms": 1160.7,
+            "frames": 1,
+            "interval_ms": 1385.6
+          },
+          {
+            "fps": 0.83,
+            "avg_ms": 1208.2,
+            "recent_ms": 1208.2,
+            "max_ms": 1208.2,
+            "tick_ms": 1532.3,
+            "frames": 1,
+            "interval_ms": 1208.2
+          },
+          {
+            "fps": 0.63,
+            "avg_ms": 1581.6,
+            "recent_ms": 1581.6,
+            "max_ms": 1581.6,
+            "tick_ms": 1355.1,
+            "frames": 1,
+            "interval_ms": 1581.6
+          },
+          {
+            "fps": 0.71,
+            "avg_ms": 1400.5,
+            "recent_ms": 1400.5,
+            "max_ms": 1400.5,
+            "tick_ms": 1363.5,
+            "frames": 1,
+            "interval_ms": 1400.5
+          },
+          {
+            "fps": 0.71,
+            "avg_ms": 1401.7,
+            "recent_ms": 1401.7,
+            "max_ms": 1401.7,
+            "tick_ms": 1458.4,
+            "frames": 1,
+            "interval_ms": 1401.7
+          }
+        ]
+      }
+    ],
+    "validationNote": "Captured before logging changes; screenshot timed out after firing sample."
+  }
+}

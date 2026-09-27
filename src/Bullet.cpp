@@ -176,9 +176,9 @@ void Bullet::NextFrame()
     
     // Check level collision first
     PointCollisionQuery levelQuery(x, y, z, CollisionLayer::LEVEL, this);
-    Logger::Get().Write("Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (%.2f, %.2f, %.2f)\n", x, y, z);
+    TANKGAME_LOG_DEBUG("Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (%.2f, %.2f, %.2f)\n", x, y, z);
     Events::GetBus().Publish(levelQuery);
-    Logger::Get().Write("Bullet::CheckForCollisions - PointCollisionQuery result=%d\n", levelQuery.result);
+    TANKGAME_LOG_DEBUG("Bullet::CheckForCollisions - PointCollisionQuery result=%d\n", levelQuery.result);
     
     if (levelQuery.result) {
         // Post level collision event for CombatSystem to handle

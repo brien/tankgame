@@ -17,6 +17,7 @@
 #endif
 
 #include <iostream>
+#include <algorithm>
 #include <SDL2/SDL.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
@@ -146,6 +147,16 @@ namespace
 {
 void BrowserFrame(void *appPointer)
 {
+    // Callback spacing includes browser scheduling/presentation; Tick time is
+    // CPU submission time, not GPU execution time. Report only once a second.
+    static double previousStart = 0.0;
+    static double elapsed = 0.0;
+    static double tickTime = 0.0;
+    static double maxFrame = 0.0;
+    static unsigned frames = 0;
+    const double start = emscripten_get_now();
+    const double frameTime = previousStart > 0.0 ? start - previousStart : 0.0;
+    previousStart = start;
     App *app = static_cast<App *>(appPointer);
     static bool firstFrame = true;
     if (!app->Tick())
@@ -154,6 +165,22 @@ void BrowserFrame(void *appPointer)
         emscripten_cancel_main_loop();
         app->Shutdown();
         return;
+    }
+
+    if (frameTime > 0.0)
+    {
+        elapsed += frameTime;
+        tickTime += emscripten_get_now() - start;
+        maxFrame = std::max(maxFrame, frameTime);
+        ++frames;
+        if (elapsed >= 1000.0)
+        {
+            Logger::Get().Write("Browser perf: fps=%.2f avg_ms=%.3f recent_ms=%.3f max_ms=%.3f tick_ms=%.3f frames=%u interval_ms=%.3f\n",
+                frames * 1000.0 / elapsed, elapsed / frames, frameTime,
+                maxFrame, tickTime / frames, frames, elapsed);
+            elapsed = tickTime = maxFrame = 0.0;
+            frames = 0;
+        }
     }
 
     if (firstFrame)

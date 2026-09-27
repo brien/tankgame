@@ -129,7 +129,7 @@ void Player::HandleInput()
     {
         if (inputLogCounter % 180 == 0)
         {
-            Logger::Get().Write("Player::HandleInput() - Player %d SKIP: tank=%s alive=%d inputHandler=%s\n",
+            TANKGAME_LOG_DEBUG("Player::HandleInput() - Player %d SKIP: tank=%s alive=%d inputHandler=%s\n",
                                 playerIndex,
                                 (controlledTank ? "valid" : "null"),
                                 (controlledTank ? controlledTank->alive : false),
@@ -141,7 +141,7 @@ void Player::HandleInput()
 
     if (inputLogCounter % 180 == 0)
     { // Log every 3 seconds
-        Logger::Get().Write("Player::HandleInput() - Player %d processing input via NEW PlayerManager path (tank id=%d)\n",
+        TANKGAME_LOG_DEBUG("Player::HandleInput() - Player %d processing input via NEW PlayerManager path (tank id=%d)\n",
                             playerIndex, controlledTank->identity.GetLegacyId());
     }
 
@@ -215,7 +215,7 @@ void Player::Update()
     {
         if (logCounter % 120 == 0)
         { // Log every 2 seconds
-            Logger::Get().Write("Player %d processing NextFrame + input for tank\n", playerIndex);
+            TANKGAME_LOG_DEBUG("Player %d processing NextFrame + input for tank\n", playerIndex);
         }
 
         // Physics and game state update (was done by TankHandler::UpdatePlayerStates)
@@ -270,7 +270,7 @@ void Player::Update()
 
                 if (logCounter % 60 == 0)
                 { // Log every 1 second
-                    Logger::Get().Write("Player %d tank dead - deadtime: %.2f\n", playerIndex, controlledTank->deadtime);
+                    TANKGAME_LOG_DEBUG("Player %d tank dead - deadtime: %.2f\n", playerIndex, controlledTank->deadtime);
                 }
             }
         }
