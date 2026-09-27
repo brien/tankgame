@@ -156,17 +156,17 @@ void PlayerManager::NextFrame() {
     static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
     static constexpr float VERSUS_RESPAWN_DELAY = 1.5f;
     
-    Logger::Get().Write("PlayerManager::NextFrame() - Starting\n");
+    TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - Starting\n");
     
     // Update player-specific game logic
-    Logger::Get().Write("PlayerManager::NextFrame() - UpdatePlayerCombos\n");
+    TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - UpdatePlayerCombos\n");
     UpdatePlayerCombos();
-    Logger::Get().Write("PlayerManager::NextFrame() - UpdatePlayerTargeting\n");
+    TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - UpdatePlayerTargeting\n");
     UpdatePlayerTargeting();
-    Logger::Get().Write("PlayerManager::NextFrame() - UpdateVersusMode\n");
+    TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - UpdateVersusMode\n");
     UpdateVersusMode();
     
-    Logger::Get().Write("PlayerManager::NextFrame() - Updating %d players\n", numPlayers);
+    TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - Updating %d players\n", numPlayers);
     for (int i = 0; i < numPlayers; i++) {
         if (players[i]) {
             Tank* tank = players[i]->GetControlledTank();
@@ -174,14 +174,14 @@ void PlayerManager::NextFrame() {
                 // Check if tank is alive
                 if (tank->alive) {
                     if (frameCounter % 60 == 0) { // Log every 60 frames (~1 second)
-                        Logger::Get().Write("PlayerManager: Processing Player %d via NEW PlayerManager system\n", i);
+                        TANKGAME_LOG_DEBUG("PlayerManager: Processing Player %d via NEW PlayerManager system\n", i);
                     }
                     players[i]->Update();
                     tank->deadtime = 0.0f;
                 } else {
                     // Tank is dead - handle death and respawn
                     if (frameCounter % 60 == 0) {
-                        Logger::Get().Write("PlayerManager: Player %d tank is DEAD (deadtime=%.2f)\n", i, tank->deadtime);
+                        TANKGAME_LOG_DEBUG("PlayerManager: Player %d tank is DEAD (deadtime=%.2f)\n", i, tank->deadtime);
                     }
                     
                     // Increment deadtime FIRST, before checking respawn
@@ -222,7 +222,7 @@ void PlayerManager::NextFrame() {
         }
     }
     frameCounter++;
-    Logger::Get().Write("PlayerManager::NextFrame() - Complete\n");
+    TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - Complete\n");
 }
 
 void PlayerManager::SpawnPlayerTanks() {

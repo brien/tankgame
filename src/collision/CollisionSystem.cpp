@@ -138,11 +138,11 @@ std::vector<Entity*> CollisionSystem::CheckSphereCollision(float x, float y, flo
 }
 
 void CollisionSystem::OnPointCollisionQuery(const PointCollisionQuery& query) {
-    Logger::Get().Write("CollisionSystem::OnPointCollisionQuery - pos=(%.2f, %.2f, %.2f)\n", query.x, query.y, query.z);
+    TANKGAME_LOG_DEBUG("CollisionSystem::OnPointCollisionQuery - pos=(%.2f, %.2f, %.2f)\n", query.x, query.y, query.z);
     
     query.result = CheckPointCollision(query.x, query.y, query.z, query.layerMask, query.excludeEntity);
     
-    Logger::Get().Write("CollisionSystem::OnPointCollisionQuery - result=%d\n", query.result);
+    TANKGAME_LOG_DEBUG("CollisionSystem::OnPointCollisionQuery - result=%d\n", query.result);
     
     if (query.result) {
         // Find which entity was hit (for more detailed queries)
@@ -164,12 +164,12 @@ void CollisionSystem::OnPointCollisionQuery(const PointCollisionQuery& query) {
 }
 
 void CollisionSystem::OnSphereCollisionQuery(const SphereCollisionQuery& query) {
-    Logger::Get().Write("CollisionSystem::OnSphereCollisionQuery - pos=(%.2f, %.2f, %.2f) radius=%.2f\n", 
+    TANKGAME_LOG_DEBUG("CollisionSystem::OnSphereCollisionQuery - pos=(%.2f, %.2f, %.2f) radius=%.2f\n",
                        query.x, query.y, query.z, query.radius);
     
     query.results = CheckSphereCollision(query.x, query.y, query.z, query.radius, query.layerMask, query.excludeEntity);
     
-    Logger::Get().Write("CollisionSystem::OnSphereCollisionQuery - found %zu entities\n", query.results.size());
+    TANKGAME_LOG_DEBUG("CollisionSystem::OnSphereCollisionQuery - found %zu entities\n", query.results.size());
 }
 
 void CollisionSystem::OnGetLevelBoundsQuery(const GetLevelBoundsQuery& query) {

@@ -180,7 +180,7 @@ void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bul
         return;
     }
     
-    Logger::Get().Write("CombatSystem::UpdatePlayerCombos - playerIndex=%d, bulletId=%d, targetHealth=%.2f\n", 
+    TANKGAME_LOG_DEBUG("CombatSystem::UpdatePlayerCombos - playerIndex=%d, bulletId=%d, targetHealth=%.2f\n",
                        playerIndex, bullet->GetTankId(), target->health);
     
     // Get player from PlayerManager

@@ -154,7 +154,7 @@ void Tank::Fire(float dTpressed)
     
     if (energy >= fireCost && fireTimer > fireRate)
     {
-        Logger::Get().Write("Tank::Fire - id=%d, creating bullet at (%.2f, %.2f, %.2f)\n", identity.GetLegacyId(), x, y, z);
+        TANKGAME_LOG_DEBUG("Tank::Fire - id=%d, creating bullet at (%.2f, %.2f, %.2f)\n", identity.GetLegacyId(), x, y, z);
         
         // Get player tank from PlayerManager for audio positioning
         auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
@@ -434,7 +434,7 @@ void Tank::Fall()
     // Debug logging for player tanks (only log occasionally)
     static int fallLogCounter = 0;
     if (identity.IsPlayer() && fallLogCounter++ % 60 == 0 && !isGrounded) {
-        Logger::Get().Write("Tank %d FALL: y=%.3f vy=%.3f dy=%.3f isJumping=%d\n", 
+        TANKGAME_LOG_DEBUG("Tank %d FALL: y=%.3f vy=%.3f dy=%.3f isJumping=%d\n",
                           identity.GetLegacyId(), y, vy, dy, isJumping);
     }
 
@@ -850,7 +850,7 @@ void Tank::Jump()
             
             // Debug logging for player tanks
             if (identity.IsPlayer()) {
-                Logger::Get().Write("Tank %d JUMP START: vy=%.3f energy=%.1f y=%.3f\n", 
+                TANKGAME_LOG_DEBUG("Tank %d JUMP START: vy=%.3f energy=%.1f y=%.3f\n",
                                   identity.GetLegacyId(), vy, energy, y);
             }
         }
@@ -1251,7 +1251,7 @@ void Tank::HandleInput()
     if (inputHandler)
     {
         if (inputLogCounter % 180 == 0 && isPlayer) { // Log every 3 seconds for players only
-            Logger::Get().Write("Tank::HandleInput() - Player tank %d processing input via LEGACY TankHandler path\n", identity.GetLegacyId());
+            TANKGAME_LOG_DEBUG("Tank::HandleInput() - Player tank %d processing input via LEGACY TankHandler path\n", identity.GetLegacyId());
         }
         inputHandler->HandleInput(*this);
     }
