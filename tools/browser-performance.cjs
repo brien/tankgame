@@ -24,6 +24,7 @@ const { performance } = require('node:perf_hooks');
             return { renderer: ext && gl.getParameter(ext.UNMASKED_RENDERER_WEBGL), width: canvas.width, height: canvas.height, visibility: document.visibilityState };
         });
         const samples = [];
+        const glErrors = [];
         for (const state of ['idle', 'firing']) {
             if (state === 'firing') {
                 await page.mouse.move(650, 400);
@@ -48,6 +49,12 @@ const { performance } = require('node:perf_hooks');
             fs.writeFileSync(`/tmp/tankgame-${label}.json`, JSON.stringify({ browser: browser.version(), gpu, samples, errors }, null, 2));
             fs.writeFileSync(`/tmp/tankgame-${label}-console.json`, JSON.stringify(logs));
             console.log(JSON.stringify(result));
+            // Probe outside measured intervals; never drain errors every frame.
+            glErrors.push(await page.evaluate(state => {
+                const canvas = document.querySelector('#canvas');
+                const gl = canvas.getContext('webgl2') || canvas.getContext('webgl');
+                return { state, error: gl.getError(), contextLost: gl.isContextLost() };
+            }, state));
             await page.screenshot({ path: `/tmp/tankgame-${label}-${state}.png` });
         }
         await page.mouse.up();
@@ -62,9 +69,15 @@ const { performance } = require('node:perf_hooks');
         const countAtStop = logs.filter(log => log.text.startsWith('Browser perf:')).length;
         await page.waitForTimeout(1500);
         const stopped = countAtStop === logs.filter(log => log.text.startsWith('Browser perf:')).length;
-        const result = { browser: browser.version(), gpu, samples, errors, stopped };
+        const webglDiagnostics = logs.filter(log => /WebGL:|OpenGL Error|context lost|shader compilation failed|program link failed/i.test(log.text));
+        const result = { browser: browser.version(), gpu, samples, errors, glErrors, webglDiagnostics, stopped };
         fs.writeFileSync(`/tmp/tankgame-${label}.json`, JSON.stringify(result, null, 2));
         fs.writeFileSync(`/tmp/tankgame-${label}-console.json`, JSON.stringify(logs));
-        console.log(JSON.stringify({ browser: result.browser, gpu, errors, stopped }));
+        console.log(JSON.stringify({ browser: result.browser, gpu, errors, glErrors, webglDiagnostics, stopped }));
+        if (!stopped || errors.length || webglDiagnostics.length ||
+            glErrors.some(probe => probe.error !== 0 || probe.contextLost) ||
+            samples.some(sample => sample.frames === 0)) {
+            throw new Error('Browser validation failed; see saved results and console events.');
+        }
     } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
