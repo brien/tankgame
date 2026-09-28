@@ -1,5 +1,11 @@
 # Tankgame browser migration plan
 
+> **Historical plan and current status (2026-09-28):** This phase sequence records
+> the original pre-implementation plan; do not infer completion from its future-tense
+> wording. The browser PoC has since implemented work out of order. See
+> [current-state-roadmap.md](current-state-roadmap.md) for the phase-by-phase status,
+> architectural delta, conditional audit, and revised renderer-convergence roadmap.
+
 ## Principles and continuous gates
 
 This is a future implementation sequence, not work performed by this analysis.

@@ -1,5 +1,12 @@
 # Browser-port risk register
 
+> **Original risk register:** The mitigations below were written before the browser
+> proof of concept. Some risks have now been demonstrated or partially mitigated,
+> while the shared-renderer and cross-platform validation risks remain open. See
+> [current-state-roadmap.md](current-state-roadmap.md) for status as of 2026-09-28
+> and the revised convergence milestones. The original entries are preserved for
+> traceability.
+
 | Risk / unknown | Relevant code | Why it matters | Mitigation / validation | Validate early? | Desktop compatibility impact |
 |---|---|---|---|---|---|
 | Compatibility GL is not WebGL | `GraphicsTask.cpp`, all concrete renderer files | Immediate mode, matrix stack, lighting and display lists cannot be the shipping browser renderer. | Representative shader/VBO PoC; inventory and golden captures; migrate by render pass. | Yes—primary gate. | Shared renderer must run on Linux/macOS/Windows, or retain/test native backend. |

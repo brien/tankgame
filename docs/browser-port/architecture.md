@@ -1,5 +1,11 @@
 # Repository architecture and portability analysis
 
+> **Historical baseline:** This document describes the repository topology audited
+> before browser implementation. It remains the record of the original observations
+> and recommended boundary. For the implemented browser/native split and the current
+> target architecture, see
+> [current-state-roadmap.md](current-state-roadmap.md).
+
 ## Runtime topology
 
 ```text
