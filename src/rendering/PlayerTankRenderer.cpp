@@ -3,6 +3,7 @@
 #include "../App.h"
 #include "../GlobalTimer.h"
 #include "RenderContext.h"
+#include "RendererMode.h"
 
 namespace
 {
@@ -354,11 +355,13 @@ void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float dri
 
 void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
 {
-#ifdef __EMSCRIPTEN__
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
-        PlayerBodyModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
-        tank.secondaryColor.b);
-#else
+    if (RendererMode::IsModern()) {
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
+            PlayerBodyModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
+            tank.secondaryColor.b);
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
     glTranslatef(tank.position.x, tank.position.y + TANK_HEIGHT_OFFSET, tank.position.z);
     glRotatef(tank.bodyRotation.x, 1, 0, 0);
@@ -373,11 +376,13 @@ void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
 
 void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
 {
-#ifdef __EMSCRIPTEN__
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
-        PlayerTurretModel(tank), tank.primaryColor.r, tank.primaryColor.g,
-        tank.primaryColor.b);
-#else
+    if (RendererMode::IsModern()) {
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
+            PlayerTurretModel(tank), tank.primaryColor.r, tank.primaryColor.g,
+            tank.primaryColor.b);
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Draw turret (continuing from body transformation)
     glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
     glRotatef(tank.turretRotation.x, 1, 0, 0);

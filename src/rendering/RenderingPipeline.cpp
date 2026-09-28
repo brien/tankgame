@@ -1,6 +1,7 @@
 #include "RenderingPipeline.h"
 #include "../App.h"
 #include "RenderContext.h"
+#include "RendererMode.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -41,12 +42,9 @@ bool RenderingPipeline::Initialize()
     // The desktop unified renderer also owns the legacy enemy path.  The
     // browser selects the already-migrated player-only renderer instead so
     // TankRenderer.cpp (and its immediate-mode geometry) stays out of WebGL.
-#ifdef __EMSCRIPTEN__
-    tankRenderer = TankRendererFactory::CreateRenderer(
-        TankRendererFactory::RendererType::PLAYER_TANK);
-#else
-    tankRenderer = TankRendererFactory::CreateUnifiedRenderer();
-#endif
+    tankRenderer = RendererMode::IsModern()
+        ? TankRendererFactory::CreateRenderer(TankRendererFactory::RendererType::PLAYER_TANK)
+        : TankRendererFactory::CreateUnifiedRenderer();
     if (tankRenderer)
     {
         success &= tankRenderer->Initialize();
@@ -164,14 +162,16 @@ void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIn
         const CameraData &camData = scene.cameras[playerIndex];
 
         // Set up camera matrices
-#ifdef __EMSCRIPTEN__
+        if (RendererMode::IsModern()) {
         const Viewport &viewport = viewportManager.GetViewport(playerIndex);
         RenderContext::Current().SetProjection(
             Matrix4::Perspective(45.0f, viewport.GetAspectRatio(), 0.1f, 1000.0f));
         RenderContext::Current().SetView(Matrix4::LookAt(
             camData.position.x, camData.position.y, camData.position.z,
             camData.focus.x, camData.focus.y, camData.focus.z, 0.0f, 1.0f, 0.0f));
-#else
+        }
+#ifndef __EMSCRIPTEN__
+        else {
         glMatrixMode(GL_PROJECTION);
         glLoadIdentity();
 
@@ -188,6 +188,7 @@ void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIn
             camData.focus.x, camData.focus.y, camData.focus.z,
             0.0f, 1.0f, 0.0f // Standard up vector
         );
+        }
 #endif
     }
 
@@ -250,10 +251,11 @@ void RenderingPipeline::RenderSkybox(const SceneData &scene)
 
 void RenderingPipeline::RenderTerrain(const TerrainRenderData &terrain)
 {
-#ifdef __EMSCRIPTEN__
-    (void)terrain;
-    // Terrain remains a desktop-only compatibility renderer for this milestone.
-#else
+    if (RendererMode::IsModern()) {
+        (void)terrain;
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Delegate to terrain renderer - let it handle its own state management
     terrainRenderer.RenderTerrain(terrain);
 #endif
@@ -275,12 +277,12 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
 
 void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex)
 {
-#ifdef __EMSCRIPTEN__
-    (void)scene;
-    (void)playerIndex;
-    // HUD and menus are intentionally deferred rather than submitted to WebGL.
-    return;
-#else
+    if (RendererMode::IsModern()) {
+        (void)scene;
+        (void)playerIndex;
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Only render UI if we have UI data
     if (!scene.uiData) {
         return;
@@ -307,7 +309,7 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
 
 void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     if (tanks.empty() || !tankRenderer)
     {
         return;
@@ -327,7 +329,9 @@ void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
     }
     tankRenderer->CleanupRenderState();
     renderStats.tanksRendered = playersRendered;
-#else
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     if (tanks.empty() || !tankRenderer)
     {
         return;
@@ -354,10 +358,11 @@ void RenderingPipeline::RenderBullets(const std::vector<BulletRenderData> &bulle
 
 void RenderingPipeline::RenderEffects(const std::vector<EffectRenderData> &effects)
 {
-#ifdef __EMSCRIPTEN__
-    (void)effects;
-    return;
-#else
+    if (RendererMode::IsModern()) {
+        (void)effects;
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     if (effects.empty())
     {
         return;

@@ -39,6 +39,65 @@ path selectable on native Linux and render the already-working player tank fixtu
 Keep the compatibility renderer as a temporary runtime/build fallback and visual
 oracle. Do not next implement browser-only terrain, enemies, effects, or UI.
 
+## Renderer convergence milestone 1 (2026-09-28)
+
+The first convergence step is now implemented. `DisplayList` retains its neutral
+facade but its geometry path is no longer selected by target platform: in modern
+mode the same `Geometry` preparation, interleaved VBO, attribute layout, shader,
+explicit MVP/default-colour uniforms, and draw call execute on Linux and WebGL.
+Native compatibility display lists remain in the same facade solely as the
+temporary regression backend. The shared modern scene slice is player body and
+turret, bullets, and items; terrain, enemies, effects, and UI remain deliberately
+outside this milestone.
+
+### Selection and compatibility strategy
+
+Native defaults to the compatibility renderer. Set `TANKGAME_RENDERER=modern` to
+select the programmable slice from the same executable. Emscripten always selects
+modern mode. Linux continues requesting an OpenGL 2.1 compatibility context, so
+both choices coexist and the fallback's fixed-function calls remain legal. The
+modern backend targets the OpenGL 2.1/GLES2 common buffer/shader subset.
+
+The shader has one shared vertex body and one shared fragment body. WebGL receives
+an ES precision preamble; desktop receives `#version 120`. This is the only shader
+dialect split. GL header and prototype selection is isolated in `PlatformGL.h`.
+The backend uses buffers, shaders, attribute arrays, uniforms, and draw arrays;
+UVs and normals remain uploaded but intentionally have no texture/lighting effect.
+
+### Validation and remaining boundaries
+
+On Linux, Release configure/build and all 77 tests passed. Both modes initialized
+under Xvfb from the same executable. Compatibility mode remained alive for its
+smoke interval. Modern mode entered gameplay, created six tank entities, displayed
+the flat-colour player body/turret with the expected hierarchy and winding, accepted
+mouse/key injection, and shut down through Escape without a shader/GL error. The
+headless software/Xvfb swap interval ran much faster than real display refresh, so
+it is not evidence for a 60 FPS native performance claim. Bullets use the same
+shared modern transform/draw path and the build/runtime path was exercised, but a
+bullet was not captured in the headless screenshot; item code also shares the path,
+while the selected level produced no item fixture. Precise legacy-versus-modern
+pixel parity, bullet/item captures, and real-display frame pacing therefore remain
+manual validation items rather than claimed results.
+
+The Emscripten Release target was rebuilt successfully and still excludes the
+compatibility-only renderer sources. Browser visual behavior remains supported by
+the previously recorded headed-Chromium evidence; it was not re-observed in this
+headless run. In the affected convergence files, Emscripten directives decreased
+from 46 to 43. Remaining directives either omit desktop display-list/fixed-function
+fallback code from WebGL, select the small GLSL preamble/header boundary, or guard
+still-deferred compatibility subsystems. Renderer choice, modern transforms,
+geometry upload, and modern draw submission are now runtime/shared decisions rather
+than Emscripten renderer branches.
+
+macOS still needs an early decision: its supported core contexts reject both the
+2.1 compatibility fallback and GLSL 1.20, while its legacy compatibility context is
+deprecated. Validate a core-compatible shader preamble/function set before claiming
+modern macOS support. Windows OpenGL headers expose only 1.1 entry points directly,
+so the modern functions need an explicit loader (or SDL proc loading); this Linux
+milestone does not claim Windows readiness. Do not retire compatibility rendering
+until later milestones cover terrain, enemies, effects, HUD/menu, textures and
+lighting with native visual fixtures on all desktop targets.
+
 ## Original intent, without hindsight
 
 The original documents made three different levels of statement:

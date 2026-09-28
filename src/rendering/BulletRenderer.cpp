@@ -12,6 +12,7 @@
 #include "../App.h"
 #include "../Logger.h"
 #include "RenderContext.h"
+#include "RendererMode.h"
 
 BulletRenderer::BulletRenderer() : 
     BaseRenderer(),
@@ -91,7 +92,7 @@ void BulletRenderer::RenderStandardBullet(const BulletRenderData& bullet) {
 }
 
 void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float yOffset, float zOffset, float rotationX, float scaleZ) {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     Matrix4 model = Matrix4::Translation(bullet.position.x, bullet.position.y + yOffset,
                                           bullet.position.z) *
         Matrix4::Rotation(bullet.rotation.x, 1, 0, 0) *
@@ -110,7 +111,9 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
         RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
             bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha);
     }
-#else
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
     
     // Position the bullet
@@ -167,9 +170,11 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
 void BulletRenderer::SetupBulletRendering() {
     // Texture enable/disable is fixed-function desktop state. WebGL bullet
     // shaders are untextured; GL_TEXTURE_2D is not a valid WebGL capability.
+    if (!RendererMode::IsModern()) {
 #ifndef __EMSCRIPTEN__
-    glDisable(GL_TEXTURE_2D);
+        glDisable(GL_TEXTURE_2D);
 #endif
+    }
     texturesEnabled = false;
 }
 

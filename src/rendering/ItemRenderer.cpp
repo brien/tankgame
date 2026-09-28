@@ -10,6 +10,7 @@
 #include "ItemRenderer.h"
 #include "../App.h"
 #include "RenderContext.h"
+#include "RendererMode.h"
 
 ItemRenderer::ItemRenderer() {
     // Constructor - base class handles initialization
@@ -50,13 +51,15 @@ void ItemRenderer::RenderItem(const ItemRenderData& item) {
         return;
     }
     
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     const Matrix4 model = Matrix4::Translation(item.position.x, item.position.y, item.position.z) *
         Matrix4::Rotation(-item.rotationY, 0, 1, 0) * Matrix4::Rotation(90, 0, 0, 1);
     const Color color = GetItemColor(item.itemType);
     RenderContext::Current().Draw(App::GetSingleton().graphicsTask->itemlist, model,
                                   color.r, color.g, color.b);
-#else
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
     
     // Apply transformations
