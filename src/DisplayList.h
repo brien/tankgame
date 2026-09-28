@@ -3,6 +3,7 @@
 #include <memory>
 
 #include "Geometry.h"
+#include "rendering/BasicMaterial.h"
 
 // A renderer resource facade. The shared modern backend stores an interleaved
 // VBO and shader on every platform. Native compatibility mode retains display
@@ -24,6 +25,7 @@ public:
     // the native compatibility backend.
     void SetMvpMatrix(const float* columnMajorMatrix);
     void SetDefaultColor(float red, float green, float blue, float alpha = 1.0f);
+    void SetMaterial(const BasicMaterial& material);
     void Call(int i);
     void Close();
 

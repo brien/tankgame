@@ -130,6 +130,14 @@ void PlayerTankRenderer::SetupPlayerTankRenderState()
 
 void PlayerTankRenderer::SetupPlayerEffectsRenderState()
 {
+    if (RendererMode::IsModern()) {
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_FALSE);
+        glDepthFunc(GL_LEQUAL);
+        glEnable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        return;
+    }
     glPushMatrix();
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_DEPTH_TEST);
@@ -141,6 +149,13 @@ void PlayerTankRenderer::SetupPlayerEffectsRenderState()
 
 void PlayerTankRenderer::SetupTargetingUIRenderState()
 {
+    if (RendererMode::IsModern()) {
+        glEnable(GL_BLEND);
+        glEnable(GL_DEPTH_TEST);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+        glDepthMask(GL_FALSE);
+        return;
+    }
     glDisable(GL_LIGHTING);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_BLEND);
@@ -152,9 +167,10 @@ void PlayerTankRenderer::SetupTargetingUIRenderState()
 void PlayerTankRenderer::RestoreRenderState()
 {
     glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
     glDepthMask(GL_TRUE);
     glEnable(GL_CULL_FACE);
+    if (RendererMode::IsModern()) return;
+    glDisable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
 }
 
@@ -295,10 +311,12 @@ void PlayerTankRenderer::RenderPlayerTank(const TankRenderData& tank, float drif
 void PlayerTankRenderer::RenderPlayerEffects(const TankRenderData& tank, float drift)
 {
     SetupPlayerEffectsRenderState();
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     RenderEffectBody(tank);
     RenderEffectTurret(tank);
-#else
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     // Awesome effects are performed using the texture matrix stack
     glMatrixMode(GL_TEXTURE);
     glPushMatrix();
@@ -328,11 +346,14 @@ void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float dri
     
     SetupTargetingUIRenderState();
     
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     RenderTargetingIndicator(tank);
     if (tank.charge >= tank.fireCost)
         RenderReadyIndicator(tank, drift);
-#else
+    RestoreRenderState();
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     glPushMatrix();
     glTranslatef(tank.position.x, tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z);
     glRotatef(-tank.targetRotation, 0, 1, 0);
@@ -399,10 +420,17 @@ void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
 
 void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
+    BasicMaterial material;
+    material.red = tank.primaryColor.r;
+    material.green = tank.primaryColor.g;
+    material.blue = tank.primaryColor.b;
+    material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_DIAMOND);
     RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
-        PlayerBodyModel(tank), tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b);
-#else
+                                  PlayerBodyModel(tank), material);
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     glDisable(GL_LIGHTING);
     glTranslatef(tank.position.x, tank.position.y + TANK_HEIGHT_OFFSET, tank.position.z);
     glRotatef(tank.bodyRotation.x, 1, 0, 0);
@@ -416,12 +444,19 @@ void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
 
 void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 {
-#ifdef __EMSCRIPTEN__
-    if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
+    if (RendererMode::IsModern()) {
+    if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR) {
+        BasicMaterial material;
+        material.red = tank.secondaryColor.r;
+        material.green = tank.secondaryColor.g;
+        material.blue = tank.secondaryColor.b;
+        material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_DIAMOND);
         RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
-            PlayerTurretModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
-            tank.secondaryColor.b);
-#else
+                                      PlayerTurretModel(tank), material);
+    }
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     // Draw effect turret
     glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
     glRotatef(tank.turretRotation.x, 1, 0, 0);
@@ -441,13 +476,19 @@ void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 
 void PlayerTankRenderer::RenderTargetingIndicator(const TankRenderData& tank)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     const Matrix4 model = Matrix4::Translation(tank.position.x,
         tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z) *
         Matrix4::Rotation(-tank.targetRotation, 0, 1, 0);
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
-                                  1.0f, tank.health / 50.0f, 0.1f, 1.0f);
-#else
+    BasicMaterial material;
+    material.red = 1.0f;
+    material.green = tank.health / 50.0f;
+    material.blue = 0.1f;
+    material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_RING);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model, material);
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
     glColor4f(1.0f, tank.health / 50.0f, 0.1f, 1.0); // Use health as distance approximation
     App::GetSingleton().graphicsTask->squarelist.Call(0);
@@ -456,16 +497,19 @@ void PlayerTankRenderer::RenderTargetingIndicator(const TankRenderData& tank)
 
 void PlayerTankRenderer::RenderReadyIndicator(const TankRenderData& tank, float drift)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     const Matrix4 model = Matrix4::Translation(tank.position.x,
         tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z) *
         Matrix4::Rotation(-tank.targetRotation, 0, 1, 0) *
         Matrix4::Translation(0, TARGETING_EFFECT_OFFSET, 0) *
         Matrix4::Rotation(ROTATION_EFFECT_SPEED * drift, 0, 1, 0) *
         Matrix4::Scale(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
-                                  1.0f, 1.0f, 1.0f, 1.0f);
-#else
+    BasicMaterial material;
+    material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_DIAMOND);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model, material);
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
     glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
 

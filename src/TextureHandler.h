@@ -1,62 +1,33 @@
 #pragma once
 
-#define TGA_RGB 2
-#define TGA_A 3
-#define TGA_RLE 10
+#include <array>
+#include <memory>
+
+#include "rendering/GpuTexture.h"
 
 enum TextureNames
 {
-    TEXTURE_ZERO,
-    TEXTURE_ONE,
-    TEXTURE_TWO,
-    TEXTURE_THREE,
-    TEXTURE_FOUR,
-    TEXTURE_FIVE,
-    TEXTURE_SIX,
-    TEXTURE_SEVEN,
-    TEXTURE_EIGHT,
-    TEXTURE_NINE,
-    TEXTURE_WHITE_CUBE,
-    TEXTURE_BLACK_CUBE,
-    TEXTURE_EXIT,
-    TEXTURE_BANG,
-    TEXTURE_X,
-    TEXTURE_CHECKER,
-    TEXTURE_HEART,
-    TEXTURE_DIAMOND,
-    TEXTURE_P,
-    TEXTURE_STAR,
-    TEXTURE_RING,
-    TEXTURE_LONGSHOT,
-    TEXTURE_BANKSHOT,
-    TEXTURE_MULTISHOT,
-    TEXTURE_SCORE,
-    TEXTURE_ENEMY,
-
-    TEXTURE_NAMES_COUNT
+    TEXTURE_ZERO, TEXTURE_ONE, TEXTURE_TWO, TEXTURE_THREE, TEXTURE_FOUR,
+    TEXTURE_FIVE, TEXTURE_SIX, TEXTURE_SEVEN, TEXTURE_EIGHT, TEXTURE_NINE,
+    TEXTURE_WHITE_CUBE, TEXTURE_BLACK_CUBE, TEXTURE_EXIT, TEXTURE_BANG,
+    TEXTURE_X, TEXTURE_CHECKER, TEXTURE_HEART, TEXTURE_DIAMOND, TEXTURE_P,
+    TEXTURE_STAR, TEXTURE_RING, TEXTURE_LONGSHOT, TEXTURE_BANKSHOT,
+    TEXTURE_MULTISHOT, TEXTURE_SCORE, TEXTURE_ENEMY, TEXTURE_NAMES_COUNT
 };
 
-struct tImageTGA
-{
-    int channels;
-    int size_x;
-    int size_y;
-    unsigned char *data;
-};
-
+// Transitional catalogue: modern code receives owned resources; the raw array
+// remains only for compatibility renderers until their migration.
 class TextureHandler
 {
 public:
     TextureHandler();
-    ~TextureHandler();
-
+    ~TextureHandler() = default;
     void LoadTextures();
-
-    unsigned int *GetTextureArray() { return textureArray; }
+    std::shared_ptr<const GpuTexture> GetTexture(TextureNames name) const;
+    unsigned int* GetTextureArray() { return compatibilityHandles.data(); }
 
 private:
-    unsigned int textureArray[32];
-
-    void TGA_Texture(unsigned int textureArray[], const char *strFileName, int ID, bool wrap);
-    tImageTGA *Load_TGA(const char *strfilename);
+    std::array<std::shared_ptr<GpuTexture>, TEXTURE_NAMES_COUNT> textures;
+    std::array<unsigned int, 32> compatibilityHandles;
+    void LoadTexture(const char* fileName, TextureNames id, bool wrap);
 };

@@ -9,6 +9,7 @@
 #include "GeometryBuffer.h"
 #include "rendering/PlatformGL.h"
 #include "rendering/RendererMode.h"
+#include "rendering/GpuTexture.h"
 
 class DisplayList::Implementation
 {
@@ -43,6 +44,7 @@ public:
     GLfloat mvp[16] = {1, 0, 0, 0, 0, 1, 0, 0,
                        0, 0, 1, 0, 0, 0, 0, 1};
     GLfloat defaultColor[4] = {1, 1, 1, 1};
+    std::shared_ptr<const GpuTexture> texture;
 #ifndef __EMSCRIPTEN__
     GLuint first = 0;
     GLuint current = 0;
@@ -98,7 +100,9 @@ GLuint CreateProgram()
         " vUV = aUV; vNormal = aNormal; }\n";
     static const char* fragmentBody =
         "varying vec4 vColor; varying vec2 vUV; varying vec3 vNormal;\n"
-        "void main() { gl_FragColor = vColor + vec4(vUV, vNormal.x, 0.0) * 0.0000001; }\n";
+        "uniform sampler2D uTexture; uniform bool uHasTexture;\n"
+        "void main() { vec4 texel = uHasTexture ? texture2D(uTexture, vUV) : vec4(1.0);"
+        " gl_FragColor = texel * vColor + vec4(vNormal.x) * 0.0000001; }\n";
 #ifdef __EMSCRIPTEN__
     const std::string vertexSource = std::string("precision mediump float;\n") + vertexBody;
     const std::string fragmentSource = std::string("precision mediump float;\n") + fragmentBody;
@@ -282,6 +286,10 @@ void DisplayList::Call(int i)
                   implementation->defaultColor);
     glUniform1i(glGetUniformLocation(implementation->program, "uHasColor"),
                 implementation->layout.hasColors ? 1 : 0);
+    const bool hasTexture = implementation->texture && implementation->layout.hasTextureCoordinates;
+    glUniform1i(glGetUniformLocation(implementation->program, "uHasTexture"), hasTexture ? 1 : 0);
+    glUniform1i(glGetUniformLocation(implementation->program, "uTexture"), 0);
+    if (hasTexture) implementation->texture->Bind(0);
     glDrawArrays(implementation->drawMode, 0, implementation->vertexCount);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     return;
@@ -289,6 +297,13 @@ void DisplayList::Call(int i)
 #ifndef __EMSCRIPTEN__
     glCallList(implementation->first + i);
 #endif
+}
+
+void DisplayList::SetMaterial(const BasicMaterial& material)
+{
+    if (!RendererMode::IsModern()) return;
+    SetDefaultColor(material.red, material.green, material.blue, material.alpha);
+    implementation->texture = material.texture;
 }
 
 void DisplayList::SetMvpMatrix(const float* columnMajorMatrix)
@@ -312,6 +327,7 @@ void DisplayList::SetDefaultColor(float red, float green, float blue, float alph
     implementation->defaultColor[1] = green;
     implementation->defaultColor[2] = blue;
     implementation->defaultColor[3] = alpha;
+    implementation->texture.reset();
     }
     else
     {

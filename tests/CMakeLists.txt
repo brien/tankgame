@@ -22,6 +22,7 @@ add_executable(tankgame_tests
     test_geometry.cpp
     test_geometry_buffer.cpp
     test_matrix4.cpp
+    test_material_texture.cpp
     test_bullet_special.cpp
     test_main.cpp
     test_player.cpp

@@ -98,6 +98,64 @@ milestone does not claim Windows readiness. Do not retire compatibility renderin
 until later milestones cover terrain, enemies, effects, HUD/menu, textures and
 lighting with native visual fixtures on all desktop targets.
 
+## Renderer convergence milestone 2: shared basic materials and textures (2026-09-28)
+
+The modern Linux and WebGL paths now share an unlit texture path. The selected
+real fixture is the player's targeting/ready indicator and special-energy overlay:
+it is small, already uses the migrated player transforms and UV-bearing square/tank
+geometry, and uses the existing `ring.tga` and `p_itemstar.tga` assets without
+pulling terrain, HUD, enemies, or lighting into the milestone. The legacy path
+modulates these textures with `glColor` and uses additive blending; the modern
+shader explicitly implements the same `texture sample * base/vertex colour`
+relationship and retains the existing additive pass state.
+
+The resource flow is now `TGA -> ImageData -> GpuTexture -> BasicMaterial ->
+RenderContext/DisplayList shader draw`. `ImageData` contains dimensions, RGB/RGBA
+format, and owned bytes, so decoding is independently testable and contains no GL
+identifier. `GpuTexture` owns creation, portable upload, sampler setup, and deletion.
+`BasicMaterial` contains an RGBA multiplier and an optional shared texture; an
+absent texture selects the unchanged flat-colour shader behavior. `TextureHandler`
+is the transitional catalogue/owner. It exposes owned texture objects to modern
+code, while its raw-handle array remains only for compatibility renderers. The
+separately instantiated `TextureHandler` members in `GraphicsTask` and the newer
+`ResourceManager` remain duplicated ownership and should be unified later.
+
+All currently loaded TGAs, including the 128x128 ring and 64x64 item-star used by
+the fixture, are power-of-two RGB images. Upload sets unpack alignment to one,
+uses linear filtering, mipmaps, and repeat where requested. The shared policy
+automatically falls back to clamp-to-edge, linear minification, and no mipmaps for
+NPOT inputs, satisfying WebGL 1/GLES2 restrictions without a browser-only uploader.
+The old GLU/native versus `glTexImage2D`/browser upload split was removed.
+
+Release Linux build and 80/80 tests passed. Under Xvfb/llvmpipe, both default
+compatibility and `TANKGAME_RENDERER=modern` entered level 0 and shut down; a
+captured modern frame visibly showed the modulated ring/item-star textures with
+the expected orientation, transforms, and filtering, and logs contained no shader
+or GL error. The compatibility frame remained the richer visual oracle; full
+pixel parity is not claimed because modern lighting and the legacy animated
+texture-matrix drift are intentionally still absent. The complete Emscripten
+target configured, compiled, linked, and emitted HTML/JS/WASM/data using these same
+`ImageData`, `GpuTexture`, `BasicMaterial`, shader, and player-renderer sources.
+The preloaded `/texture` directory includes both selected assets. Browser visuals
+were not re-observed in this environment: serve `runtime/`, open
+`tankgame-linux.html`, press Enter for level 0, and verify the ring/star overlays,
+tank and bullets, clean console, and frame pacing near the prior 60 FPS baseline.
+
+In the texture/material implementation files touched here, `__EMSCRIPTEN__`
+directives fell from 26 to 23. Texture upload and migrated player draw selection
+lost their platform branches. The remaining directives isolate desktop display
+lists/fixed-function fallback and the shader precision/version preamble; none
+selects a distinct modern texture/material implementation.
+
+macOS remains unvalidated: a core-profile context needs a core-compatible GLSL
+preamble (GLSL 1.20 is not sufficient), although the texture calls themselves are
+portable. Windows remains unvalidated: shader, VBO, active-texture, and mipmap
+entry points still require an explicit loader/SDL proc-address strategy beyond the
+system OpenGL 1.1 exports. The next convergence milestone should migrate one small
+world-space category onto this material contract (not terrain as a whole) and
+centralize duplicate resource ownership; lighting, terrain, enemy, effects beyond
+this player overlay, HUD/menu, and text remain deferred.
+
 ## Original intent, without hindsight
 
 The original documents made three different levels of statement:
