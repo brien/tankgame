@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Matrix4.h"
+#include "BasicMaterial.h"
 
 class DisplayList;
 
@@ -13,6 +14,8 @@ public:
     Matrix4 Mvp(const Matrix4& model) const { return projection * view * model; }
     void Draw(DisplayList& resource, const Matrix4& model,
               float red, float green, float blue, float alpha = 1.0f) const;
+    void Draw(DisplayList& resource, const Matrix4& model,
+              const BasicMaterial& material) const;
 
 private:
     Matrix4 projection;

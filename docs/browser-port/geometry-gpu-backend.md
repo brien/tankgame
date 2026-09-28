@@ -27,9 +27,11 @@ error.
 
 The vertex shader has position, color, UV, and normal attributes, an MVP
 uniform, a default-color uniform, and a flag selecting vertex versus default
-color. The fragment shader emits that color. UV and normal are carried through
-the initial shader to keep their attribute path live, but no material,
-texturing, or lighting model is introduced.
+color. UV and normal are carried through the shader. A `BasicMaterial` now supplies
+an RGBA multiplier and optional owned `GpuTexture`; the fragment shader explicitly
+selects between flat colour and `texture2D(uTexture, vUV) * colour`. Normals still
+have no lighting effect. Decoded `ImageData` and portable sampling decisions remain
+GL-free, while `GpuTexture` owns upload and deletion on both Linux modern and WebGL.
 
 ## Deliberate next boundary
 

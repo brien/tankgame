@@ -15,3 +15,12 @@ void RenderContext::Draw(DisplayList& resource, const Matrix4& model,
     resource.SetDefaultColor(red, green, blue, alpha);
     resource.Call(0);
 }
+
+void RenderContext::Draw(DisplayList& resource, const Matrix4& model,
+                         const BasicMaterial& material) const
+{
+    const Matrix4 mvp = Mvp(model);
+    resource.SetMvpMatrix(mvp.Data());
+    resource.SetMaterial(material);
+    resource.Call(0);
+}
