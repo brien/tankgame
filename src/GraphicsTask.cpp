@@ -26,6 +26,7 @@
 #include "rendering/SceneDataBuilder.h"
 #include "rendering/RenderingPipeline.h"
 #include "rendering/RenderContext.h"
+#include "rendering/RendererMode.h"
 #include <stdlib.h>
 #include <sys/types.h>
 #include <iostream>
@@ -65,14 +66,17 @@ bool GraphicsTask::Start()
 
     // Setup viewport and projection (needed before pipeline initialization)
     glViewport(0, 0, VideoTask::scrWidth, VideoTask::scrHeight);
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern()) {
     const float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
     RenderContext::Current().SetProjection(Matrix4::Perspective(45.0f, ratio, 0.1f, 1024.0f));
-#else
+    }
+#ifndef __EMSCRIPTEN__
+    else {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
     float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
     gluPerspective(45.0, ratio, 0.1, 1024.0);
+    }
 #endif
 
     // Enable essential OpenGL features
@@ -151,6 +155,7 @@ bool GraphicsTask::Start()
     InitializeNewRenderingPipeline();
 
     Logger::Get().Write("GraphicsTask::Started\n");
+    Logger::Get().Write("Renderer mode: %s\n", RendererMode::Name());
     return true;
 }
 

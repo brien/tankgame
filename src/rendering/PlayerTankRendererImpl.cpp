@@ -1,6 +1,7 @@
 #include "PlayerTankRendererImpl.h"
 #include "PlayerTankRenderer.h" // For delegating to existing static methods
 #include "../App.h"
+#include "RendererMode.h"
 
 PlayerTankRendererImpl::PlayerTankRendererImpl() 
     : animationDrift(0.0f) {
@@ -38,11 +39,13 @@ void PlayerTankRendererImpl::Render(const TankRenderData& data) {
     // TODO: Implement native rendering when PlayerTankRenderer is fully refactored
     PlayerTankRenderer::RenderPlayerTank(data, animationDrift);
 
+    if (!RendererMode::IsModern()) {
 #ifndef __EMSCRIPTEN__
     // Render additional player-specific elements
     RenderPlayerEffects(data);
     RenderTargetingUI(data, true); // TODO: Get actual enemy presence from game state
 #endif
+    }
 }
 
 void PlayerTankRendererImpl::SetupRenderState() {

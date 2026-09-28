@@ -3,32 +3,23 @@
 #include <cstdio>
 #include <cstdlib>
 #include <stdexcept>
+#include <string>
+#include <vector>
 
-#ifdef __EMSCRIPTEN__
-#include <GLES2/gl2.h>
 #include "GeometryBuffer.h"
-#endif
-
-#ifndef __EMSCRIPTEN__
-#ifdef _WIN32
-#pragma warning(disable : 4996)
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-#endif
+#include "rendering/PlatformGL.h"
+#include "rendering/RendererMode.h"
 
 class DisplayList::Implementation
 {
 public:
-#ifdef __EMSCRIPTEN__
-    explicit Implementation(int count) : count(count) {}
+    explicit Implementation(int count) : count(count)
+    {
+#ifndef __EMSCRIPTEN__
+        if (!RendererMode::IsModern())
+            first = current = count > 0 ? glGenLists(count) : 0;
+#endif
+    }
 
     ~Implementation()
     {
@@ -36,6 +27,10 @@ public:
             glDeleteBuffers(1, &vertexBuffer);
         if (program != 0)
             glDeleteProgram(program);
+#ifndef __EMSCRIPTEN__
+        if (first != 0)
+            glDeleteLists(first, count);
+#endif
     }
 
     int count;
@@ -48,26 +43,12 @@ public:
     GLfloat mvp[16] = {1, 0, 0, 0, 0, 1, 0, 0,
                        0, 0, 1, 0, 0, 0, 0, 1};
     GLfloat defaultColor[4] = {1, 1, 1, 1};
-#else
-    explicit Implementation(int count)
-        : count(count), first(count > 0 ? glGenLists(count) : 0), current(first)
-    {
-    }
-
-    ~Implementation()
-    {
-        if (first != 0)
-            glDeleteLists(first, count);
-    }
-
-    int count;
-    GLuint first;
-    GLuint current;
-    Geometry geometry;
+#ifndef __EMSCRIPTEN__
+    GLuint first = 0;
+    GLuint current = 0;
 #endif
 };
 
-#ifdef __EMSCRIPTEN__
 namespace
 {
 [[noreturn]] void UnsupportedDisplayListOperation(const char* operation)
@@ -101,7 +82,7 @@ GLuint CompileShader(GLenum type, const char* source)
 
 GLuint CreateProgram()
 {
-    static const char* vertexSource =
+    static const char* vertexBody =
         "attribute vec3 aPosition;\n"
         "attribute vec3 aColor;\n"
         "attribute vec2 aUV;\n"
@@ -115,12 +96,21 @@ GLuint CreateProgram()
         "void main() { gl_Position = uMvp * vec4(aPosition, 1.0);"
         " vColor = uHasColor ? vec4(aColor, 1.0) : uDefaultColor;"
         " vUV = aUV; vNormal = aNormal; }\n";
-    static const char* fragmentSource =
-        "precision mediump float;\n"
+    static const char* fragmentBody =
         "varying vec4 vColor; varying vec2 vUV; varying vec3 vNormal;\n"
         "void main() { gl_FragColor = vColor + vec4(vUV, vNormal.x, 0.0) * 0.0000001; }\n";
-    const GLuint vertex = CompileShader(GL_VERTEX_SHADER, vertexSource);
-    const GLuint fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentSource);
+#ifdef __EMSCRIPTEN__
+    const std::string vertexSource = std::string("precision mediump float;\n") + vertexBody;
+    const std::string fragmentSource = std::string("precision mediump float;\n") + fragmentBody;
+#else
+    const std::string vertexSource = std::string("#version 120\n") + vertexBody;
+    const std::string fragmentSource = std::string("#version 120\n") + fragmentBody;
+#endif
+    const char* vertexText = vertexSource.c_str();
+    const char* fragmentText = fragmentSource.c_str();
+    // Shared shader body; only the narrow dialect preamble differs.
+    const GLuint vertex = CompileShader(GL_VERTEX_SHADER, vertexText);
+    const GLuint fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentText);
     const GLuint program = glCreateProgram();
     glAttachShader(program, vertex);
     glAttachShader(program, fragment);
@@ -146,7 +136,6 @@ GLuint CreateProgram()
     return program;
 }
 }
-#endif
 
 DisplayList::DisplayList(int num)
     : implementation(std::make_shared<Implementation>(num))
@@ -161,9 +150,9 @@ void DisplayList::BeginNewList()
 
 void DisplayList::NextNewList()
 {
-#ifdef __EMSCRIPTEN__
-    UnsupportedDisplayListOperation("NextNewList");
-#else
+    if (RendererMode::IsModern())
+        UnsupportedDisplayListOperation("NextNewList");
+#ifndef __EMSCRIPTEN__
     glEndList();
     ++implementation->current;
     if (implementation->current >= implementation->first + implementation->count ||
@@ -175,36 +164,36 @@ void DisplayList::NextNewList()
 
 void DisplayList::EndNewList()
 {
-#ifdef __EMSCRIPTEN__
-    UnsupportedDisplayListOperation("EndNewList");
-#else
+    if (RendererMode::IsModern())
+        UnsupportedDisplayListOperation("EndNewList");
+#ifndef __EMSCRIPTEN__
     glEndList();
 #endif
 }
 
 void DisplayList::ResetList()
 {
-#ifdef __EMSCRIPTEN__
-    // Resetting the cursor does not claim that the resource can be rendered.
-#else
+    if (RendererMode::IsModern())
+        return;
+#ifndef __EMSCRIPTEN__
     implementation->current = implementation->first;
 #endif
 }
 
 void DisplayList::NewList()
 {
-#ifdef __EMSCRIPTEN__
-    UnsupportedDisplayListOperation("NewList");
-#else
+    if (RendererMode::IsModern())
+        UnsupportedDisplayListOperation("NewList");
+#ifndef __EMSCRIPTEN__
     glNewList(implementation->current, GL_COMPILE);
 #endif
 }
 
 void DisplayList::EndList()
 {
-#ifdef __EMSCRIPTEN__
-    UnsupportedDisplayListOperation("EndList");
-#else
+    if (RendererMode::IsModern())
+        UnsupportedDisplayListOperation("EndList");
+#ifndef __EMSCRIPTEN__
     glEndList();
     ++implementation->current;
 #endif
@@ -213,7 +202,8 @@ void DisplayList::EndList()
 void DisplayList::SetGeometry(const Geometry& geometry)
 {
     implementation->geometry = geometry;
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern())
+    {
     const PreparedGeometry prepared = PrepareGeometryForGpu(geometry);
     implementation->layout = prepared.layout;
     implementation->vertexCount = static_cast<GLsizei>(prepared.VertexCount());
@@ -228,7 +218,9 @@ void DisplayList::SetGeometry(const Geometry& geometry)
                  static_cast<GLsizeiptr>(prepared.vertices.size() * sizeof(float)),
                  prepared.vertices.empty() ? nullptr : prepared.vertices.data(), GL_STATIC_DRAW);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-#else
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     BeginNewList();
     GLenum mode = GL_QUADS;
     if (geometry.topology == PrimitiveTopology::LINE_LOOP)
@@ -256,7 +248,8 @@ void DisplayList::SetGeometry(const Geometry& geometry)
 
 void DisplayList::Call(int i)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern())
+    {
     if (i != 0 || i >= implementation->count)
         throw std::out_of_range("DisplayList geometry resource index is out of range");
     if (implementation->vertexBuffer == 0 || implementation->program == 0)
@@ -291,36 +284,39 @@ void DisplayList::Call(int i)
                 implementation->layout.hasColors ? 1 : 0);
     glDrawArrays(implementation->drawMode, 0, implementation->vertexCount);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
-#else
+    return;
+    }
+#ifndef __EMSCRIPTEN__
     glCallList(implementation->first + i);
 #endif
 }
 
 void DisplayList::SetMvpMatrix(const float* columnMajorMatrix)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern())
+    {
     if (columnMajorMatrix == nullptr)
         throw std::invalid_argument("DisplayList MVP matrix cannot be null");
     for (int i = 0; i < 16; ++i)
         implementation->mvp[i] = columnMajorMatrix[i];
-#else
-    (void)columnMajorMatrix;
-#endif
+    }
+    else
+        (void)columnMajorMatrix;
 }
 
 void DisplayList::SetDefaultColor(float red, float green, float blue, float alpha)
 {
-#ifdef __EMSCRIPTEN__
+    if (RendererMode::IsModern())
+    {
     implementation->defaultColor[0] = red;
     implementation->defaultColor[1] = green;
     implementation->defaultColor[2] = blue;
     implementation->defaultColor[3] = alpha;
-#else
-    (void)red;
-    (void)green;
-    (void)blue;
-    (void)alpha;
-#endif
+    }
+    else
+    {
+        (void)red; (void)green; (void)blue; (void)alpha;
+    }
 }
 
 void DisplayList::Close()
