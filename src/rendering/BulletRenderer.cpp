@@ -165,8 +165,11 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
 }
 
 void BulletRenderer::SetupBulletRendering() {
-    // Disable textures for bullet rendering
+    // Texture enable/disable is fixed-function desktop state. WebGL bullet
+    // shaders are untextured; GL_TEXTURE_2D is not a valid WebGL capability.
+#ifndef __EMSCRIPTEN__
     glDisable(GL_TEXTURE_2D);
+#endif
     texturesEnabled = false;
 }
 

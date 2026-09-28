@@ -126,7 +126,8 @@ the combined logging path's cost rather than a precise share for each component.
   both builds. The faster build reaches Chromium's 256-warning suppression limit.
   They are not JavaScript exceptions and are not a demonstrated performance
   bottleneck after the logging fix. A favicon 404 also occurs in both builds.
-  These renderer warnings remain for a separate correctness task.
+  These warnings were present during the performance measurements; the follow-up
+  below records their subsequent fix.
 - No terrain, enemy rendering, HUD/menu, texture, lighting, effect, or audio work.
 - No commit was made. Existing unrelated worktree files were left untouched.
 
@@ -159,3 +160,34 @@ The focused performance change is ready to commit.
 
 Generated browser/native build outputs are not source changes. The pre-existing
 modified `runtime/applog.txt` and unrelated untracked files are excluded.
+
+## Follow-up: WebGL INVALID_ENUM cleanup
+
+The warning came from `BulletRenderer::SetupBulletRendering()` calling
+`glDisable(GL_TEXTURE_2D)`. A temporary browser capability-call trace captured
+118 calls to `disable(3553)` during a short level0 idle/firing reproduction.
+`GL_TEXTURE_2D` is a desktop fixed-function capability, not a WebGL enable/disable
+capability. The browser's bullet shader is already untextured.
+
+The call is now guarded for desktop builds, matching the existing platform
+boundary in the player renderer. Native state changes and browser geometry are
+unchanged. Repeating the capability trace found zero invalid calls.
+
+`tools/browser-performance.cjs` now records `gl.getError()` and context-loss state
+after each measured phase, outside the timed interval. It fails on WebGL console
+diagnostics, GL errors, context loss, JavaScript exceptions, missing frames, or
+failure to stop. It does not suppress warnings or drain errors every frame.
+
+Validation on the same visible Chromium/AMD WebGL setup:
+
+- 20 seconds idle and 20 seconds firing: **59.79 FPS / 16.72 ms** in both phases.
+- `gl.getError()`: **GL_NO_ERROR (0)** after both phases; no context loss.
+- **Zero WebGL console diagnostics and zero JavaScript exceptions** from startup
+  through shutdown. The unrelated favicon 404 remains.
+- Tank, turret input, and bullets remain visible and functional; the existing
+  two-Escape shutdown sequence completes and frame reports stop.
+- Native configure/build and full CTest suite: **77/77 passed**, 0.79 seconds.
+
+Follow-up files: `src/rendering/BulletRenderer.cpp`,
+`tools/browser-performance.cjs`, and this report. No renderer features added;
+no commit made.
