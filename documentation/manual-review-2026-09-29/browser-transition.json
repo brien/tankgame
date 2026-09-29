@@ -1,0 +1,35 @@
+{
+  "samples": [
+    {
+      "label": "initial-single",
+      "viewport": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "error": 0
+    },
+    {
+      "label": "coop",
+      "viewport": [
+        0,
+        360,
+        1280,
+        360
+      ],
+      "error": 0
+    },
+    {
+      "label": "selected-single",
+      "viewport": [
+        0,
+        360,
+        1280,
+        360
+      ],
+      "error": 0
+    }
+  ],
+  "errors": []
+}

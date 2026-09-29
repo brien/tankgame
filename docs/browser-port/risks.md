@@ -1,9 +1,34 @@
-# Browser-port risk register
+# Browser-port known issues and risk register
+
+## Current known issues (2026-09-29)
+
+Evidence: [manual regression review of `6fd947f`](../../documentation/manual-review-2026-09-29/README.md),
+including screenshots, crash stacks, reproduction drivers, and 84 passing native
+tests. See the [current roadmap](current-state-roadmap.md#current-runtime-findings-and-multiplayer-priority-2026-09-29)
+for sequencing.
+
+| Issue | Evidence / impact | Status and priority |
+| --- | --- | --- |
+| Split-screen viewport clearing erased the lower view | Both views now survive repeated frames, movement, camera changes, and firing in fresh browser, Linux default, and Linux modern co-op/versus runs. | **Fixed and visually verified.** See [clear correction](split-screen-clearing.md). This verifies rendering, not multiplayer robustness. |
+| Crashes during longer multiplayer/session sequences | Browser recorded a WASM table-index trap after two-player respawns; Linux modern recorded SIGSEGV in collision checking after restart/co-op entry. Short fresh sessions passed. | **Open — deferred / low priority.** Preserve failing sequences and logs for a later multiplayer subsystem investigation. No clean multiplayer baseline. |
+| Single-player selection retains split-screen | After a two-player session, selecting single-player can retain two players and half-height viewports in browser and both Linux renderers. The menu player-count reset omission predates the port. | **Open — deferred / low priority.** Revisit session/mode reset behavior with multiplayer work. |
+| Independent player-2 input | A joystick was unavailable; independent movement, firing, and camera controls remain unverified. | **Unverified — deferred / low priority.** Requires joystick validation when multiplayer is revisited. |
+
+**Multiplayer robustness is outside the current browser-port critical path.**
+The failures may reflect older multiplayer/session-state architecture; their
+shared root cause has not been established. They remain known limitations even
+when renderer tests or short gameplay runs pass. Defer a multiplayer rewrite and
+keep session/respawn/controller architecture work separate from renderer migration.
+Prioritize shared renderer/resource convergence and desktop validation; revisit
+multiplayer later as its own subsystem. Viewport and per-player UI rendering checks
+remain part of renderer validation without making this backlog a convergence gate.
+
+## Original risk register
 
 > **Original risk register:** The mitigations below were written before the browser
 > proof of concept. Some risks have now been demonstrated or partially mitigated,
 > while the shared-renderer and cross-platform validation risks remain open. See
-> [current-state-roadmap.md](current-state-roadmap.md) for status as of 2026-09-28
+> [current-state-roadmap.md](current-state-roadmap.md) for status as of 2026-09-29
 > and the revised convergence milestones. The original entries are preserved for
 > traceability.
 

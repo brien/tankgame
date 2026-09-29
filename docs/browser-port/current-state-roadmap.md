@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-09-28
+**Status date:** 2026-09-29
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -38,6 +38,40 @@ Emscripten, Linux, macOS, and Windows. First make the existing geometry/shader/V
 path selectable on native Linux and render the already-working player tank fixture.
 Keep the compatibility renderer as a temporary runtime/build fallback and visual
 oracle. Do not next implement browser-only terrain, enemies, effects, or UI.
+
+## Current runtime findings and multiplayer priority (2026-09-29)
+
+The [manual regression review](../../documentation/manual-review-2026-09-29/README.md)
+of `6fd947f` rebuilt Linux and Emscripten Release targets and passed all 84 native
+tests. The shared modern player/material slice runs in browser and Linux; native
+compatibility remains the default. The milestone records below describe the
+earlier implementation steps and their validation at the time.
+
+| Finding | Current status |
+| --- | --- |
+| Split-screen viewport clearing | **Fixed and visually verified** in browser, Linux default, and Linux modern. Both views survive movement, camera changes, and firing in fresh co-op/versus runs. |
+| Longer multiplayer/session sequences | **Open, deferred / low priority.** Browser can trap and Linux modern can segfault. Successful short runs do not establish a clean multiplayer baseline. |
+| Returning to single-player | **Open, deferred / low priority.** Selecting single-player after multiplayer can retain two players and split-screen state on all three renderers. |
+| Independent player-2 input | **Unverified, deferred / low priority.** No joystick was available; independent movement, firing, and camera controls were not tested. |
+
+Single-player sustained firing passed three 60-second browser runs and one
+60-second run in each Linux renderer. This evidence supports the tested
+single-player slice and the framebuffer-clear fix, not general multiplayer
+robustness. See the [known-issues register](risks.md#current-known-issues-2026-09-29)
+for evidence and follow-up boundaries.
+
+**Planning decision: multiplayer robustness is deferred and low priority, outside
+the current browser-port critical path.** These failures may reflect older
+multiplayer/session-state architecture; the player-count reset omission predates
+the port, while the crash root causes and their relationship remain unconfirmed.
+Keep the failures visible in validation reports. Do not count the multiplayer
+baseline as clean or interpret renderer smoke passes as multiplayer sign-off.
+
+Continue shared renderer/resource convergence and the desktop validation gates.
+Do not start a multiplayer rewrite or mix session/respawn/controller architecture
+work into renderer migration. Revisit multiplayer later as a separately scoped
+subsystem. R4/R5 retain their viewport and UI rendering checks; those checks do
+not require resolving this deferred robustness backlog.
 
 ## Renderer convergence milestone 1 (2026-09-28)
 
@@ -228,7 +262,7 @@ resource architecture were complete.
 | 3 — SDL canvas/input/focus/pointer lock | **PARTIAL** | ES2 SDL canvas works; keyboard starts game; SDL input updates; mouse turret motion was observed. | Relative mode is deliberately disabled; no click-to-lock UI, lock-loss/blur clearing, resize/high-DPI, event/hot-plug, or browser gamepad validation. | Yes; mouse motion without deliberate pointer-lock UX is not completion. |
 | 4 — renderer proof foundation | **PARTIAL** | Real GSM extraction, GL-free geometry preparation, VBO, shaders, explicit MVP/colour, and player mesh rendering work in browser. TGA upload is browser-safe. | Shader does not sample textures or light; no shared modern path on any desktop; no four-target fixture/screenshots; VBO/shader lives inside an Emscripten branch of `DisplayList`; no recreation test. | Yes and now the highest-priority gate. The required proof should use the already-working player tank rather than invent a new fixture. |
 | 5 — resource and asset pipeline | **PARTIAL** | Browser preloads a startup subset; QGLMesh emits CPU geometry; facade owns GPU resources; topology conversion is tested. | No manifest/root abstraction, one CPU/GPU ownership model, indexed buffers, font centralization, complete asset set, context recreation, or clean texture decode/upload split. Native/browser resource implementations remain coupled to old/new backends. | Yes. Complete it incrementally behind the shared renderer; do not wait for a perfect manifest before native proof. |
-| 6 — terrain/camera/split-screen | **PARTIAL** | CPU perspective/view matrices and viewport iteration exist for browser; DTO terrain is still built. | Browser terrain is skipped; split screen, per-view clearing/aspect, resize/DPI, terrain batching, water, and visual gates are unproven. | Yes. Camera work is ahead of terrain work; success still requires rendered representative levels. |
+| 6 — terrain/camera/split-screen | **PARTIAL** | CPU perspective/view matrices and viewport iteration exist; single frame clear and both split-screen views are verified at 1280×720 in browser and both Linux renderers. | Browser terrain, resize/DPI, broader aspect/seam coverage, terrain batching, water, and four-target visual gates remain open. Multiplayer robustness is separately deferred / low priority. | Yes for rendering. Representative levels still need validation; passing viewport checks is not multiplayer sign-off. |
 | 7 — tanks/items/bullets/effects | **PARTIAL** | Browser player body/turret and bullets render; geometry/item submission code exists. Extractors/DTOs remain shared. | Enemy tanks and effects are deferred; items lack documented visible validation; overlays, indicators, texture/lighting and full variant parity are missing. Browser chooses a separate player renderer factory path. | Yes. Revise order: converge the player/bullet path natively before adding categories. |
 | 8 — HUD/menu/text/cutover | **NOT STARTED** | Shared HUD/menu data extraction and native legacy renderers pre-existed. | Browser implementations are deferred/no-op; no atlas/batched UI; native cutover is not begun. | Yes. Do not count pre-existing DTO organization as modern-renderer completion. |
 | 9 — audio/interaction lifecycle | **NOT STARTED** | Browser deliberately disables sound and startup music, avoiding autoplay failure. | No activation/resume, codec/mixer, positional sound, hidden-tab, or browser audio smoke test. | Yes. Disabling audio was correct bootstrap scaffolding, not implementation. |
@@ -480,7 +514,7 @@ split-screen, resize and per-viewport projection using explicit shared pass stat
 * **Prerequisites:** complete opaque pass and agreed blend/depth parity tolerances.
 * **Scope/files:** effect renderer/data, transparent sorting/state, viewport/camera,
   canvas/drawable resize and terrain variants.
-* **Exclude:** HUD text and audio.
+* **Exclude:** HUD text, audio, and deferred multiplayer/session-state robustness work.
 * **Gates:** representative effects and one-/two-player captures on all targets;
   browser resize/DPI/GL-error smoke; no state leakage between passes.
 * **Retire afterward:** native effect/overlay compatibility calls, browser effect
@@ -495,7 +529,8 @@ the default.
 * **Prerequisites:** resource ownership stable and baseline UI captures available.
 * **Scope/files:** HUD/menu renderers, font atlas/cache, UI DTO ownership, old
   `GraphicsTask` text/HUD/menu reachability, backend default/telemetry.
-* **Exclude:** browser audio/persistence except activation UI hooks.
+* **Exclude:** browser audio/persistence except activation UI hooks, and deferred
+  multiplayer/session-state robustness work.
 * **Gates:** menus/HUD/text and split-screen UI on four targets; stable resource
   counts; visual approval; fallback remains selectable for one release if desired.
 * **Retire afterward:** deferred HUD/menu source, legacy UI functions/resources, and,
@@ -520,10 +555,10 @@ risk.
 
 | Platform | Evidence today | Gap/action |
 | --- | --- | --- |
-| Linux | Current Release configure/build and 77/77 CTest pass; earlier notes report manual game runs. | No automated renderer smoke or current audit screenshot. Add deterministic native old/new fixture and a launch smoke before R1. |
+| Linux | 2026-09-29 Release build and 84/84 CTest pass; default/modern gameplay and split-screen captures exist. Sustained single-player firing passes; modern crashes in a longer multiplayer sequence. | Multiplayer is an open, deferred / low-priority limitation. Retain deterministic default/modern renderer fixtures and the crash evidence; no clean multiplayer baseline is claimed. |
 | macOS | Source/header/CMake accommodation only; no build or runtime artifact found in current browser-port records. | Unvalidated. Add compile plus real core-context/shader runtime in R2, before broad migration. |
 | Windows | Visual Studio files and source branches exist; no recent build/runtime artifact found. | Unvalidated. Add CMake/VS compile and GPU smoke in R2. |
-| Emscripten | Successful link/run reports, >1,700-frame debug/release runs, 59.79 FPS performance run, screenshots, GL-error/context checks and clean shutdown. | Evidence is one Chromium/AMD environment; no current CI/WASM unit tests, browser matrix, pointer lock/audio, context loss, or complete assets/features. |
+| Emscripten | 2026-09-29 Release build, fresh co-op/versus captures, and three 60-second single-player firing runs at 59.81–59.82 FPS with clean GL probes/shutdown. A longer multiplayer sequence traps. | Multiplayer is deferred / low priority; independent player-2 input is unverified. Evidence remains one Chromium/AMD environment; CI/WASM tests, browser matrix, interaction/audio, context recovery, and feature completeness remain open. |
 
 Before renderer convergence changes, retain the existing browser screenshots/results
 and add a deterministic scene fixture with mesh counts/bounds, camera/model matrices,

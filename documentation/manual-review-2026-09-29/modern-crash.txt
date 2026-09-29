@@ -1,0 +1,45 @@
+           PID: 227044 (tankgame-linux)
+           UID: 1000 (deck)
+           GID: 1000 (deck)
+        Signal: 11 (SEGV)
+     Timestamp: Tue 2026-09-29 13:57:08 CEST (1min 16s ago)
+  Command Line: ./tankgame-linux
+    Executable: /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux
+ Control Group: /user.slice/user-1000.slice/user@1000.service/user.slice/libpod-ce4823dcb3bcd864f92579fe91390364b7ea0102dca40408a3a80c09d993b7d6.scope/container
+          Unit: user@1000.service
+     User Unit: libpod-ce4823dcb3bcd864f92579fe91390364b7ea0102dca40408a3a80c09d993b7d6.scope
+         Slice: user-1000.slice
+     Owner UID: 1000 (deck)
+       Boot ID: 7cf34f98d5e4418eb60048a66fdd3fc6
+    Machine ID: f867498405d94988be97a27f6ae38b7a
+      Hostname: cpp-dev.steamdeck
+       Storage: /var/lib/systemd/coredump/core.tankgame-linux.1000.7cf34f98d5e4418eb60048a66fdd3fc6.227044.1790683028000000.zst (inaccessible)
+       Message: Process 227044 (tankgame-linux) of user 1000 dumped core.
+                
+                Stack trace of thread 227044:
+                #0  0x000056102c696c70 _ZNK15CollisionSystem20CheckSphereCollisionEffff14CollisionLayerP6Entity (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x45c70)
+                #1  0x000056102c696e8d _ZNSt17_Function_handlerIFvRK20SphereCollisionQueryEZN15CollisionSystem10InitializeEvEUlS2_E_E9_M_invokeERKSt9_Any_dataS2_ (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x45e8d)
+                #2  0x000056102c6623ee _ZN8EventBus8DispatchESt10type_indexRK5Event (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x113ee)
+                #3  0x000056102c660d93 _ZN6Bullet9NextFrameEv (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0xfd93)
+                #4  0x000056102c6680fc _ZN9GameWorld25UpdateEntitiesWithCleanupI6BulletEEvR13EntityManagerIT_E (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x170fc)
+                #5  0x000056102c666414 _ZN9GameWorld6UpdateEv (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x15414)
+                #6  0x000056102c665434 _ZN8GameTask18HandlePlayingStateEv (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x14434)
+                #7  0x000056102c665880 _ZN8GameTask6UpdateEv (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x14880)
+                #8  0x000056102c695850 _ZN11TaskHandler4TickEv (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x44850)
+                #9  0x000056102c695908 _ZN11TaskHandler7ExecuteEv (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x44908)
+                #10 0x000056102c6a2562 _ZN3App3RunEiPPc (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0x51562)
+                #11 0x000056102c65fd1c main (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0xed1c)
+                #12 0x00007fdd9f1186c1 n/a (/usr/lib/libc.so.6 + 0x276c1)
+                #13 0x00007fdd9f1187f9 n/a (/usr/lib/libc.so.6 + 0x277f9)
+                #14 0x000056102c65fd75 _start (/home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux + 0xed75)
+                
+                Stack trace of thread 227052:
+                #0  0x00007fdd9f18ff32 n/a (/usr/lib/libc.so.6 + 0x9ef32)
+                #1  0x00007fdd9f18468c n/a (/usr/lib/libc.so.6 + 0x9368c)
+                #2  0x00007fdd9f186e5e n/a (/usr/lib/libc.so.6 + 0x95e5e)
+                #3  0x00007fdd9a9ec55e n/a (/usr/lib/libgallium-26.0.1-arch1.1.so + 0x5ec55e)
+                #4  0x00007fdd9a9a18fd n/a (/usr/lib/libgallium-26.0.1-arch1.1.so + 0x5a18fd)
+                #5  0x00007fdd9a9ec49d n/a (/usr/lib/libgallium-26.0.1-arch1.1.so + 0x5ec49d)
+                #6  0x00007fdd9f18797a n/a (/usr/lib/libc.so.6 + 0x9697a)
+                #7  0x00007fdd9f20b2bc n/a (/usr/lib/libc.so.6 + 0x11a2bc)
+                ELF object binary architecture: AMD x86-64

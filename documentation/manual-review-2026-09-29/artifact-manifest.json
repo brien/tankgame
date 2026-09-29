@@ -1,0 +1,26 @@
+{
+  "tankgame-linux": {
+    "bytes": 671184,
+    "sha256": "2e373dd763946215bb9a2cd32f5448288964c904156fd2286d00ec59d011bceb"
+  },
+  "tankgame_tests": {
+    "bytes": 1769080,
+    "sha256": "ebdd94e558aea4b4c18b0f2bf8badecad2ceef8322157bb35deb83ec3748a036"
+  },
+  "tankgame-linux.html": {
+    "bytes": 19550,
+    "sha256": "8770c32e5d68cf35c9f8a9b8712c94b9b42faeb928457f7448cd72665b7e9e88"
+  },
+  "tankgame-linux.js": {
+    "bytes": 191352,
+    "sha256": "cb9817c9c70210eef0f15fb9eefe86aaba2a5ec12a45b2f36cf0e7264b1c632c"
+  },
+  "tankgame-linux.wasm": {
+    "bytes": 1822033,
+    "sha256": "955d118348f6bb3a422d5cfacd6d65cddc8165b362d9edf23fc67688614518d0"
+  },
+  "tankgame-linux.data": {
+    "bytes": 933796,
+    "sha256": "60b111ef41ebb8874775471a49c166c481b51166c5a9b66e04ce1432fc425405"
+  }
+}

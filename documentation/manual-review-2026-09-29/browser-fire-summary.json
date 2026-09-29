@@ -1,0 +1,47 @@
+[
+  {
+    "run": 1,
+    "seconds": 60,
+    "fps": 59.82023319096559,
+    "respawns": 3,
+    "errors": [],
+    "stopped": true,
+    "probe": {
+      "error": 0,
+      "lost": false
+    },
+    "heapBytes": [
+      18350080
+    ]
+  },
+  {
+    "run": 2,
+    "seconds": 60,
+    "fps": 59.81308411214953,
+    "respawns": 3,
+    "errors": [],
+    "stopped": true,
+    "probe": {
+      "error": 0,
+      "lost": false
+    },
+    "heapBytes": [
+      18350080
+    ]
+  },
+  {
+    "run": 3,
+    "seconds": 60,
+    "fps": 59.81298773285896,
+    "respawns": 3,
+    "errors": [],
+    "stopped": true,
+    "probe": {
+      "error": 0,
+      "lost": false
+    },
+    "heapBytes": [
+      18350080
+    ]
+  }
+]

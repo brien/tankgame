@@ -1,5 +1,15 @@
 # Split-screen framebuffer clearing
 
+**Current status (2026-09-29): fixed and visually verified.** The
+[manual review](../../documentation/manual-review-2026-09-29/README.md) confirms
+both views remain visible in fresh co-op/versus runs on browser, Linux default,
+and Linux modern. Longer multiplayer sequences can still crash in browser and
+Linux modern; switching back to single-player can retain split-screen state.
+Independent player-2 input remains unverified without a joystick. These are
+[deferred, low-priority multiplayer issues](risks.md#current-known-issues-2026-09-29)
+outside the browser-port critical path. The clear fix does not establish a clean
+multiplayer baseline; renderer convergence takes priority over a multiplayer rewrite.
+
 ## Verified render sequence and root cause
 
 The defect predates the browser port: the faulty per-view clear was already present
@@ -58,7 +68,7 @@ after all player views and must deliberately select the full framebuffer
 viewport. This fix does not enable scissor state and therefore creates no hidden
 constraint for that work.
 
-## Validation
+## Initial implementation validation
 
 The Linux Release executable and all 84 discovered tests build successfully; the
 three new platform-independent tests cover the full-frame single-player rectangle,
@@ -68,10 +78,11 @@ links its HTML, JavaScript, WASM, and data outputs successfully. Removing two
 redundant clears makes the frame perform less GPU clear work; no material frame-time
 regression is expected.
 
-This environment has no X server, headed Chromium, or virtual-display executable,
-so it cannot honestly provide a new visual native or browser smoke result. The
-following checks remain required on a graphical machine for both default and
-`TANKGAME_RENDERER=modern` native runs:
+The implementation environment had no X server, headed Chromium, or virtual-display
+executable, so the initial validation could not provide a visual smoke result.
+The subsequent manual review linked above supplies the current results and limits.
+The original graphical checklist is retained below for future regression runs in
+both default and `TANKGAME_RENDERER=modern` native modes:
 
 1. Run `runtime/tankgame-linux` from `runtime/`, start single-player, and confirm
    its appearance is unchanged.

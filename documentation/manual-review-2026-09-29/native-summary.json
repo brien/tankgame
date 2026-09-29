@@ -1,0 +1,14 @@
+{
+  "compatibility": {
+    "respawns": 8,
+    "reloads": 8,
+    "setups": 5,
+    "errors": []
+  },
+  "modern": {
+    "respawns": 6,
+    "reloads": 6,
+    "setups": 3,
+    "errors": []
+  }
+}
