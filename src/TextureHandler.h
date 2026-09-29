@@ -4,6 +4,7 @@
 #include <memory>
 
 #include "rendering/GpuTexture.h"
+#include "rendering/ImageData.h"
 
 enum TextureNames
 {
@@ -24,10 +25,12 @@ public:
     ~TextureHandler() = default;
     void LoadTextures();
     std::shared_ptr<const GpuTexture> GetTexture(TextureNames name) const;
+    std::shared_ptr<const ImageData> GetImage(TextureNames name) const;
     unsigned int* GetTextureArray() { return compatibilityHandles.data(); }
 
 private:
     std::array<std::shared_ptr<GpuTexture>, TEXTURE_NAMES_COUNT> textures;
+    std::array<std::shared_ptr<const ImageData>, TEXTURE_NAMES_COUNT> images;
     std::array<unsigned int, 32> compatibilityHandles;
     void LoadTexture(const char* fileName, TextureNames id, bool wrap);
 };

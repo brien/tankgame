@@ -14,13 +14,7 @@
 class DisplayList::Implementation
 {
 public:
-    explicit Implementation(int count) : count(count)
-    {
-#ifndef __EMSCRIPTEN__
-        if (!RendererMode::IsModern())
-            first = current = count > 0 ? glGenLists(count) : 0;
-#endif
-    }
+    explicit Implementation(int count) : count(count) {}
 
     ~Implementation()
     {
@@ -225,6 +219,12 @@ void DisplayList::SetGeometry(const Geometry& geometry)
     return;
     }
 #ifndef __EMSCRIPTEN__
+    // Compatibility names are allocated lazily.  This keeps construction of
+    // the resource catalogue CPU-only; initialization after context creation
+    // is the single point where compatibility GPU objects are created.
+    if (implementation->first == 0 && implementation->count > 0)
+        implementation->first = implementation->current =
+            glGenLists(implementation->count);
     BeginNewList();
     GLenum mode = GL_QUADS;
     if (geometry.topology == PrimitiveTopology::LINE_LOOP)

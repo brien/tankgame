@@ -513,7 +513,7 @@ bool HUDRenderer::LoadHUDTextures() {
         return false;
     }
     
-    auto* textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
+    auto* textureArray = App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray();
     
     // Map HUD textures to existing game textures
     hudTextures[TEXTURE_HEALTH_ICON] = textureArray[TEXTURE_HEART];

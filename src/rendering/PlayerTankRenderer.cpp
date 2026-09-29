@@ -78,7 +78,7 @@ void PlayerTankRenderer::DrawPlayerEffects(const Tank& player,
     glTranslatef(TEXTURE_DRIFT_SPEED * drift, 0, 0);
     glMatrixMode(GL_MODELVIEW);
 
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[17]);
     Color primaryColor = player.GetPrimaryColor();
     glColor3f(primaryColor.r, primaryColor.g, primaryColor.b);
 
@@ -185,7 +185,7 @@ void PlayerTankRenderer::RenderTankBody(const Tank& player)
     glFrontFace(GL_CCW);
     Color secondaryColor = player.GetSecondaryColor();
     glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
-    App::GetSingleton().graphicsTask->bodylist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody).Call(0);
 }
 
 void PlayerTankRenderer::RenderTankTurret(const Tank& player)
@@ -198,7 +198,7 @@ void PlayerTankRenderer::RenderTankTurret(const Tank& player)
 
     Color primaryColor = player.GetPrimaryColor();
     glColor3f(primaryColor.r, primaryColor.g, primaryColor.b);
-    App::GetSingleton().graphicsTask->turretlist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
 
     glFrontFace(GL_CW);
     glPopMatrix();
@@ -213,7 +213,7 @@ void PlayerTankRenderer::RenderEffectBody(const Tank& player)
     glRotatef(player.rz, 0, 0, 1);
 
     glFrontFace(GL_CCW);
-    App::GetSingleton().graphicsTask->bodylist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody).Call(0);
 }
 
 void PlayerTankRenderer::RenderEffectTurret(const Tank& player, 
@@ -231,7 +231,7 @@ void PlayerTankRenderer::RenderEffectTurret(const Tank& player,
 
     if (special[playerIndex] >= player.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
     {
-        App::GetSingleton().graphicsTask->turretlist.Call(0);
+        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
     }
 
     glFrontFace(GL_CW);
@@ -239,9 +239,9 @@ void PlayerTankRenderer::RenderEffectTurret(const Tank& player,
 
 void PlayerTankRenderer::RenderTargetingIndicator(const Tank& player)
 {
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[20]);
     glColor4f(1.0f, player.dist / DISTANCE_COLOR_FACTOR, 0.1f, 1.0);
-    App::GetSingleton().graphicsTask->squarelist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
 }
 
 void PlayerTankRenderer::RenderReadyIndicator(const Tank& player, float drift)
@@ -249,11 +249,11 @@ void PlayerTankRenderer::RenderReadyIndicator(const Tank& player, float drift)
     glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
     glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
 
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[17]);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     glScalef(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
-    App::GetSingleton().graphicsTask->squarelist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
     glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
 }
 #endif
@@ -323,7 +323,7 @@ void PlayerTankRenderer::RenderPlayerEffects(const TankRenderData& tank, float d
     glTranslatef(TEXTURE_DRIFT_SPEED * drift, 0, 0);
     glMatrixMode(GL_MODELVIEW);
 
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[17]);
     glColor3f(tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b);
 
     glPushMatrix();
@@ -377,7 +377,7 @@ void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float dri
 void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
 {
     if (RendererMode::IsModern()) {
-        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody),
             PlayerBodyModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
             tank.secondaryColor.b);
         return;
@@ -391,14 +391,14 @@ void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
 
     glFrontFace(GL_CCW);
     glColor3f(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b);
-    App::GetSingleton().graphicsTask->bodylist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody).Call(0);
 #endif
 }
 
 void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
 {
     if (RendererMode::IsModern()) {
-        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret),
             PlayerTurretModel(tank), tank.primaryColor.r, tank.primaryColor.g,
             tank.primaryColor.b);
         return;
@@ -411,7 +411,7 @@ void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
     glRotatef(tank.turretRotation.z, 0, 0, 1);
 
     glColor3f(tank.primaryColor.r, tank.primaryColor.g, tank.primaryColor.b);
-    App::GetSingleton().graphicsTask->turretlist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
 
     glFrontFace(GL_CW);
     glPopMatrix();
@@ -421,12 +421,11 @@ void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
 void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
 {
     if (RendererMode::IsModern()) {
-    BasicMaterial material;
+    BasicMaterial material = App::GetSingleton().graphicsTask->Resources().GetMaterial(MaterialResource::StarOverlay);
     material.red = tank.primaryColor.r;
     material.green = tank.primaryColor.g;
     material.blue = tank.primaryColor.b;
-    material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_DIAMOND);
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->bodylist,
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody),
                                   PlayerBodyModel(tank), material);
     return;
     }
@@ -438,7 +437,7 @@ void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
     glRotatef(tank.bodyRotation.z, 0, 0, 1);
 
     glFrontFace(GL_CCW);
-    App::GetSingleton().graphicsTask->bodylist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody).Call(0);
 #endif
 }
 
@@ -446,12 +445,11 @@ void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 {
     if (RendererMode::IsModern()) {
     if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR) {
-        BasicMaterial material;
+        BasicMaterial material = App::GetSingleton().graphicsTask->Resources().GetMaterial(MaterialResource::StarOverlay);
         material.red = tank.secondaryColor.r;
         material.green = tank.secondaryColor.g;
         material.blue = tank.secondaryColor.b;
-        material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_DIAMOND);
-        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->turretlist,
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret),
                                       PlayerTurretModel(tank), material);
     }
     return;
@@ -467,7 +465,7 @@ void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 
     if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
     {
-        App::GetSingleton().graphicsTask->turretlist.Call(0);
+        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
     }
 
     glFrontFace(GL_CW);
@@ -480,18 +478,17 @@ void PlayerTankRenderer::RenderTargetingIndicator(const TankRenderData& tank)
     const Matrix4 model = Matrix4::Translation(tank.position.x,
         tank.position.y + TARGETING_HEIGHT_OFFSET, tank.position.z) *
         Matrix4::Rotation(-tank.targetRotation, 0, 1, 0);
-    BasicMaterial material;
+    BasicMaterial material = App::GetSingleton().graphicsTask->Resources().GetMaterial(MaterialResource::RingOverlay);
     material.red = 1.0f;
     material.green = tank.health / 50.0f;
     material.blue = 0.1f;
-    material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_RING);
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model, material);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad), model, material);
     return;
     }
 #ifndef __EMSCRIPTEN__
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[20]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[20]);
     glColor4f(1.0f, tank.health / 50.0f, 0.1f, 1.0); // Use health as distance approximation
-    App::GetSingleton().graphicsTask->squarelist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
 #endif
 }
 
@@ -504,20 +501,19 @@ void PlayerTankRenderer::RenderReadyIndicator(const TankRenderData& tank, float 
         Matrix4::Translation(0, TARGETING_EFFECT_OFFSET, 0) *
         Matrix4::Rotation(ROTATION_EFFECT_SPEED * drift, 0, 1, 0) *
         Matrix4::Scale(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
-    BasicMaterial material;
-    material.texture = App::GetSingleton().graphicsTask->textureHandler.GetTexture(TEXTURE_DIAMOND);
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model, material);
+    BasicMaterial material = App::GetSingleton().graphicsTask->Resources().GetMaterial(MaterialResource::StarOverlay);
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad), model, material);
     return;
     }
 #ifndef __EMSCRIPTEN__
     glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
     glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
 
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[17]);
+    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[17]);
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     glScalef(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
-    App::GetSingleton().graphicsTask->squarelist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
     glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
 #endif
 }

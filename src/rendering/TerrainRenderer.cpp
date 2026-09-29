@@ -113,7 +113,7 @@ void TerrainRenderer::RenderFloatingElements(const TerrainRenderData &terrain)
                 // Use the cube display list from GraphicsTask
                 if (App::GetSingleton().graphicsTask)
                 {
-                    App::GetSingleton().graphicsTask->cubelist1.Call(0);
+                    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TerrainCube).Call(0);
                 }
 
                 glPopMatrix();
@@ -330,7 +330,7 @@ void TerrainRenderer::RenderWaterEffects(const TerrainRenderData &terrain)
     if (App::GetSingleton().graphicsTask)
     {
         glBindTexture(GL_TEXTURE_2D,
-                      App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[TEXTURE_BLEND]);
+                      App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[TEXTURE_BLEND]);
     }
 
     glColor4f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z, 0.5f);
@@ -503,7 +503,7 @@ void TerrainRenderer::BindSurfaceTexture(int levelNumber, int currentHeight)
         return;
     }
 
-    auto *textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
+    auto *textureArray = App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray();
 
     // Select surface texture based on level
     // For title screen (level 0 and some others), use checker pattern for top surface
@@ -542,7 +542,7 @@ void TerrainRenderer::BindWallTexture(int levelNumber)
         return;
     }
 
-    auto *textureArray = App::GetSingleton().graphicsTask->textureHandler.GetTextureArray();
+    auto *textureArray = App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray();
     
     glBindTexture(GL_TEXTURE_2D, textureArray[TEXTURE_BLACK]);
 

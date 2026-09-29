@@ -8,12 +8,18 @@ TextureHandler::TextureHandler() { compatibilityHandles.fill(0); }
 void TextureHandler::LoadTexture(const char* fileName, TextureNames id, bool wrap)
 {
     try {
-        textures[id] = std::make_shared<GpuTexture>(DecodeTga(fileName),
+        images[id] = std::make_shared<const ImageData>(DecodeTga(fileName));
+        textures[id] = std::make_shared<GpuTexture>(*images[id],
                                                     TextureUploadOptions{wrap, true});
         compatibilityHandles[id] = textures[id]->CompatibilityHandle();
     } catch (const std::exception& error) {
         Logger::Get().Write("TextureHandler: %s\n", error.what());
     }
+}
+
+std::shared_ptr<const ImageData> TextureHandler::GetImage(TextureNames name) const
+{
+    return images.at(static_cast<std::size_t>(name));
 }
 
 std::shared_ptr<const GpuTexture> TextureHandler::GetTexture(TextureNames name) const
