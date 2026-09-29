@@ -118,9 +118,6 @@ void RenderingPipeline::RenderScene(const SceneData &scene, int playerIndex)
     // Setup scene for specific player
     SetupSceneForPlayer(scene, playerIndex);
 
-    // Clear buffers
-    ClearBuffers();
-
     // Render in proper order for correct depth and transparency
     RenderSkybox(scene);
     RenderTerrain(scene.terrain);
@@ -138,6 +135,12 @@ void RenderingPipeline::RenderScene(const SceneData &scene, int playerIndex)
 
 void RenderingPipeline::RenderAllPlayerViews(const SceneData &scene)
 {
+    // A viewport limits rasterization, but it does not limit glClear. Clear the
+    // shared framebuffer once before rendering any player so that a later view
+    // cannot erase an earlier one. The viewports do not overlap, so their depth
+    // values can safely coexist in the same depth buffer.
+    ClearBuffers();
+
     // Render for each active player
     for (int i = 0; i < scene.numPlayers && i < viewportManager.GetNumViewports(); ++i)
     {

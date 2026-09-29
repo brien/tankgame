@@ -28,6 +28,7 @@ add_executable(tankgame_tests
     test_player.cpp
     test_tank_data_extractor.cpp
     test_player_manager_regression.cpp
+    test_viewport_manager.cpp
     ${TEST_SOURCES}
 )
 

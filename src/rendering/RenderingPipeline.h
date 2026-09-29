@@ -50,8 +50,10 @@ public:
     void CleanupRenderState() override;
     
     /**
-     * Renders a complete scene for the specified player.
+     * Renders the scene pass for the specified player into its viewport.
      * Handles viewport setup, camera positioning, and rendering all objects.
+     * The framebuffer is cleared once by RenderAllPlayerViews before any player
+     * pass is rendered.
      * 
      * @param scene Complete scene data containing all objects to render
      * @param playerIndex Index of the player whose view to render (0 or 1)
@@ -59,7 +61,8 @@ public:
     void RenderScene(const SceneData& scene, int playerIndex);
     
     /**
-     * Renders scenes for all players (split-screen support).
+     * Clears the shared framebuffer once, then renders scenes for all players
+     * (split-screen support).
      * 
      * @param scene Complete scene data containing all objects to render
      */
