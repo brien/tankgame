@@ -186,9 +186,6 @@ void GraphicsTask::Stop()
 
 void GraphicsTask::Update()
 {
-    // Essential buffer clearing and basic setup
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
     static int lastnumPlayers = 1; // Default to 1, will be updated dynamically
     
     // Get current player count from PlayerManager (via GameTask)
