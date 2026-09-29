@@ -1,6 +1,7 @@
 #include "GpuGeometry.h"
 
 #include "PlatformGL.h"
+#include "GLFunctions.h"
 
 class GpuGeometry::Implementation
 {
@@ -17,18 +18,18 @@ GpuGeometry::GpuGeometry(const Geometry& geometry) : implementation(new Implemen
     implementation->layout = prepared.layout;
     implementation->drawMode = prepared.drawMode;
     implementation->vertexCount = prepared.VertexCount();
-    glGenBuffers(1, &implementation->buffer);
-    glBindBuffer(GL_ARRAY_BUFFER, implementation->buffer);
-    glBufferData(GL_ARRAY_BUFFER,
+    GLFunctions::GenBuffers(1, &implementation->buffer);
+    GLFunctions::BindBuffer(GL_ARRAY_BUFFER, implementation->buffer);
+    GLFunctions::BufferData(GL_ARRAY_BUFFER,
                  static_cast<GLsizeiptr>(prepared.vertices.size() * sizeof(float)),
                  prepared.vertices.empty() ? nullptr : prepared.vertices.data(), GL_STATIC_DRAW);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GLFunctions::BindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 GpuGeometry::~GpuGeometry()
 {
     if (implementation->buffer != 0)
-        glDeleteBuffers(1, &implementation->buffer);
+        GLFunctions::DeleteBuffers(1, &implementation->buffer);
 }
 
 const GeometryAttributeLayout& GpuGeometry::Layout() const { return implementation->layout; }

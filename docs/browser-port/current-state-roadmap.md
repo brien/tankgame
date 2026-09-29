@@ -214,6 +214,34 @@ audio, or session behavior. The recommended next step is the narrow shader/progr
 and GPU-submission ownership boundary described in that audit, not a new feature
 category.
 
+## Renderer convergence milestone 5: desktop portability boundary (2026-09-29)
+
+The shared modern slice no longer depends on Linux extension prototypes.
+`GLFunctions` centrally loads every post-OpenGL-1.1 entry point through
+`SDL_GL_GetProcAddress` on desktop, uses normal GLES symbols on Emscripten, and
+fails initialization with a list of missing functions. `GraphicsCapabilities`
+now explicitly selects Linux/Windows OpenGL 2.1 compatibility, macOS modern
+OpenGL 3.2 core, and Emscripten ES 2.0 contexts. macOS compatibility mode is
+explicitly unsupported rather than being placed in a core context.
+
+The single logical shader now emits GLSL 1.20, GLSL 1.50 core, or GLSL ES 1.00
+syntax. Release Linux compilation and all 89 tests passed; the complete
+Emscripten application configured, linked and packaged. Linux modern initialized
+and remained alive for a five-second headless smoke, but legacy segfaulted after
+the environment reported its missing `XDG_RUNTIME_DIR`; there was no X server or
+Xvfb, so neither visual path was revalidated. There was no browser either. This
+environment also had neither Windows nor macOS toolchains/runtimes: those
+targets have architectural and build-system validation only, not compile/link
+or runtime validation. In particular, deferred renderer categories still use
+compatibility APIs and therefore prevent a claim that the whole game is macOS
+core-ready. See the focused
+[desktop portability report](desktop-modern-renderer-portability.md).
+
+The next milestone should qualify this boundary in Windows/macOS CI and on real
+machines, then migrate one narrow deferred draw category. It must not be treated
+as permission to begin terrain, effects, HUD/text, lighting, audio, browser UX,
+or multiplayer work.
+
 ## Original intent, without hindsight
 
 The original documents made three different levels of statement:
