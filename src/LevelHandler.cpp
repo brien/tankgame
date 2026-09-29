@@ -18,6 +18,7 @@
 #include "PlayerManager.h"
 #include "App.h"
 #include "Logger.h"
+#include "events/Events.h"
 #include "rendering/RenderData.h"
 #include <nlohmann/json.hpp>
 #include <iostream>
@@ -216,6 +217,11 @@ bool LevelHandler::Load(const char filePath[])
 void LevelHandler::NextLevel(bool forb)
 {
     Logger::Get().Write("\n========== LevelHandler::NextLevel(%s) called ==========\n", forb ? "true" : "false");
+
+    // Bullet updates may have queued collisions before a respawn reloads the
+    // level in the same frame. Discard old-level events before their entities
+    // are destroyed, just as GameTask::SetUpGame does for a new game.
+    Events::Clear();
     
     // Clear GameWorld entities (bullets, effects, items) 
     Logger::Get().Write("LevelHandler: Clearing GameWorld...\n");
