@@ -3,11 +3,12 @@
 #include <memory>
 
 #include "Geometry.h"
-#include "rendering/BasicMaterial.h"
 
-// A renderer resource facade. The shared modern backend stores an interleaved
-// VBO and shader on every platform. Native compatibility mode retains display
-// lists temporarily. No OpenGL handle or type is exposed.
+class GpuGeometry;
+
+// A transitional resource facade. Modern mode stores CPU geometry plus an
+// interleaved GPU geometry resource; native compatibility mode retains display
+// lists temporarily. Programs and draw state are owned elsewhere.
 class DisplayList
 {
 public:
@@ -21,12 +22,8 @@ public:
     void EndList();
     // Owns the CPU geometry and prepares the platform renderer resource.
     void SetGeometry(const Geometry& geometry);
-    // Explicit programmable-renderer draw state boundary. These are no-ops for
-    // the native compatibility backend.
-    void SetMvpMatrix(const float* columnMajorMatrix);
-    void SetDefaultColor(float red, float green, float blue, float alpha = 1.0f);
-    void SetMaterial(const BasicMaterial& material);
     void Call(int i);
+    const GpuGeometry& ModernGeometry() const;
     void Close();
 
 private:

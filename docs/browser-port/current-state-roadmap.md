@@ -292,6 +292,68 @@ resource architecture were complete.
 | 9 — audio/interaction lifecycle | **NOT STARTED** | Browser deliberately disables sound and startup music, avoiding autoplay failure. | No activation/resume, codec/mixer, positional sound, hidden-tab, or browser audio smoke test. | Yes. Disabling audio was correct bootstrap scaffolding, not implementation. |
 | 10 — persistence/polish/release | **PARTIAL** | Standard shell/data output, clean loop shutdown, release logging gate, performance harness, GL-error checks, and local screenshots exist. | Loading UX, persistence, fullscreen, responsive canvas, focus/accessibility, context loss, browser matrix, hosting/release automation and all native release artifacts are missing. | Yes, but release hardening remains after feature/convergence gates. Performance work was a justified out-of-order stabilization. |
 
+## Renderer convergence milestone 4: shared program and submission (2026-09-29)
+
+The programmable path no longer treats each `DisplayList` as a miniature
+renderer.  The verified old lifecycle created one identical shader program for
+every modern `DisplayList` (15 catalogue slots at initialization), stored the
+MVP, colour, and texture as mutable geometry state, and queried five uniform
+locations on every draw.  Its VBO was separable in principle but lived beside
+the program and submission code in the same private implementation.
+
+The modern flow is now `Geometry -> GpuGeometry -> ModernRenderer::Draw`.  A
+`GpuGeometry` owns one interleaved VBO plus topology, layout and vertex count.
+The catalogue owns one `ModernRenderer`, whose private `ShaderProgram` compiles
+and links the existing logical shader once, caches all five uniform locations,
+and serves player body/turret, bullets, items, and textured ring/star draws.
+`RenderContext` computes the MVP and supplies it with a `BasicMaterial` in one
+explicit call; neither transform nor material is persisted on geometry.
+
+`DisplayList` remains a deliberately transitional facade to avoid unrelated
+repository-wide churn.  It owns CPU geometry and either exposes its uploaded
+`GpuGeometry` to the explicit modern submission path or executes the native
+compatibility list through `Call`.  Calling `Call` in modern mode is now an
+error.  Its compatibility branches retain fixed-function/list behavior and are
+not compiled by Emscripten.
+
+Lifecycle is deterministic: after a current GL context exists,
+`ResourceManager` creates the shared program, uploads textures and VBOs, and
+connects it to `RenderContext`.  Shutdown first removes pipeline users, then
+releases every geometry facade/VBO, disconnects the context, destroys the
+program, and finally releases catalogue textures, all before `VideoTask`
+destroys the GL context.  No shader compilation, link, uniform lookup, VBO
+creation, or texture upload occurs per frame.
+
+Release native configure/build and all 86 tests passed.  Xvfb startup smokes reached the native task loop in both default compatibility
+and `TANKGAME_RENDERER=modern` modes without shader or GL errors. The smokes
+were time-bounded at the title scene, so they do not constitute fresh gameplay
+visual or clean-shutdown validation.
+The complete Emscripten Release target configured, compiled, linked, and emitted
+HTML/JS/WASM/data packaging.  Browser visual validation remains manual: launch
+the generated HTML through a local HTTP server, enter one-player gameplay,
+verify body/turret and mouse aim, fire continuously, observe items and ring/star
+overlays, check the console for WebGL errors, confirm approximately 60 FPS, and
+exercise shutdown/navigation.
+
+In the directly refactored facade, `__EMSCRIPTEN__` directives fell from 10 to
+9.  One shader-preamble directive moved into `ModernRenderer`, so the combined
+modern-backend total remains 10; the difference is now isolated to shader
+dialect, while the nine facade directives exclusively exclude compatibility
+display-list operations.  `PlatformGL` retains its one header-selection branch.
+
+macOS still needs a core-profile context and a core-compatible GLSL variant;
+centralizing program creation makes that variant a single narrow change, but
+the modern slice still uses GLSL 1.20 syntax and compatibility-only renderers
+remain elsewhere.  Windows still needs runtime loading for buffer, shader,
+program, attribute, uniform, active-texture, and mipmap entry points.  Those
+calls now have clear integration points in `GpuGeometry`, `ModernRenderer`, and
+`GpuTexture`, rather than being repeated per geometry.
+
+The next convergence milestone should establish the portable GL function
+loading/core shader boundary and validate this same migrated slice on another
+desktop platform.  It should not add terrain, enemies, effects, HUD/menu, text,
+lighting, or audio.
+
 ## Current architecture and delta
 
 ```text
@@ -301,15 +363,17 @@ resource architecture were complete.
        SceneDataBuilder + DTO extractors
                  |
  RenderingPipeline / viewport-camera orchestration
-         ________|____________________________
-        /                                      \
- native Linux/macOS/Windows                 Emscripten
- compatibility renderer                    transitional modern slice
- fixed-function matrices/colour            Matrix4 + global RenderContext
- immediate mode + DisplayList              CPU Geometry -> PreparedGeometry
- legacy lighting/textures/UI               DisplayList impl -> VBO + per-resource shader
- all legacy renderer classes               player-specific + bullet/item paths
-                                           deferred/no-op terrain/enemy/effect/UI
+                 |
+     migrated shared modern slice
+ Geometry -> GpuGeometry -> RenderContext
+                 |
+  one ModernRenderer / ShaderProgram
+                 |
+      Linux modern + Emscripten
+
+ Native compatibility fallback (separate bridge)
+ fixed-function matrices/colour + display lists
+ legacy lighting/textures and deferred feature categories
 ```
 
 ### Boundary audit

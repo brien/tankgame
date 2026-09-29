@@ -4,11 +4,13 @@
 #include "BasicMaterial.h"
 
 class DisplayList;
+class ModernRenderer;
 
 class RenderContext
 {
 public:
     static RenderContext& Current();
+    void SetModernRenderer(ModernRenderer* value) { renderer = value; }
     void SetProjection(const Matrix4& value) { projection = value; }
     void SetView(const Matrix4& value) { view = value; }
     Matrix4 Mvp(const Matrix4& model) const { return projection * view * model; }
@@ -18,6 +20,7 @@ public:
               const BasicMaterial& material) const;
 
 private:
+    ModernRenderer* renderer = nullptr;
     Matrix4 projection;
     Matrix4 view;
 };

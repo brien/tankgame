@@ -4,6 +4,7 @@
 #include "../DisplayList.h"
 #include "../TextureHandler.h"
 #include "../igtl_qmesh.h"
+#include "ModernRenderer.h"
 #include <stdexcept>
 
 enum class GeometryResource {
@@ -46,6 +47,7 @@ public:
     DisplayList& GetGeometry(GeometryResource resource);
     const DisplayList& GetGeometry(GeometryResource resource) const;
     const BasicMaterial& GetMaterial(MaterialResource resource) const;
+    const ModernRenderer* GetModernRenderer() const { return modernRenderer.get(); }
 
     // Compatibility aliases retained while non-migrated renderers are removed.
     const DisplayList& GetCubeList1() const { return cubeList1; }
@@ -83,6 +85,8 @@ public:
     bool AreMeshesLoaded() const { return meshesLoaded; }
     
 private:
+    // Created before geometry upload and explicitly destroyed after all VBOs.
+    std::unique_ptr<ModernRenderer> modernRenderer;
     // Display lists (moved from GraphicsTask)
     DisplayList cubeList1{1};
     DisplayList cubeList2{1};
