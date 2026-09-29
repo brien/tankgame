@@ -1,7 +1,9 @@
 #pragma once
 
-// Keep API/header differences at the context/backend boundary. The shared
-// programmable backend itself uses only the OpenGL 2.1 / GLES2 common subset.
+// Keep API/header differences at the context/backend boundary. Modern desktop
+// entry points are never taken from these headers; GLFunctions loads them from
+// the current SDL context. This matters on Windows, whose system header stops
+// at OpenGL 1.1.
 #ifdef __EMSCRIPTEN__
 #include <GLES2/gl2.h>
 #elif defined(_WIN32)
@@ -10,8 +12,8 @@
 #include <GL/glext.h>
 #elif defined(__APPLE__)
 #include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
 #else
-#define GL_GLEXT_PROTOTYPES 1
 #include <GL/gl.h>
 #include <GL/glext.h>
 #endif

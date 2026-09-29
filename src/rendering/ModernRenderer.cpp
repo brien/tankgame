@@ -8,24 +8,26 @@
 #include "GpuGeometry.h"
 #include "GpuTexture.h"
 #include "PlatformGL.h"
+#include "GLFunctions.h"
+#include "GraphicsCapabilities.h"
 
 namespace
 {
 GLuint CompileShader(GLenum type, const char* source)
 {
-    const GLuint shader = glCreateShader(type);
-    glShaderSource(shader, 1, &source, nullptr);
-    glCompileShader(shader);
+    const GLuint shader = GLFunctions::CreateShader(type);
+    GLFunctions::ShaderSource(shader, 1, &source, nullptr);
+    GLFunctions::CompileShader(shader);
     GLint compiled = GL_FALSE;
-    glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
+    GLFunctions::GetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
     if (compiled == GL_FALSE)
     {
         GLint length = 0;
-        glGetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
+        GLFunctions::GetShaderiv(shader, GL_INFO_LOG_LENGTH, &length);
         std::vector<char> log(static_cast<std::size_t>(length > 0 ? length : 1));
-        glGetShaderInfoLog(shader, length, nullptr, log.data());
+        GLFunctions::GetShaderInfoLog(shader, length, nullptr, log.data());
         std::fprintf(stderr, "Modern renderer shader compilation failed: %s\n", log.data());
-        glDeleteShader(shader);
+        GLFunctions::DeleteShader(shader);
         throw std::runtime_error("Modern renderer shader compilation failed");
     }
     return shader;
@@ -37,58 +39,50 @@ class ModernRenderer::ShaderProgram
 public:
     ShaderProgram()
     {
-        static const char* vertexBody =
-            "attribute vec3 aPosition;\nattribute vec3 aColor;\nattribute vec2 aUV;\n"
-            "attribute vec3 aNormal;\nuniform mat4 uMvp;\nuniform vec4 uDefaultColor;\n"
-            "uniform bool uHasColor;\nvarying vec4 vColor;\nvarying vec2 vUV;\n"
-            "varying vec3 vNormal;\nvoid main() { gl_Position = uMvp * vec4(aPosition, 1.0);"
-            " vColor = uHasColor ? vec4(aColor, 1.0) : uDefaultColor;"
-            " vUV = aUV; vNormal = aNormal; }\n";
-        static const char* fragmentBody =
-            "varying vec4 vColor; varying vec2 vUV; varying vec3 vNormal;\n"
-            "uniform sampler2D uTexture; uniform bool uHasTexture;\n"
-            "void main() { vec4 texel = uHasTexture ? texture2D(uTexture, vUV) : vec4(1.0);"
-            " gl_FragColor = texel * vColor + vec4(vNormal.x) * 0.0000001; }\n";
+        GraphicsPlatform platform = GraphicsPlatform::Linux;
 #ifdef __EMSCRIPTEN__
-        const std::string preamble = "precision mediump float;\n";
-#else
-        const std::string preamble = "#version 120\n";
+        platform = GraphicsPlatform::Web;
+#elif defined(__APPLE__)
+        platform = GraphicsPlatform::MacOS;
+#elif defined(_WIN32)
+        platform = GraphicsPlatform::Windows;
 #endif
-        const std::string vertexSource = preamble + vertexBody;
-        const std::string fragmentSource = preamble + fragmentBody;
+        const ShaderDialect dialect = ChooseShaderDialect(platform, true);
+        const std::string vertexSource = BuildVertexShader(dialect);
+        const std::string fragmentSource = BuildFragmentShader(dialect);
         const GLuint vertex = CompileShader(GL_VERTEX_SHADER, vertexSource.c_str());
         const GLuint fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
-        handle = glCreateProgram();
-        glAttachShader(handle, vertex);
-        glAttachShader(handle, fragment);
-        glBindAttribLocation(handle, 0, "aPosition");
-        glBindAttribLocation(handle, 1, "aColor");
-        glBindAttribLocation(handle, 2, "aUV");
-        glBindAttribLocation(handle, 3, "aNormal");
-        glLinkProgram(handle);
-        glDeleteShader(vertex);
-        glDeleteShader(fragment);
+        handle = GLFunctions::CreateProgram();
+        GLFunctions::AttachShader(handle, vertex);
+        GLFunctions::AttachShader(handle, fragment);
+        GLFunctions::BindAttribLocation(handle, 0, "aPosition");
+        GLFunctions::BindAttribLocation(handle, 1, "aColor");
+        GLFunctions::BindAttribLocation(handle, 2, "aUV");
+        GLFunctions::BindAttribLocation(handle, 3, "aNormal");
+        GLFunctions::LinkProgram(handle);
+        GLFunctions::DeleteShader(vertex);
+        GLFunctions::DeleteShader(fragment);
         GLint linked = GL_FALSE;
-        glGetProgramiv(handle, GL_LINK_STATUS, &linked);
+        GLFunctions::GetProgramiv(handle, GL_LINK_STATUS, &linked);
         if (linked == GL_FALSE)
         {
             GLint length = 0;
-            glGetProgramiv(handle, GL_INFO_LOG_LENGTH, &length);
+            GLFunctions::GetProgramiv(handle, GL_INFO_LOG_LENGTH, &length);
             std::vector<char> log(static_cast<std::size_t>(length > 0 ? length : 1));
-            glGetProgramInfoLog(handle, length, nullptr, log.data());
+            GLFunctions::GetProgramInfoLog(handle, length, nullptr, log.data());
             std::fprintf(stderr, "Modern renderer program link failed: %s\n", log.data());
-            glDeleteProgram(handle);
+            GLFunctions::DeleteProgram(handle);
             handle = 0;
             throw std::runtime_error("Modern renderer program link failed");
         }
-        mvp = glGetUniformLocation(handle, "uMvp");
-        defaultColor = glGetUniformLocation(handle, "uDefaultColor");
-        hasColor = glGetUniformLocation(handle, "uHasColor");
-        hasTexture = glGetUniformLocation(handle, "uHasTexture");
-        texture = glGetUniformLocation(handle, "uTexture");
+        mvp = GLFunctions::GetUniformLocation(handle, "uMvp");
+        defaultColor = GLFunctions::GetUniformLocation(handle, "uDefaultColor");
+        hasColor = GLFunctions::GetUniformLocation(handle, "uHasColor");
+        hasTexture = GLFunctions::GetUniformLocation(handle, "uHasTexture");
+        texture = GLFunctions::GetUniformLocation(handle, "uTexture");
     }
 
-    ~ShaderProgram() { if (handle != 0) glDeleteProgram(handle); }
+    ~ShaderProgram() { if (handle != 0) GLFunctions::DeleteProgram(handle); }
 
     GLuint handle = 0;
     GLint mvp = -1;
@@ -106,34 +100,34 @@ void ModernRenderer::Draw(const GpuGeometry& geometry, const float* mvp,
 {
     if (mvp == nullptr) throw std::invalid_argument("ModernRenderer MVP matrix cannot be null");
     const GeometryAttributeLayout& layout = geometry.Layout();
-    glUseProgram(program->handle);
-    glBindBuffer(GL_ARRAY_BUFFER, geometry.BufferHandle());
+    GLFunctions::UseProgram(program->handle);
+    GLFunctions::BindBuffer(GL_ARRAY_BUFFER, geometry.BufferHandle());
     const GLsizei stride = static_cast<GLsizei>(layout.strideFloats * sizeof(float));
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, nullptr);
+    GLFunctions::EnableVertexAttribArray(0);
+    GLFunctions::VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride, nullptr);
     const auto optional = [&](GLuint index, bool present, GLint size, std::size_t offset) {
         if (present) {
-            glEnableVertexAttribArray(index);
-            glVertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride,
+            GLFunctions::EnableVertexAttribArray(index);
+            GLFunctions::VertexAttribPointer(index, size, GL_FLOAT, GL_FALSE, stride,
                                   reinterpret_cast<const void*>(offset * sizeof(float)));
-        } else glDisableVertexAttribArray(index);
+        } else GLFunctions::DisableVertexAttribArray(index);
     };
     optional(1, layout.hasColors, 3, layout.colorOffset);
     optional(2, layout.hasTextureCoordinates, 2, layout.textureCoordinateOffset);
     optional(3, layout.hasNormals, 3, layout.normalOffset);
 
     const GLfloat color[] = {material.red, material.green, material.blue, material.alpha};
-    glUniformMatrix4fv(program->mvp, 1, GL_FALSE, mvp);
-    glUniform4fv(program->defaultColor, 1, color);
-    glUniform1i(program->hasColor, layout.hasColors ? 1 : 0);
+    GLFunctions::UniformMatrix4fv(program->mvp, 1, GL_FALSE, mvp);
+    GLFunctions::Uniform4fv(program->defaultColor, 1, color);
+    GLFunctions::Uniform1i(program->hasColor, layout.hasColors ? 1 : 0);
     const bool textured = material.texture && layout.hasTextureCoordinates;
-    glUniform1i(program->hasTexture, textured ? 1 : 0);
-    glUniform1i(program->texture, 0);
+    GLFunctions::Uniform1i(program->hasTexture, textured ? 1 : 0);
+    GLFunctions::Uniform1i(program->texture, 0);
     if (textured) material.texture->Bind(0);
     const GLenum mode = geometry.DrawMode() == GeometryDrawMode::LINES ? GL_LINES :
         geometry.DrawMode() == GeometryDrawMode::LINE_LOOP ? GL_LINE_LOOP : GL_TRIANGLES;
     glDrawArrays(mode, 0, static_cast<GLsizei>(geometry.VertexCount()));
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    GLFunctions::BindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 const void* ModernRenderer::ProgramIdentity() const { return program.get(); }

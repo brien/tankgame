@@ -5,6 +5,9 @@
 #include "VideoTask.h"
 #include "TankHandler.h"
 #include "App.h"
+#include "rendering/GLFunctions.h"
+#include "rendering/GraphicsCapabilities.h"
+#include "rendering/RendererMode.h"
 
 #include <SDL2/SDL.h>
 #include <iostream>
@@ -27,14 +30,26 @@ bool VideoTask::Start()
         Logger::Get().Write("VideoTask::Start: SDL_InitSubSystem failed.\n");
         return false;
     }
+    GraphicsPlatform platform = GraphicsPlatform::Linux;
 #ifdef __EMSCRIPTEN__
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_ES);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 0);
-#else
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 2);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
+    platform = GraphicsPlatform::Web;
+#elif defined(__APPLE__)
+    platform = GraphicsPlatform::MacOS;
+#elif defined(_WIN32)
+    platform = GraphicsPlatform::Windows;
 #endif
+    const ContextRequest context = ChooseContextRequest(platform, RendererMode::IsModern());
+    if (!context.supported)
+    {
+        Logger::Get().Write("VideoTask::Start: compatibility rendering is unsupported on macOS; use TANKGAME_RENDERER=modern.\n");
+        return false;
+    }
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, context.major);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, context.minor);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,
+        context.profile == GraphicsProfile::ES2 ? SDL_GL_CONTEXT_PROFILE_ES :
+        context.profile == GraphicsProfile::Core32 ? SDL_GL_CONTEXT_PROFILE_CORE :
+        SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 
     SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
     SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
@@ -147,6 +162,20 @@ bool VideoTask::Start()
         return false;
     }
 
+    if (RendererMode::IsModern())
+    {
+        std::string loaderError;
+        if (!GLFunctions::Initialize(loaderError))
+        {
+            Logger::Get().Write("VideoTask::Start: %s\n", loaderError.c_str());
+            SDL_GL_DeleteContext(glContext);
+            glContext = nullptr;
+            SDL_DestroyWindow(window);
+            window = nullptr;
+            return false;
+        }
+    }
+
     SDL_GL_SetSwapInterval(1);
     Logger::Get().Write("VideoTask::Start: graphics context ready at %dx%d.\n", scrWidth, scrHeight);
 
@@ -160,7 +189,8 @@ void VideoTask::Update()
 
 void VideoTask::Stop()
 {
-    SDL_QuitSubSystem(SDL_INIT_VIDEO);
+    GLFunctions::Shutdown();
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
+    SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }

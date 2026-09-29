@@ -1,5 +1,6 @@
 #include "GpuTexture.h"
 #include "PlatformGL.h"
+#include "GLFunctions.h"
 
 #include <stdexcept>
 
@@ -16,7 +17,7 @@ GpuTexture::GpuTexture(const ImageData& image, TextureUploadOptions options)
     glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
     glTexImage2D(GL_TEXTURE_2D, 0, format, image.width, image.height, 0,
                  format, GL_UNSIGNED_BYTE, image.pixels.data());
-    if (settings.mipmaps) glGenerateMipmap(GL_TEXTURE_2D);
+    if (settings.mipmaps) GLFunctions::GenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                     settings.mipmaps ? GL_LINEAR_MIPMAP_LINEAR : GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -32,7 +33,7 @@ GpuTexture::~GpuTexture()
 
 void GpuTexture::Bind(unsigned int unit) const
 {
-    glActiveTexture(GL_TEXTURE0 + unit);
+    GLFunctions::ActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, implementation->handle);
 }
 
