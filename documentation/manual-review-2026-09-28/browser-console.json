@@ -1,0 +1,852 @@
+{
+  "logs": [
+    {
+      "type": "log",
+      "text": "We compiled against SDL version 2.28.4 ..."
+    },
+    {
+      "type": "log",
+      "text": "But we are linking against SDL version 2.28.4."
+    },
+    {
+      "type": "log",
+      "text": "VideoTask::Start: graphics context ready at 1280x720."
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask::Starting"
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: terrain is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer initialized successfully"
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: effects is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: enemy tank rendering is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "type": "log",
+      "text": "RenderingPipeline initializing... "
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: terrain is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer initialized successfully"
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: effects is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: HUD is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: menus is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask::Started"
+    },
+    {
+      "type": "log",
+      "text": "Renderer mode: modern"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: ./levels/title@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: ./levels/title@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameWorld::Initialize() - Starting"
+    },
+    {
+      "type": "log",
+      "text": "CollisionSystem::Initialize() - Subscribing to collision query events"
+    },
+    {
+      "type": "log",
+      "text": "CollisionSystem::Initialize() - Subscriptions complete"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld initialized with collision and combat systems"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Setting GameWorld and recreating SceneDataBuilder"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: OnResume - Initializing systems..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Initializing PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Initialize called with GameWorld"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Creating initial player..."
+    },
+    {
+      "type": "log",
+      "text": "Created Player 0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Claiming existing tanks from TankHandler..."
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: No valid tank found for Player 0 in TankHandler"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up controllers and input with synced preferences..."
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Detected 0 joysticks"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Keeping TankHandler input preference isInputJoy=0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Using keyboard/mouse input (from TankHandler)"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Keeping numPlayers=1 from initialization"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Initialized with 1 players"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager initialized with 1 players"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: OnResume complete"
+    },
+    {
+      "type": "log",
+      "text": "Initialization complete."
+    },
+    {
+      "type": "log",
+      "text": "Registering non-blocking Emscripten browser frame loop."
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "type": "log",
+      "text": "Browser first frame completed: WebGL clear/render/swap path executed."
+    },
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (File not found)"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Setting up new game..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Cleared event queue"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: GameWorld::CreateTank returned tank=0x1fe2d0"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank::Init() completed"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 took control of tank"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Player tanks spawned"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Game setup complete"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=58.65 avg_ms=17.051 recent_ms=16.700 max_ms=39.000 tick_ms=1.076 frames=59 interval_ms=1006.000"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.700 max_ms=16.900 tick_ms=0.505 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 108 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=17.300 tick_ms=0.492 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 5, Items: 0, Effects: 25 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.700 max_ms=16.800 tick_ms=0.523 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 7, Items: 0, Effects: 56 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.96 avg_ms=16.677 recent_ms=16.600 max_ms=16.800 tick_ms=0.488 frames=60 interval_ms=1000.600"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 9, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.94 avg_ms=16.683 recent_ms=16.700 max_ms=19.800 tick_ms=0.513 frames=60 interval_ms=1001.000"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 11, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=16.900 tick_ms=0.532 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 14, Items: 0, Effects: 72 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=16.900 tick_ms=0.572 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 16, Items: 0, Effects: 28 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.800 max_ms=16.900 tick_ms=0.573 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Calling NextLevel for player respawn (deadtime=0.50)"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to ENEMY_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 released tank control"
+    },
+    {
+      "type": "log",
+      "text": ""
+    },
+    {
+      "type": "log",
+      "text": "========== LevelHandler::NextLevel(false) called =========="
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Clearing GameWorld..."
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: GameWorld cleared"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Creating new player tank after respawn"
+    },
+    {
+      "type": "log",
+      "text": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: GameWorld::CreateTank returned tank=0x234180"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank::Init() completed"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 took control of tank"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 respawned with new tank"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=58.96 avg_ms=16.961 recent_ms=16.600 max_ms=47.200 tick_ms=1.149 frames=59 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 2, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.700 max_ms=16.900 tick_ms=0.423 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 4, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.96 avg_ms=16.678 recent_ms=16.600 max_ms=16.800 tick_ms=0.452 frames=60 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 7, Items: 0, Effects: 101 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.700 max_ms=16.900 tick_ms=0.540 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 9, Items: 0, Effects: 128 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.600 max_ms=16.900 tick_ms=0.532 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 11, Items: 0, Effects: 0 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.700 max_ms=17.000 tick_ms=0.550 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 13, Items: 0, Effects: 13 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=16.800 tick_ms=0.545 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 15, Items: 0, Effects: 43 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.600 max_ms=17.000 tick_ms=0.612 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 17, Items: 0, Effects: 36 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.700 max_ms=17.000 tick_ms=0.585 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 20, Items: 0, Effects: 32 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.96 avg_ms=16.678 recent_ms=16.600 max_ms=16.800 tick_ms=0.637 frames=60 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 21, Items: 0, Effects: 122 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Calling NextLevel for player respawn (deadtime=0.50)"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to ENEMY_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 released tank control"
+    },
+    {
+      "type": "log",
+      "text": ""
+    },
+    {
+      "type": "log",
+      "text": "========== LevelHandler::NextLevel(false) called =========="
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Clearing GameWorld..."
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: GameWorld cleared"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Creating new player tank after respawn"
+    },
+    {
+      "type": "log",
+      "text": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: GameWorld::CreateTank returned tank=0x234180"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank::Init() completed"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 took control of tank"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 respawned with new tank"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=56.95 avg_ms=17.560 recent_ms=16.700 max_ms=70.000 tick_ms=1.675 frames=57 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 2, Items: 0, Effects: 0 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.800 max_ms=16.900 tick_ms=0.422 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 4, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.96 avg_ms=16.678 recent_ms=16.700 max_ms=18.200 tick_ms=0.455 frames=60 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 7, Items: 0, Effects: 66 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.94 avg_ms=16.683 recent_ms=16.800 max_ms=21.700 tick_ms=0.588 frames=60 interval_ms=1001.000"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 9, Items: 0, Effects: 146 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.96 avg_ms=16.678 recent_ms=16.700 max_ms=16.900 tick_ms=0.558 frames=60 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 9, Items: 0, Effects: 58 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.96 avg_ms=16.678 recent_ms=16.600 max_ms=17.100 tick_ms=0.522 frames=60 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 9, Items: 0, Effects: 58 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Setting up new game..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Cleared event queue"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Player tanks spawned"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Game setup complete"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.600 max_ms=24.900 tick_ms=0.885 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 11, Bullets: 7, Items: 0, Effects: 68 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.600 max_ms=16.900 tick_ms=0.558 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 11, Bullets: 7, Items: 0, Effects: 59 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.94 avg_ms=16.683 recent_ms=16.800 max_ms=16.900 tick_ms=0.497 frames=60 interval_ms=1001.000"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 11, Bullets: 7, Items: 0, Effects: 101 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Created Player 1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 1 using generic joystick input mode"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Input handler created successfully for player 1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager now managing 2 players"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Setting up new game..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Cleared event queue"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": ">>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 1: GameWorld::CreateTank returned tank=0x2a4fd8"
+    },
+    {
+      "type": "log",
+      "text": "Player 1: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 1: Tank::Init() completed"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 1 took control of tank"
+    },
+    {
+      "type": "log",
+      "text": "Player 1: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Player tanks spawned"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Game setup complete"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=56.95 avg_ms=17.558 recent_ms=16.700 max_ms=82.100 tick_ms=2.023 frames=57 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 17, Bullets: 4, Items: 0, Effects: 167 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=16.900 tick_ms=0.813 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 17, Bullets: 4, Items: 0, Effects: 70 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.800 max_ms=16.900 tick_ms=0.722 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 17, Bullets: 4, Items: 0, Effects: 132 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Setting up new game..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Cleared event queue"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Player tanks spawned"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Game setup complete"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.800 max_ms=31.200 tick_ms=1.250 frames=60 interval_ms=1000.900"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 22, Bullets: 2, Items: 0, Effects: 42 | FPS: 62.5"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.800 max_ms=16.800 tick_ms=0.733 frames=60 interval_ms=1000.800"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 22, Bullets: 2, Items: 0, Effects: 143 | FPS: 58.8"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: ClosingFont "
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer cleaned up"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer cleaned up"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Stopped "
+    },
+    {
+      "type": "log",
+      "text": "Browser frame loop stopped."
+    }
+  ],
+  "errors": [],
+  "probes": [
+    {
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"
+    }
+  ]
+}

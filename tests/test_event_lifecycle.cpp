@@ -2,6 +2,9 @@
 #include "GameWorld.h"
 #include "LevelHandler.h"
 #include "events/Events.h"
+#include "TankHandler.h"
+#include <cstdio>
+#include <fstream>
 
 namespace {
 struct Ping : EventBase<Ping> {};
@@ -185,6 +188,48 @@ TEST_F(EventLifecycleTest, WorldCanInitializeAgainAfterShutdown) {
         ExpectNoWorldCallbacks();
         EXPECT_EQ(world.GetFX().size(), count + 1);
     }
+}
+
+TEST_F(EventLifecycleTest, LevelReloadDiscardsEventsForDestroyedEntities) {
+    // Keep the level number at filename[12], as expected by NextLevel.
+    const char* filename = "reload-level0.txt";
+    struct LevelFile {
+        const char* path;
+        ~LevelFile() { std::remove(path); }
+    } file{filename};
+    {
+        std::ofstream levelFile(filename);
+        for (int row = 0; row < 128; ++row) {
+            levelFile << std::string(128, 'd') << '\n';
+        }
+    }
+    auto& level = LevelHandler::GetSingleton();
+    ASSERT_TRUE(level.Load(filename));
+    GameWorld world;
+    world.Initialize();
+    level.SetGameWorld(&world);
+    TankHandler::Create();
+    struct TankHandlerCleanup {
+        ~TankHandlerCleanup() { TankHandler::Destroy(); }
+    } cleanup;
+    TankHandler::GetSingleton().SetGameWorld(&world);
+
+    Bullet* bullet = world.CreateBullet(Bullet{});
+    Events::Post(BulletTimeoutEvent(bullet, 100));
+    Events::Post(Effect());
+    level.NextLevel(false);
+    Events::ProcessQueuedEvents();
+    EXPECT_TRUE(world.GetBullets().empty());
+    EXPECT_TRUE(world.GetFX().empty());
+
+    // Reload must preserve subscriptions and normal new-level event handling.
+    Bullet* nextBullet = world.CreateBullet(Bullet{});
+    Events::Post(BulletTimeoutEvent(nextBullet, 100));
+    Events::Post(Effect());
+    Events::ProcessQueuedEvents();
+    EXPECT_FALSE(nextBullet->IsAlive());
+    EXPECT_EQ(world.GetFX().size(), 1u);
+    level.SetGameWorld(nullptr);
 }
 
 TEST_F(EventLifecycleTest, ShuttingDownOneWorldPreservesAnotherWorld) {

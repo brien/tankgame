@@ -1,0 +1,12 @@
+const {chromium}=require('playwright');const fs=require('fs');
+const out='/home/deck/Dropbox/work/Programming/tankgame/documentation/manual-review-2026-09-28';
+(async()=>{const b=await chromium.launch({headless:false});const p=await b.newPage({viewport:{width:1280,height:1000}});let logs=[],errors=[];p.on('console',m=>logs.push({type:m.type(),text:m.text()}));p.on('pageerror',e=>{errors.push(e.stack);console.log('PAGE ERROR',e.stack)});let probes=[];
+const shot=async name=>{await p.locator('#canvas').screenshot({path:out+'/browser-'+name+'.png'});console.log(name);if(errors.length)throw Error('Game trapped; see console stack');};
+const key=async k=>{await p.locator('#canvas').focus();await p.keyboard.press(k,{delay:250});await p.waitForTimeout(300)};
+try {await p.goto('http://127.0.0.1:8765/tankgame-linux.html');await p.waitForFunction(()=>document.querySelector('#output').value.includes('Browser first frame completed'));await p.locator('#canvas').focus();await shot('title');await key('Enter');await p.waitForTimeout(1500);await shot('idle');
+await p.mouse.move(650,400);await p.mouse.down();await p.waitForTimeout(650);await shot('firing');await p.waitForTimeout(20000);await p.mouse.up();
+await p.locator('#canvas').focus();await p.keyboard.down('d');await p.waitForTimeout(350);await p.keyboard.up('d');await p.keyboard.down('w');await p.waitForTimeout(500);await p.keyboard.up('w');await p.mouse.move(750,400,{steps:10});await shot('moved');await key('Space');await shot('jump');
+probes.push(await p.evaluate(()=>{let g=document.querySelector('#canvas').getContext('webgl');let e=g.getExtension('WEBGL_debug_renderer_info');return {error:g.getError(),lost:g.isContextLost(),renderer:g.getParameter(e.UNMASKED_RENDERER_WEBGL)}}));
+await key('Escape');await shot('returned-menu');await key('Enter');await p.waitForTimeout(1000);await shot('restart');await key('Escape');await key('ArrowRight');await key('Enter');await p.waitForTimeout(1000);await shot('two-player');await key('Escape');await key('ArrowDown');await key('Enter');await p.waitForTimeout(1000);await shot('versus');await key('Escape');await key('Escape');await p.waitForFunction(()=>document.querySelector('#output').value.includes('Browser frame loop stopped'));await p.waitForTimeout(1500);
+console.log(JSON.stringify({errors,probes,stopped:true,browser:b.version()}));
+} finally {fs.writeFileSync(out+'/browser-console.json',JSON.stringify({logs,errors,probes},null,2));await b.close()}})().catch(e=>{console.error(e);process.exitCode=1});
