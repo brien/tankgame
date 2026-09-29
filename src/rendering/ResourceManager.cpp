@@ -1,4 +1,6 @@
 #include "ResourceManager.h"
+#include "RenderContext.h"
+#include "RendererMode.h"
 ResourceManager::ResourceManager() 
     : isInitialized(false)
     , displayListsBuilt(false)
@@ -11,6 +13,12 @@ bool ResourceManager::Initialize() {
         return true;
     }
     
+    // Compile/link once per catalogue/context, before any modern draw resource.
+    if (RendererMode::IsModern()) {
+        modernRenderer.reset(new ModernRenderer);
+        RenderContext::Current().SetModernRenderer(modernRenderer.get());
+    }
+
     // Initialize all resource subsystems
     bool success = true;
     
@@ -30,6 +38,8 @@ bool ResourceManager::Initialize() {
 
 void ResourceManager::Cleanup() {
     CleanupDisplayLists();
+    RenderContext::Current().SetModernRenderer(nullptr);
+    modernRenderer.reset();
     CleanupTextures();
     CleanupMeshes();
     
@@ -158,7 +168,12 @@ void ResourceManager::PrepareMesh(igtl_QGLMesh& mesh, const char* fileName) {
 }
 
 void ResourceManager::CleanupDisplayLists() {
-    // Display lists automatically clean up when destroyed
+    // Release VBOs before the shared program and while the context is current.
+    cubeList1.Close(); cubeList2.Close(); bulletList.Close();
+    bodyList.Close(); turretList.Close(); cannonList.Close(); itemList.Close();
+    squareList.Close(); squareList2.Close();
+    bodyListEx.Close(); turretListEx.Close(); cannonListEx.Close();
+    bodyListEx2.Close(); turretListEx2.Close(); cannonListEx2.Close();
     displayListsBuilt = false;
 }
 

@@ -1,109 +1,131 @@
-# Renderer resource ownership catalogue
+# Renderer resource and submission ownership catalogue
 
-**Status:** renderer-convergence milestone 3, 2026-09-29
+**Status:** renderer-convergence milestone 4, 2026-09-29
 
-## Audit and decision
+## Verified previous model
 
-Before this milestone, `GraphicsTask` loaded all 26 TGAs, loaded four GSM meshes,
-extracted the migrated geometry, and constructed its `DisplayList` resources.
-It then constructed a `ResourceManager`, which repeated the texture uploads, tried
-to load those same GSM files through the OBJ loader, and built a second resource
-set. Draw code used the `GraphicsTask` set, so the object named resource manager
-was not authoritative. `BasicMaterial` values for ring/star textures were also
-assembled at each draw. Both owners used RAII internally, but their overlapping
-lifetimes doubled uploads and made teardown responsibility unclear.
+The milestone began with `ResourceManager` already authoritative for migrated CPU
+geometry, textures, and materials. The remaining coupling was verified in code:
+each of its 15 `DisplayList` catalogue slots could construct an identical linked
+program when initialized in modern mode. The facade also owned its VBO, topology,
+layout, vertex count, MVP array, default colour, and current texture. Every draw
+called `glGetUniformLocation` for `uMvp`, `uDefaultColor`, `uHasColor`,
+`uHasTexture`, and `uTexture`, then configured attributes and submitted the draw.
+Thus program creation happened per geometry, uniform discovery happened per draw,
+and `SetMvpMatrix` / `SetMaterial` / `Call` made geometry carry mutable draw state.
 
-`TextureHandler` decoded TGA data directly into a temporary `ImageData`, uploaded
-one `GpuTexture`, and retained both the owning object and a copied raw GL name.
-The raw name was used by compatibility rendering. `DisplayList` owned CPU
-`Geometry`, a modern VBO and shader program, and (on desktop) a compatibility
-display-list name. Shader programs remain per geometry resource; they were not
-duplicated between the two old catalogues, and consolidating them is deliberately
-deferred until the GPU backend is separated from the historical `DisplayList`
-facade.
+The VBO data was already derived cleanly by the GL-independent
+`PrepareGeometryForGpu`: optional position/colour/UV/normal semantics and stride
+were explicit, QUADS were triangulated, and TRIANGLES, LINES, and LINE_LOOP were
+preserved. This made separation possible without changing the vertex format or
+adding index buffers.
 
-We chose **Option A: make `ResourceManager` authoritative**. It was already
-injected into `RenderingPipeline` and already described the exact migrated
-resource set. Repairing its GSM loader and eliminating the shadow members was
-smaller and clearer than introducing a third asset manager. It is now the sole
-catalogue for player body/turret, bullet/quad geometry, items, ring/star materials,
-and the texture set. Typed `GeometryResource` and `MaterialResource` lookups replace
-direct access to the migrated `GraphicsTask` members and fail explicitly for an
-unknown identifier.
+## New ownership boundary
 
-## Ownership and lookup flow
+The modern flow is:
 
-The flow is now:
+```
+asset / QGLMesh -> CPU Geometry (ResourceManager catalogue)
+                 -> GpuGeometry (VBO + immutable metadata)
+                 -> RenderContext (MVP + BasicMaterial)
+                 -> ModernRenderer (one ShaderProgram + draw submission)
+                 -> glDrawArrays
+```
 
-1. After SDL has made the GL context current, `GraphicsTask` creates and initializes
-   one `ResourceManager`.
-2. `ResourceManager` loads each selected GSM once, creates CPU `Geometry` once,
-   and assigns it to one catalogue-owned `DisplayList` facade.
-3. Its sole `TextureHandler` decodes each TGA once into shared, immutable
-   `ImageData`, then uploads one shared `GpuTexture`.
-4. Catalogue-owned ring and star `BasicMaterial` templates retain the appropriate
-   texture. Draws copy the small value object only to apply per-player colour;
-   the texture ownership remains shared and stable.
-5. Linux-modern and Emscripten-modern use identical typed lookups. There is no
-   platform-specific registry.
+Responsibilities are deliberately narrow:
 
-CPU meshes and extracted geometry are owned by `ResourceManager` and its
-`DisplayList` values. Decoded images and GPU textures are owned by
-`TextureHandler`; callers receive `shared_ptr<const ...>` views. Materials are
-owned as catalogue values. Modern VBOs and the current per-resource shader program
-are RAII state inside `DisplayList`; GL handles do not cross its interface.
+- `Geometry` and QGLMesh extraction remain backend-neutral CPU data.
+- `GpuGeometry` owns the uploaded VBO, attribute layout, topology, and vertex
+  count. It owns no shader, texture, material, or transform.
+- `ModernRenderer::ShaderProgram` compiles/links the existing simple shader,
+  fixes attribute locations, caches all uniform locations, reports compile/link
+  logs, and deletes the program.
+- `ModernRenderer::Draw` binds that one program, configures the selected
+  geometry, binds the draw's material/texture and MVP, and issues `glDrawArrays`.
+- `RenderContext::Draw` is the explicit call-site boundary. It computes the MVP
+  and supplies a value `BasicMaterial`; it no longer mutates a geometry resource.
 
-## Compatibility bridge
+The one renderer/program instance is owned by `ResourceManager` and services all
+migrated body, turret, bullet, item, horizontal quad/outline, and ring/star draws.
+Program identity therefore does not vary by geometry. Program construction,
+linking and uniform discovery occur once during catalogue initialization, not per
+resource or frame. VBO upload and texture upload likewise remain initialization
+work; draw submission performs no large allocation.
 
-The legacy renderer consumes the same catalogue. `DisplayList::SetGeometry`
-creates its desktop compatibility display list lazily from the shared CPU
-geometry. `TextureHandler::GetTextureArray()` remains the explicitly transitional
-raw-name bridge and contains the name of the same `GpuTexture`; it does not upload
-a second texture. Modern code uses `GpuTexture` and typed material lookups and does
-not receive raw GL names. Terrain, enemy, effect, and HUD compatibility consumers
-still use bridge accessors, but no modern version of those features was added.
+## `DisplayList` compatibility facade
 
-## Initialization and shutdown
+A repository-wide rename would create churn unrelated to this milestone, so
+`DisplayList` remains a temporary facade. In modern mode it retains CPU geometry
+and a shared `GpuGeometry` and exposes the latter to `RenderContext`; it contains
+no program or mutable material/transform state. `Call` deliberately throws in
+modern mode so new code cannot recreate the old miniature-renderer API.
 
-Catalogue construction is CPU-only. GPU allocation begins only in `Initialize`,
-after context setup and (for Emscripten) after preloaded files are available.
-Shutdown cleans the rendering pipeline first, then calls catalogue cleanup and
-destroys the `ResourceManager` while the context is still current. This releases
-materials, textures, VBOs, programs, and compatibility lists before `VideoTask`
-tears down the context. No catalogue `shared_ptr` is retained by simulation code
-or by a renderer after pipeline cleanup.
+On native compatibility mode, the same facade lazily compiles and calls the
+existing OpenGL display-list name. `BeginNewList`, `NextNewList`, `EndNewList`,
+`NewList`, `EndList`, and the fixed-function geometry loop remain behind desktop
+exclusions. The legacy renderer was not modernized or removed. Emscripten cannot
+compile those symbols.
 
-Initialization failure is explicit for a missing or undecodable GSM. The existing
-TGA loader continues logging individual missing textures because native packaging
-historically permits optional texture failures.
+## Catalogue and lifecycle
 
-## Conditional and platform audit
+The GL context is current before `GraphicsTask` initializes `ResourceManager`.
+In modern mode initialization creates the sole `ModernRenderer` first and attaches
+it non-owningly to `RenderContext`; textures, meshes, and each `GpuGeometry` are
+then prepared. Catalogue lookup continues returning the same facade for a typed
+resource identity, and `GraphicsTask` owns no competing mesh, program, or texture
+catalogue.
 
-Across the affected ownership/resource and migrated-renderer files,
-`__EMSCRIPTEN__` directives decreased from 30 to 29. The removed branch was an
-obsolete projection fallback made unnecessary by the shared modern mode decision.
-Remaining conditionals do not select a different catalogue: they isolate desktop
-fixed-function/display-list calls, deferred compatibility-only renderers, and the
-small desktop GLSL 1.20 versus GLES precision preamble.
+Shutdown order is explicit:
 
-On macOS, catalogue teardown must continue while the correct context is current.
-The ownership model adds no macOS-specific path, but the modern shader still needs
-a core-profile dialect before modern macOS can be claimed. On Windows, catalogue
-initialization/destruction likewise requires a current context; VBO, shader,
-active-texture, and mipmap functions still require an explicit loader because the
-system headers expose only OpenGL 1.1 entry points. Neither platform was built or
-run for this milestone.
+1. `GraphicsTask` cleans and destroys the rendering pipeline, ending draw users.
+2. `ResourceManager::CleanupDisplayLists` closes all facades, deleting modern
+   VBOs (or native compatibility lists) while the context is current.
+3. `RenderContext` drops its non-owning renderer pointer.
+4. `ResourceManager` destroys the shared program.
+5. Catalogue texture/material state is destroyed with the manager.
+6. `VideoTask` later destroys the GL context.
 
-## Boundaries and next milestone
+No shared pointer to `GpuGeometry` is returned from the catalogue, and the
+renderer pointer does not own or prolong the catalogue. This prevents resources
+from surviving context teardown.
 
-The retained `GraphicsTask` font belongs to the deferred compatibility HUD/text
-path; the unused duplicate font in `ResourceManager` was removed. Terrain, enemy
-tanks, effects, HUD/menu, lighting, audio, and multiplayer behavior were not
-migrated. Compatibility bridge calls in those systems remain visible technical
-debt rather than new modern resources.
+## Platform conditionals and portability
 
-The recommended next convergence milestone is to extract shared shader/program
-ownership and modern draw submission from `DisplayList` into a narrow GPU backend,
-while keeping this catalogue and its typed resource identities unchanged. Do not
-start terrain or enemy migration until that boundary has native fixtures and
-cross-platform function-loading support.
+In `DisplayList.cpp`, `__EMSCRIPTEN__` directives decreased from 10 to 9. Those
+nine remaining directives only exclude desktop compatibility-list operations.
+`ModernRenderer.cpp` has one directive for the GLES precision versus desktop
+GLSL 1.20 preamble, so the combined count for these refactored backend files is
+unchanged at 10 while responsibility is better isolated. `PlatformGL.h` retains
+one branch selecting GLES2, Windows, macOS, or Linux headers. There is no native
+modern versus WebGL submission fork: both compile `GpuGeometry`,
+`ModernRenderer`, and `RenderContext`.
+
+macOS requires a supported core-profile context and a core GLSL shader spelling;
+central program ownership provides one place to add it. Compatibility display
+lists and the deferred fixed-function feature renderers remain deprecated APIs
+outside the migrated modern slice. Windows must load buffer, shader/program,
+attribute/uniform, active-texture, and mipmap entry points at runtime (for example
+through `SDL_GL_GetProcAddress`); submission centralization now gives that loader
+a small, explicit integration surface. Neither platform is claimed validated.
+
+## Validation and boundaries
+
+A native Release configure/build and all 86 tests passed. Xvfb runtime smokes for both default legacy and
+`TANKGAME_RENDERER=modern` reached the native task loop without shader or GL
+errors. They were stopped by a timeout at the title scene, so migrated gameplay
+visuals and graceful shutdown were not freshly validated. The Emscripten
+Release target configured, compiled, linked, and generated its HTML, JavaScript,
+WebAssembly, and preload data artifacts, proving the same submission sources and
+asset packaging build without compatibility GL symbols.
+
+For local browser validation, serve `runtime/` over HTTP, open
+`tankgame-linux.html`, start one-player gameplay, verify body/turret and mouse aim,
+fire continuously, observe item and ring/star rendering, inspect the console for
+WebGL errors, check approximately 60 FPS, and exercise shutdown. For native, run
+both `./tankgame-linux` and `TANKGAME_RENDERER=modern ./tankgame-linux` from
+`runtime/` and repeat the same migrated-slice checks.
+
+No terrain, enemy, effect, HUD/menu, text, lighting, audio, browser UX, or session
+feature was migrated. The recommended next convergence milestone is portable GL
+function loading plus a core-profile shader/context variant and validation on one
+additional desktop platform, not another visual category.
