@@ -108,17 +108,14 @@ bool GraphicsTask::Start()
     glEnable(GL_TEXTURE_2D);
 #endif
 
-    // Load textures
-    textureHandler.LoadTextures();
-
-    // Prepare meshes for rendering
-    PrepareMesh(bodymesh, "nowbody.gsm");
-    PrepareMesh(turretmesh, "nowturret.gsm");
-    PrepareMesh(cannonmesh, "cannon.gsm");
-    PrepareMesh(itemmesh, "body.gsm");
-
-    // Build display lists
-    BuildDisplayLists();
+    // The GL context is current before the authoritative catalogue performs
+    // any texture, buffer, shader, or compatibility display-list upload.
+    resourceManager = std::make_unique<ResourceManager>();
+    if (!resourceManager->Initialize())
+    {
+        Logger::Get().Write("ERROR: Failed to initialize renderer resources\n");
+        return false;
+    }
 
     // Initialize individual renderers (required for proper functioning)
     if (!terrainRenderer.Initialize())
@@ -157,15 +154,6 @@ bool GraphicsTask::Start()
     Logger::Get().Write("GraphicsTask::Started\n");
     Logger::Get().Write("Renderer mode: %s\n", RendererMode::Name());
     return true;
-}
-
-void GraphicsTask::FixMesh(igtl_QGLMesh &mesh)
-{
-    mesh.SafetyCheck();
-    mesh.Unitize(.3);
-    mesh.GenerateFacets();
-    mesh.MergeVerticies();
-    mesh.GenerateEdges();
 }
 
 void GraphicsTask::Stop()
@@ -268,13 +256,8 @@ void GraphicsTask::InitializeNewRenderingPipeline()
 
     try
     {
-        // Create ResourceManager and initialize it
-        resourceManager = std::make_unique<ResourceManager>();
-        if (!resourceManager->Initialize())
-        {
-            Logger::Get().Write("ERROR: Failed to initialize ResourceManager\n");
-            return;
-        }
+        if (!resourceManager || !resourceManager->IsInitialized())
+            throw std::runtime_error("renderer resource catalogue is not initialized");
 
         // Create SceneDataBuilder with references to game handlers
         // Note: GameWorld is nullptr at this point (GameTask starts after GraphicsTask)
@@ -375,17 +358,6 @@ void GraphicsTask::RenderWithNewPipeline()
     }
 }
 
-void GraphicsTask::PrepareMesh(igtl_QGLMesh &mesh, const char *fileName)
-{
-    FILE *tload = fopen(fileName, "rb");
-
-    if (tload != NULL)
-    {
-        mesh.LoadGSM(tload);
-        fclose(tload);
-    }
-}
-
 void GraphicsTask::DrawSky()
 {
     // Unused for now. Simple skybox rendering for level 48
@@ -455,7 +427,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     sprintf(buffer, "FPS: %.2f", framesPerSecond);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_HEART]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[TEXTURE_HEART]);
     glColor4f(1.0f, 0.6, 0.6f, 1.0f);
 
     // Armor
@@ -474,7 +446,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     glVertex3f(-0.55f, 0.34f, static_cast<float>(0));
     glEnd();
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_BANG]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[TEXTURE_BANG]);
 
     glColor4f(0.6f, 0.6, 1.0f, 1.0f);
 
@@ -741,7 +713,7 @@ void GraphicsTask::DrawHUD(Tank &player)
         glColor3f(1.0, 1.0, 1.0);
         glEnable(GL_TEXTURE_2D);
 
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[player.bonus]);
+        glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[player.bonus]);
 
         glEnable(GL_BLEND);
 
@@ -773,7 +745,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
     glEnable(GL_BLEND);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[currentPlayer->GetHitCombo() % 10]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[currentPlayer->GetHitCombo() % 10]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -795,7 +767,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     //{
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)currentPlayer->GetHitCombo() / 10]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[(int)currentPlayer->GetHitCombo() / 10]);
 
     glBegin(GL_QUADS);
 
@@ -884,7 +856,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     {
         glPushMatrix();
         glLoadIdentity();
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[18]);
+        glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[18]);
         glTranslatef(-0.3, -0.1, -1.0);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 1);
@@ -911,7 +883,7 @@ void GraphicsTask::DrawHUD(Tank &player)
         {
             glPushMatrix();
         glLoadIdentity();
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[24]);
+        glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[24]);
         glTranslatef(0.0, 0.2, -1.0);
         glBegin(GL_QUADS);
         glTexCoord2f(0, 1);
@@ -929,7 +901,7 @@ void GraphicsTask::DrawHUD(Tank &player)
 
         glTranslatef(0.08, -0.05, 0.0);
 
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[currentPlayer->GetWins() % 10]);
+        glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[currentPlayer->GetWins() % 10]);
 
         glBegin(GL_QUADS);
         glTexCoord2f(0, 1);
@@ -949,7 +921,7 @@ void GraphicsTask::DrawHUD(Tank &player)
         //---------
         glTranslatef(-0.08, 0.0, 0.0);
 
-        glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)currentPlayer->GetWins() / 10]);
+        glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[(int)currentPlayer->GetWins() / 10]);
 
         glBegin(GL_QUADS);
 
@@ -981,7 +953,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     // Ones of enemy tanks left:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TankHandler::GetSingleton().GetAllEnemyTanks().size() % 10]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[TankHandler::GetSingleton().GetAllEnemyTanks().size() % 10]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -1000,7 +972,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     // Tens of enemy tanks left:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[(int)TankHandler::GetSingleton().GetAllEnemyTanks().size() / 10]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[(int)TankHandler::GetSingleton().GetAllEnemyTanks().size() / 10]);
 
     glBegin(GL_QUADS);
 
@@ -1020,7 +992,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     // X:
     glTranslatef(-0.04, 0.0, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_X]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[TEXTURE_X]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -1039,7 +1011,7 @@ void GraphicsTask::DrawHUD(Tank &player)
     // EnemyTank Icon:
     glTranslatef(-0.07, -0.02, 0.0);
 
-    glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[TEXTURE_ENEMY]);
+    glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[TEXTURE_ENEMY]);
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 1);
@@ -1264,8 +1236,8 @@ void GraphicsTask::RenderText(const TTF_Font *Font, const GLubyte &R, const GLub
     unsigned Texture = 0;
 
     glGenTextures(1, &Texture);
-    glBindTexture(GL_TEXTURE_2D, Texture); // textureHandler.GetTextureArray()[12]);
-    // glBindTexture(GL_TEXTURE_2D, textureHandler.GetTextureArray()[12]);
+    glBindTexture(GL_TEXTURE_2D, Texture); // Resources().GetTextureHandler().GetTextureArray()[12]);
+    // glBindTexture(GL_TEXTURE_2D, Resources().GetTextureHandler().GetTextureArray()[12]);
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, Message->w, Message->h, 0,
                  GL_RGBA, GL_UNSIGNED_BYTE, Message->pixels);
 
@@ -1307,83 +1279,4 @@ void GraphicsTask::RenderText(const TTF_Font *Font, const GLubyte &R, const GLub
     SDL_FreeSurface(Message);
     //-----------
     glPopMatrix();
-}
-
-void GraphicsTask::BuildDisplayLists()
-{
-    cubelist1 = DisplayList(1);
-    cubelist1.SetGeometry(SimpleGeometry::CreateCube());
-
-    squarelist = DisplayList(1);
-    squarelist.SetGeometry(SimpleGeometry::CreateHorizontalSquare());
-
-    squarelist2 = DisplayList(1);
-    squarelist2.SetGeometry(SimpleGeometry::CreateHorizontalSquare(
-        0.5f, PrimitiveTopology::LINE_LOOP));
-
-    bulletlist = DisplayList(1);
-    bulletlist.SetGeometry(SimpleGeometry::CreateBullet());
-
-    // bodylistEx=cubelist1+3;
-    bodylistEx = DisplayList(1);
-    bodylistEx.SetGeometry(bodymesh.CreateTriangleExtrudedGeometry(.01f));
-
-    // turretlistEx=cubelist1+4;
-    turretlistEx = DisplayList(1);
-    turretlistEx.SetGeometry(turretmesh.CreateTriangleExtrudedGeometry(.01f));
-
-    // cannonlistEx=cubelist1+5;
-    cannonlistEx = DisplayList(1);
-    cannonlistEx.SetGeometry(cannonmesh.CreateTriangleExtrudedGeometry(.01f));
-
-    // bodylist=cubelist1+6;
-    bodylist = DisplayList(1);
-
-    // glNewList(cubelist1+6, GL_COMPILE);
-    bodylist.SetGeometry(bodymesh.CreateTriangleGeometry());
-
-    // turretlist=cubelist1+7;
-    turretlist = DisplayList(1);
-
-    // glNewList(cubelist1+7, GL_COMPILE);
-    turretlist.SetGeometry(turretmesh.CreateTriangleGeometry());
-
-    // cannonlist=cubelist1+8;
-
-    // glNewList(cubelist1+8, GL_COMPILE);
-    cannonlist.SetGeometry(cannonmesh.CreateTriangleGeometry());
-
-    // bodylistEx2=cubelist1+9;
-
-    // glNewList(cubelist1+9, GL_COMPILE);
-    bodylistEx2.SetGeometry(bodymesh.CreateEdgeExtrudedGeometry(.01f));
-
-    // turretlistEx2=cubelist1+10;
-
-    // glNewList(cubelist1+10, GL_COMPILE);
-    turretlistEx2.SetGeometry(turretmesh.CreateEdgeExtrudedGeometry(.01f));
-
-    // cannonlistEx2=cubelist1+11;
-    cannonlistEx2 = DisplayList(1);
-
-    // glNewList(cubelist1+11, GL_COMPILE);
-
-    cannonlistEx2.SetGeometry(cannonmesh.CreateEdgeExtrudedGeometry(.01f));
-
-    itemlist = DisplayList(1);
-
-    // itemlist=cubelist1+14;
-
-    // glNewList(cubelist1+14, GL_COMPILE);
-
-    // glBegin(GL_LINE_LOOP);
-
-    itemlist.SetGeometry(itemmesh.CreateTriangleExtrudedGeometry(.01f));
-    // itemmesh.DrawEdges();
-    //
-    ////glEnd();
-    //
-    // glEndList();
-
-    return;
 }

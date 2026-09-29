@@ -101,7 +101,7 @@ void EffectRenderer::RenderEffect(const EffectRenderData& effect) {
     
     // Render the glowing inner part
     if (App::GetSingleton().graphicsTask) {
-        App::GetSingleton().graphicsTask->squarelist.Call(0);
+        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
     }
     
     RestoreBlendMode();
@@ -130,7 +130,7 @@ void EffectRenderer::SetupEffectTexture(const EffectRenderData& effect) {
     
     if (textureId != 0 && App::GetSingleton().graphicsTask) {
         glEnable(GL_TEXTURE_2D);
-        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->textureHandler.GetTextureArray()[textureId]);
+        glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[textureId]);
         texturesEnabled = true;
         currentTexture = textureId;
     }
@@ -166,7 +166,7 @@ void EffectRenderer::RenderEffectGeometry(const EffectRenderData& effect) {
     // Render base geometry for specific effect types
     if (effect.type == FxType::TYPE_DEATH || effect.type == FxType::TYPE_ZERO) {
         if (App::GetSingleton().graphicsTask) {
-            App::GetSingleton().graphicsTask->squarelist2.Call(0);
+            App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalOutline).Call(0);
         }
     }
 }

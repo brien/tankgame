@@ -1,22 +1,9 @@
 #include "ResourceManager.h"
-#include "../App.h"
-
-#ifdef _WIN32
-#include <windows.h>
-#include <GL/gl.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
-
 ResourceManager::ResourceManager() 
-    : defaultFont(nullptr)
-    , isInitialized(false)
+    : isInitialized(false)
     , displayListsBuilt(false)
     , texturesLoaded(false)
-    , meshesLoaded(false)
-    , fontsLoaded(false) {
+    , meshesLoaded(false) {
 }
 
 bool ResourceManager::Initialize() {
@@ -27,7 +14,6 @@ bool ResourceManager::Initialize() {
     // Initialize all resource subsystems
     bool success = true;
     
-    success &= InitializeFonts();
     success &= InitializeTextures();
     success &= InitializeMeshes();
     success &= InitializeDisplayLists();
@@ -46,13 +32,11 @@ void ResourceManager::Cleanup() {
     CleanupDisplayLists();
     CleanupTextures();
     CleanupMeshes();
-    CleanupFonts();
     
     isInitialized = false;
     displayListsBuilt = false;
     texturesLoaded = false;
     meshesLoaded = false;
-    fontsLoaded = false;
 }
 
 void ResourceManager::SetupRenderState() {
@@ -64,28 +48,11 @@ void ResourceManager::CleanupRenderState() {
     // ResourceManager doesn't change OpenGL state during rendering
 }
 
-bool ResourceManager::InitializeFonts() {
-    // Initialize font system if not already done
-    if (TTF_WasInit() == 0) {
-        if (TTF_Init() != 0) {
-            return false;
-        }
-    }
-    
-    // Load default font
-    defaultFont = TTF_OpenFont("fonts/arial.ttf", 16);
-    if (!defaultFont) {
-        // Try alternative font location
-        defaultFont = TTF_OpenFont("fonts/DroidSansMono.ttf", 16);
-    }
-    
-    fontsLoaded = (defaultFont != nullptr);
-    return fontsLoaded;
-}
-
 bool ResourceManager::InitializeTextures() {
     // Delegate texture loading to TextureHandler
     textureHandler.LoadTextures();
+    ringMaterial.texture = textureHandler.GetTexture(TEXTURE_RING);
+    starMaterial.texture = textureHandler.GetTexture(TEXTURE_DIAMOND);
     texturesLoaded = true;  // Assume success since LoadTextures doesn't return status
     return texturesLoaded;
 }
@@ -173,26 +140,21 @@ void ResourceManager::BuildItemList() {
 
 void ResourceManager::BuildSquareLists() {
     squareList = DisplayList(1);
-    squareList.SetGeometry(SimpleGeometry::CreateVerticalSquare());
+    squareList.SetGeometry(SimpleGeometry::CreateHorizontalSquare());
 
     squareList2 = DisplayList(1);
-    squareList2.SetGeometry(SimpleGeometry::CreateVerticalSquare(1.0f));
+    squareList2.SetGeometry(SimpleGeometry::CreateHorizontalSquare(
+        0.5f, PrimitiveTopology::LINE_LOOP));
 }
 
 void ResourceManager::PrepareMesh(igtl_QGLMesh& mesh, const char* fileName) {
-    // Load mesh using proper method name
-    mesh.LoadOBJ(fileName);
-    FixMesh(mesh);
-}
-
-void ResourceManager::FixMesh(igtl_QGLMesh& mesh) {
-    // Fix mesh normals and prepare for rendering
-    // Note: The original code accessed internal members, but we should use the public interface
-    // For now, just ensure the mesh is loaded properly
-    // The mesh normals are typically handled internally by the mesh class
-    
-    // Additional mesh processing could be added here if needed
-    // For example: mesh.FixWinding() to ensure consistent winding order
+    FILE* input = fopen(fileName, "rb");
+    if (!input)
+        throw std::runtime_error(std::string("cannot open mesh: ") + fileName);
+    const bool loaded = mesh.LoadGSM(input);
+    fclose(input);
+    if (!loaded)
+        throw std::runtime_error(std::string("cannot decode mesh: ") + fileName);
 }
 
 void ResourceManager::CleanupDisplayLists() {
@@ -211,10 +173,34 @@ void ResourceManager::CleanupMeshes() {
     meshesLoaded = false;
 }
 
-void ResourceManager::CleanupFonts() {
-    if (defaultFont) {
-        TTF_CloseFont(defaultFont);
-        defaultFont = nullptr;
+DisplayList& ResourceManager::GetGeometry(GeometryResource resource) {
+    switch (resource) {
+    case GeometryResource::TerrainCube: return cubeList1;
+    case GeometryResource::Bullet: return bulletList;
+    case GeometryResource::TankBody: return bodyList;
+    case GeometryResource::TankTurret: return turretList;
+    case GeometryResource::TankCannon: return cannonList;
+    case GeometryResource::Item: return itemList;
+    case GeometryResource::HorizontalQuad: return squareList;
+    case GeometryResource::HorizontalOutline: return squareList2;
+    case GeometryResource::TankBodyExtruded: return bodyListEx;
+    case GeometryResource::TankTurretExtruded: return turretListEx;
+    case GeometryResource::TankCannonExtruded: return cannonListEx;
+    case GeometryResource::TankBodyEdges: return bodyListEx2;
+    case GeometryResource::TankTurretEdges: return turretListEx2;
+    case GeometryResource::TankCannonEdges: return cannonListEx2;
     }
-    fontsLoaded = false;
+    throw std::out_of_range("unknown geometry resource");
+}
+
+const DisplayList& ResourceManager::GetGeometry(GeometryResource resource) const {
+    return const_cast<ResourceManager*>(this)->GetGeometry(resource);
+}
+
+const BasicMaterial& ResourceManager::GetMaterial(MaterialResource resource) const {
+    switch (resource) {
+    case MaterialResource::RingOverlay: return ringMaterial;
+    case MaterialResource::StarOverlay: return starMaterial;
+    }
+    throw std::out_of_range("unknown material resource");
 }

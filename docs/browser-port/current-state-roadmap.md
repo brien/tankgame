@@ -190,6 +190,30 @@ world-space category onto this material contract (not terrain as a whole) and
 centralize duplicate resource ownership; lighting, terrain, enemy, effects beyond
 this player overlay, HUD/menu, and text remain deferred.
 
+## Renderer convergence milestone 3: authoritative resource catalogue (2026-09-29)
+
+`ResourceManager` is now the authoritative catalogue for the migrated renderer
+slice. `GraphicsTask` no longer loads a second copy of the GSM meshes, uploads a
+second complete texture set, or owns shadow display-list/modern geometry objects.
+Both Linux renderer modes and Emscripten resolve typed geometry and material IDs
+through the same manager. The compatibility renderer builds its display-list view
+from the catalogue CPU geometry and uses raw texture names only through the
+explicit transitional texture bridge; modern interfaces expose no raw GL handle.
+
+Texture decode results now remain as shared immutable `ImageData`, each
+`GpuTexture` is uploaded once, and ring/star material templates have stable
+catalogue ownership. Pipeline cleanup precedes catalogue destruction while the GL
+context is current. Focused tests establish stable typed lookup identity and
+explicit failure for invalid IDs. See the
+[resource ownership audit](renderer-resource-ownership.md) for the before/after
+map, lifetime rules, compatibility boundary, conditional count, and desktop
+readiness notes.
+
+This milestone does not migrate terrain, enemy tanks, effects, HUD/menu, lighting,
+audio, or session behavior. The recommended next step is the narrow shader/program
+and GPU-submission ownership boundary described in that audit, not a new feature
+category.
+
 ## Original intent, without hindsight
 
 The original documents made three different levels of statement:

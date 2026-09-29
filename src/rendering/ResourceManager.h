@@ -4,7 +4,16 @@
 #include "../DisplayList.h"
 #include "../TextureHandler.h"
 #include "../igtl_qmesh.h"
-#include <SDL2/SDL_ttf.h>
+#include <stdexcept>
+
+enum class GeometryResource {
+    TerrainCube, Bullet, TankBody, TankTurret, TankCannon, Item,
+    HorizontalQuad, HorizontalOutline, TankBodyExtruded,
+    TankTurretExtruded, TankCannonExtruded, TankBodyEdges,
+    TankTurretEdges, TankCannonEdges
+};
+
+enum class MaterialResource { RingOverlay, StarOverlay };
 
 /**
  * Centralized resource manager for all rendering resources.
@@ -14,13 +23,12 @@
  * - Display lists for geometry rendering
  * - Texture management through TextureHandler  
  * - Mesh data for complex geometry
- * - Font resources for text rendering
  * 
  * Design Principles:
  * - Single point of access for all rendering resources
  * - Proper resource lifecycle management (initialization/cleanup)
  * - Separation from game logic - purely rendering resources
- * - Thread-safe access to shared resources
+ * - Stable typed lookup for the migrated renderer slice
  */
 class ResourceManager : public IRenderer {
 public:
@@ -33,7 +41,13 @@ public:
     void SetupRenderState() override;
     void CleanupRenderState() override;
     
-    // Display list access
+    // Typed modern/compatibility catalogue access. A lookup always returns the
+    // same catalogue-owned object for the lifetime of this manager.
+    DisplayList& GetGeometry(GeometryResource resource);
+    const DisplayList& GetGeometry(GeometryResource resource) const;
+    const BasicMaterial& GetMaterial(MaterialResource resource) const;
+
+    // Compatibility aliases retained while non-migrated renderers are removed.
     const DisplayList& GetCubeList1() const { return cubeList1; }
     const DisplayList& GetCubeList2() const { return cubeList2; }
     const DisplayList& GetBulletList() const { return bulletList; }
@@ -62,9 +76,6 @@ public:
     const igtl_QGLMesh& GetCannonMesh() const { return cannonMesh; }
     const igtl_QGLMesh& GetItemMesh() const { return itemMesh; }
     
-    // Font management
-    TTF_Font* GetDefaultFont() const { return defaultFont; }
-    
     // Resource state queries
     bool IsInitialized() const { return isInitialized; }
     bool AreDisplayListsReady() const { return displayListsBuilt; }
@@ -74,25 +85,27 @@ public:
 private:
     // Display lists (moved from GraphicsTask)
     DisplayList cubeList1{1};
-    DisplayList cubeList2;
-    DisplayList bulletList;
-    DisplayList bodyList;
-    DisplayList turretList;
-    DisplayList cannonList;
-    DisplayList itemList;
-    DisplayList squareList;
-    DisplayList squareList2;
+    DisplayList cubeList2{1};
+    DisplayList bulletList{1};
+    DisplayList bodyList{1};
+    DisplayList turretList{1};
+    DisplayList cannonList{1};
+    DisplayList itemList{1};
+    DisplayList squareList{1};
+    DisplayList squareList2{1};
     
     // Extended display lists for different tank types
-    DisplayList bodyListEx;
-    DisplayList turretListEx;
-    DisplayList cannonListEx;
-    DisplayList bodyListEx2;
-    DisplayList turretListEx2;
-    DisplayList cannonListEx2;
+    DisplayList bodyListEx{1};
+    DisplayList turretListEx{1};
+    DisplayList cannonListEx{1};
+    DisplayList bodyListEx2{1};
+    DisplayList turretListEx2{1};
+    DisplayList cannonListEx2{1};
     
     // Resource managers
     TextureHandler textureHandler;
+    BasicMaterial ringMaterial;
+    BasicMaterial starMaterial;
     
     // Mesh data (moved from GraphicsTask private members)
     igtl_QGLMesh bodyMesh;
@@ -100,21 +113,16 @@ private:
     igtl_QGLMesh cannonMesh;
     igtl_QGLMesh itemMesh;
     
-    // Font resources
-    TTF_Font* defaultFont;
-    
     // Initialization state tracking
     bool isInitialized;
     bool displayListsBuilt;
     bool texturesLoaded;
     bool meshesLoaded;
-    bool fontsLoaded;
     
     // Private initialization methods
     bool InitializeDisplayLists();
     bool InitializeTextures();
     bool InitializeMeshes();
-    bool InitializeFonts();
     
     // Display list building methods (moved from GraphicsTask)
     void BuildCubeLists();
@@ -124,12 +132,10 @@ private:
     void BuildSquareLists();
     
     // Mesh processing methods (moved from GraphicsTask)
-    void FixMesh(igtl_QGLMesh& mesh);
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
     
     // Cleanup methods
     void CleanupDisplayLists();
     void CleanupTextures();
     void CleanupMeshes();
-    void CleanupFonts();
 };

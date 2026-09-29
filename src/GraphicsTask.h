@@ -22,11 +22,8 @@
 #include <memory>
 
 #include "ITask.h"
-#include "igtl_qmesh.h"
 #include "Tank.h"
 #include "Camera.h"
-#include "DisplayList.h"
-#include "TextureHandler.h"
 #include "rendering/ViewportManager.h"
 #include "rendering/CameraManager.h"
 #include "rendering/TerrainRenderer.h"
@@ -49,8 +46,9 @@ public:
     GraphicsTask();
     ~GraphicsTask() = default;
 
-    TextureHandler textureHandler;
     TTF_Font *defaultFont;
+    ResourceManager& Resources() { return *resourceManager; }
+    const ResourceManager& Resources() const { return *resourceManager; }
     
     Camera cams[4];
     ViewportManager viewportManager;  // Manages viewport layout for split-screen
@@ -67,26 +65,6 @@ public:
     EffectRenderer effectRenderer;    // Handles all visual effect rendering
     ItemRenderer itemRenderer;       // Handles all item/power-up rendering
     TankRenderer tankRenderer;     // Handles all tank rendering
-    
-    DisplayList cubelist1;
-    DisplayList cubelist2;
-    DisplayList bulletlist;
-    DisplayList bodylist;
-    DisplayList turretlist;
-    DisplayList cannonlist;
-    
-    DisplayList itemlist;
-    
-    DisplayList squarelist;
-    DisplayList squarelist2;
-    
-    DisplayList bodylistEx;
-    DisplayList turretlistEx;
-    DisplayList cannonlistEx;
-    
-    DisplayList bodylistEx2;
-    DisplayList turretlistEx2;
-    DisplayList cannonlistEx2;
     
     void DrawHUD(Tank& player);
     void DrawMenu(int option);
@@ -109,13 +87,5 @@ public:
 private:
     class GameWorld* gameWorld = nullptr;  // Non-owning pointer to GameWorld (owned by GameTask)
     
-    igtl_QGLMesh bodymesh;
-    igtl_QGLMesh turretmesh;
-    igtl_QGLMesh cannonmesh;
-    igtl_QGLMesh itemmesh;
-
-    void BuildDisplayLists();
-    void FixMesh(igtl_QGLMesh& mesh);
-    void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
     void RenderLegacyUIElements();  // Legacy HUD/UI rendering
 };

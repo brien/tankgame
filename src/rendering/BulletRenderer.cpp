@@ -102,13 +102,13 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
         Matrix4::Rotation(rotationX, 1, 0, 0) *
         Matrix4::Scale(1, 1, scaleZ);
     if (App::GetSingleton().graphicsTask) {
-        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist2, model,
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalOutline), model,
             bullet.primaryColor.r, bullet.primaryColor.g, bullet.primaryColor.b);
     }
     float alpha = 0.1f + bullet.power /
         (bullet.type1 == TankType::TYPE_BLUE ? 500.0f : 1000.0f);
     if (App::GetSingleton().graphicsTask) {
-        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->squarelist, model,
+        RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad), model,
             bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha);
     }
     return;
@@ -140,7 +140,7 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
     
     // Render the bullet outline using the square display list
     if (App::GetSingleton().graphicsTask) {
-        App::GetSingleton().graphicsTask->squarelist2.Call(0);
+        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalOutline).Call(0);
     }
     
     // Render the glowing effect with secondary color
@@ -158,7 +158,7 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
     
     // Render the glowing inner part
     if (App::GetSingleton().graphicsTask) {
-        App::GetSingleton().graphicsTask->squarelist.Call(0);
+        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
     }
     
     RestoreBlendMode();

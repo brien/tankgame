@@ -55,7 +55,7 @@ void ItemRenderer::RenderItem(const ItemRenderData& item) {
     const Matrix4 model = Matrix4::Translation(item.position.x, item.position.y, item.position.z) *
         Matrix4::Rotation(-item.rotationY, 0, 1, 0) * Matrix4::Rotation(90, 0, 0, 1);
     const Color color = GetItemColor(item.itemType);
-    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->itemlist, model,
+    RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::Item), model,
                                   color.r, color.g, color.b);
         return;
     }
@@ -72,7 +72,7 @@ void ItemRenderer::RenderItem(const ItemRenderData& item) {
     SetItemColor(item.itemType);
     
     // Render the item mesh using the display list from GraphicsTask
-    App::GetSingleton().graphicsTask->itemlist.Call(0);
+    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::Item).Call(0);
     
     glPopMatrix();
 #endif
