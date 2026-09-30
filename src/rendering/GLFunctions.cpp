@@ -27,7 +27,7 @@ TG_DIRECT(void, Uniform1i, (GLint a, GLint b), (a,b)) TG_DIRECT(void, ActiveText
 #else
 namespace {
 bool initialized = false;
-#define TG_PROC(ret, name, args) using name##Proc = ret (APIENTRYP) args; name##Proc p##name = nullptr
+#define TG_PROC(ret, name, args) using name##Proc = ret (APIENTRY*) args; name##Proc p##name = nullptr
 TG_PROC(GLuint, CreateShader, (GLenum)); TG_PROC(void, ShaderSource, (GLuint, GLsizei, const GLchar* const*, const GLint*));
 TG_PROC(void, CompileShader, (GLuint)); TG_PROC(void, GetShaderiv, (GLuint, GLenum, GLint*)); TG_PROC(void, GetShaderInfoLog, (GLuint, GLsizei, GLsizei*, GLchar*)); TG_PROC(void, DeleteShader, (GLuint));
 TG_PROC(GLuint, CreateProgram, ()); TG_PROC(void, AttachShader, (GLuint, GLuint)); TG_PROC(void, BindAttribLocation, (GLuint, GLuint, const GLchar*)); TG_PROC(void, LinkProgram, (GLuint));
