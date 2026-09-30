@@ -453,8 +453,7 @@ FodyWeavers.xsd
 
 # VS Code files for those working on multiple tools
 .vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
+# Current settings and tasks are developer-local (including host/container paths).
 !.vscode/launch.json
 !.vscode/extensions.json
 *.code-workspace
@@ -479,3 +478,23 @@ src/build.sh
 /runtime/tankgame-linux.js
 /runtime/tankgame-linux.wasm
 /runtime/tankgame-linux.data
+
+# CMake browser build tree, including fetched dependencies and staged assets
+/build-browser/
+
+# Native game/test executables and Emscripten debug sidecars
+/runtime/tankgame-linux
+/runtime/tankgame-mac
+/runtime/tankgame_tests
+/runtime/tankgame-*.html.symbols
+/runtime/tankgame-*.wasm.map
+
+# Logger output is relative to the process working directory
+applog.txt
+/runtime/applog (*conflicted copy*).txt
+
+# Downloaded developer tooling
+/runtime/visual-studio-code-bin/
+
+# Informal old-renderer reference retained locally
+/screenshots/Screenshot_20250905_090421.png
