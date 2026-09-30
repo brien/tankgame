@@ -1,0 +1,71 @@
+name: Desktop CI
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  linux:
+    name: Linux / GCC
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --no-install-recommends \
+            ninja-build libgl1-mesa-dev libglu1-mesa-dev \
+            libsdl2-dev libsdl2-mixer-dev libsdl2-ttf-dev nlohmann-json3-dev
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
+      - name: Build application and tests
+        run: cmake --build build --parallel
+      - name: Run tests
+        run: ctest --test-dir build --build-config Release --output-on-failure
+  windows:
+    name: Windows / MinGW-w64 GCC
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: msys2/setup-msys2@v2
+        with:
+          msystem: MINGW64
+          update: true
+          install: >-
+            mingw-w64-x86_64-toolchain
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-SDL2
+            mingw-w64-x86_64-SDL2_mixer
+            mingw-w64-x86_64-SDL2_ttf
+            mingw-w64-x86_64-nlohmann-json
+      - name: Configure
+        run: cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=ON
+      - name: Build application and tests
+        run: cmake --build build --parallel
+      - name: Run platform-independent tests
+        run: ctest --test-dir build --build-config Release --output-on-failure
+
+  macos:
+    name: macOS / AppleClang
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: brew install ninja sdl2 sdl2_mixer sdl2_ttf nlohmann-json
+      - name: Configure
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_TESTS=ON
+          -DCMAKE_PREFIX_PATH="$(brew --prefix)"
+      - name: Build application and tests
+        run: cmake --build build --parallel
+      - name: Run platform-independent tests
+        run: ctest --test-dir build --build-config Release --output-on-failure

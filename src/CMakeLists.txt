@@ -74,8 +74,8 @@ target_include_directories(${EXECUTABLE_NAME} PRIVATE
 )
 
 # Keep the project's math.h available to quoted includes without allowing it
-# to shadow the C library <math.h> used by Emscripten's libc++ headers.
-if(EMSCRIPTEN)
+# to shadow the C library <math.h> used by Clang/GCC standard library headers.
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
     target_compile_options(${EXECUTABLE_NAME} PRIVATE
         "-iquote${CMAKE_CURRENT_SOURCE_DIR}"
     )

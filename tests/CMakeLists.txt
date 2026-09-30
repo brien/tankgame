@@ -41,8 +41,8 @@ target_include_directories(tankgame_tests PRIVATE
 )
 
 # Keep the project's math.h available to quoted includes without allowing it
-# to shadow the C library <math.h> used by Emscripten's libc++ headers.
-if(EMSCRIPTEN)
+# to shadow the C library <math.h> used by Clang/GCC standard library headers.
+if(CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
     target_compile_options(tankgame_tests PRIVATE
         "-iquote${CMAKE_SOURCE_DIR}/src"
     )
@@ -52,12 +52,17 @@ else()
     )
 endif()
 
+# FindSDL2 can include SDL2main in this variable on Windows. Tests provide a
+# normal main function, so link SDL2 itself without SDL2main's SDL_main shim.
+set(TEST_SDL2_LIBRARIES ${SDL2_LIBRARIES})
+list(FILTER TEST_SDL2_LIBRARIES EXCLUDE REGEX "SDL2main")
+
 # Link test executable with gtest and required libraries
 target_link_libraries(tankgame_tests
     GTest::gtest
     GTest::gtest_main
     nlohmann_json::nlohmann_json
-    ${SDL2_LIBRARIES}
+    ${TEST_SDL2_LIBRARIES}
     tankgame_sdl2_mixer
     tankgame_sdl2_ttf
     ${OPENGL_LIBRARIES}

@@ -242,6 +242,42 @@ machines, then migrate one narrow deferred draw category. It must not be treated
 as permission to begin terrain, effects, HUD/text, lighting, audio, browser UX,
 or multiplayer work.
 
+## Cross-platform desktop CI qualification milestone (2026-09-29)
+
+A new required-failure GitHub Actions workflow provides one Release build per
+desktop platform: Ubuntu/GCC with APT dependencies, Windows/MinGW-w64 GCC with
+MSYS2 MINGW64 dependencies, and macOS/AppleClang with Homebrew dependencies.
+Every job configures and links both the full native executable and the test
+executable, then runs CTest. This complete-source build makes the Windows job a
+compile/link check of the SDL-proc-loaded `GLFunctions` boundary and
+`ModernRenderer`/`GpuGeometry`/`GpuTexture`; it makes the macOS job a compile/link
+check of the Apple GL headers and shared renderer, while focused tests cover the
+OpenGL 3.2 core request and GLSL 1.50 core generation.
+
+Linux remains the strongest gate through compile, link, and the full 89-test
+suite. A candidate bounded Xvfb legacy smoke reproduced a pre-existing startup
+segmentation fault, so the workflow does not turn that fragile result into a CI
+dependency and makes no new runtime-smoke claim. Earlier Linux runtime evidence
+remains separate. Windows and macOS remain **runtime unvalidated** and need real
+machine rendering checks. macOS legacy mode is still intentionally unsupported;
+merely compiling retained compatibility renderer sources does not make those
+calls valid in its core context.
+
+The repository previously had no executable CI workflow, so there was no native
+matrix, automated test run, artifact upload, or Emscripten job to preserve. This
+milestone does not add artifact packaging or browser CI. Because GitHub-hosted
+Windows/macOS runners are unavailable inside the authoring environment, their
+compile/link/test qualification is pending the first green pushed workflow and
+must not yet be described as successful. See the
+[desktop portability report](desktop-modern-renderer-portability.md#desktop-ci-qualification-gate)
+for exact dependencies and qualification semantics.
+
+The recommended next renderer milestone is real-machine Windows and macOS
+runtime qualification of the existing slice. A later, separately scoped change
+may migrate one narrow deferred draw category only after that evidence. Terrain,
+enemies, effects, HUD/menu, text, lighting, audio, browser UX, and multiplayer
+remain outside this milestone.
+
 ## Original intent, without hindsight
 
 The original documents made three different levels of statement:
