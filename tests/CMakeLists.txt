@@ -31,6 +31,7 @@ add_executable(tankgame_tests
     test_player_manager_regression.cpp
     test_resource_manager.cpp
     test_viewport_manager.cpp
+    test_video_startup.cpp
     ${TEST_SOURCES}
 )
 

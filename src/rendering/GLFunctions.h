@@ -4,7 +4,7 @@
 
 #include "PlatformGL.h"
 
-// The complete entry-point boundary used by the shared programmable renderer.
+// The entry-point boundary used by shared textures and the programmable renderer.
 // Initialize must be called with the SDL GL context current. OpenGL 1.1 state,
 // texture upload and draw calls remain direct because every desktop ABI exports
 // them; GLES/WebGL keeps using its normal linked symbols.

@@ -70,7 +70,7 @@ bool Initialize(std::string& error)
         Load(pGenerateMipmap, "glGenerateMipmapEXT", missing);
     }
 #undef TG_LOAD
-    if (!missing.empty()) { error = "Missing required modern OpenGL functions: " + missing; return false; }
+    if (!missing.empty()) { error = "Missing required OpenGL functions: " + missing; return false; }
     initialized = true; return true;
 }
 void Shutdown() { initialized = false; }

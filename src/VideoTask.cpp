@@ -162,18 +162,17 @@ bool VideoTask::Start()
         return false;
     }
 
-    if (RendererMode::IsModern())
+    // Shared textures use loaded entry points (including mipmap generation)
+    // in both renderers. Load them before GraphicsTask uploads any resources.
+    std::string loaderError;
+    if (!GLFunctions::Initialize(loaderError))
     {
-        std::string loaderError;
-        if (!GLFunctions::Initialize(loaderError))
-        {
-            Logger::Get().Write("VideoTask::Start: %s\n", loaderError.c_str());
-            SDL_GL_DeleteContext(glContext);
-            glContext = nullptr;
-            SDL_DestroyWindow(window);
-            window = nullptr;
-            return false;
-        }
+        Logger::Get().Write("VideoTask::Start: %s\n", loaderError.c_str());
+        SDL_GL_DeleteContext(glContext);
+        glContext = nullptr;
+        SDL_DestroyWindow(window);
+        window = nullptr;
+        return false;
     }
 
     SDL_GL_SetSwapInterval(1);
