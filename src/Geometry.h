@@ -42,4 +42,7 @@ Geometry CreateHorizontalSquare(float halfExtent = 0.5f,
 Geometry CreateVerticalSquare(float halfExtent = 0.5f);
 Geometry CreateBullet();
 Geometry CreateItemFallback();
+Geometry CreateEnemyBody();
+Geometry CreateEnemyBarrel();
+Geometry CreateEnemyTurret();
 }

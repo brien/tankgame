@@ -1,0 +1,5 @@
+configure: cmake -S . -B build-browser -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release -DSDL2_DIR=/workspace/tankgame/work/browser-sdl2 -DCMAKE_CXX_FLAGS=-sUSE_SDL=2 -DCMAKE_EXE_LINKER_FLAGS=-sMINIFY_HTML=0 -DCMAKE_TOOLCHAIN_FILE=/workspace/tankgame/work/browser-toolchain/usr/share/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/opt/codex/runtimes/codex-primary-runtime/dependencies/node/bin/node
+-- Using the multi-header code from /workspace/tankgame/build-browser/_deps/nlohmann_json-src/include/
+-- Configuring done (0.9s)
+-- Generating done (0.0s)
+-- Build files have been written to: /workspace/tankgame/build-browser

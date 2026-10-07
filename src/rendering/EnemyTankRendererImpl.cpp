@@ -1,29 +1,53 @@
 #include "EnemyTankRendererImpl.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#include <GL/gl.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "../App.h"
+#include "RenderContext.h"
+#include "RendererMode.h"
 
-EnemyTankRendererImpl::EnemyTankRendererImpl() {
+EnemyTankRendererImpl::EnemyTankRendererImpl(ResourceManager* resources)
+    : resources(resources) {
+}
+
+namespace {
+BasicMaterial EnemyMaterial(const Color& color, float health, float maxHealth) {
+    BasicMaterial material;
+    // Preserve glColor3f's multiplier (including values above one); the shader
+    // and framebuffer perform the final clamp. Enemy surfaces are opaque/untextured.
+    const bool hasHealth = health > 0.0f && maxHealth > 0.0f;
+    const float factor = hasHealth ? maxHealth / health : 0.0f;
+    material.red = hasHealth ? (4 * color.r + factor) / 2 : color.r;
+    material.green = hasHealth ? (4 * color.g + factor) / 2 : color.g;
+    material.blue = hasHealth ? (4 * color.b + factor) / 2 : color.b;
+    return material;
+}
+}
+
+std::array<EnemyTankDraw, 3> EnemyTankRendererImpl::BuildDraws(const TankRenderData& tank) {
+    const Matrix4 body = Matrix4::Translation(tank.position.x, tank.position.y, tank.position.z) *
+        Matrix4::Rotation(tank.bodyRotation.x, 1, 0, 0) *
+        Matrix4::Rotation(-tank.bodyRotation.y, 0, 1, 0) *
+        Matrix4::Rotation(tank.bodyRotation.z, 0, 0, 1);
+    const Matrix4 aim = body * Matrix4::Rotation(tank.turretRotation.x, 1, 0, 0) *
+        Matrix4::Rotation(-tank.turretRotation.y, 0, 1, 0) *
+        Matrix4::Rotation(tank.turretRotation.z, 0, 0, 1);
+    const BasicMaterial secondary = EnemyMaterial(tank.secondaryColor, tank.health, tank.maxHealth);
+    const BasicMaterial primary = EnemyMaterial(tank.primaryColor, tank.health, tank.maxHealth);
+    // Compatibility restores each component scale before applying relative aim
+    // and the 0.1 local-X cannon offset. Never inherit the body's 0.06 scale.
+    return {{{GeometryResource::EnemyBody, body * Matrix4::Scale(.06f, .06f, .06f), secondary},
+             {GeometryResource::EnemyBarrel, aim * Matrix4::Scale(.1f, .1f, .1f), primary},
+             {GeometryResource::EnemyTurret, aim * Matrix4::Translation(.1f, 0, 0) *
+                 Matrix4::Scale(.1f, .1f, .1f), primary}}};
 }
 
 bool EnemyTankRendererImpl::Initialize() {
     if (!BaseRenderer::Initialize()) {
         return false;
     }
-    // TODO: Initialize enemy-specific resources
-    // - Optimize for batch rendering
-    // - Set up efficient geometry rendering
     return true;
 }
 
 void EnemyTankRendererImpl::Cleanup() {
-    // TODO: Clean up enemy-specific resources
     BaseRenderer::Cleanup();
 }
 
@@ -32,6 +56,11 @@ void EnemyTankRendererImpl::Render(const TankRenderData& data) {
         return;
     }
     
+    if (RendererMode::IsModern()) {
+        RenderEnemyTankGeometry(data);
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Save matrix state
     glPushMatrix();
     
@@ -40,11 +69,22 @@ void EnemyTankRendererImpl::Render(const TankRenderData& data) {
     
     // Restore matrix state
     glPopMatrix();
+#endif
 }
 
 void EnemyTankRendererImpl::SetupRenderState() {
+    if (RendererMode::IsModern()) {
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_LESS);
+        glDisable(GL_BLEND);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     BaseRenderer::SetupRenderState();
-    
     // Enemy tank render state (optimized for performance)
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glEnable(GL_LIGHTING);
@@ -53,15 +93,26 @@ void EnemyTankRendererImpl::SetupRenderState() {
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
     glFrontFace(GL_CW);
+#endif
 }
 
 void EnemyTankRendererImpl::CleanupRenderState() {
-    // Restore OpenGL state
+    if (RendererMode::IsModern()) return;
+#ifndef __EMSCRIPTEN__
     glPopAttrib();
     BaseRenderer::CleanupRenderState();
+#endif
 }
 
 void EnemyTankRendererImpl::RenderEnemyTankGeometry(const TankRenderData& tank) {
+    if (RendererMode::IsModern()) {
+        ResourceManager& catalogue = resources ? *resources : App::GetSingleton().graphicsTask->Resources();
+        for (const EnemyTankDraw& draw : BuildDraws(tank)) {
+            RenderContext::Current().Draw(catalogue.GetGeometry(draw.geometry), draw.model, draw.material);
+        }
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Replicate TankRenderer::Draw() logic exactly for compatibility
     
     // Setup body transform
@@ -81,8 +132,10 @@ void EnemyTankRendererImpl::RenderEnemyTankGeometry(const TankRenderData& tank) 
     
     // Draw turret (uses current color from barrel)
     DrawTurret();
+#endif
 }
 
+#ifndef __EMSCRIPTEN__
 void EnemyTankRendererImpl::SetupBodyTransform(const TankRenderData& tank) {
     glTranslatef(tank.position.x, tank.position.y, tank.position.z);
     glRotatef(tank.bodyRotation.x, 1, 0, 0);
@@ -399,3 +452,5 @@ void EnemyTankRendererImpl::DrawTurret() {
     glEnd();
     glScalef(1.0f/0.1f, 1.0f/0.1f, 1.0f/0.1f); // Restore scale
 }
+
+#endif

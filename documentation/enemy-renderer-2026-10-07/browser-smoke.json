@@ -1,0 +1,1329 @@
+{
+  "browser": "151.0.7922.173",
+  "logs": [
+    {
+      "type": "error",
+      "text": "Failed to load resource: the server responded with a status of 404 (File not found)"
+    },
+    {
+      "type": "log",
+      "text": "We compiled against SDL version 2.30.8 ..."
+    },
+    {
+      "type": "log",
+      "text": "But we are linking against SDL version 2.30.8."
+    },
+    {
+      "type": "log",
+      "text": "VideoTask::Start: graphics context ready at 1280x720."
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask::Starting"
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: terrain is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer initialized successfully"
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: effects is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: compatibility unified tank renderer is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "type": "log",
+      "text": "RenderingPipeline initializing... "
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: terrain is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer initialized successfully"
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: effects is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: HUD is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "Browser renderer unavailable: menus is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "type": "log",
+      "text": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask::Started"
+    },
+    {
+      "type": "log",
+      "text": "Renderer mode: modern"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: ./levels/title@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: ./levels/title@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameWorld::Initialize() - Starting"
+    },
+    {
+      "type": "log",
+      "text": "CollisionSystem::Initialize() - Subscribing to collision query events"
+    },
+    {
+      "type": "log",
+      "text": "CollisionSystem::Initialize() - Subscriptions complete"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld initialized with collision and combat systems"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Setting GameWorld and recreating SceneDataBuilder"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: OnResume - Initializing systems..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Initializing PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Initialize called with GameWorld"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Creating initial player..."
+    },
+    {
+      "type": "log",
+      "text": "Created Player 0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Claiming existing tanks from TankHandler..."
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: No valid tank found for Player 0 in TankHandler"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up controllers and input with synced preferences..."
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Detected 0 joysticks"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Keeping TankHandler input preference isInputJoy=0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Using keyboard/mouse input (from TankHandler)"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Keeping numPlayers=1 from initialization"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Initialized with 1 players"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager initialized with 1 players"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: OnResume complete"
+    },
+    {
+      "type": "log",
+      "text": "Initialization complete."
+    },
+    {
+      "type": "log",
+      "text": "Registering non-blocking Emscripten browser frame loop."
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "type": "log",
+      "text": "Browser first frame completed: WebGL clear/render/swap path executed."
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=5.52 avg_ms=181.067 recent_ms=122.300 max_ms=418.000 tick_ms=0.250 frames=6 interval_ms=1086.400"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Setting up new game..."
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Cleared event queue"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "type": "log",
+      "text": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: GameWorld::CreateTank returned tank=0x305a78"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank::Init() completed"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 took control of tank"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Player tanks spawned"
+    },
+    {
+      "type": "log",
+      "text": "GameTask: Game setup complete"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=1.37 avg_ms=727.500 recent_ms=1705.300 max_ms=1705.300 tick_ms=671.600 frames=3 interval_ms=2182.500"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=22.40 avg_ms=44.648 recent_ms=57.600 max_ms=102.700 tick_ms=1.804 frames=23 interval_ms=1026.900"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=23.00 avg_ms=43.487 recent_ms=33.700 max_ms=110.500 tick_ms=0.596 frames=23 interval_ms=1000.200"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 38 | FPS: 17.5"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=24.42 avg_ms=40.944 recent_ms=39.900 max_ms=57.000 tick_ms=0.540 frames=25 interval_ms=1023.600"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=17.67 avg_ms=56.579 recent_ms=321.100 max_ms=321.100 tick_ms=0.642 frames=19 interval_ms=1075.000"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=18.88 avg_ms=52.979 recent_ms=40.500 max_ms=111.700 tick_ms=0.558 frames=19 interval_ms=1006.600"
+    },
+    {
+      "type": "log",
+      "text": "GameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 22 | FPS: 16.4"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Calling NextLevel for player respawn (deadtime=0.51)"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to ENEMY_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 released tank control"
+    },
+    {
+      "type": "log",
+      "text": ""
+    },
+    {
+      "type": "log",
+      "text": "========== LevelHandler::NextLevel(false) called =========="
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Clearing GameWorld..."
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: GameWorld cleared"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "type": "log",
+      "text": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Creating new player tank after respawn"
+    },
+    {
+      "type": "log",
+      "text": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: GameWorld::CreateTank returned tank=0x305938"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: Tank::Init() completed"
+    },
+    {
+      "type": "log",
+      "text": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "type": "log",
+      "text": "Player 0 took control of tank"
+    },
+    {
+      "type": "log",
+      "text": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "type": "log",
+      "text": "PlayerManager: Player 0 respawned with new tank"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=19.78 avg_ms=50.555 recent_ms=34.300 max_ms=120.500 tick_ms=6.075 frames=20 interval_ms=1011.100"
+    },
+    {
+      "type": "log",
+      "text": "Browser perf: fps=20.99 avg_ms=47.652 recent_ms=43.700 max_ms=72.400 tick_ms=0.462 frames=21 interval_ms=1000.700"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: ClosingFont "
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer cleaned up"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "type": "log",
+      "text": "BulletRenderer cleaned up"
+    },
+    {
+      "type": "log",
+      "text": "GraphicsTask: Stopped "
+    },
+    {
+      "type": "log",
+      "text": "Browser frame loop stopped."
+    }
+  ],
+  "errors": [],
+  "probes": [
+    {
+      "name": "idle",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "counts": {
+        "4": 33,
+        "6": 169,
+        "24": 170,
+        "36": 340,
+        "444": 136,
+        "912": 136
+      },
+      "samples": [
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        }
+      ]
+    },
+    {
+      "name": "enemy-motion",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "counts": {
+        "4": 122,
+        "6": 530,
+        "24": 510,
+        "36": 1020,
+        "444": 408,
+        "912": 408
+      },
+      "samples": [
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        }
+      ]
+    },
+    {
+      "name": "moved",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "counts": {
+        "4": 147,
+        "6": 611,
+        "24": 625,
+        "36": 1250,
+        "444": 464,
+        "912": 464
+      },
+      "samples": [
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        }
+      ]
+    },
+    {
+      "name": "firing",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+      "counts": {
+        "4": 194,
+        "6": 728,
+        "24": 750,
+        "36": 1500,
+        "444": 562,
+        "912": 564
+      },
+      "samples": [
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 36,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 24,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        }
+      ]
+    }
+  ],
+  "stopped": true
+}

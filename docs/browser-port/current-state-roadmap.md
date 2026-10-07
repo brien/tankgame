@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-09-29
+**Status date:** 2026-10-07
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -8,36 +8,52 @@ remain the historical record of the pre-implementation recommendation.
 
 ## Executive assessment
 
-The browser proof of concept has crossed its original feasibility threshold. It
-builds and links, preloads a deliberately limited asset package, yields every frame
-to the browser, and has been exercised in headed Chromium. A flat-colour player
-tank (body and turret), bullets, and turret response to mouse movement have been
-observed at approximately 60 FPS after release-build diagnostic logging was gated.
-This is a successful vertical slice, not a feature-complete browser port: terrain,
-enemy visuals, effects, HUD/menu, texture sampling, lighting, browser audio, and a
-polished browser interaction lifecycle remain absent or deferred.
+The shared modern renderer now covers player body/turret and ring/star overlays,
+bullets/items, and enemy bodies, turret housings, and cannons on native desktop
+and Emscripten. Native compatibility remains the default, fallback, and visual
+reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
+program; platform differences stay at GL loading, context/shader dialect, and
+application/toolchain boundaries. Deferred terrain, effects, HUD/menu/text,
+lighting, audio, and browser UX keep this a partial port, not full convergence.
 
-The implementation followed the plan in its most important direction: gameplay and
-`SceneData` extraction stayed shared; mesh calls became CPU `Geometry`; explicit
-matrix/colour state and a real shader/VBO submission path replaced browser-side
-fixed-function emulation. It deliberately used the plan's transitional option for
-speed and native safety. Native still executes compatibility OpenGL while
-Emscripten selects modern paths, substitutes no-op/deferred renderers, and excludes
-legacy renderer sources.
+**Current owner decision (2026-10-07):** proceed with the narrow enemy migration.
+The owner reports that the Windows build runs correctly, with renderer mode
+unspecified; this is not Windows modern-renderer qualification. The owner
+explicitly defers macOS runtime validation. Preserve macOS build support and the
+existing three-desktop CI checks. Multiplayer robustness remains deferred and
+low priority. The historical milestone evidence below remains dated evidence,
+not a claim that earlier platform gates were completed in this change.
 
-The result is therefore **a mixture, closest to architecture B**: shared simulation,
-DTOs, CPU geometry preparation, orchestration, and portions of renderer classes;
-but a modern browser GPU implementation alongside the retained native compatibility
-renderer. It is not yet architecture A (one modern renderer plus small platform
-adapters). This divergence was useful PoC scaffolding. It becomes architectural
-drift if more visual systems receive browser-only implementations before the
-existing modern path is proved and adopted on native.
+## Shared modern enemy milestone (2026-10-07)
 
-**Recommendation:** choose Option B now: converge on one programmable renderer for
-Emscripten, Linux, macOS, and Windows. First make the existing geometry/shader/VBO
-path selectable on native Linux and render the already-working player tank fixture.
-Keep the compatibility renderer as a temporary runtime/build fallback and visual
-oracle. Do not next implement browser-only terrain, enemies, effects, or UI.
+`EnemyTankRendererImpl` now submits body, housing/barrel, and cannon/turret through
+catalogue `Geometry/GpuGeometry`, `BasicMaterial`, `RenderContext`, and the existing
+`ModernRenderer` on native and browser. The pipeline routes alive enemies to this
+shared pass. All 25 current type pairs retain the compatibility renderer's same
+fixed mesh set and primary/secondary health-based colours. Position, body and
+relative turret rotations, .06/.1 scales, and local-X cannon offset are preserved.
+The compatibility unified renderer and default selection remain intact. No new
+assets/preloads, per-frame uploads, or program/resource owners were introduced.
+
+Native Release game/tests build and the full 98-test CTest run under Xvfb passed,
+including the opt-in GL startup test. Eight new tests cover variant selection,
+colours, transforms, geometry and catalogue identity. Linux default and modern
+single-player gameplay smokes both exited cleanly with screenshots and no recorded
+GL/shader error. A separate two-pose close-up fixture returned GL_NO_ERROR in both
+backends and matched foreground silhouettes exactly; modern faces remain unlit.
+The Emscripten 3.1.69 Release target packaged successfully; headed Chromium
+151/SwiftShader gameplay showed enemies and preserved player overlays, with four
+zero-error WebGL probes, no context loss, and clean shutdown. Local SDL2 discovery
+and HTML-minifier adapters are detailed in the report; this is software runtime
+evidence, not hardware frame-pacing qualification.
+See the [enemy milestone report](enemy-modern-renderer.md) and its dated evidence
+for exact commands, browser results, visual limits, and Windows/browser checklists.
+
+This implements only the enemy portion of R3. It does not complete the opaque
+world pass, establish Windows modern qualification, or close the explicitly
+deferred macOS runtime gate. Future renderer work remains separately scoped;
+terrain, effects, UI/text, lighting, audio, browser UX, and multiplayer work are
+not authorized by this milestone.
 
 ## Current runtime findings and multiplayer priority (2026-09-29)
 
@@ -278,6 +294,10 @@ may migrate one narrow deferred draw category only after that evidence. Terrain,
 enemies, effects, HUD/menu, text, lighting, audio, browser UX, and multiplayer
 remain outside this milestone.
 
+The 2026-10-07 owner decision and enemy milestone above supersede the earlier
+recommendation to block every narrow migration on macOS runtime qualification.
+The earlier evidence and recommendations are retained as historical records.
+
 ## Original intent, without hindsight
 
 The original documents made three different levels of statement:
@@ -335,6 +355,9 @@ left for proof-of-concept evidence.
 | Significant Emscripten branching | **True:** 69 Emscripten conditional directives in 16 production C/C++ files, plus Emscripten build selection in root/source/test CMake. Most renderer branches are transitional rather than permanent platform boundaries. |
 
 ## Original migration-plan status
+
+The table below is the original reconciliation snapshot. Current implementation
+and validation are recorded in the dated convergence milestones above.
 
 “Complete” means the original behavioural success criteria have been met, not merely
 that a target compiles. Work happened out of order: browser linking, geometry,
@@ -705,19 +728,17 @@ risk.
 
 ## Platform validation and test protection
 
-| Platform | Evidence today | Gap/action |
+| Platform | Current evidence | Gap/action |
 | --- | --- | --- |
-| Linux | 2026-09-29 Release build and 84/84 CTest pass; default/modern gameplay and split-screen captures exist. Sustained single-player firing passes; modern crashes in a longer multiplayer sequence. | Multiplayer is an open, deferred / low-priority limitation. Retain deterministic default/modern renderer fixtures and the crash evidence; no clean multiplayer baseline is claimed. |
-| macOS | Source/header/CMake accommodation only; no build or runtime artifact found in current browser-port records. | Unvalidated. Add compile plus real core-context/shader runtime in R2, before broad migration. |
-| Windows | Visual Studio files and source branches exist; no recent build/runtime artifact found. | Unvalidated. Add CMake/VS compile and GPU smoke in R2. |
-| Emscripten | 2026-09-29 Release build, fresh co-op/versus captures, and three 60-second single-player firing runs at 59.81–59.82 FPS with clean GL probes/shutdown. A longer multiplayer sequence traps. | Multiplayer is deferred / low priority; independent player-2 input is unverified. Evidence remains one Chromium/AMD environment; CI/WASM tests, browser matrix, interaction/audio, context recovery, and feature completeness remain open. |
+| Linux | 2026-10-07 Release game/test build; 98/98 CTest with Xvfb GL opt-in; compatibility and modern single-player gameplay captures/clean shutdown; enemy two-pose silhouette comparison. | Software/Xvfb evidence does not qualify hardware frame pacing or lighting parity. Multiplayer remains deferred; historical failures are retained. |
+| macOS | Shared Apple headers/core shader/context policy and existing build/test CI remain supported and unchanged. | Owner explicitly defers runtime validation. No new macOS build/runtime or hosted-CI result is claimed; deferred compatibility categories still need core-safe migration. |
+| Windows | Owner reports the Windows build runs correctly, renderer unspecified. Existing MinGW build/test CI remains unchanged. | Run the explicit `TANKGAME_RENDERER=modern` checklist; no Windows modern-runtime qualification is inferred from the owner's report. |
+| Emscripten | 2026-10-07 Emscripten 3.1.69 Release build/package and Chromium 151/SwiftShader gameplay captures; four zero-error/no-loss probes and clean shutdown. Historical Chromium/AMD firing/split-screen evidence remains separate. | Browser/device matrix, deferred visuals, audio/interaction/context recovery, and multiplayer remain open. |
 
-Before renderer convergence changes, retain the existing browser screenshots/results
-and add a deterministic scene fixture with mesh counts/bounds, camera/model matrices,
-and frame-state assertions. Add image comparisons with tolerant thresholds rather
-than brittle exact pixels. A smoke test should assert shader link, zero GL errors,
-non-empty draws and clean teardown; screenshots require human-approved references on
-each graphics family/platform.
+The new regression tests protect enemy type-pair mesh/colour selection and local
+transform composition independently of GL. Close-up reference captures separate
+geometry/depth silhouettes from intentionally different lighting. Retain the
+historical multiplayer crash evidence; a renderer smoke is not session sign-off.
 
 ### Reconciliation validation history
 
@@ -755,8 +776,8 @@ milestone reports rather than represented as a new run.
 
 ## Human decisions still required
 
-1. Approve convergence (Option B) and time-box the compatibility fallback, or
-   explicitly accept the long-term cost of Option A.
+1. Decide the compatibility fallback retirement timeline after broader visual
+   coverage; shared convergence and this narrow enemy migration are authorized.
 2. Choose the supported WebGL baseline and minimum desktop GL/core-profile version,
    especially the macOS floor.
 3. Choose shader portability: common restricted source, generated preambles/variants,
@@ -771,11 +792,11 @@ milestone reports rather than represented as a new run.
    gain persistence.
 8. Decide how long all runtime assets should be preloaded versus staged, and which
    levels/game modes define the first browser release.
-9. Provide or fund real macOS and Windows build/runtime agents; source conditionals
-   cannot substitute for validation.
+9. Complete explicit modern-mode Windows runtime checks and revisit macOS runtime
+   when the owner ends its deferral; CI builds do not substitute for visual checks.
 
-## Exact documentation changes in this reconciliation
+## Original reconciliation changes (historical, 2026-09-28)
 
-No production or test source is changed. This document is added as the current
+At the original reconciliation, no production or test source was changed. This document is added as the current
 status/roadmap, and short historical-status pointers are added to
 `architecture.md`, `migration-plan.md`, and `risks.md`.

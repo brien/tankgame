@@ -3,24 +3,23 @@
 #include "ITankRenderer.h"
 #include "BaseRenderer.h"
 #include "RenderData.h"
+#include "ResourceManager.h"
+#include "Matrix4.h"
+#include <array>
 
-/**
- * Enemy tank renderer implementing the ITankRenderer interface.
- * 
- * This renderer specializes in rendering enemy tanks with basic geometry and
- * efficient rendering. It focuses on performance over visual effects since
- * enemy tanks are typically numerous and don't need the same level of detail
- * as player tanks.
- * 
- * Features:
- * - Hardcoded geometry for performance
- * - Health-based color modifications
- * - Minimal effects for efficiency
- * - Optimized for batch rendering
- */
+// Shared modern enemy submission with a retained native compatibility path.
+struct EnemyTankDraw {
+    GeometryResource geometry;
+    Matrix4 model;
+    BasicMaterial material;
+};
+
 class EnemyTankRendererImpl : public BaseRenderer, public ITankRenderer {
 public:
-    EnemyTankRendererImpl();
+    explicit EnemyTankRendererImpl(ResourceManager* resources = nullptr);
+
+    // GL-free draw description used by submission and regression tests.
+    static std::array<EnemyTankDraw, 3> BuildDraws(const TankRenderData& tank);
     virtual ~EnemyTankRendererImpl() = default;
     
     // ITankRenderer interface implementation
@@ -34,6 +33,8 @@ public:
     void RenderEnemyTankGeometry(const TankRenderData& tank);
     
 private:
+    ResourceManager* resources; // Non-owning; catalogue outlives the pipeline.
+#ifndef __EMSCRIPTEN__
     // Internal rendering helpers (using hardcoded geometry from TankRenderer)
     void RenderTankBody(const TankRenderData& tank);
     void RenderTankBarrel(const TankRenderData& tank);
@@ -48,4 +49,5 @@ private:
     void SetupBodyTransform(const TankRenderData& tank);
     void SetupBarrelTransform(const TankRenderData& tank);
     void SetupTurretTransform();
+#endif
 };

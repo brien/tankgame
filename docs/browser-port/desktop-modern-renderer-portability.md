@@ -2,6 +2,15 @@
 
 **Status date:** 2026-09-29
 
+
+**2026-10-07 follow-up:** the [shared enemy milestone](enemy-modern-renderer.md)
+adds enemy bodies/housings/cannons through the existing catalogue and program.
+The owner reports Windows runs correctly (renderer unspecified) and explicitly
+defers macOS runtime validation while authorizing this narrow migration. Existing
+macOS build support and desktop CI checks remain intact. Earlier evidence and
+recommendations below are historical; they do not establish Windows modern
+qualification or current macOS runtime success.
+
 ## Scope and previous assumptions
 
 This milestone changes only the existing modern player/material slice. It does

@@ -20,7 +20,7 @@
 
 RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &camera,
                                      ResourceManager &resources)
-    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), renderStats{0, 0, 0, 0, 0.0f}
+    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), enemyTankRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
 {
 }
 
@@ -39,9 +39,8 @@ bool RenderingPipeline::Initialize()
     success &= hudRenderer.Initialize();
     success &= menuRenderer.Initialize();
 
-    // The desktop unified renderer also owns the legacy enemy path.  The
-    // browser selects the already-migrated player-only renderer instead so
-    // TankRenderer.cpp (and its immediate-mode geometry) stays out of WebGL.
+    // Modern player and enemy passes share the catalogue and submission backend.
+    if (RendererMode::IsModern()) success &= enemyTankRenderer.Initialize();
     tankRenderer = RendererMode::IsModern()
         ? TankRendererFactory::CreateRenderer(TankRendererFactory::RendererType::PLAYER_TANK)
         : TankRendererFactory::CreateUnifiedRenderer();
@@ -65,6 +64,8 @@ void RenderingPipeline::Cleanup()
         tankRenderer->Cleanup();
         tankRenderer.reset();
     }
+
+    if (RendererMode::IsModern()) enemyTankRenderer.Cleanup();
 
     // Cleanup UI renderers
     hudRenderer.Cleanup();
@@ -318,20 +319,26 @@ void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
         return;
     }
 
-    // Enemy render data remains in the scene for simulation and later
-    // milestones, but must never reach the player-only WebGL renderer.
-    int playersRendered = 0;
+    int tanksRendered = 0;
+    // Preserve the player's overlay state sequence, then establish opaque enemy
+    // state explicitly so additive blending/depth-write settings cannot leak.
     tankRenderer->SetupRenderState();
-    for (const TankRenderData& tank : tanks)
-    {
-        if (tank.alive && tank.isPlayer)
-        {
+    for (const TankRenderData& tank : tanks) {
+        if (tank.alive && tank.isPlayer) {
             tankRenderer->Render(tank);
-            ++playersRendered;
+            ++tanksRendered;
         }
     }
     tankRenderer->CleanupRenderState();
-    renderStats.tanksRendered = playersRendered;
+    enemyTankRenderer.SetupRenderState();
+    for (const TankRenderData& tank : tanks) {
+        if (tank.alive && !tank.isPlayer) {
+            enemyTankRenderer.Render(tank);
+            ++tanksRendered;
+        }
+    }
+    enemyTankRenderer.CleanupRenderState();
+    renderStats.tanksRendered = tanksRendered;
     return;
     }
 #ifndef __EMSCRIPTEN__
