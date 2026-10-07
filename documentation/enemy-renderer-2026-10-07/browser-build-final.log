@@ -1,0 +1,4 @@
+[  1%] Linking CXX executable /workspace/tankgame/runtime/tankgame-linux.html
+cache:INFO: generating system asset: symbol_lists/2f1a9ec133c80053ced4455551c2bff26ac9b034.json... (this will be cached in "/workspace/tankgame/work/emscripten-cache/symbol_lists/2f1a9ec133c80053ced4455551c2bff26ac9b034.json" for subsequent builds)
+cache:INFO:  - ok
+[100%] Built target tankgame-linux

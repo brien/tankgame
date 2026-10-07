@@ -11,7 +11,7 @@ enum class GeometryResource {
     TerrainCube, Bullet, TankBody, TankTurret, TankCannon, Item,
     HorizontalQuad, HorizontalOutline, TankBodyExtruded,
     TankTurretExtruded, TankCannonExtruded, TankBodyEdges,
-    TankTurretEdges, TankCannonEdges
+    TankTurretEdges, TankCannonEdges, EnemyBody, EnemyBarrel, EnemyTurret
 };
 
 enum class MaterialResource { RingOverlay, StarOverlay };
@@ -106,6 +106,10 @@ private:
     DisplayList turretListEx2{1};
     DisplayList cannonListEx2{1};
     
+    DisplayList enemyBody{1};
+    DisplayList enemyBarrel{1};
+    DisplayList enemyTurret{1};
+
     // Resource managers
     TextureHandler textureHandler;
     BasicMaterial ringMaterial;

@@ -10,6 +10,7 @@
 #include "EffectRenderer.h"
 #include "ItemRenderer.h"
 #include "ITankRenderer.h"
+#include "EnemyTankRendererImpl.h"
 #include "TankRendererFactory.h"
 #include "HUDRenderer.h"
 #include "MenuRenderer.h"
@@ -104,6 +105,7 @@ private:
     EffectRenderer effectRenderer;
     ItemRenderer itemRenderer;
     std::unique_ptr<ITankRenderer> tankRenderer;
+    EnemyTankRendererImpl enemyTankRenderer;
     
     // UI renderers
     HUDRenderer hudRenderer;

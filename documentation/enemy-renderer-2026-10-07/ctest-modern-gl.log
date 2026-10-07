@@ -1,0 +1,14 @@
+Note: Google Test filter = VideoStartupTest.*
+[==========] Running 1 test from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 1 test from VideoStartupTest
+[ RUN      ] VideoStartupTest.LoadsTextureFunctionsBeforeUpload
+VideoTask::Start: Failed to open settings.txt
+VideoTask::Start: Using default settings
+VideoTask::Start: graphics context ready at 1280x720.
+[       OK ] VideoStartupTest.LoadsTextureFunctionsBeforeUpload (3341 ms)
+[----------] 1 test from VideoStartupTest (3341 ms total)
+
+[----------] Global test environment tear-down
+[==========] 1 test from 1 test suite ran. (3341 ms total)
+[  PASSED  ] 1 test.

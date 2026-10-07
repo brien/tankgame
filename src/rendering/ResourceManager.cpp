@@ -113,6 +113,11 @@ void ResourceManager::BuildBulletList() {
 }
 
 void ResourceManager::BuildTankDisplayLists() {
+    // Enemy geometry is the compatibility renderer's fixed mesh for all types.
+    enemyBody.SetGeometry(SimpleGeometry::CreateEnemyBody());
+    enemyBarrel.SetGeometry(SimpleGeometry::CreateEnemyBarrel());
+    enemyTurret.SetGeometry(SimpleGeometry::CreateEnemyTurret());
+
     // Build tank body display lists using loaded meshes
     if (meshesLoaded) {
         // bodyListEx - enhanced body
@@ -174,6 +179,7 @@ void ResourceManager::CleanupDisplayLists() {
     squareList.Close(); squareList2.Close();
     bodyListEx.Close(); turretListEx.Close(); cannonListEx.Close();
     bodyListEx2.Close(); turretListEx2.Close(); cannonListEx2.Close();
+    enemyBody.Close(); enemyBarrel.Close(); enemyTurret.Close();
     displayListsBuilt = false;
 }
 
@@ -190,6 +196,9 @@ void ResourceManager::CleanupMeshes() {
 
 DisplayList& ResourceManager::GetGeometry(GeometryResource resource) {
     switch (resource) {
+    case GeometryResource::EnemyBody: return enemyBody;
+    case GeometryResource::EnemyBarrel: return enemyBarrel;
+    case GeometryResource::EnemyTurret: return enemyTurret;
     case GeometryResource::TerrainCube: return cubeList1;
     case GeometryResource::Bullet: return bulletList;
     case GeometryResource::TankBody: return bodyList;
