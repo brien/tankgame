@@ -7,17 +7,17 @@ GraphicsTask::Starting
 BulletRenderer initialized successfully
 EffectRenderer initialized successfully
 GraphicsTask: Initializing new centralized rendering pipeline
-RenderingPipeline initializing... 
+RenderingPipeline initializing...
 [Gameplay diagnostics omitted; complete local log was checked for GL/shader failures.]
 PlayerManager::NextFrame() - Updating 1 players
 PlayerManager::NextFrame() - Complete
-GraphicsTask: ClosingFont 
+GraphicsTask: ClosingFont
 GraphicsTask: Cleaning up new rendering pipeline
 EffectRenderer cleaned up
 BulletRenderer cleaned up
-TerrainRenderer cleaned up 
+TerrainRenderer cleaned up
 GraphicsTask: New rendering pipeline cleanup complete
-TerrainRenderer cleaned up 
+TerrainRenderer cleaned up
 BulletRenderer cleaned up
 EffectRenderer cleaned up
-GraphicsTask: Stopped 
+GraphicsTask: Stopped
