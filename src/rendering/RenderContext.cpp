@@ -10,7 +10,7 @@ RenderContext& RenderContext::Current()
     return context;
 }
 
-void RenderContext::Draw(DisplayList& resource, const Matrix4& model,
+void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
                          float red, float green, float blue, float alpha) const
 {
     const Matrix4 mvp = Mvp(model);
@@ -23,7 +23,7 @@ void RenderContext::Draw(DisplayList& resource, const Matrix4& model,
     renderer->Draw(resource.ModernGeometry(), mvp.Data(), material);
 }
 
-void RenderContext::Draw(DisplayList& resource, const Matrix4& model,
+void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
                          const BasicMaterial& material) const
 {
     const Matrix4 mvp = Mvp(model);

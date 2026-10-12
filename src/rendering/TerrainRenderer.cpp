@@ -1,11 +1,7 @@
-#ifdef _WIN32
-#include <windows.h>
-#include <GL/gl.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "PlatformGL.h"
+#include "RendererMode.h"
+#include "RenderContext.h"
+#include "ResourceManager.h"
 
 #include <cmath>
 #include "TerrainRenderer.h"
@@ -13,13 +9,16 @@
 #include "../App.h"
 #include "../Logger.h"
 
-TerrainRenderer::TerrainRenderer() : BaseRenderer(),
+TerrainRenderer::TerrainRenderer(ResourceManager* catalogue) : BaseRenderer(),
+                                     resources(catalogue),
                                      currentTerrainData(nullptr),
                                      displayListInitialized(false),
                                      lastHeightX(0),
                                      lastHeightZ(0)
 {
+#ifndef __EMSCRIPTEN__
     InitializeColorPalette();
+#endif
 }
 
 bool TerrainRenderer::Initialize()
@@ -37,6 +36,7 @@ bool TerrainRenderer::Initialize()
 
 void TerrainRenderer::Setup3DRenderState()
 {
+#ifndef __EMSCRIPTEN__
     // Call base class setup first
     BaseRenderer::Setup3DRenderState();
     
@@ -50,6 +50,7 @@ void TerrainRenderer::Setup3DRenderState()
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     
     CheckGLError("TerrainRenderer::Setup3DRenderState");
+#endif
 }
 
 void TerrainRenderer::Cleanup()
@@ -66,6 +67,11 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
         return;
     }
 
+    if (RendererMode::IsModern()) {
+        RenderModernTerrain(terrainData);
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Save OpenGL state
     SetupRenderState();
 
@@ -91,8 +97,30 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
 
     // Restore OpenGL state
     CleanupRenderState();
+#endif
 }
 
+void TerrainRenderer::RenderModernTerrain(const TerrainRenderData& terrain)
+{
+    if (!resources) throw std::logic_error("modern terrain requires a resource catalogue");
+    const auto& batches = resources->PrepareTerrain(terrain);
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_TRUE);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glDisable(GL_BLEND);
+    for (const auto& batch : batches) {
+        if (batch.empty) continue;
+        glFrontFace(batch.counterClockwise ? GL_CCW : GL_CW);
+        RenderContext::Current().Draw(batch.geometry, Matrix4::Identity(), batch.material);
+    }
+    glFrontFace(GL_CW);
+}
+
+// Retained native reference, including water. Only the programmable opaque
+// implementation above is compiled for the browser.
+#ifndef __EMSCRIPTEN__
 void TerrainRenderer::RenderFloatingElements(const TerrainRenderData &terrain)
 {
     glFrontFace(GL_CCW);
@@ -756,3 +784,5 @@ void TerrainRenderer::InitializeColorPalette()
         }
     }
 }
+
+#endif

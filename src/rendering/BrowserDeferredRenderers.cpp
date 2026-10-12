@@ -4,7 +4,6 @@
 #include "HUDRenderer.h"
 #include "MenuRenderer.h"
 #include "TankRenderer.h"
-#include "TerrainRenderer.h"
 
 #include "../Logger.h"
 
@@ -71,28 +70,5 @@ void TankRenderer::Render(const TankRenderData&) {}
 void TankRenderer::RenderMultiple(const std::vector<TankRenderData>&) {}
 void TankRenderer::SetupRenderState() {}
 void TankRenderer::CleanupRenderState() {}
-
-TerrainRenderer::TerrainRenderer()
-    : currentTerrainData(nullptr), displayListInitialized(false), lastHeightX(-1), lastHeightZ(-1)
-{
-    InitializeColorPalette();
-}
-
-bool TerrainRenderer::Initialize()
-{
-    LogDeferred("terrain");
-    return BaseRenderer::Initialize();
-}
-
-void TerrainRenderer::Cleanup() { BaseRenderer::Cleanup(); }
-void TerrainRenderer::RenderTerrain(const TerrainRenderData&) {}
-void TerrainRenderer::Setup3DRenderState() {}
-
-void TerrainRenderer::InitializeColorPalette()
-{
-    for (int i = 0; i < COLOR_PALETTE_SIZE; ++i)
-        for (int channel = 0; channel < 4; ++channel)
-            colorPalette[i][channel] = channel == 3 ? 1.0f : 0.0f;
-}
 
 #endif

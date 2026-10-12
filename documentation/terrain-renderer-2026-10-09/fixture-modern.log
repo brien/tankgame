@@ -1,0 +1,8 @@
+VideoTask::Start: graphics context ready at 1280x720.
+fixture frame 0: cached GPU identity stable
+fixture frame 0: GL error=0
+fixture frame 1: cached GPU identity stable
+fixture frame 1: GL error=0
+fixture frame 2: cached GPU identity stable
+fixture frame 2: GL error=0
+TerrainRenderer cleaned up

@@ -20,7 +20,7 @@
 
 RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &camera,
                                      ResourceManager &resources)
-    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), enemyTankRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
+    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), enemyTankRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
 {
 }
 
@@ -255,14 +255,8 @@ void RenderingPipeline::RenderSkybox(const SceneData &scene)
 
 void RenderingPipeline::RenderTerrain(const TerrainRenderData &terrain)
 {
-    if (RendererMode::IsModern()) {
-        (void)terrain;
-        return;
-    }
-#ifndef __EMSCRIPTEN__
     // Delegate to terrain renderer - let it handle its own state management
     terrainRenderer.RenderTerrain(terrain);
-#endif
 }
 
 void RenderingPipeline::RenderGameObjects(const SceneData &scene)

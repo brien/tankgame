@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-07
+**Status date:** 2026-10-12
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -9,20 +9,46 @@ remain the historical record of the pre-implementation recommendation.
 ## Executive assessment
 
 The shared modern renderer now covers player body/turret and ring/star overlays,
-bullets/items, and enemy bodies, turret housings, and cannons on native desktop
+bullets/items, enemy bodies/turrets, and textured opaque terrain on native desktop
 and Emscripten. Native compatibility remains the default, fallback, and visual
 reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
-application/toolchain boundaries. Deferred terrain, effects, HUD/menu/text,
-lighting, audio, and browser UX keep this a partial port, not full convergence.
+application/toolchain boundaries. Water, effects, HUD/menu/text, lighting, audio,
+and browser UX remain deferred, so this is still a partial port.
 
-**Current owner decision (2026-10-07):** proceed with the narrow enemy migration.
-The owner reports that the Windows build runs correctly, with renderer mode
-unspecified; this is not Windows modern-renderer qualification. The owner
-explicitly defers macOS runtime validation. Preserve macOS build support and the
-existing three-desktop CI checks. Multiplayer robustness remains deferred and
-low priority. The historical milestone evidence below remains dated evidence,
-not a claim that earlier platform gates were completed in this change.
+**Current owner decision (terrain follow-up):** defer Windows modern-renderer
+runtime qualification alongside macOS, and proceed with the first opaque terrain
+slice. Preserve both platforms' build support and the existing three-desktop CI
+checks. The earlier Windows report did not identify renderer mode; neither
+platform is newly runtime-qualified here. Multiplayer robustness remains deferred
+and low priority.
+
+## Shared opaque terrain milestone (2026-10-09–12)
+
+The shared `TerrainRenderer` now renders textured surfaces, stepped walls,
+boundaries/ceilings, and floating blocks through the existing catalogue, material,
+and program on modern desktop and Emscripten. `TerrainGeometry` builds GL-free
+batches preserving the active compatibility geometry, UVs, colours and winding,
+including its unusual strip endpoints and level-48 boundary behavior.
+`ResourceManager` caches CPU/GPU batches by actual map and colour content, so
+unchanged frames/viewports reuse buffers while same-number level edits invalidate
+them. The browser terrain no-op and modern pipeline skip are removed.
+
+Linux Release and Emscripten 3.1.64 Release builds pass. Linux CTest passes 108/108
+with the GL startup opt-in enabled; a separate modern startup process also passes.
+Both Linux renderers complete movement, sustained firing, restart and shutdown.
+Three unlit deterministic comparisons have identical silhouettes and at most one
+8-bit channel value of colour difference. This isolates geometry/texture parity;
+it does not establish lighting parity or multiplayer robustness. Visible Chromium
+152/AMD gameplay passed six zero-error/no-context-loss probes and clean shutdown;
+GPU upload counts stayed constant after level entry through firing and restart.
+See the [terrain milestone report](terrain-modern-renderer.md) for browser results,
+reproduction commands, cache checks, screenshots and limitations.
+
+This completes the first opaque terrain slice of R3, not all of R3. Basic lighting
+and broader visual fixture coverage remain. Water belongs to the later transparent
+pass; effects, UI/text, audio, browser UX, and compatibility retirement remain
+separately scoped. Windows and macOS runtime gates are explicitly deferred.
 
 ## Shared modern enemy milestone (2026-10-07)
 
@@ -730,14 +756,14 @@ risk.
 
 | Platform | Current evidence | Gap/action |
 | --- | --- | --- |
-| Linux | 2026-10-07 Release game/test build; 98/98 CTest with Xvfb GL opt-in; compatibility and modern single-player gameplay captures/clean shutdown; enemy two-pose silhouette comparison. | Software/Xvfb evidence does not qualify hardware frame pacing or lighting parity. Multiplayer remains deferred; historical failures are retained. |
+| Linux | Terrain milestone: Release build; 108/108 CTest with GL opt-in; compatibility and modern single-player gameplay/clean shutdown; three terrain fixture comparisons. | Lighting parity and multiplayer robustness remain open; historical failures are retained. |
 | macOS | Shared Apple headers/core shader/context policy and existing build/test CI remain supported and unchanged. | Owner explicitly defers runtime validation. No new macOS build/runtime or hosted-CI result is claimed; deferred compatibility categories still need core-safe migration. |
-| Windows | Owner reports the Windows build runs correctly, renderer unspecified. Existing MinGW build/test CI remains unchanged. | Run the explicit `TANKGAME_RENDERER=modern` checklist; no Windows modern-runtime qualification is inferred from the owner's report. |
-| Emscripten | 2026-10-07 Emscripten 3.1.69 Release build/package and Chromium 151/SwiftShader gameplay captures; four zero-error/no-loss probes and clean shutdown. Historical Chromium/AMD firing/split-screen evidence remains separate. | Browser/device matrix, deferred visuals, audio/interaction/context recovery, and multiplayer remain open. |
+| Windows | Owner reports the Windows build runs correctly, renderer unspecified. Existing MinGW build/test CI remains unchanged. | Owner explicitly defers modern-runtime qualification alongside macOS for the terrain milestone. Retain the modern checklist for later; no qualification is inferred. |
+| Emscripten | Terrain milestone: 3.1.64 Release build/package; visible Chromium 152/AMD gameplay, six zero-error/no-loss probes, stable buffer-upload counts and clean shutdown. | Browser/device matrix, deferred visuals, audio/interaction/context recovery, and multiplayer remain open. |
 
-The new regression tests protect enemy type-pair mesh/colour selection and local
-transform composition independently of GL. Close-up reference captures separate
-geometry/depth silhouettes from intentionally different lighting. Retain the
+Regression tests protect enemy type-pair selection/transforms and terrain
+geometry/texture rules/cache invalidation independently of GL. Close-up reference
+captures isolate geometry and texture parity from deferred lighting. Retain the
 historical multiplayer crash evidence; a renderer smoke is not session sign-off.
 
 ### Reconciliation validation history

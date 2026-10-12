@@ -1,0 +1,11 @@
+title
+idle
+firing
+firing seconds 10
+firing-sustained
+moved
+jump
+returned-menu
+restart
+exit 0
+process status before cleanup 0

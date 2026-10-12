@@ -1,0 +1,5 @@
+configure: cmake -S . -B build-browser -DBUILD_TESTS=OFF -DCMAKE_BUILD_TYPE=Release -DFETCHCONTENT_UPDATES_DISCONNECTED=ON -DCMAKE_TOOLCHAIN_FILE=/home/deck/emsdk/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake -DCMAKE_CROSSCOMPILING_EMULATOR=/home/deck/emsdk/node/24.19.0_64bit/bin/node
+-- Using the multi-header code from /home/deck/Dropbox/work/Programming/tankgame/build-browser/_deps/nlohmann_json-src/include/
+-- Configuring done (10.1s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/deck/Dropbox/work/Programming/tankgame/build-browser
