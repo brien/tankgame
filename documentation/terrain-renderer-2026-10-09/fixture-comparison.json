@@ -1,0 +1,23 @@
+[
+  {
+    "frame": 0,
+    "differingPixels": 609,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 0.0002734375
+  },
+  {
+    "frame": 1,
+    "differingPixels": 1701,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 0.0007374855324074074
+  },
+  {
+    "frame": 2,
+    "differingPixels": 1670,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 0.0007179542824074074
+  }
+]

@@ -1,0 +1,8 @@
+[  1%] Built target gtest
+[  3%] Built target gtest_main
+[  4%] Built target gmock
+[  5%] Built target gmock_main
+[ 47%] Built target tankgame-linux
+[ 48%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/test_terrain_geometry.cpp.o
+[ 49%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame_tests
+[100%] Built target tankgame_tests

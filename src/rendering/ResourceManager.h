@@ -5,6 +5,7 @@
 #include "../TextureHandler.h"
 #include "../igtl_qmesh.h"
 #include "ModernRenderer.h"
+#include "TerrainGeometry.h"
 #include <stdexcept>
 
 enum class GeometryResource {
@@ -15,6 +16,14 @@ enum class GeometryResource {
 };
 
 enum class MaterialResource { RingOverlay, StarOverlay };
+
+struct TerrainDrawBatch {
+    DisplayList geometry{0};
+    BasicMaterial material;
+    bool counterClockwise = false;
+    bool empty = true;
+};
+using TerrainDrawBatches = std::array<TerrainDrawBatch, static_cast<std::size_t>(TerrainBatch::Count)>;
 
 /**
  * Centralized resource manager for all rendering resources.
@@ -48,6 +57,7 @@ public:
     const DisplayList& GetGeometry(GeometryResource resource) const;
     const BasicMaterial& GetMaterial(MaterialResource resource) const;
     const ModernRenderer* GetModernRenderer() const { return modernRenderer.get(); }
+    const TerrainDrawBatches& PrepareTerrain(const TerrainRenderData& terrain);
 
     // Compatibility aliases retained while non-migrated renderers are removed.
     const DisplayList& GetCubeList1() const { return cubeList1; }
@@ -87,6 +97,8 @@ public:
 private:
     // Created before geometry upload and explicitly destroyed after all VBOs.
     std::unique_ptr<ModernRenderer> modernRenderer;
+    TerrainGeometry terrainGeometry;
+    TerrainDrawBatches terrainDraws;
     // Display lists (moved from GraphicsTask)
     DisplayList cubeList1{1};
     DisplayList cubeList2{1};

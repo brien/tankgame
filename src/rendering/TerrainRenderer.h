@@ -5,6 +5,7 @@
 
 // Forward declaration
 struct TerrainRenderData;
+class ResourceManager;
 
 /**
  * TerrainRenderer - Handles all terrain rendering including heightmaps,
@@ -17,7 +18,7 @@ struct TerrainRenderData;
 class TerrainRenderer : public BaseRenderer
 {
 public:
-    TerrainRenderer();
+    explicit TerrainRenderer(ResourceManager* resources = nullptr);
     virtual ~TerrainRenderer() = default;
 
     // IRenderer interface implementation
@@ -32,6 +33,8 @@ protected:
     void Setup3DRenderState();
 
 private:
+    ResourceManager* resources;
+    void RenderModernTerrain(const TerrainRenderData& terrain);
     // Main rendering functions
     void RenderFloatingElements(const TerrainRenderData &terrain);
     void RenderTerrainSurface(const TerrainRenderData &terrain);

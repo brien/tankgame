@@ -174,6 +174,8 @@ void ResourceManager::PrepareMesh(igtl_QGLMesh& mesh, const char* fileName) {
 
 void ResourceManager::CleanupDisplayLists() {
     // Release VBOs before the shared program and while the context is current.
+    terrainDraws = TerrainDrawBatches{};
+    terrainGeometry.Clear();
     cubeList1.Close(); cubeList2.Close(); bulletList.Close();
     bodyList.Close(); turretList.Close(); cannonList.Close(); itemList.Close();
     squareList.Close(); squareList2.Close();
@@ -227,4 +229,33 @@ const BasicMaterial& ResourceManager::GetMaterial(MaterialResource resource) con
     case MaterialResource::StarOverlay: return starMaterial;
     }
     throw std::out_of_range("unknown material resource");
+}
+
+const TerrainDrawBatches& ResourceManager::PrepareTerrain(const TerrainRenderData& terrain) {
+    if (!isInitialized || !RendererMode::IsModern())
+        throw std::logic_error("terrain uploads require the initialized modern catalogue");
+    if (!terrainGeometry.Update(terrain)) return terrainDraws;
+    try {
+        TerrainDrawBatches next;
+        for (std::size_t i = 0; i < next.size(); ++i) {
+            const auto batch = static_cast<TerrainBatch>(i);
+            auto& draw = next[i];
+            const auto& geometry = terrainGeometry.Batches()[i];
+            draw.empty = geometry.vertices.empty();
+            if (draw.empty) continue;
+            TextureNames texture = TEXTURE_BLACK_CUBE;
+            if (batch == TerrainBatch::WhiteSurface) texture = TEXTURE_WHITE_CUBE;
+            if (batch == TerrainBatch::CheckerSurface) texture = TEXTURE_CHECKER;
+            draw.material.texture = textureHandler.GetTexture(texture);
+            draw.counterClockwise = batch == TerrainBatch::Floating ||
+                (batch == TerrainBatch::Boundary && terrain.levelNumber == 48);
+            draw.geometry.SetGeometry(geometry);
+        }
+        terrainDraws = std::move(next);
+    } catch (...) {
+        // A failed upload must not mark the new content as GPU-resident.
+        terrainGeometry.Clear();
+        throw;
+    }
+    return terrainDraws;
 }
