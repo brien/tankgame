@@ -27,12 +27,19 @@ std::string BuildVertexShader(ShaderDialect dialect)
     return preamble +
         (core ? "in vec3 aPosition;\nin vec3 aColor;\nin vec2 aUV;\nin vec3 aNormal;\n"
               : "attribute vec3 aPosition;\nattribute vec3 aColor;\nattribute vec2 aUV;\nattribute vec3 aNormal;\n") +
-        "uniform mat4 uMvp;\nuniform vec4 uDefaultColor;\nuniform bool uHasColor;\n" +
-        (core ? "out vec4 vColor;\nout vec2 vUV;\nout vec3 vNormal;\n"
-              : "varying vec4 vColor;\nvarying vec2 vUV;\nvarying vec3 vNormal;\n") +
+        "uniform mat4 uNormalTransform; uniform bool uLit; uniform mat4 uMvp;\nuniform vec4 uDefaultColor;\nuniform bool uHasColor;\n" +
+        (core ? "out vec4 vColor;\nout vec2 vUV;\n"
+              : "varying vec4 vColor;\nvarying vec2 vUV;\n") +
         "void main() { gl_Position = uMvp * vec4(aPosition, 1.0);"
         " vColor = uHasColor ? vec4(aColor, 1.0) : uDefaultColor;"
-        " vUV = aUV; vNormal = aNormal; }\n";
+        " if (uLit) {"
+        " vec3 n = mat3(uNormalTransform) * aNormal;"
+        " float magnitude = length(n);"
+        " float diffuse = magnitude > 0.0 ? max(dot(n / magnitude, normalize(vec3(0.5, 1.0, 0.5))), 0.0) : 0.0;"
+        // Fixed-function global ambient (.2) plus LIGHT0 ambient (.2),
+        // zero material specular/emission, and diffuse (.8). Clamp per vertex.
+        " vColor.rgb = clamp(vColor.rgb * (0.4 + 0.8 * diffuse), 0.0, 1.0); }"
+        " vUV = aUV; }\n";
 }
 
 std::string BuildFragmentShader(ShaderDialect dialect)
@@ -41,11 +48,11 @@ std::string BuildFragmentShader(ShaderDialect dialect)
     const std::string preamble = dialect == ShaderDialect::GLSLES100 ? "precision mediump float;\n" :
         core ? "#version 150 core\n" : "#version 120\n";
     return preamble +
-        (core ? "in vec4 vColor; in vec2 vUV; in vec3 vNormal;\nout vec4 fragmentColor;\n"
-              : "varying vec4 vColor; varying vec2 vUV; varying vec3 vNormal;\n") +
+        (core ? "in vec4 vColor; in vec2 vUV;\nout vec4 fragmentColor;\n"
+              : "varying vec4 vColor; varying vec2 vUV;\n") +
         "uniform sampler2D uTexture; uniform bool uHasTexture;\n"
         "void main() { vec4 texel = uHasTexture ? " +
         (core ? std::string("texture(uTexture, vUV)") : std::string("texture2D(uTexture, vUV)")) +
         " : vec4(1.0); " + (core ? std::string("fragmentColor") : std::string("gl_FragColor")) +
-        " = texel * vColor + vec4(vNormal.x) * 0.0000001; }\n";
+        " = texel * vColor; }\n";
 }

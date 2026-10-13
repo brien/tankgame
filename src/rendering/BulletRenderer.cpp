@@ -103,14 +103,16 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
         Matrix4::Scale(1, 1, scaleZ);
     if (App::GetSingleton().graphicsTask) {
         RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalOutline), model,
-            bullet.primaryColor.r, bullet.primaryColor.g, bullet.primaryColor.b);
+            bullet.primaryColor.r, bullet.primaryColor.g, bullet.primaryColor.b, 1.0f, false);
     }
+    SetupBlendMode();
     float alpha = 0.1f + bullet.power /
         (bullet.type1 == TankType::TYPE_BLUE ? 500.0f : 1000.0f);
     if (App::GetSingleton().graphicsTask) {
         RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad), model,
-            bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha);
+            bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha, false);
     }
+    RestoreBlendMode();
     return;
     }
 #ifndef __EMSCRIPTEN__
@@ -173,6 +175,8 @@ void BulletRenderer::SetupBulletRendering() {
     if (!RendererMode::IsModern()) {
 #ifndef __EMSCRIPTEN__
         glDisable(GL_TEXTURE_2D);
+        // Emissive projectiles must not inherit the last mesh normal/light state.
+        glDisable(GL_LIGHTING);
 #endif
     }
     texturesEnabled = false;

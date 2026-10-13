@@ -75,6 +75,8 @@ public:
             handle = 0;
             throw std::runtime_error("Modern renderer program link failed");
         }
+        normalTransform = GLFunctions::GetUniformLocation(handle, "uNormalTransform");
+        lit = GLFunctions::GetUniformLocation(handle, "uLit");
         mvp = GLFunctions::GetUniformLocation(handle, "uMvp");
         defaultColor = GLFunctions::GetUniformLocation(handle, "uDefaultColor");
         hasColor = GLFunctions::GetUniformLocation(handle, "uHasColor");
@@ -85,6 +87,8 @@ public:
     ~ShaderProgram() { if (handle != 0) GLFunctions::DeleteProgram(handle); }
 
     GLuint handle = 0;
+    GLint normalTransform = -1;
+    GLint lit = -1;
     GLint mvp = -1;
     GLint defaultColor = -1;
     GLint hasColor = -1;
@@ -96,7 +100,7 @@ ModernRenderer::ModernRenderer() : program(new ShaderProgram) {}
 ModernRenderer::~ModernRenderer() = default;
 
 void ModernRenderer::Draw(const GpuGeometry& geometry, const float* mvp,
-                          const BasicMaterial& material) const
+                          const BasicMaterial& material, const float* normalTransform, bool lighting) const
 {
     if (mvp == nullptr) throw std::invalid_argument("ModernRenderer MVP matrix cannot be null");
     const GeometryAttributeLayout& layout = geometry.Layout();
@@ -116,6 +120,8 @@ void ModernRenderer::Draw(const GpuGeometry& geometry, const float* mvp,
     optional(2, layout.hasTextureCoordinates, 2, layout.textureCoordinateOffset);
     optional(3, layout.hasNormals, 3, layout.normalOffset);
 
+    GLFunctions::UniformMatrix4fv(program->normalTransform, 1, GL_FALSE, normalTransform);
+    GLFunctions::Uniform1i(program->lit, lighting && material.lit && layout.hasNormals ? 1 : 0);
     const GLfloat color[] = {material.red, material.green, material.blue, material.alpha};
     GLFunctions::UniformMatrix4fv(program->mvp, 1, GL_FALSE, mvp);
     GLFunctions::Uniform4fv(program->defaultColor, 1, color);

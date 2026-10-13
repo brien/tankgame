@@ -1,0 +1,45 @@
+VideoTask::Start: graphics context ready at 1280x720.
+BulletRenderer initialized successfully
+frame 0 terrain GL error=0
+frame 0 enemy GL error=0
+frame 0 player GL error=0
+frame 0 item GL error=0
+frame 0 bullet GL error=0
+fixture frame 0: cached GPU identity stable
+fixture frame 0: GL error=0
+frame 1 terrain GL error=0
+frame 1 enemy GL error=0
+frame 1 player GL error=0
+frame 1 item GL error=0
+frame 1 bullet GL error=0
+fixture frame 1: cached GPU identity stable
+fixture frame 1: GL error=0
+frame 2 terrain GL error=0
+frame 2 enemy GL error=0
+frame 2 player GL error=0
+frame 2 item GL error=0
+frame 2 bullet GL error=0
+fixture frame 2: cached GPU identity stable
+fixture frame 2: GL error=0
+frame 3 terrain GL error=0
+frame 3 enemy GL error=0
+frame 3 player GL error=0
+frame 3 item GL error=0
+frame 3 bullet GL error=0
+fixture frame 3: cached GPU identity stable
+fixture frame 3: GL error=0
+frame 4 terrain GL error=0
+frame 4 enemy GL error=0
+frame 4 player GL error=0
+frame 4 item GL error=0
+frame 4 bullet GL error=0
+fixture frame 4: cached GPU identity stable
+fixture frame 4: GL error=0
+frame 5 terrain GL error=0
+frame 5 enemy GL error=0
+frame 5 player GL error=0
+frame 5 item GL error=0
+frame 5 bullet GL error=0
+fixture frame 5: cached GPU identity stable
+fixture frame 5: GL error=0
+TerrainRenderer cleaned up 

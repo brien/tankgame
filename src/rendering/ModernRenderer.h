@@ -17,7 +17,7 @@ public:
     ModernRenderer& operator=(const ModernRenderer&) = delete;
 
     void Draw(const GpuGeometry& geometry, const float* columnMajorMvp,
-              const BasicMaterial& material) const;
+              const BasicMaterial& material, const float* normalTransform, bool lighting) const;
     const void* ProgramIdentity() const;
 
 private:

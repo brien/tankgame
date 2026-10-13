@@ -83,6 +83,10 @@ void TerrainRenderer::RenderTerrain(const TerrainRenderData &terrainData)
         // Re-enable texturing now that we've fixed the lighting issue
         glEnable(GL_TEXTURE_2D);
 
+        // Cubes have no stored normals. Seed the same upward normal as surfaces
+        // so their lighting cannot inherit a previous entity or viewport.
+        glNormal3f(0, 1, 0);
+
         // Render terrain components in order
         RenderFloatingElements(terrainData);
         RenderTerrainSurface(terrainData);

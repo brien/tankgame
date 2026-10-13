@@ -1,0 +1,50 @@
+[
+  {
+    "pixelsAboveOneChannelValue": 1,
+    "frame": 0,
+    "differingPixels": 592,
+    "silhouetteDifferences": 1,
+    "maxChannelDifference": 65,
+    "meanChannelDifference": 0.000322265625
+  },
+  {
+    "pixelsAboveOneChannelValue": 0,
+    "frame": 1,
+    "differingPixels": 1791,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 0.0007805266203703703
+  },
+  {
+    "pixelsAboveOneChannelValue": 0,
+    "frame": 2,
+    "differingPixels": 1753,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 0.000767505787037037
+  },
+  {
+    "pixelsAboveOneChannelValue": 0,
+    "frame": 3,
+    "differingPixels": 1,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 3.616898148148148e-07
+  },
+  {
+    "pixelsAboveOneChannelValue": 1,
+    "frame": 4,
+    "differingPixels": 1,
+    "silhouetteDifferences": 1,
+    "maxChannelDifference": 85,
+    "meanChannelDifference": 4.304108796296296e-05
+  },
+  {
+    "pixelsAboveOneChannelValue": 0,
+    "frame": 5,
+    "differingPixels": 0,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 0,
+    "meanChannelDifference": 0.0
+  }
+]

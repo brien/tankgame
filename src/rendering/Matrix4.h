@@ -19,6 +19,9 @@ public:
                           float centerX, float centerY, float centerZ,
                           float upX, float upY, float upZ);
 
+    // Inverse transpose of the linear transform; singular transforms return zero normals.
+    Matrix4 NormalTransform() const;
+
     Matrix4 operator*(const Matrix4& rhs) const;
     const float* Data() const { return values.data(); }
     float operator()(int row, int column) const { return values[column * 4 + row]; }

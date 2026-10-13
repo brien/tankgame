@@ -1,0 +1,42 @@
+VideoTask::Start: graphics context ready at 1280x720.
+BulletRenderer initialized successfully
+TerrainRenderer: Level 0 (internal 48) - Setting terrain color to (0.70, 0.50, 0.30)
+TerrainRenderer: OpenGL color after glColor3f: (0.70, 0.50, 0.30, 1.00)
+TerrainRenderer: GL_LIGHTING=1, GL_COLOR_MATERIAL=1
+frame 0 terrain GL error=0
+frame 0 enemy GL error=0
+frame 0 player GL error=0
+frame 0 item GL error=0
+frame 0 bullet GL error=0
+fixture frame 0: GL error=0
+frame 1 terrain GL error=0
+frame 1 enemy GL error=0
+frame 1 player GL error=0
+frame 1 item GL error=0
+frame 1 bullet GL error=0
+fixture frame 1: GL error=0
+frame 2 terrain GL error=0
+frame 2 enemy GL error=0
+frame 2 player GL error=0
+frame 2 item GL error=0
+frame 2 bullet GL error=0
+fixture frame 2: GL error=0
+frame 3 terrain GL error=0
+frame 3 enemy GL error=0
+frame 3 player GL error=0
+frame 3 item GL error=0
+frame 3 bullet GL error=0
+fixture frame 3: GL error=0
+frame 4 terrain GL error=0
+frame 4 enemy GL error=0
+frame 4 player GL error=0
+frame 4 item GL error=0
+frame 4 bullet GL error=0
+fixture frame 4: GL error=0
+frame 5 terrain GL error=0
+frame 5 enemy GL error=0
+frame 5 player GL error=0
+frame 5 item GL error=0
+frame 5 bullet GL error=0
+fixture frame 5: GL error=0
+TerrainRenderer cleaned up 

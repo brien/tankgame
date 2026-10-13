@@ -1,4 +1,5 @@
 #include "BaseRenderer.h"
+#include "RendererMode.h"
 #include "../Logger.h"
 #include <iostream>
 
@@ -141,6 +142,9 @@ void BaseRenderer::PopMatrix()
 
 void BaseRenderer::StoreRenderState()
 {
+    // Migrated draws set their own state; fixed-function matrix/light queries
+    // have no role in the programmable backend.
+    if (RendererMode::IsModern()) { stateStored = false; return; }
 #ifdef __EMSCRIPTEN__
     // WebGL state used by migrated draws is established explicitly. Do not
     // query desktop-only lighting or matrix-stack state.

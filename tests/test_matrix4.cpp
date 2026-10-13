@@ -67,3 +67,29 @@ TEST(RenderContextTest, ComposesProjectionViewModelInThatOrder)
     ExpectNear(mvp, 0, 3, 2.0f);
     ExpectNear(mvp, 1, 3, 6.0f);
 }
+
+TEST(Matrix4Test, NormalTransformPreservesPerpendicularityUnderNonuniformScale)
+{
+    const Matrix4 model = Matrix4::Translation(7, 2, -4) *
+        Matrix4::Rotation(37, 1, 2, 3) * Matrix4::Scale(2, 3, .5f);
+    const Matrix4 normal = model.NormalTransform();
+    // Original tangent (1,1,0) and normal (1,-1,0) are perpendicular.
+    float dot = 0;
+    for (int row = 0; row < 3; ++row)
+        dot += (model(row,0) + model(row,1)) * (normal(row,0) - normal(row,1));
+    EXPECT_NEAR(dot, 0, .00001f);
+    ExpectNear(normal, 0, 3, 0);
+    ExpectNear(normal, 1, 3, 0);
+    ExpectNear(normal, 2, 3, 0);
+}
+
+TEST(Matrix4Test, NormalTransformHandlesReflectionAndSingularScale)
+{
+    const Matrix4 reflection = Matrix4::Scale(-2, 4, .5f).NormalTransform();
+    ExpectNear(reflection, 0, 0, -.5f);
+    ExpectNear(reflection, 1, 1, .25f);
+    ExpectNear(reflection, 2, 2, 2);
+    const Matrix4 singular = Matrix4::Scale(0, 1, 1).NormalTransform();
+    for (int row = 0; row < 3; ++row)
+        for (int col = 0; col < 3; ++col) ExpectNear(singular, row, col, 0);
+}

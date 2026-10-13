@@ -207,10 +207,12 @@ void RenderingPipeline::ClearBuffers()
 
 void RenderingPipeline::SetupLighting(const SceneData &scene)
 {
-#ifdef __EMSCRIPTEN__
     (void)scene;
-    // Lighting is deferred until the browser shader-lighting milestone.
-#else
+    if (RendererMode::IsModern()) {
+        RenderContext::Current().SetLighting(true);
+        return;
+    }
+#ifndef __EMSCRIPTEN__
     // Enable lighting
     glEnable(GL_LIGHTING);
     glEnable(GL_LIGHT0);

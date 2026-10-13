@@ -246,6 +246,7 @@ const TerrainDrawBatches& ResourceManager::PrepareTerrain(const TerrainRenderDat
             TextureNames texture = TEXTURE_BLACK_CUBE;
             if (batch == TerrainBatch::WhiteSurface) texture = TEXTURE_WHITE_CUBE;
             if (batch == TerrainBatch::CheckerSurface) texture = TEXTURE_CHECKER;
+            draw.material.lit = true;
             draw.material.texture = textureHandler.GetTexture(texture);
             draw.counterClockwise = batch == TerrainBatch::Floating ||
                 (batch == TerrainBatch::Boundary && terrain.levelNumber == 48);
