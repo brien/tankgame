@@ -377,6 +377,7 @@ void PlayerTankRenderer::RenderTargetingUI(const TankRenderData& tank, float dri
 void PlayerTankRenderer::RenderTankBody(const TankRenderData& tank)
 {
     if (RendererMode::IsModern()) {
+        glFrontFace(GL_CCW);
         RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody),
             PlayerBodyModel(tank), tank.secondaryColor.r, tank.secondaryColor.g,
             tank.secondaryColor.b);
@@ -401,6 +402,7 @@ void PlayerTankRenderer::RenderTankTurret(const TankRenderData& tank)
         RenderContext::Current().Draw(App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret),
             PlayerTurretModel(tank), tank.primaryColor.r, tank.primaryColor.g,
             tank.primaryColor.b);
+        glFrontFace(GL_CW);
         return;
     }
 #ifndef __EMSCRIPTEN__

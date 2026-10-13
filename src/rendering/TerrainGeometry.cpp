@@ -69,8 +69,8 @@ TerrainBatches TerrainGeometry::Build(const TerrainRenderData& t)
     for (auto& batch : result) {
         batch.hasTextureCoordinates = true;
         batch.hasColors = true;
-        // Lighting is deferred. Do not invent normals for the legacy walls,
-        // which inherit the surface normal in the compatibility renderer.
+        // Walls and boundaries inherit the upward surface normal in compatibility.
+        batch.hasNormals = true;
     }
     auto& floating = result[static_cast<std::size_t>(TerrainBatch::Floating)];
     const Geometry cube = SimpleGeometry::CreateCube();
@@ -78,6 +78,7 @@ TerrainBatches TerrainGeometry::Build(const TerrainRenderData& t)
         for (int z = 0; z < t.sizeZ; ++z) {
             if (!t.floatMap[x][z]) continue;
             for (auto v : cube.vertices) {
+                v.normalY = 1.0f;
                 v.x += x + .5f; v.y += t.floatMap[x][z] - .5f; v.z += z + .5f;
                 v.red = t.colors.blockColor.x;
                 v.green = t.colors.blockColor.y;

@@ -11,6 +11,7 @@ EnemyTankRendererImpl::EnemyTankRendererImpl(ResourceManager* resources)
 namespace {
 BasicMaterial EnemyMaterial(const Color& color, float health, float maxHealth) {
     BasicMaterial material;
+    material.lit = true;
     // Preserve glColor3f's multiplier (including values above one); the shader
     // and framebuffer perform the final clamp. Enemy surfaces are opaque/untextured.
     const bool hasHealth = health > 0.0f && maxHealth > 0.0f;

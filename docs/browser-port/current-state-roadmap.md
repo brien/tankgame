@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-12
+**Status date:** 2026-10-13
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -13,7 +13,7 @@ bullets/items, enemy bodies/turrets, and textured opaque terrain on native deskt
 and Emscripten. Native compatibility remains the default, fallback, and visual
 reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
-application/toolchain boundaries. Water, effects, HUD/menu/text, lighting, audio,
+application/toolchain boundaries. Water, effects, HUD/menu/text, audio,
 and browser UX remain deferred, so this is still a partial port.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
@@ -22,6 +22,24 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## Shared opaque lighting follow-up (2026-10-13)
+
+The shared modern program now applies ambient-plus-directional vertex lighting to
+terrain, player/enemy meshes and items. Normal transforms use the inverse transpose
+of the model's linear transform; overlays and bullets have explicit unlit materials.
+Terrain batches include normals, preserving the compatibility surface/wall convention.
+Floating cubes now receive a defined upward normal in both paths rather than
+inheriting a previous draw's normal. Bullet blending and modern state restoration
+also received narrowly scoped corrections exposed by the expanded fixture.
+
+Linux and browser validation, deterministic captures, limitations and reproduction
+are recorded in [the lighting report](opaque-lighting.md). This implements the
+remaining basic lighting work in R3 and expands entity/terrain fixture coverage.
+It does not close the deferred Windows/macOS runtime gates or establish exhaustive
+level/entity parity. Compatibility remains the default and visual reference.
+R4 (transparent effects, water and complete view handling) is the next feature
+milestone; retained R3 platform/coverage gates still need eventual qualification.
 
 ## Shared opaque terrain milestone (2026-10-09–12)
 

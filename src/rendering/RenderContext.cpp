@@ -11,16 +11,15 @@ RenderContext& RenderContext::Current()
 }
 
 void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
-                         float red, float green, float blue, float alpha) const
+                         float red, float green, float blue, float alpha, bool lit) const
 {
-    const Matrix4 mvp = Mvp(model);
     BasicMaterial material;
+    material.lit = lit;
     material.red = red;
     material.green = green;
     material.blue = blue;
     material.alpha = alpha;
-    if (!renderer) throw std::logic_error("RenderContext has no modern renderer");
-    renderer->Draw(resource.ModernGeometry(), mvp.Data(), material);
+    Draw(resource, model, material);
 }
 
 void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
@@ -28,5 +27,6 @@ void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
 {
     const Matrix4 mvp = Mvp(model);
     if (!renderer) throw std::logic_error("RenderContext has no modern renderer");
-    renderer->Draw(resource.ModernGeometry(), mvp.Data(), material);
+    renderer->Draw(resource.ModernGeometry(), mvp.Data(), material,
+                   model.NormalTransform().Data(), lighting);
 }

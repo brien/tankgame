@@ -1,0 +1,10 @@
+[  1%] Built target gtest
+[  3%] Built target gtest_main
+[  4%] Built target gmock
+[  5%] Built target gmock_main
+[  6%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/PlayerTankRenderer.cpp.o
+[  7%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/rendering/PlayerTankRenderer.cpp.o
+[  7%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux
+[ 48%] Built target tankgame-linux
+[ 49%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame_tests
+[100%] Built target tankgame_tests

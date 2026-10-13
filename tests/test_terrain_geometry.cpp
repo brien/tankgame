@@ -188,3 +188,20 @@ TEST(TerrainGeometryTest, RejectsInvalidDimensionsBeforeReadingMaps)
     t.sizeX = 5; t.sizeZ = 129;
     EXPECT_THROW(TerrainGeometry::Build(t), std::invalid_argument);
 }
+
+TEST(TerrainGeometryTest, LightingNormalsPreserveInheritedUpDirection)
+{
+    TerrainRenderData terrain;
+    terrain.sizeX = terrain.sizeZ = 4;
+    terrain.floatMap[2][2] = 3;
+    terrain.heightMap[2][2] = 2;
+    const auto batches = TerrainGeometry::Build(terrain);
+    for (const auto& batch : batches) {
+        EXPECT_TRUE(batch.hasNormals);
+        for (const auto& vertex : batch.vertices) {
+            EXPECT_FLOAT_EQ(vertex.normalX, 0);
+            EXPECT_FLOAT_EQ(vertex.normalY, 1);
+            EXPECT_FLOAT_EQ(vertex.normalZ, 0);
+        }
+    }
+}
