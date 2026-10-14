@@ -27,6 +27,8 @@ public:
 
     // Terrain-specific rendering method
     void RenderTerrain(const TerrainRenderData &terrainData);
+    // Modern additive water pass; compatibility retains its reference ordering.
+    void RenderWater(const TerrainRenderData& terrain);
 
 protected:
     // Override render state setup to disable lighting for terrain

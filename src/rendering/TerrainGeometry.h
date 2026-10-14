@@ -5,9 +5,9 @@
 #include <array>
 #include <memory>
 
-// CPU-only opaque terrain batches, in compatibility submission order. Surface
+// CPU-only terrain batches. Water is submitted separately after opaque objects. Surface
 // strips are grouped by texture; all use vertex colours and a white material.
-enum class TerrainBatch { Floating, BlackSurface, WhiteSurface, CheckerSurface, Walls, Boundary, Count };
+enum class TerrainBatch { Floating, BlackSurface, WhiteSurface, CheckerSurface, Walls, Boundary, Water, Count };
 using TerrainBatches = std::array<Geometry, static_cast<std::size_t>(TerrainBatch::Count)>;
 
 class TerrainGeometry

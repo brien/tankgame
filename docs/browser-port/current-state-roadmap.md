@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-13
+**Status date:** 2026-10-14
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -22,6 +22,27 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R4 water slice (2026-10-13–14)
+
+The modern renderer now submits cached additive water ribbons after opaque world
+objects using the existing terrain catalogue and shared shader. Geometry retains
+legacy coordinates, UVs and lighting; the shader now preserves material alpha for
+RGB vertex-coloured batches. Compatibility keeps its existing reference ordering.
+Both paths now bias water depth slightly to prevent unstable rejection on coplanar
+wall surfaces. This is a deliberate correction to the compatibility reference too.
+
+Native and Emscripten Release builds pass; 113/113 native tests pass with GL startup.
+Six Linux fixture pairs pass the unchanged strict image tolerance and have zero GL
+errors, stable cached GPU identity, unchanged water-pass depth buffers and verified
+outgoing pass state. A two-viewport fixture verifies near-object occlusion, visible
+water in front of a far object and isolation between views. Browser smoke observed
+water draws during title/start with correct state, six clean GL/context probes,
+stable uploads after level entry and clean shutdown. See the
+[water slice evidence and reproduction](../../documentation/water-renderer-2026-10-13/README.md).
+This completes the initial water slice, not R4 as a whole. Effects, debug lines,
+overlay ordering, full pipeline split-screen captures, resize/DPI and broader
+platform gates remain pending; Windows/macOS runtime deferrals are unchanged.
 
 ## Shared opaque lighting follow-up (2026-10-13)
 

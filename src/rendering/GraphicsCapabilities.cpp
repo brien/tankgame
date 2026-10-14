@@ -31,7 +31,8 @@ std::string BuildVertexShader(ShaderDialect dialect)
         (core ? "out vec4 vColor;\nout vec2 vUV;\n"
               : "varying vec4 vColor;\nvarying vec2 vUV;\n") +
         "void main() { gl_Position = uMvp * vec4(aPosition, 1.0);"
-        " vColor = uHasColor ? vec4(aColor, 1.0) : uDefaultColor;"
+        // RGB vertex colours have no alpha channel; retain material opacity.
+        " vColor = uHasColor ? vec4(aColor, uDefaultColor.a) : uDefaultColor;"
         " if (uLit) {"
         " vec3 n = mat3(uNormalTransform) * aNormal;"
         " float magnitude = length(n);"

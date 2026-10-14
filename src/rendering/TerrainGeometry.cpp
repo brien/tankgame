@@ -56,6 +56,42 @@ void Wall(Geometry& g, const TerrainRenderData& t, int x, int z, int last, int h
     }
 }
 
+// Compatibility water consists of vertical textured ribbons at negative-height
+// transitions, not a horizontal water plane. The previous height deliberately
+// carries across rows within each direction.
+void Water(Geometry& g, const TerrainRenderData& t)
+{
+    const int sx = t.sizeX - 1, sz = t.sizeZ - 1;
+    const auto& c = t.colors.defaultColor;
+    for (int direction = 0; direction < 4; ++direction) {
+        int last = 0;
+        const auto visit = [&](int x, int z, bool eligible) {
+            const int height = t.heightMap[x][z];
+            if (eligible && height != last && height < 0) {
+                const int ax = x + (direction == 3 ? 1 : 0);
+                const int az = z + (direction == 1 ? 1 : 0);
+                const int bx = ax + (direction < 2 ? 1 : 0);
+                const int bz = az + (direction >= 2 ? 1 : 0);
+                Quad(g, Vertex(ax,last+2,az,0,1,c), Vertex(bx,last+2,bz,1,1,c),
+                     Vertex(bx,last,bz,1,0,c), Vertex(ax,last,az,0,0,c));
+            }
+            last = height;
+        };
+        if (direction == 0)
+            for (int x = 0; x <= sx; ++x)
+                for (int z = 0; z <= sz; ++z) visit(x,z,z != sz);
+        if (direction == 1)
+            for (int x = sx; x > 0; --x)
+                for (int z = sz-1; z > 0; --z) visit(x,z,true);
+        if (direction == 2)
+            for (int z = 0; z < sz; ++z)
+                for (int x = 0; x <= sx; ++x) visit(x,z,x != sx);
+        if (direction == 3)
+            for (int z = sz; z > 0; --z)
+                for (int x = sx; x >= 0; --x) visit(x,z,x != 0);
+    }
+}
+
 bool SameColor(const Vector3& a, const Vector3& b)
 {
     return a.x == b.x && a.y == b.y && a.z == b.z;
@@ -164,6 +200,7 @@ TerrainBatches TerrainGeometry::Build(const TerrainRenderData& t)
          Vertex(sx,bottom,sz,sx-1,0,b), Vertex(sz,bottom,1,0,0,b));
     Quad(boundary, Vertex(1,top,sz,0,30,c), Vertex(1,top,1,sx-1,30,c),
          Vertex(1,bottom,1,sx-1,0,b), Vertex(1,bottom,sz,0,0,b));
+    Water(result[static_cast<std::size_t>(TerrainBatch::Water)], t);
     return result;
 }
 

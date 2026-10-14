@@ -114,7 +114,9 @@ void TerrainRenderer::RenderModernTerrain(const TerrainRenderData& terrain)
     glEnable(GL_CULL_FACE);
     glCullFace(GL_BACK);
     glDisable(GL_BLEND);
-    for (const auto& batch : batches) {
+    for (std::size_t i = 0; i < batches.size(); ++i) {
+        if (i == static_cast<std::size_t>(TerrainBatch::Water)) continue;
+        const auto& batch = batches[i];
         if (batch.empty) continue;
         glFrontFace(batch.counterClockwise ? GL_CCW : GL_CW);
         RenderContext::Current().Draw(batch.geometry, Matrix4::Identity(), batch.material);
@@ -122,8 +124,39 @@ void TerrainRenderer::RenderModernTerrain(const TerrainRenderData& terrain)
     glFrontFace(GL_CW);
 }
 
+void TerrainRenderer::RenderWater(const TerrainRenderData& terrain)
+{
+    if (!IsReady() || !RendererMode::IsModern()) return;
+    if (!resources) throw std::logic_error("modern water requires a resource catalogue");
+    const auto& batch = resources->PrepareTerrain(terrain)[static_cast<std::size_t>(TerrainBatch::Water)];
+    if (batch.empty) return;
+
+    // Additive ribbons are order-independent with each other, but must test
+    // against the complete opaque depth buffer without writing to it.
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+    glDepthMask(GL_FALSE);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    // Ribbons can be coplanar with terrain walls. Bias their depth test toward
+    // the camera so rounding differences do not produce speckled missing pixels.
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(-1.0f, -1.0f);
+    RenderContext::Current().Draw(batch.geometry, Matrix4::Identity(), batch.material);
+
+    // Establish the shared opaque baseline for the next pass or viewport.
+    glDisable(GL_POLYGON_OFFSET_FILL);
+    glDepthMask(GL_TRUE);
+    glDisable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
+}
+
 // Retained native reference, including water. Only the programmable opaque
-// implementation above is compiled for the browser.
+// and water implementations above are compiled for the browser.
 #ifndef __EMSCRIPTEN__
 void TerrainRenderer::RenderFloatingElements(const TerrainRenderData &terrain)
 {
@@ -356,6 +389,10 @@ void TerrainRenderer::RenderWaterEffects(const TerrainRenderData &terrain)
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE);
+    // Ribbons can be coplanar with terrain walls. Bias their depth test toward
+    // the camera so rounding differences do not produce speckled missing pixels.
+    glEnable(GL_POLYGON_OFFSET_FILL);
+    glPolygonOffset(-1.0f, -1.0f);
     glDepthMask(GL_FALSE);
 
     // Bind water texture
@@ -447,6 +484,7 @@ void TerrainRenderer::RenderWaterEffects(const TerrainRenderData &terrain)
     }
 
     // Restore OpenGL state
+    glDisable(GL_POLYGON_OFFSET_FILL);
     glColor3f(terrain.colors.defaultColor.x, terrain.colors.defaultColor.y, terrain.colors.defaultColor.z);
     glDisable(GL_BLEND);
     glDepthMask(GL_TRUE);

@@ -1,0 +1,4 @@
+[  1%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/GraphicsCapabilities.cpp.o
+[  3%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TerrainRenderer.cpp.o
+[  4%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux.html
+[100%] Built target tankgame-linux
