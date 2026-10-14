@@ -1,0 +1,34 @@
+VideoTask::Start: graphics context ready at 1280x720.
+frame 0 terrain GL error=0
+frame 0: water preserves depth and restores pass state
+frame 0 water GL error=0
+fixture frame 0: cached GPU identity stable
+fixture frame 0: GL error=0
+frame 1 terrain GL error=0
+frame 1: water preserves depth and restores pass state
+frame 1 water GL error=0
+fixture frame 1: cached GPU identity stable
+fixture frame 1: GL error=0
+frame 2 terrain GL error=0
+frame 2: water preserves depth and restores pass state
+frame 2 water GL error=0
+fixture frame 2: cached GPU identity stable
+fixture frame 2: GL error=0
+frame 3 terrain GL error=0
+frame 3: water preserves depth and restores pass state
+frame 3 water GL error=0
+fixture frame 3: cached GPU identity stable
+fixture frame 3: GL error=0
+frame 4 terrain GL error=0
+frame 4: water preserves depth and restores pass state
+frame 4 water GL error=0
+fixture frame 4: cached GPU identity stable
+fixture frame 4: GL error=0
+frame 5 terrain GL error=0
+frame 5: water preserves depth and restores pass state
+frame 5 water GL error=0
+fixture frame 5: cached GPU identity stable
+fixture frame 5: GL error=0
+occlusion view 0: changed pixels=0, other view preserved
+occlusion view 1: changed pixels=19919, other view preserved
+TerrainRenderer cleaned up

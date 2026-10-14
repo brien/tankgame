@@ -1,0 +1,19 @@
+[281667:1014/110012.764115:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[281667:1014/110013.103647:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[281667:1014/110013.103767:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+ready
+create renderer
+Gtk-Message: 11:00:13.190: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 11:00:13.191: Failed to load module "window-decorations-gtk-module"
+debugger
+(electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead.
+inject
+load
+loaded
+probe title
+probe idle
+probe idle-cached
+probe moved
+probe firing
+probe restart
+{"stopped":true,"errors":[],"probes":[{"name":"title","error":0,"lost":false,"uploads":23,"renderer":"ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"},{"name":"idle","error":0,"lost":false,"uploads":27,"renderer":"ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"},{"name":"idle-cached","error":0,"lost":false,"uploads":27,"renderer":"ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"},{"name":"moved","error":0,"lost":false,"uploads":27,"renderer":"ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"},{"name":"firing","error":0,"lost":false,"uploads":27,"renderer":"ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"},{"name":"restart","error":0,"lost":false,"uploads":27,"renderer":"ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)"}]}

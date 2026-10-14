@@ -205,3 +205,49 @@ TEST(TerrainGeometryTest, LightingNormalsPreserveInheritedUpDirection)
         }
     }
 }
+
+TEST(TerrainGeometryTest, WaterRibbonsSurroundNegativeCellWithLegacyUVsAndHeight)
+{
+    auto terrain = SmallTerrain();
+    EXPECT_TRUE(Batch(TerrainGeometry::Build(terrain), TerrainBatch::Water).vertices.empty());
+    terrain.heightMap[2][2] = -3;
+    const auto batches = TerrainGeometry::Build(terrain);
+    const auto& water = Batch(batches, TerrainBatch::Water);
+    ASSERT_EQ(water.vertices.size(), 16u);
+    // Each ribbon starts at the preceding (zero) height, regardless of pit depth.
+    const float expected[4][4] = {{2,2,3,2}, {2,3,3,3}, {2,2,2,3}, {3,2,3,3}};
+    for (int face = 0; face < 4; ++face) {
+        const auto* v = &water.vertices[face*4];
+        EXPECT_EQ(v[0].x, expected[face][0]); EXPECT_EQ(v[0].z, expected[face][1]);
+        EXPECT_EQ(v[1].x, expected[face][2]); EXPECT_EQ(v[1].z, expected[face][3]);
+        EXPECT_EQ(v[0].y, 2); EXPECT_EQ(v[1].y, 2);
+        EXPECT_EQ(v[2].y, 0); EXPECT_EQ(v[3].y, 0);
+        EXPECT_EQ(v[0].u, 0); EXPECT_EQ(v[0].v, 1);
+        EXPECT_EQ(v[1].u, 1); EXPECT_EQ(v[1].v, 1);
+        EXPECT_EQ(v[2].u, 1); EXPECT_EQ(v[2].v, 0);
+        EXPECT_EQ(v[3].u, 0); EXPECT_EQ(v[3].v, 0);
+        EXPECT_FLOAT_EQ(v[0].red, .2f);
+        EXPECT_FLOAT_EQ(v[0].normalY, 1);
+    }
+}
+
+TEST(TerrainGeometryTest, WaterRetainsPreviousHeightAcrossRowsAndRefreshesCachedContent)
+{
+    auto terrain = SmallTerrain();
+    terrain.heightMap[0][4] = 3;
+    terrain.heightMap[1][0] = -2;
+    TerrainGeometry cache;
+    ASSERT_TRUE(cache.Update(terrain));
+    const auto& water = Batch(cache.Batches(), TerrainBatch::Water);
+    ASSERT_GE(water.vertices.size(), 4u);
+    EXPECT_EQ(water.vertices[0].x, 1);
+    EXPECT_EQ(water.vertices[0].z, 0);
+    EXPECT_EQ(water.vertices[0].y, 5); // Previous row's final height + 2.
+    EXPECT_EQ(water.vertices[2].y, 3);
+    const auto* vertices = water.vertices.data();
+    EXPECT_FALSE(cache.Update(terrain));
+    EXPECT_EQ(Batch(cache.Batches(), TerrainBatch::Water).vertices.data(), vertices);
+    terrain.heightMap[0][4] = 1;
+    ASSERT_TRUE(cache.Update(terrain));
+    EXPECT_EQ(Batch(cache.Batches(), TerrainBatch::Water).vertices[0].y, 3);
+}

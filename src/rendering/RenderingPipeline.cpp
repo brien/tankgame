@@ -271,7 +271,8 @@ void RenderingPipeline::RenderGameObjects(const SceneData &scene)
 
 void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
 {
-    // Render transparent objects in back-to-front order for correct blending
+    // Water is additive and tests against all opaque world objects.
+    terrainRenderer.RenderWater(scene.terrain);
     RenderEffects(scene.effects);
 }
 
