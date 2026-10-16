@@ -3,6 +3,8 @@
 
 #include "BaseRenderer.h"
 #include <vector>
+#include "ResourceManager.h"
+#include "Matrix4.h"
 
 // Forward declaration
 struct EffectRenderData;
@@ -17,7 +19,10 @@ struct EffectRenderData;
  */
 class EffectRenderer : public BaseRenderer {
 public:
-    EffectRenderer();
+    explicit EffectRenderer(ResourceManager* resources = nullptr);
+    static Matrix4 BuildModel(const EffectRenderData& effect);
+    static TextureNames TextureFor(FxType type);
+    static bool HasOutline(FxType type);
     virtual ~EffectRenderer() = default;
 
     // IRenderer interface implementation
@@ -28,6 +33,9 @@ public:
     void RenderEffects(const std::vector<EffectRenderData>& effects);
 
 private:
+    ResourceManager* resources; // Non-owning catalogue, shared with the pipeline.
+    void RenderModern(const std::vector<EffectRenderData>& effects);
+#ifndef __EMSCRIPTEN__
     // Main rendering functions for different effect types
     void RenderEffect(const EffectRenderData& effect);
     void SetupEffectTexture(const EffectRenderData& effect);
@@ -40,6 +48,7 @@ private:
     void SetupBlendMode();
     void RestoreBlendMode();
     
+#endif
     // Cached state to avoid redundant OpenGL calls
     bool blendEnabled;
     bool texturesEnabled;

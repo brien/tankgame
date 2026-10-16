@@ -20,6 +20,7 @@ set(TEST_SOURCES ${GAME_SOURCES})
 add_executable(tankgame_tests
     test_terrain_geometry.cpp
     test_enemy_renderer.cpp
+    test_effect_renderer.cpp
     test_event_lifecycle.cpp
     test_geometry.cpp
     test_geometry_buffer.cpp

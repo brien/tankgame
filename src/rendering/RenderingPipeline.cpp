@@ -20,7 +20,7 @@
 
 RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &camera,
                                      ResourceManager &resources)
-    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), enemyTankRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
+    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), effectRenderer(&resources), enemyTankRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
 {
 }
 
@@ -365,22 +365,9 @@ void RenderingPipeline::RenderBullets(const std::vector<BulletRenderData> &bulle
 
 void RenderingPipeline::RenderEffects(const std::vector<EffectRenderData> &effects)
 {
-    if (RendererMode::IsModern()) {
-        (void)effects;
-        return;
-    }
-#ifndef __EMSCRIPTEN__
-    if (effects.empty())
-    {
-        return;
-    }
-
-    effectRenderer.SetupRenderState();
+    if (effects.empty()) return;
     effectRenderer.RenderEffects(effects);
-    effectRenderer.CleanupRenderState();
-
     renderStats.effectsRendered = static_cast<int>(effects.size());
-#endif
 }
 
 void RenderingPipeline::RenderItems(const std::vector<ItemRenderData> &items)

@@ -1,0 +1,15 @@
+VideoTask::Start: graphics context ready at 1280x720.
+EffectRenderer initialized successfully
+frame 0 effects GL error=0
+fixture frame 0: GL error=0
+frame 1 effects GL error=0
+fixture frame 1: GL error=0
+frame 2 effects GL error=0
+fixture frame 2: GL error=0
+frame 3 effects GL error=0
+fixture frame 3: GL error=0
+frame 4 effects GL error=0
+fixture frame 4: GL error=0
+frame 5 effects GL error=0
+fixture frame 5: GL error=0
+EffectRenderer cleaned up

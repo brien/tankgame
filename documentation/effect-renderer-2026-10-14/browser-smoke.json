@@ -1,0 +1,1750 @@
+{
+  "versions": {
+    "node": "24.21.0",
+    "acorn": "8.18.0",
+    "ada": "4.0.0",
+    "amaro": "1.1.11",
+    "ares": "1.34.8",
+    "brotli": "1.2.0",
+    "cldr": "48.0",
+    "icu": "78.2",
+    "llhttp": "9.4.3",
+    "merve": "1.2.2",
+    "modules": "149",
+    "napi": "10",
+    "nbytes": "0.1.4",
+    "ncrypto": "0.0.1",
+    "nghttp2": "1.70.0",
+    "nghttp3": "",
+    "ngtcp2": "",
+    "openssl": "0.0.0",
+    "simdjson": "4.6.7",
+    "simdutf": "7.7.0",
+    "sqlite": "3.53.4",
+    "tz": "2026d",
+    "undici": "7.29.1",
+    "unicode": "17.0",
+    "uv": "1.52.1",
+    "uvwasi": "0.0.23",
+    "v8": "15.2.124.28-electron.0",
+    "zlib": "1.3.2.1-motley",
+    "zstd": "1.6.0",
+    "electron": "44.7.0",
+    "chrome": "152.0.7977.130"
+  },
+  "errors": [],
+  "logs": [
+    {
+      "level": 2,
+      "message": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."
+    },
+    {
+      "level": 2,
+      "message": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."
+    },
+    {
+      "level": 1,
+      "message": "We compiled against SDL version 2.28.4 ..."
+    },
+    {
+      "level": 1,
+      "message": "But we are linking against SDL version 2.28.4."
+    },
+    {
+      "level": 1,
+      "message": "VideoTask::Start: graphics context ready at 1280x720."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "Browser renderer unavailable: compatibility unified tank renderer is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline initializing... "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "Browser renderer unavailable: HUD is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "level": 1,
+      "message": "Browser renderer unavailable: menus is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Started"
+    },
+    {
+      "level": 1,
+      "message": "Renderer mode: modern"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: ./levels/title@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: ./levels/title@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameWorld::Initialize() - Starting"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscribing to collision query events"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscriptions complete"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld initialized with collision and combat systems"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Setting GameWorld and recreating SceneDataBuilder"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume - Initializing systems..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Initializing PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialize called with GameWorld"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Creating initial player..."
+    },
+    {
+      "level": 1,
+      "message": "Created Player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Claiming existing tanks from TankHandler..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: No valid tank found for Player 0 in TankHandler"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up controllers and input with synced preferences..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Detected 0 joysticks"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping TankHandler input preference isInputJoy=0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Using keyboard/mouse input (from TankHandler)"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping numPlayers=1 from initialization"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume complete"
+    },
+    {
+      "level": 1,
+      "message": "Initialization complete."
+    },
+    {
+      "level": 1,
+      "message": "Registering non-blocking Emscripten browser frame loop."
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "level": 1,
+      "message": "Browser first frame completed: WebGL clear/render/swap path executed."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Setting up new game..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Cleared event queue"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: GameWorld::CreateTank returned tank=0x315050"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: Tank::Init() completed"
+    },
+    {
+      "level": 1,
+      "message": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "level": 1,
+      "message": "Player 0 took control of tank"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Player tanks spawned"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Game setup complete"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=41.97 avg_ms=23.829 recent_ms=16.900 max_ms=300.400 tick_ms=2.186 frames=42 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.96 avg_ms=16.678 recent_ms=16.600 max_ms=16.900 tick_ms=0.555 frames=60 interval_ms=1000.700"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=48.96 avg_ms=20.424 recent_ms=16.700 max_ms=209.600 tick_ms=0.814 frames=49 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 52 | FPS: 55.6"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=17.000 tick_ms=0.785 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 62 | FPS: 55.6"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=48.96 avg_ms=20.424 recent_ms=16.700 max_ms=203.300 tick_ms=0.804 frames=49 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 78 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=49.26 avg_ms=20.302 recent_ms=197.800 max_ms=197.800 tick_ms=0.838 frames=50 interval_ms=1015.100"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 109 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=60.81 avg_ms=16.444 recent_ms=16.600 max_ms=17.300 tick_ms=0.961 frames=61 interval_ms=1003.100"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 5, Items: 0, Effects: 61 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.86 avg_ms=16.705 recent_ms=16.500 max_ms=18.600 tick_ms=1.190 frames=60 interval_ms=1002.300"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 7, Items: 0, Effects: 26 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=60.03 avg_ms=16.657 recent_ms=16.600 max_ms=18.900 tick_ms=0.780 frames=61 interval_ms=1016.100"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 9, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.800 max_ms=17.600 tick_ms=0.643 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 11, Items: 0, Effects: 10 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=17.200 tick_ms=0.660 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 13, Items: 0, Effects: 65 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.600 max_ms=19.600 tick_ms=0.853 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 14, Items: 0, Effects: 39 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=16.900 tick_ms=0.823 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 13, Items: 0, Effects: 34 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.682 recent_ms=16.800 max_ms=16.800 tick_ms=0.793 frames=60 interval_ms=1000.900"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 12, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.700 max_ms=16.800 tick_ms=0.617 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 12, Items: 0, Effects: 8 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.95 avg_ms=16.680 recent_ms=16.800 max_ms=16.800 tick_ms=0.650 frames=60 interval_ms=1000.800"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Setting up new game..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Cleared event queue"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Player tanks spawned"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Game setup complete"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 11, Bullets: 11, Items: 0, Effects: 49 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=49.46 avg_ms=20.220 recent_ms=16.400 max_ms=194.600 tick_ms=1.104 frames=50 interval_ms=1011.000"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 11, Bullets: 8, Items: 0, Effects: 43 | FPS: 55.6"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=59.90 avg_ms=16.693 recent_ms=17.700 max_ms=19.200 tick_ms=0.867 frames=60 interval_ms=1001.600"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: ClosingFont "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    },
+    {
+      "level": 1,
+      "message": "Browser frame loop stopped."
+    }
+  ],
+  "probes": [
+    {
+      "name": "title",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "counts": {
+        "24": 2,
+        "252": 2,
+        "2862": 2,
+        "3480": 2,
+        "13068": 2
+      },
+      "uploads": 23,
+      "effectDraws": 0,
+      "effectStates": [],
+      "samples": [
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        }
+      ],
+      "rect": {
+        "x": 20,
+        "y": 80.71875,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "name": "idle",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "counts": {
+        "6": 472,
+        "24": 715,
+        "36": 1180,
+        "252": 7,
+        "444": 472,
+        "912": 472,
+        "2862": 7,
+        "3456": 118,
+        "3480": 7,
+        "4212": 118,
+        "13068": 7,
+        "16104": 118
+      },
+      "uploads": 27,
+      "effectDraws": 0,
+      "effectStates": [],
+      "samples": [
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        }
+      ],
+      "rect": {
+        "x": 20,
+        "y": 80.71875,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "name": "idle-cached",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "counts": {
+        "6": 6485,
+        "24": 1453,
+        "36": 2410,
+        "252": 7,
+        "444": 964,
+        "912": 964,
+        "2862": 7,
+        "3456": 241,
+        "3480": 7,
+        "4212": 241,
+        "13068": 7,
+        "16104": 241
+      },
+      "uploads": 27,
+      "effectDraws": 5521,
+      "effectStates": [
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        }
+      ],
+      "samples": [
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        }
+      ],
+      "rect": {
+        "x": 20,
+        "y": 80.71875,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "name": "moved",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "counts": {
+        "6": 10046,
+        "24": 1813,
+        "36": 3010,
+        "252": 7,
+        "444": 1204,
+        "912": 1204,
+        "2862": 7,
+        "3456": 301,
+        "3480": 7,
+        "4212": 301,
+        "13068": 7,
+        "16104": 301
+      },
+      "uploads": 27,
+      "effectDraws": 8842,
+      "effectStates": [
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        }
+      ],
+      "samples": [
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        }
+      ],
+      "rect": {
+        "x": 20,
+        "y": 80.71875,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "name": "firing",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "counts": {
+        "4": 5787,
+        "6": 37530,
+        "24": 5431,
+        "36": 9040,
+        "252": 7,
+        "444": 3388,
+        "912": 3616,
+        "2862": 7,
+        "3456": 904,
+        "3480": 7,
+        "4212": 904,
+        "13068": 7,
+        "16104": 904
+      },
+      "uploads": 27,
+      "effectDraws": 29295,
+      "effectStates": [
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        }
+      ],
+      "samples": [
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        }
+      ],
+      "rect": {
+        "x": 20,
+        "y": 80.71875,
+        "width": 1280,
+        "height": 720
+      }
+    },
+    {
+      "name": "restart",
+      "error": 0,
+      "lost": false,
+      "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+      "counts": {
+        "4": 7090,
+        "6": 43983,
+        "24": 6620,
+        "36": 11170,
+        "252": 7,
+        "444": 3880,
+        "912": 4112,
+        "2862": 7,
+        "3456": 1028,
+        "3480": 7,
+        "4212": 1028,
+        "13068": 7,
+        "16104": 1028
+      },
+      "uploads": 27,
+      "effectDraws": 34021,
+      "effectStates": [
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        },
+        {
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "cull": false,
+          "src": 770,
+          "dst": 1,
+          "offset": -1
+        }
+      ],
+      "samples": [
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        },
+        {
+          "count": 3480,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 2862,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 13068,
+          "depth": true,
+          "write": true,
+          "blend": false,
+          "front": 2304
+        },
+        {
+          "count": 252,
+          "depth": true,
+          "write": false,
+          "blend": true,
+          "front": 2304
+        }
+      ],
+      "rect": {
+        "x": 20,
+        "y": 80.71875,
+        "width": 1280,
+        "height": 720
+      }
+    }
+  ],
+  "stopped": true
+}

@@ -13,9 +13,9 @@ set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
 
 # These renderers still use desktop compatibility OpenGL throughout their
 # implementations. The browser links deferred implementations for them while
-# retaining the shared modern player, enemy tank, and opaque terrain renderers.
+# retaining shared modern player, enemy, terrain/water, and effect renderers.
 if(EMSCRIPTEN)
-    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(EffectRenderer|HUDRenderer|MenuRenderer|TankRenderer)\\.cpp$")
+    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(HUDRenderer|MenuRenderer|TankRenderer)\\.cpp$")
     list(APPEND SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
     )
