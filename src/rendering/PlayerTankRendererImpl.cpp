@@ -25,6 +25,16 @@ void PlayerTankRendererImpl::Cleanup() {
 }
 
 void PlayerTankRendererImpl::Render(const TankRenderData& data) {
+    RenderOpaque(data);
+    RenderOverlays(data);
+}
+
+void PlayerTankRendererImpl::RenderOpaque(const TankRenderData& data) {
+    if (!data.alive || !data.isPlayer) return;
+    PlayerTankRenderer::RenderPlayerTank(data, animationDrift);
+}
+
+void PlayerTankRendererImpl::RenderOverlays(const TankRenderData& data) {
     if (!data.alive || !data.isPlayer) {
         return;
     }
@@ -35,13 +45,18 @@ void PlayerTankRendererImpl::Render(const TankRenderData& data) {
         animationDrift = 0.0f;
     }
     
-    // Delegate to existing PlayerTankRenderer static methods for now
-    // TODO: Implement native rendering when PlayerTankRenderer is fully refactored
-    PlayerTankRenderer::RenderPlayerTank(data, animationDrift);
-
     // Render additional player-specific elements
     RenderPlayerEffects(data);
     RenderTargetingUI(data, true); // TODO: Get actual enemy presence from game state
+    if (RendererMode::IsModern()) {
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_LESS);
+        glDisable(GL_BLEND);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_CULL_FACE);
+        glCullFace(GL_BACK);
+        glFrontFace(GL_CW);
+    }
 }
 
 void PlayerTankRendererImpl::SetupRenderState() {

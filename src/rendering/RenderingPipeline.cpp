@@ -278,6 +278,13 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
     // Water is additive and tests against all opaque world objects.
     terrainRenderer.RenderWater(scene.terrain);
     RenderEffects(scene.effects);
+    // All depth-writing objects (including effect outlines) must precede the
+    // additive player overlays. They test world depth without modifying it.
+    if (RendererMode::IsModern() && tankRenderer) {
+        for (const auto& tank : scene.tanks) {
+            if (tank.alive && tank.isPlayer) tankRenderer->RenderOverlays(tank);
+        }
+    }
 }
 
 void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex)
@@ -321,12 +328,11 @@ void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
     }
 
     int tanksRendered = 0;
-    // Preserve the player's overlay state sequence, then establish opaque enemy
-    // state explicitly so additive blending/depth-write settings cannot leak.
+    // Submit player meshes here; overlays follow the complete opaque world.
     tankRenderer->SetupRenderState();
     for (const TankRenderData& tank : tanks) {
         if (tank.alive && tank.isPlayer) {
-            tankRenderer->Render(tank);
+            tankRenderer->RenderOpaque(tank);
             ++tanksRendered;
         }
     }

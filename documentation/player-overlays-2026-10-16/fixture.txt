@@ -1,0 +1,10 @@
+VideoTask::Start: graphics context ready at 1280x720.
+RenderingPipeline initializing... 
+BulletRenderer initialized successfully
+EffectRenderer initialized successfully
+RenderingPipeline Initialized Successfully: 1
+players=1: exact ordered reference, unchanged overlay depth, old order differs at 228 pixels, GL_NO_ERROR
+players=2: exact ordered reference, unchanged overlay depth, old order differs at 135 pixels, GL_NO_ERROR
+EffectRenderer cleaned up
+BulletRenderer cleaned up
+TerrainRenderer cleaned up 
