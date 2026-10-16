@@ -1,6 +1,5 @@
 #ifdef __EMSCRIPTEN__
 
-#include "EffectRenderer.h"
 #include "HUDRenderer.h"
 #include "MenuRenderer.h"
 #include "TankRenderer.h"
@@ -16,20 +15,6 @@ void LogDeferred(const char* subsystem)
         subsystem);
 }
 }
-
-EffectRenderer::EffectRenderer()
-    : blendEnabled(false), texturesEnabled(false), currentTexture(0)
-{
-}
-
-bool EffectRenderer::Initialize()
-{
-    LogDeferred("effects");
-    return BaseRenderer::Initialize();
-}
-
-void EffectRenderer::Cleanup() { BaseRenderer::Cleanup(); }
-void EffectRenderer::RenderEffects(const std::vector<EffectRenderData>&) {}
 
 HUDRenderer::HUDRenderer() : texturesLoaded(false) {}
 

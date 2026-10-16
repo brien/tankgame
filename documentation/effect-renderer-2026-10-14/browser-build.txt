@@ -1,0 +1,7 @@
+-- Using the multi-header code from /home/deck/Dropbox/work/Programming/tankgame/build-browser/_deps/nlohmann_json-src/include/
+-- Configuring done (1.7s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/deck/Dropbox/work/Programming/tankgame/build-browser
+[  1%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/RenderingPipeline.cpp.o
+[  3%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux.html
+[100%] Built target tankgame-linux

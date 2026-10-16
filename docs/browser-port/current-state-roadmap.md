@@ -13,7 +13,8 @@ bullets/items, enemy bodies/turrets, and textured opaque terrain on native deskt
 and Emscripten. Native compatibility remains the default, fallback, and visual
 reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
-application/toolchain boundaries. Water, effects, HUD/menu/text, audio,
+application/toolchain boundaries. Shared water and effects are now implemented.
+HUD/menu/text, audio,
 and browser UX remain deferred, so this is still a partial port.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
@@ -22,6 +23,26 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R4 shared effects slice (2026-10-14)
+
+All eight existing effect types now render through the shared catalogue/program
+on modern native and Emscripten. The browser substitute and pipeline skip are
+removed. Transforms, textures, solid outlines and additive quad behavior are
+preserved. Effects are explicitly unlit in both backends to remove inherited
+lighting dependence. Compatibility remains the default.
+
+Native and browser Release builds pass; 116/116 native tests pass with GL startup.
+Six Linux fixture pairs have identical silhouettes and zero GL errors, with a
+narrow documented exception for up to two coplanar outline/quad depth samples.
+The fixture verifies quad depth preservation, outgoing state, opaque occlusion
+and two-viewport isolation. Browser gameplay records effect draws, six clean
+WebGL probes, stable uploads and clean shutdown. See the
+[effect implementation and evidence](../../documentation/effect-renderer-2026-10-14/README.md).
+
+This closes the effect slice, not all of R4. Debug lines, player-overlay ordering,
+full-pipeline split-screen captures and resize/DPI remain follow-ups. Deferred
+Windows/macOS runtime and multiplayer robustness gates are unchanged.
 
 ## R4 water slice (2026-10-13–14)
 

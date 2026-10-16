@@ -1,0 +1,9 @@
+-- Configuring done (0.6s)
+-- Generating done (0.2s)
+-- Build files have been written to: /home/deck/Dropbox/work/Programming/tankgame/build
+[  1%] Built target gtest
+[  3%] Built target gtest_main
+[  4%] Built target gmock
+[ 46%] Built target tankgame-linux
+[ 47%] Built target gmock_main
+[100%] Built target tankgame_tests
