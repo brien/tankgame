@@ -58,3 +58,50 @@ TEST(ViewportManagerTest, CoopAndVersusSharePlayerIndexLayout)
         EXPECT_EQ(coopViewport.height, versusViewport.height);
     }
 }
+
+TEST(ViewportManagerTest, ResizingSplitScreenCoversEveryDrawablePixel)
+{
+    ViewportManager manager;
+    // Odd sizes, a simulated 2x DPI transition, and back to the original size.
+    for (const auto& size : {std::make_pair(801, 601), std::make_pair(1602, 1202),
+                             std::make_pair(997, 503), std::make_pair(801, 601)})
+    {
+        manager.SetupSplitScreen(2, size.first, size.second);
+        ASSERT_EQ(manager.GetNumViewports(), 2);
+        const auto& lower = manager.GetViewport(0);
+        const auto& upper = manager.GetViewport(1);
+        EXPECT_EQ(manager.GetScreenWidth(), size.first);
+        EXPECT_EQ(manager.GetScreenHeight(), size.second);
+        EXPECT_EQ(lower.y, 0);
+        EXPECT_EQ(lower.y + lower.height, upper.y);
+        EXPECT_EQ(upper.y + upper.height, size.second);
+        EXPECT_EQ(lower.width, size.first);
+        EXPECT_EQ(upper.width, size.first);
+        EXPECT_FLOAT_EQ(lower.GetAspectRatio(), float(size.first) / lower.height);
+        EXPECT_FLOAT_EQ(upper.GetAspectRatio(), float(size.first) / upper.height);
+    }
+}
+
+TEST(ViewportManagerTest, EmptyViewsKeepPlayerIndicesUntilRestored)
+{
+    ViewportManager manager;
+    manager.SetupSplitScreen(2, 801, 1);
+    ASSERT_EQ(manager.GetNumViewports(), 2);
+    EXPECT_FALSE(manager.GetViewport(0).IsValid());
+    EXPECT_TRUE(manager.GetViewport(1).IsValid());
+    EXPECT_EQ(manager.GetViewport(1).height, 1);
+
+    manager.SetupSplitScreen(2, 0, 0);
+    ASSERT_EQ(manager.GetNumViewports(), 2);
+    EXPECT_FALSE(manager.GetViewport(0).IsValid());
+    EXPECT_FALSE(manager.GetViewport(1).IsValid());
+    EXPECT_FLOAT_EQ(manager.GetViewport(0).GetAspectRatio(), 1.f);
+
+    manager.SetupSplitScreen(2, 801, 601);
+    ASSERT_EQ(manager.GetNumViewports(), 2);
+    EXPECT_EQ(manager.GetViewport(0).height, 300);
+    EXPECT_EQ(manager.GetViewport(1).height, 301);
+    manager.SetupSinglePlayer(801, 601);
+    ASSERT_EQ(manager.GetNumViewports(), 1);
+    EXPECT_EQ(manager.GetViewport(0).height, 601);
+}

@@ -1,0 +1,23 @@
+VideoTask::Start: graphics context ready at 1280x720.
+RenderingPipeline initializing...
+BulletRenderer initialized successfully
+EffectRenderer initialized successfully
+RenderingPipeline Initialized Successfully: 1
+modern 801x601 players=1 view=0: 232341 visible pixels, exact isolated-view match
+frame=0 players=1 GL error=0
+modern 801x601 players=2 view=0: 67156 visible pixels, exact isolated-view match
+modern 801x601 players=2 view=1: 65174 visible pixels, exact isolated-view match
+frame=0 players=2 GL error=0
+modern 997x503 players=1 view=0: 170674 visible pixels, exact isolated-view match
+frame=1 players=1 GL error=0
+modern 997x503 players=2 view=0: 47860 visible pixels, exact isolated-view match
+modern 997x503 players=2 view=1: 46514 visible pixels, exact isolated-view match
+frame=1 players=2 GL error=0
+modern 801x601 players=1 view=0: 232341 visible pixels, exact isolated-view match
+frame=2 players=1 GL error=0
+modern 801x601 players=2 view=0: 67156 visible pixels, exact isolated-view match
+modern 801x601 players=2 view=1: 65174 visible pixels, exact isolated-view match
+frame=2 players=2 GL error=0
+EffectRenderer cleaned up
+BulletRenderer cleaned up
+TerrainRenderer cleaned up

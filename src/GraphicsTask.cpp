@@ -67,14 +67,14 @@ bool GraphicsTask::Start()
     // Setup viewport and projection (needed before pipeline initialization)
     glViewport(0, 0, VideoTask::scrWidth, VideoTask::scrHeight);
     if (RendererMode::IsModern()) {
-    const float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
+    const float ratio = viewportManager.GetViewport(0).GetAspectRatio();
     RenderContext::Current().SetProjection(Matrix4::Perspective(45.0f, ratio, 0.1f, 1024.0f));
     }
 #ifndef __EMSCRIPTEN__
     else {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    float ratio = static_cast<float>(VideoTask::scrWidth) / static_cast<float>(VideoTask::scrHeight);
+    float ratio = viewportManager.GetViewport(0).GetAspectRatio();
     gluPerspective(45.0, ratio, 0.1, 1024.0);
     }
 #endif
@@ -174,16 +174,19 @@ void GraphicsTask::Stop()
 
 void GraphicsTask::Update()
 {
-    static int lastnumPlayers = 1; // Default to 1, will be updated dynamically
+    if (!App::GetSingleton().videoTask->RefreshDrawableSize()) return;
     
     // Get current player count from PlayerManager (via GameTask)
     int numPlayers = (App::GetSingleton().gameTask && App::GetSingleton().gameTask->GetPlayerManager()) 
         ? App::GetSingleton().gameTask->GetPlayerManager()->GetNumPlayers() 
         : 1;
 
-    if (lastnumPlayers != numPlayers)
+    const int numViews = numPlayers > 1 ? 2 : 1;
+    if (viewportManager.GetNumViewports() != numViews ||
+        viewportManager.GetScreenWidth() != VideoTask::scrWidth ||
+        viewportManager.GetScreenHeight() != VideoTask::scrHeight)
     {
-        // Configure viewports when player count changes - delegate to rendering pipeline
+        // Reconfigure for player-count, window, canvas or drawable DPI changes.
         if (renderingPipeline)
         {
             renderingPipeline->ConfigureViewports(numPlayers, VideoTask::scrWidth, VideoTask::scrHeight);
@@ -211,7 +214,6 @@ void GraphicsTask::Update()
 #endif
         }
 
-        lastnumPlayers = numPlayers;
     }
 
     // Basic desktop compatibility state. Browser transforms and colors are
