@@ -24,6 +24,23 @@ checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
 
+## R4 modern player-overlay ordering (2026-10-16)
+
+Modern player meshes now render in the opaque pass; their additive energy and
+targeting overlays render after water and effects, including depth-writing effect
+outlines. The overlays test the completed scene depth without writing it and
+restore explicit depth/blend/cull state. Native compatibility retains its reference
+ordering and remains the default.
+
+Native and Emscripten Release builds pass, as do all 119 native tests with GL
+enabled. A deterministic Linux modern pipeline fixture matches an explicitly
+ordered reference pixel-for-pixel in one and two viewports, preserves the depth
+buffer during overlays, and detects visible differences from the previous order.
+See [overlay evidence](../../documentation/player-overlays-2026-10-16/README.md).
+Browser runtime was not rechecked in this slice. Debug lines, broader overlay/
+effect/level coverage, browser shell policy and the deferred platform gates remain;
+this does not close R4 or qualify multiplayer robustness.
+
 ## R4 drawable-size and viewport slice (2026-10-16)
 
 Rendering now reads SDL drawable pixels before each frame and rebuilds viewports

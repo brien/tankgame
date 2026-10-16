@@ -41,6 +41,11 @@ public:
      *             including position, rotation, colors, health, effects, etc.
      */
     virtual void Render(const TankRenderData& data) = 0;
+
+    // Split submission for renderers with transparent player overlays. Legacy
+    // renderers retain their combined Render behavior until migrated.
+    virtual void RenderOpaque(const TankRenderData& data) { Render(data); }
+    virtual void RenderOverlays(const TankRenderData& data) { (void)data; }
     
     /**
      * Renders multiple tanks using the provided render data.

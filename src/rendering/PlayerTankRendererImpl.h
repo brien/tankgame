@@ -27,6 +27,8 @@ public:
     bool Initialize() override;
     void Cleanup() override;
     void Render(const TankRenderData& data) override;
+    void RenderOpaque(const TankRenderData& data) override;
+    void RenderOverlays(const TankRenderData& data) override;
     void SetupRenderState() override;
     void CleanupRenderState() override;
     
