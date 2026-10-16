@@ -1,0 +1,15 @@
+Note: Google Test filter = VideoStartupTest.*
+[==========] Running 2 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 2 tests from VideoStartupTest
+[ RUN      ] VideoStartupTest.LoadsTextureFunctionsBeforeUpload
+VideoTask::Start: graphics context ready at 1280x720.
+[       OK ] VideoStartupTest.LoadsTextureFunctionsBeforeUpload (810 ms)
+[ RUN      ] VideoStartupTest.RefreshesDrawablePixelsAfterWindowResize
+VideoTask::Start: graphics context ready at 1280x720.
+[       OK ] VideoStartupTest.RefreshesDrawablePixelsAfterWindowResize (60 ms)
+[----------] 2 tests from VideoStartupTest (871 ms total)
+
+[----------] Global test environment tear-down
+[==========] 2 tests from 1 test suite ran. (871 ms total)
+[  PASSED  ] 2 tests.

@@ -39,7 +39,8 @@ public:
     ViewportManager();
     ~ViewportManager() = default;
 
-    // Configure viewports for different player counts
+    // Configure in drawable pixels. Empty views retain their player indices;
+    // callers skip them until the drawable has sufficient area again.
     void SetupSinglePlayer(int screenWidth, int screenHeight);
     void SetupSplitScreen(int numPlayers, int screenWidth, int screenHeight);
 
@@ -66,7 +67,6 @@ private:
     // Helper methods for viewport calculation
     void CreateHorizontalSplitViewports(int screenWidth, int screenHeight);
     void CreateVerticalSplitViewports(int screenWidth, int screenHeight);
-    void ValidateViewports();
 };
 
 #endif // VIEWPORTMANAGER_H

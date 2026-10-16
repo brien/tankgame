@@ -114,6 +114,10 @@ void RenderingPipeline::CleanupRenderState()
 
 void RenderingPipeline::RenderScene(const SceneData &scene, int playerIndex)
 {
+    if (playerIndex < 0 || playerIndex >= scene.numPlayers ||
+        playerIndex >= viewportManager.GetNumViewports() ||
+        !viewportManager.GetViewport(playerIndex).IsValid()) return;
+
     auto startTime = std::chrono::high_resolution_clock::now();
 
     // Setup scene for specific player

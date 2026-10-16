@@ -142,6 +142,7 @@ bool VideoTask::Start()
         fclose(filein);
     }
 
+    flags |= SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
     window = SDL_CreateWindow("tankgame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
     if (!window)
     {
@@ -176,6 +177,7 @@ bool VideoTask::Start()
     }
 
     SDL_GL_SetSwapInterval(1);
+    RefreshDrawableSize();
     Logger::Get().Write("VideoTask::Start: graphics context ready at %dx%d.\n", scrWidth, scrHeight);
 
     return true;
@@ -186,10 +188,19 @@ void VideoTask::Update()
     SDL_GL_SwapWindow(window);
 }
 
+bool VideoTask::RefreshDrawableSize()
+{
+    scrWidth = 0;
+    scrHeight = 0;
+    if (window) SDL_GL_GetDrawableSize(window, &scrWidth, &scrHeight);
+    return scrWidth > 0 && scrHeight > 0;
+}
+
 void VideoTask::Stop()
 {
     GLFunctions::Shutdown();
     SDL_GL_DeleteContext(glContext);
     SDL_DestroyWindow(window);
+    window = nullptr;
     SDL_QuitSubSystem(SDL_INIT_VIDEO);
 }

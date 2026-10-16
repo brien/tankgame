@@ -49,3 +49,24 @@ TEST_F(VideoStartupTest, LoadsTextureFunctionsBeforeUpload)
     EXPECT_EQ(minFilter, GL_LINEAR_MIPMAP_LINEAR);
     EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
 }
+
+TEST_F(VideoStartupTest, RefreshesDrawablePixelsAfterWindowResize)
+{
+    SDL_Window* window = SDL_GL_GetCurrentWindow();
+    ASSERT_NE(window, nullptr);
+    EXPECT_NE(SDL_GetWindowFlags(window) & SDL_WINDOW_ALLOW_HIGHDPI, 0u);
+    EXPECT_NE(SDL_GetWindowFlags(window) & SDL_WINDOW_RESIZABLE, 0u);
+    // Settings may select fullscreen; use a window for deterministic size changes.
+    ASSERT_EQ(SDL_SetWindowFullscreen(window, 0), 0);
+    for (const auto& size : {std::make_pair(801, 601), std::make_pair(997, 503)})
+    {
+        SDL_SetWindowSize(window, size.first, size.second);
+        SDL_PumpEvents();
+        int width = 0, height = 0;
+        SDL_GL_GetDrawableSize(window, &width, &height);
+        ASSERT_TRUE(video.RefreshDrawableSize());
+        EXPECT_EQ(VideoTask::scrWidth, width);
+        EXPECT_EQ(VideoTask::scrHeight, height);
+    }
+    EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+}

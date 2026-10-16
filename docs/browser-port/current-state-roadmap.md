@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-14
+**Status date:** 2026-10-16
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -23,6 +23,26 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R4 drawable-size and viewport slice (2026-10-16)
+
+Rendering now reads SDL drawable pixels before each frame and rebuilds viewports
+on size or player-count changes. Windows request resizable/high-DPI support;
+odd split-screen heights assign the remainder to the upper player. Empty views
+retain their player indices and skip scene submission. Startup projection also
+handles zero height safely. Compatibility remains the default.
+
+Native and browser Release builds pass; 119/119 native tests pass with GL enabled,
+plus modern startup/resize checks. Linux compatibility and modern full-pipeline
+fixtures at two odd sizes and a resize back exactly match each independently
+rendered view, with zero GL errors. Chromium canvas resizing and simulated 2x DPI
+return matching drawing-buffer/viewports and zero GL errors. See the
+[viewport evidence](../../documentation/viewport-resize-2026-10-16/README.md).
+
+This advances R4 without closing it. Browser responsive shell/fullscreen policy,
+physical multi-monitor DPI validation, debug lines, player-overlay ordering and
+broader scene/platform coverage remain. Windows/macOS runtime and multiplayer
+robustness deferrals remain unchanged.
 
 ## R4 shared effects slice (2026-10-14)
 

@@ -20,6 +20,8 @@ ViewportManager::ViewportManager()
 
 void ViewportManager::SetupSinglePlayer(int screenWidth, int screenHeight)
 {
+    screenWidth = std::max(0, screenWidth);
+    screenHeight = std::max(0, screenHeight);
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
 
@@ -27,11 +29,12 @@ void ViewportManager::SetupSinglePlayer(int screenWidth, int screenHeight)
     viewports.emplace_back(0, 0, screenWidth, screenHeight);
 
     currentViewport = 0;
-    ValidateViewports();
 }
 
 void ViewportManager::SetupSplitScreen(int numPlayers, int screenWidth, int screenHeight)
 {
+    screenWidth = std::max(0, screenWidth);
+    screenHeight = std::max(0, screenHeight);
     this->screenWidth = screenWidth;
     this->screenHeight = screenHeight;
 
@@ -52,7 +55,6 @@ void ViewportManager::SetupSplitScreen(int numPlayers, int screenWidth, int scre
     }
 
     currentViewport = 0;
-    ValidateViewports();
 }
 
 void ViewportManager::SetActiveViewport(int playerIndex)
@@ -86,8 +88,8 @@ void ViewportManager::CreateHorizontalSplitViewports(int screenWidth, int screen
     viewports.emplace_back(0, 0, screenWidth, halfHeight);
 
     // Player 1 viewport (top half)
-    // Note: Original code uses hardcoded y=300, but we calculate it properly
-    viewports.emplace_back(0, halfHeight, screenWidth, halfHeight);
+    // Give the upper view the remainder so odd drawable heights have no gap.
+    viewports.emplace_back(0, halfHeight, screenWidth, screenHeight - halfHeight);
 }
 
 void ViewportManager::CreateVerticalSplitViewports(int screenWidth, int screenHeight)
@@ -101,27 +103,5 @@ void ViewportManager::CreateVerticalSplitViewports(int screenWidth, int screenHe
     viewports.emplace_back(0, 0, halfWidth, screenHeight);
 
     // Player 1 viewport (right half)
-    viewports.emplace_back(halfWidth, 0, halfWidth, screenHeight);
-}
-
-void ViewportManager::ValidateViewports()
-{
-    // Remove any invalid viewports
-    viewports.erase(
-        std::remove_if(viewports.begin(), viewports.end(),
-                       [](const Viewport &vp)
-                       { return !vp.IsValid(); }),
-        viewports.end());
-
-    // Ensure we have at least one viewport
-    if (viewports.empty())
-    {
-        viewports.emplace_back(0, 0, screenWidth, screenHeight);
-    }
-
-    // Clamp current viewport index
-    if (currentViewport >= static_cast<int>(viewports.size()))
-    {
-        currentViewport = 0;
-    }
+    viewports.emplace_back(halfWidth, 0, screenWidth - halfWidth, screenHeight);
 }
