@@ -1,4 +1,5 @@
 #include "RenderingPipeline.h"
+#include "DebugLineRenderer.h"
 #include "../App.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
@@ -128,6 +129,7 @@ void RenderingPipeline::RenderScene(const SceneData &scene, int playerIndex)
     RenderTerrain(scene.terrain);
     RenderGameObjects(scene);
     RenderTransparentObjects(scene);
+    if (scene.debugMode) DebugLineRenderer::Render(resourceManager, scene.debugLines);
     RenderUIElements(scene, playerIndex);
 
     // Update rendering statistics

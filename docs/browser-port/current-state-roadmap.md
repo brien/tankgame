@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-16
+**Status date:** 2026-10-17
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -23,6 +23,27 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R4 shared debug-line slice (2026-10-17)
+
+Scene data now carries world-space diagnostic segments, rendered after overlays
+and before UI in each valid viewport. The existing title-menu **I** debug control
+now also enables live tank origin axes. Both backends reuse one catalogue-owned
+segment with explicit unlit colour and endpoint transforms. Lines test scene depth
+without writing it and restore modified pass state. These are new diagnostics;
+HUD text/lines and stipple remain separately scoped to R5.
+
+Native and Emscripten Release builds pass, and all 122 native tests pass with GL
+enabled. Linux compatibility/modern line fixtures match exactly in one and two
+viewports, verify occlusion, unchanged depth and restored state, with no GL errors.
+Browser gameplay observes debug draws, stable uploads after level entry, and three
+clean WebGL/context probes. See [evidence and reproduction](../../documentation/debug-lines-2026-10-17/README.md).
+
+This completes the initial debug-line slice without closing R4. Broader full-scene
+coverage, browser shell/fullscreen policy, physical DPI validation, and deferred
+Windows/macOS runtime and multiplayer robustness gates remain open. Compatibility
+remains the native default. Earlier dated sections below retain their historical
+lists of work remaining at the time.
 
 ## R4 modern player-overlay ordering (2026-10-16)
 

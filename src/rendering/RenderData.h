@@ -250,10 +250,14 @@ struct CameraData {
     CameraData() : position(0, 0, 0), focus(0, 0, 0), playerId(0) {}
 };
 
-/**
- * Complete scene data containing all objects to be rendered
- * This structure separates rendering data from game logic
- */
+// Solid, one-pixel world-space diagnostic segment.
+struct DebugLineData {
+    Vector3 start;
+    Vector3 end;
+    Vector3 color;
+};
+
+/** Complete scene data, separated from game logic. */
 struct SceneData {
     // Renderable objects
     std::vector<TankRenderData> tanks;
@@ -261,6 +265,7 @@ struct SceneData {
     std::vector<EffectRenderData> effects;
     std::vector<ItemRenderData> items;
     TerrainRenderData terrain;
+    std::vector<DebugLineData> debugLines;
     
     // Sky rendering (special case for level 48)
     bool drawSky;
@@ -302,5 +307,6 @@ struct SceneData {
         effects.clear();
         items.clear();
         cameras.clear();
+        debugLines.clear();
     }
 };

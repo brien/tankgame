@@ -1,4 +1,5 @@
 #include "SceneDataBuilder.h"
+#include "DebugLineRenderer.h"
 #include "../App.h"
 #include "../GameWorld.h"
 #include "../PlayerManager.h"
@@ -29,6 +30,7 @@ SceneData SceneDataBuilder::BuildScene() const {
     // Extract game state information
     ExtractGameState(scene);
     ExtractRenderingFlags(scene);
+    if (scene.debugMode) scene.debugLines = DebugLineRenderer::BuildTankMarkers(scene.tanks);
     
     return scene;
 }
@@ -200,8 +202,8 @@ void SceneDataBuilder::ExtractGameState(SceneData& scene) const {
     // Versus mode when multiple players
     scene.versusMode = (scene.numPlayers > 1);
     
-    // Debug mode could be extracted from a global setting or App state
-    scene.debugMode = false; // TODO: Implement debug mode detection
+    // Use the same debug switch as the existing menu and gameplay controls.
+    scene.debugMode = App::GetSingleton().gameTask->IsDebugMode();
 }
 
 void SceneDataBuilder::ExtractRenderingFlags(SceneData& scene) const {
