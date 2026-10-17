@@ -1,0 +1,3 @@
+VideoTask::Start: graphics context ready at 1280x720.
+players=1 red=480 blue=400 hiddenGreen=0 depth unchanged; state restored; GL_NO_ERROR
+players=2 red=959 blue=400 hiddenGreen=0 depth unchanged; state restored; GL_NO_ERROR
