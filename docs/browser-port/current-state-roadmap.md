@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-17
+**Status date:** 2026-10-18
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -14,7 +14,7 @@ and Emscripten. Native compatibility remains the default, fallback, and visual
 reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
 application/toolchain boundaries. Shared water and effects are now implemented.
-HUD/menu/text, audio,
+Title-menu selection is now shared; HUD/text, audio,
 and browser UX remain deferred, so this is still a partial port.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
@@ -23,6 +23,27 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 title-menu selection slice (2026-10-17–18)
+
+The existing title selection outline/fill now uses catalogue-owned geometry and
+shared modern submission on native and browser. Navigation and gameplay hiding
+use the existing menu DTO. The browser menu stub and modern menu skip are removed;
+HUD/text remain deferred. Camera-independent transforms preserve the existing
+per-viewport perspective layout. Modern state is restored explicitly, including
+separate blend equations/factors. Both backends now disable culling for the menu
+fill, correcting inherited world-state rejection of the clockwise quad.
+
+Native and Emscripten Release builds pass, along with all 122 GL-enabled native
+tests. Ten Linux compatibility/modern fixture pairs match byte-for-byte, with
+unchanged depth and clean GL probes. Browser navigation shows all selections,
+stable uploads, six clean WebGL/context probes and clean shutdown. See
+[implementation and evidence](../../documentation/menu-renderer-2026-10-17/README.md).
+
+This starts R5 without closing R4's broader validation gates or completing R5.
+HUD, font/text resources, global UI scope and the compatibility-retirement decision
+remain. Native compatibility stays the default; Windows/macOS runtime and
+multiplayer robustness deferrals are unchanged.
 
 ## R4 shared debug-line slice (2026-10-17)
 
