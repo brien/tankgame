@@ -1,5 +1,7 @@
 #include "RenderingPipeline.h"
 #include "DebugLineRenderer.h"
+#include "HUDLayout.h"
+#include "HUDMeterRenderer.h"
 #include "../App.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
@@ -292,7 +294,11 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
 void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex)
 {
     if (RendererMode::IsModern()) {
-        if (scene.uiData) menuRenderer.RenderMenu(scene.uiData->menu);
+        if (scene.uiData) {
+            if (const auto* hud = HUDLayout::FindPlayer(scene.uiData->playerHUDs, playerIndex))
+                HUDMeterRenderer::Render(resourceManager, *hud);
+            menuRenderer.RenderMenu(scene.uiData->menu);
+        }
         return;
     }
 #ifndef __EMSCRIPTEN__
@@ -304,8 +310,8 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
     const UIRenderData& uiData = *scene.uiData;
     
     // Render player-specific HUD if we have HUD data for this player
-    if (playerIndex >= 0 && playerIndex < static_cast<int>(uiData.playerHUDs.size())) {
-        hudRenderer.RenderPlayerHUD(uiData.playerHUDs[playerIndex]);
+    if (const auto* hud = HUDLayout::FindPlayer(uiData.playerHUDs, playerIndex)) {
+        hudRenderer.RenderPlayerHUD(*hud);
     }
     
     // Render menu if visible (menu is global, not player-specific)

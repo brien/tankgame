@@ -1,4 +1,5 @@
 #include "HUDRenderer.h"
+#include "HUDLayout.h"
 #include "RenderData.h"
 #include "../App.h"
 #include "../TextureHandler.h"
@@ -59,7 +60,7 @@ void HUDRenderer::RenderPlayerHUD(const HUDRenderData& hudData) {
     }
     
     // Show action cost indicators on energy bar
-    RenderActionCostIndicators(hudData);
+    if (hudData.showEnergyBar) RenderActionCostIndicators(hudData);
     
     if (hudData.showComboMeter) {
         RenderComboMeter(hudData);
@@ -333,7 +334,7 @@ void HUDRenderer::RenderSpecialMeter(const HUDRenderData& hudData) {
     
     // Special ability cost indicators
     float costPercentage = hudData.fireCost / 500.0f;
-    int numIndicators = static_cast<int>(specialPercent / costPercentage);
+    int numIndicators = HUDLayout::SpecialIndicatorCount(hudData);
     
     ApplyColor(Vector3(1.0f, 1.0f, 1.0f));
     glBegin(GL_LINES);

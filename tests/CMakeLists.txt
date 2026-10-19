@@ -18,6 +18,7 @@ set(TEST_SOURCES ${GAME_SOURCES})
 
 # Create test executable
 add_executable(tankgame_tests
+    test_hud_layout.cpp
     test_debug_lines.cpp
     test_terrain_geometry.cpp
     test_enemy_renderer.cpp

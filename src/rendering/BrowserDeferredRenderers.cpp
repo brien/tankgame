@@ -19,7 +19,7 @@ HUDRenderer::HUDRenderer() : texturesLoaded(false) {}
 
 bool HUDRenderer::Initialize()
 {
-    LogDeferred("HUD");
+    LogDeferred("HUD targeting and text (meters/icons use the shared renderer)");
     return BaseRenderer::Initialize();
 }
 
