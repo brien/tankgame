@@ -194,10 +194,10 @@ void MenuRenderer::RenderModernMenu(const MenuRenderData& menuData) {
     ui.SetView(Matrix4::Identity());
     float x, y, width, height;
     GetOptionPosition(menuData.selectedOption, x, y, width, height);
-    const Matrix4 model = Matrix4::Translation(x, y, -1) * Matrix4::Scale(width, height, 1);
-    ui.Draw(resources->GetGeometry(GeometryResource::MenuOutline), model, 0, 1, 1, 1, false);
+    const Matrix4 model = Matrix4::Translation(x, y, -1) * Matrix4::Scale(width, -height, 1);
+    ui.Draw(resources->GetGeometry(GeometryResource::UIOutline), model, 0, 1, 1, 1, false);
     // ONE/ONE deliberately ignores alpha, matching the reference's additive fill.
-    ui.Draw(resources->GetGeometry(GeometryResource::MenuQuad), model, 0, .4f, .4f, .1f, false);
+    ui.Draw(resources->GetGeometry(GeometryResource::UIQuad), model, 0, .4f, .4f, .1f, false);
 
     GLFunctions::BlendFuncSeparate(srcRGB, dstRGB, srcAlpha, dstAlpha);
     GLFunctions::BlendEquationSeparate(equationRGB, equationAlpha);

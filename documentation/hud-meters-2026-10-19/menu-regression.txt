@@ -1,0 +1,1 @@
+10/10 compatibility/modern menu pairs byte-identical after UI primitive reuse.

@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-18
+**Status date:** 2026-10-19
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -14,8 +14,8 @@ and Emscripten. Native compatibility remains the default, fallback, and visual
 reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
 application/toolchain boundaries. Shared water and effects are now implemented.
-Title-menu selection is now shared; HUD/text, audio,
-and browser UX remain deferred, so this is still a partial port.
+Title-menu selection and player HUD meters/icons are now shared; HUD targeting,
+font/text, audio and browser UX remain deferred, so this is still a partial port.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
 runtime qualification alongside macOS, and proceed with the first opaque terrain
@@ -23,6 +23,27 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 player HUD meter/icon slice (2026-10-19)
+
+Health/energy bars, icons, action-cost lines, combo/special meters and ticks, and
+the debug timing meter now render on modern native and Emscripten through shared
+catalogue primitives, textures and the existing program. A GL-free layout builder
+preserves the reference viewport coordinates. The pass restores explicit render,
+texture and camera state and does not upload per-frame GPU resources. HUD routing
+now uses player IDs rather than packed vector offsets in both backends. Both also
+hide action markers with the energy bar and safely bound special tick counts.
+
+Native and browser Release builds pass, along with all 127 GL-enabled native
+tests. Ten Linux HUD fixture pairs match exactly in RGB with unchanged depth and
+clean GL probes; ten menu regression pairs remain byte-identical. Browser gameplay
+shows energy consumption during firing, stable uploads, four clean WebGL/context
+probes and clean shutdown. See [implementation and evidence](../../documentation/hud-meters-2026-10-19/README.md).
+
+This completes the meter/icon slice only. Font/text caching, targeting stipple,
+global UI scope and compatibility retirement remain R5 follow-ups. Native
+compatibility stays the default; R4 broader validation, Windows/macOS runtime and
+multiplayer robustness deferrals remain unchanged.
 
 ## R5 title-menu selection slice (2026-10-17–18)
 
