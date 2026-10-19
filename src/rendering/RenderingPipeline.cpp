@@ -2,6 +2,7 @@
 #include "DebugLineRenderer.h"
 #include "HUDLayout.h"
 #include "HUDMeterRenderer.h"
+#include "TargetingLineRenderer.h"
 #include "../App.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
@@ -295,8 +296,10 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
 {
     if (RendererMode::IsModern()) {
         if (scene.uiData) {
-            if (const auto* hud = HUDLayout::FindPlayer(scene.uiData->playerHUDs, playerIndex))
+            if (const auto* hud = HUDLayout::FindPlayer(scene.uiData->playerHUDs, playerIndex)) {
+                TargetingLineRenderer::Render(resourceManager, *hud);
                 HUDMeterRenderer::Render(resourceManager, *hud);
+            }
             menuRenderer.RenderMenu(scene.uiData->menu);
         }
         return;

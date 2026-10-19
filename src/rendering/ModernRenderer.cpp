@@ -75,6 +75,9 @@ public:
             handle = 0;
             throw std::runtime_error("Modern renderer program link failed");
         }
+        targeting = GLFunctions::GetUniformLocation(handle, "uTargeting");
+        stippleFrame = GLFunctions::GetUniformLocation(handle, "uStippleFrame");
+        stippleBits = GLFunctions::GetUniformLocation(handle, "uStippleBits");
         normalTransform = GLFunctions::GetUniformLocation(handle, "uNormalTransform");
         lit = GLFunctions::GetUniformLocation(handle, "uLit");
         mvp = GLFunctions::GetUniformLocation(handle, "uMvp");
@@ -87,6 +90,7 @@ public:
     ~ShaderProgram() { if (handle != 0) GLFunctions::DeleteProgram(handle); }
 
     GLuint handle = 0;
+    GLint targeting = -1, stippleFrame = -1, stippleBits = -1;
     GLint normalTransform = -1;
     GLint lit = -1;
     GLint mvp = -1;
@@ -122,6 +126,9 @@ void ModernRenderer::Draw(const GpuGeometry& geometry, const float* mvp,
 
     GLFunctions::UniformMatrix4fv(program->normalTransform, 1, GL_FALSE, normalTransform);
     GLFunctions::Uniform1i(program->lit, lighting && material.lit && layout.hasNormals ? 1 : 0);
+    GLFunctions::Uniform1i(program->targeting, material.targeting ? 1 : 0);
+    GLFunctions::Uniform4fv(program->stippleFrame, 1, material.stippleFrame);
+    GLFunctions::Uniform4fv(program->stippleBits, 1, material.stippleBits);
     const GLfloat color[] = {material.red, material.green, material.blue, material.alpha};
     GLFunctions::UniformMatrix4fv(program->mvp, 1, GL_FALSE, mvp);
     GLFunctions::Uniform4fv(program->defaultColor, 1, color);

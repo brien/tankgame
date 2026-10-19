@@ -27,12 +27,14 @@ std::string BuildVertexShader(ShaderDialect dialect)
     return preamble +
         (core ? "in vec3 aPosition;\nin vec3 aColor;\nin vec2 aUV;\nin vec3 aNormal;\n"
               : "attribute vec3 aPosition;\nattribute vec3 aColor;\nattribute vec2 aUV;\nattribute vec3 aNormal;\n") +
+        "uniform bool uTargeting;\n"
         "uniform mat4 uNormalTransform; uniform bool uLit; uniform mat4 uMvp;\nuniform vec4 uDefaultColor;\nuniform bool uHasColor;\n" +
         (core ? "out vec4 vColor;\nout vec2 vUV;\n"
               : "varying vec4 vColor;\nvarying vec2 vUV;\n") +
         "void main() { gl_Position = uMvp * vec4(aPosition, 1.0);"
         // RGB vertex colours have no alpha channel; retain material opacity.
         " vColor = uHasColor ? vec4(aColor, uDefaultColor.a) : uDefaultColor;"
+        " if (uTargeting) vColor.rgb *= 1.0 - aPosition.x;"
         " if (uLit) {"
         " vec3 n = mat3(uNormalTransform) * aNormal;"
         " float magnitude = length(n);"
@@ -52,7 +54,14 @@ std::string BuildFragmentShader(ShaderDialect dialect)
         (core ? "in vec4 vColor; in vec2 vUV;\nout vec4 fragmentColor;\n"
               : "varying vec4 vColor; varying vec2 vUV;\n") +
         "uniform sampler2D uTexture; uniform bool uHasTexture;\n"
-        "void main() { vec4 texel = uHasTexture ? " +
+        "uniform bool uTargeting; uniform vec4 uStippleFrame; uniform vec4 uStippleBits;\n"
+        "void main() {"
+        " if (uTargeting) {"
+        " float pixel = max(0.0, dot(gl_FragCoord.xy - uStippleFrame.xy, uStippleFrame.zw));"
+        " float bit = mod(floor(pixel / 16.0), 16.0);"
+        " float nibble = bit < 4.0 ? uStippleBits.x : bit < 8.0 ? uStippleBits.y : bit < 12.0 ? uStippleBits.z : uStippleBits.w;"
+        " if (mod(floor(nibble / exp2(mod(bit, 4.0))), 2.0) < 0.5) discard; }"
+        " vec4 texel = uHasTexture ? " +
         (core ? std::string("texture(uTexture, vUV)") : std::string("texture2D(uTexture, vUV)")) +
         " : vec4(1.0); " + (core ? std::string("fragmentColor") : std::string("gl_FragColor")) +
         " = texel * vColor; }\n";
