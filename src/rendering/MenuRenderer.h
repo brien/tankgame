@@ -16,9 +16,11 @@
  * Based on the original GraphicsTask::DrawMenu implementation but with
  * data-driven rendering using MenuRenderData structures.
  */
+class ResourceManager;
+
 class MenuRenderer : public BaseRenderer {
 public:
-    MenuRenderer();
+    explicit MenuRenderer(ResourceManager* resources = nullptr);
     virtual ~MenuRenderer() = default;
 
     // BaseRenderer interface implementation
@@ -32,6 +34,8 @@ public:
     void RenderMenu(const MenuRenderData& menuData);
 
 private:
+    ResourceManager* resources;
+    void RenderModernMenu(const MenuRenderData& menuData);
     // Menu rendering methods
     void SetupMenuProjection();
     void RestoreGameProjection();

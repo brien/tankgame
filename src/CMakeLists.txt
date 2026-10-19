@@ -15,7 +15,7 @@ set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
 # implementations. The browser links deferred implementations for them while
 # retaining shared modern player, enemy, terrain/water, and effect renderers.
 if(EMSCRIPTEN)
-    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(HUDRenderer|MenuRenderer|TankRenderer)\\.cpp$")
+    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(HUDRenderer|TankRenderer)\\.cpp$")
     list(APPEND SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
     )

@@ -22,6 +22,8 @@ TG_DIRECT(void, EnableVertexAttribArray, (GLuint a), (a)) TG_DIRECT(void, Disabl
 TG_DIRECT(void, VertexAttribPointer, (GLuint a, GLint b, GLenum c, GLboolean d, GLsizei e, const void* f), (a,b,c,d,e,f))
 TG_DIRECT(void, UniformMatrix4fv, (GLint a, GLsizei b, GLboolean c, const GLfloat* d), (a,b,c,d)) TG_DIRECT(void, Uniform4fv, (GLint a, GLsizei b, const GLfloat* c), (a,b,c))
 TG_DIRECT(void, Uniform1i, (GLint a, GLint b), (a,b)) TG_DIRECT(void, ActiveTexture, (GLenum a), (a)) TG_DIRECT(void, GenerateMipmap, (GLenum a), (a))
+TG_DIRECT(void, BlendFuncSeparate, (GLenum a, GLenum b, GLenum c, GLenum d), (a,b,c,d))
+TG_DIRECT(void, BlendEquationSeparate, (GLenum a, GLenum b), (a,b))
 #undef TG_DIRECT
 }
 #else
@@ -41,6 +43,8 @@ TG_PROC(void, GenBuffers, (GLsizei, GLuint*)); TG_PROC(void, BindBuffer, (GLenum
 TG_PROC(void, EnableVertexAttribArray, (GLuint)); TG_PROC(void, DisableVertexAttribArray, (GLuint)); TG_PROC(void, VertexAttribPointer, (GLuint, GLint, GLenum, GLboolean, GLsizei, const void*));
 TG_PROC(void, UniformMatrix4fv, (GLint, GLsizei, GLboolean, const GLfloat*)); TG_PROC(void, Uniform4fv, (GLint, GLsizei, const GLfloat*)); TG_PROC(void, Uniform1i, (GLint, GLint));
 TG_PROC(void, ActiveTexture, (GLenum)); TG_PROC(void, GenerateMipmap, (GLenum));
+TG_PROC(void, BlendFuncSeparate, (GLenum, GLenum, GLenum, GLenum));
+TG_PROC(void, BlendEquationSeparate, (GLenum, GLenum));
 #undef TG_PROC
 #undef TG_GL_CALL
 
@@ -59,6 +63,7 @@ bool Initialize(std::string& error)
     if (initialized) return true;
     std::string missing;
 #define TG_LOAD(name) Load(p##name, "gl" #name, missing)
+    TG_LOAD(BlendFuncSeparate); TG_LOAD(BlendEquationSeparate);
     TG_LOAD(CreateShader); TG_LOAD(ShaderSource); TG_LOAD(CompileShader); TG_LOAD(GetShaderiv); TG_LOAD(GetShaderInfoLog); TG_LOAD(DeleteShader);
     TG_LOAD(CreateProgram); TG_LOAD(AttachShader); TG_LOAD(BindAttribLocation); TG_LOAD(LinkProgram); TG_LOAD(GetProgramiv); TG_LOAD(GetProgramInfoLog); TG_LOAD(DeleteProgram); TG_LOAD(GetUniformLocation); TG_LOAD(UseProgram);
     TG_LOAD(GenBuffers); TG_LOAD(BindBuffer); TG_LOAD(BufferData); TG_LOAD(DeleteBuffers); TG_LOAD(EnableVertexAttribArray); TG_LOAD(DisableVertexAttribArray); TG_LOAD(VertexAttribPointer);
@@ -83,6 +88,8 @@ TG_FORWARD(void, GetProgramiv, (GLuint a, GLenum b, GLint* c), (a,b,c)) TG_FORWA
 TG_FORWARD(void, GenBuffers, (GLsizei a, GLuint* b), (a,b)) TG_FORWARD(void, BindBuffer, (GLenum a, GLuint b), (a,b)) TG_FORWARD(void, BufferData, (GLenum a, GLsizeiptr b, const void* c, GLenum d), (a,b,c,d)) TG_FORWARD(void, DeleteBuffers, (GLsizei a, const GLuint* b), (a,b))
 TG_FORWARD(void, EnableVertexAttribArray, (GLuint a), (a)) TG_FORWARD(void, DisableVertexAttribArray, (GLuint a), (a)) TG_FORWARD(void, VertexAttribPointer, (GLuint a, GLint b, GLenum c, GLboolean d, GLsizei e, const void* f), (a,b,c,d,e,f))
 TG_FORWARD(void, UniformMatrix4fv, (GLint a, GLsizei b, GLboolean c, const GLfloat* d), (a,b,c,d)) TG_FORWARD(void, Uniform4fv, (GLint a, GLsizei b, const GLfloat* c), (a,b,c)) TG_FORWARD(void, Uniform1i, (GLint a, GLint b), (a,b)) TG_FORWARD(void, ActiveTexture, (GLenum a), (a)) TG_FORWARD(void, GenerateMipmap, (GLenum a), (a))
+TG_FORWARD(void, BlendFuncSeparate, (GLenum a, GLenum b, GLenum c, GLenum d), (a,b,c,d))
+TG_FORWARD(void, BlendEquationSeparate, (GLenum a, GLenum b), (a,b))
 #undef TG_FORWARD
 }
 #endif

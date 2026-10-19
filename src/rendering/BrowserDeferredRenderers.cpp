@@ -1,7 +1,6 @@
 #ifdef __EMSCRIPTEN__
 
 #include "HUDRenderer.h"
-#include "MenuRenderer.h"
 #include "TankRenderer.h"
 
 #include "../Logger.h"
@@ -30,17 +29,6 @@ void HUDRenderer::RenderAllPlayerHUDs(const std::vector<HUDRenderData>&) {}
 void HUDRenderer::RenderCompleteUI(const UIRenderData&) {}
 void HUDRenderer::RenderMenu(const MenuRenderData&) {}
 void HUDRenderer::RenderDebugInfo(const DebugRenderData&) {}
-
-MenuRenderer::MenuRenderer() = default;
-
-bool MenuRenderer::Initialize()
-{
-    LogDeferred("menus");
-    return BaseRenderer::Initialize();
-}
-
-void MenuRenderer::Cleanup() { BaseRenderer::Cleanup(); }
-void MenuRenderer::RenderMenu(const MenuRenderData&) {}
 
 TankRenderer::TankRenderer() : animationDrift(0.0f) {}
 

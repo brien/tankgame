@@ -21,7 +21,7 @@
 
 RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &camera,
                                      ResourceManager &resources)
-    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), effectRenderer(&resources), enemyTankRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
+    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), effectRenderer(&resources), enemyTankRenderer(&resources), menuRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
 {
 }
 
@@ -292,8 +292,7 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
 void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex)
 {
     if (RendererMode::IsModern()) {
-        (void)scene;
-        (void)playerIndex;
+        if (scene.uiData) menuRenderer.RenderMenu(scene.uiData->menu);
         return;
     }
 #ifndef __EMSCRIPTEN__

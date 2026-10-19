@@ -85,6 +85,11 @@ bool ResourceManager::InitializeMeshes() {
 
 bool ResourceManager::InitializeDisplayLists() {
     try {
+        Geometry menu;
+        menu.vertices = {{0, 0, 0}, {1, 0, 0}, {1, -1, 0}, {0, -1, 0}};
+        menuQuad.SetGeometry(menu);
+        menu.topology = PrimitiveTopology::LINE_LOOP;
+        menuOutline.SetGeometry(menu);
         Geometry line;
         line.topology = PrimitiveTopology::LINES;
         line.vertices = {{0, 0, 0}, {1, 1, 1}};
@@ -185,6 +190,7 @@ void ResourceManager::CleanupDisplayLists() {
     squareList.Close(); squareList2.Close();
     bodyListEx.Close(); turretListEx.Close(); cannonListEx.Close();
     bodyListEx2.Close(); turretListEx2.Close(); cannonListEx2.Close();
+    menuQuad.Close(); menuOutline.Close();
     debugLine.Close();
     enemyBody.Close(); enemyBarrel.Close(); enemyTurret.Close();
     displayListsBuilt = false;
@@ -203,6 +209,8 @@ void ResourceManager::CleanupMeshes() {
 
 DisplayList& ResourceManager::GetGeometry(GeometryResource resource) {
     switch (resource) {
+    case GeometryResource::MenuQuad: return menuQuad;
+    case GeometryResource::MenuOutline: return menuOutline;
     case GeometryResource::DebugLine: return debugLine;
     case GeometryResource::EnemyBody: return enemyBody;
     case GeometryResource::EnemyBarrel: return enemyBarrel;

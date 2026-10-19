@@ -40,6 +40,8 @@ void VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normal
 void UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat* value);
 void Uniform4fv(GLint location, GLsizei count, const GLfloat* value);
 void Uniform1i(GLint location, GLint value);
+void BlendFuncSeparate(GLenum srcRGB, GLenum dstRGB, GLenum srcAlpha, GLenum dstAlpha);
+void BlendEquationSeparate(GLenum rgb, GLenum alpha);
 void ActiveTexture(GLenum texture);
 void GenerateMipmap(GLenum target);
 }
