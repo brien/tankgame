@@ -14,8 +14,8 @@ and Emscripten. Native compatibility remains the default, fallback, and visual
 reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
 application/toolchain boundaries. Shared water and effects are now implemented.
-Title-menu selection and player HUD meters/icons are now shared; HUD targeting,
-font/text, audio and browser UX remain deferred, so this is still a partial port.
+Title-menu selection, player HUD meters/icons and targeting are now shared.
+Font/text, audio and browser UX remain deferred, so this is still a partial port.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
 runtime qualification alongside macOS, and proceed with the first opaque terrain
@@ -23,6 +23,26 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 animated targeting-line slice (2026-10-19)
+
+Modern native and Emscripten now draw each player's world-space targeting ray
+before HUD meters. The shared shader uses the existing line primitive, a
+screen-space 16-bit stipple mask and a perspective-interpolated colour fade.
+Homogeneous clipping handles offscreen and behind-camera origins. The pass tests
+scene depth without writing it and restores depth/blend/line state. No additional
+GPU resources or per-frame uploads are required; compatibility remains unchanged.
+
+Native and browser builds pass, as do all 130 native tests with GL enabled. Ten
+Linux fixture cases cover one/two viewports, stipple, visibility, clipping and
+occlusion with unchanged depth and clean GL probes. Browser gameplay has four
+clean WebGL probes, stable uploads and clean shutdown. See the
+[implementation and evidence](../../documentation/targeting-line-2026-10-19/README.md).
+
+The modern ray is a single segment rather than the reference's two-vertex loop;
+exact legacy stipple raster parity is not claimed. Text/font caching, global UI
+scope and compatibility retirement remain R5 follow-ups. Windows/macOS runtime
+qualification and multiplayer robustness remain deferred.
 
 ## R5 player HUD meter/icon slice (2026-10-19)
 

@@ -1,0 +1,11 @@
+VideoTask::Start: graphics context ready at 1280x720.
+players=1 scenario=0: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=1 scenario=1: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=1 scenario=2: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=1 scenario=3: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=1 scenario=4: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=2 scenario=0: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=2 scenario=1: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=2 scenario=2: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=2 scenario=3: visibility, occlusion, depth and state pass; GL_NO_ERROR
+players=2 scenario=4: visibility, occlusion, depth and state pass; GL_NO_ERROR
