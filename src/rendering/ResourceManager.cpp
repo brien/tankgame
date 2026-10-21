@@ -1,6 +1,8 @@
 #include "ResourceManager.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
+#include "GpuTexture.h"
+#include "../Logger.h"
 ResourceManager::ResourceManager() 
     : isInitialized(false)
     , displayListsBuilt(false)
@@ -25,6 +27,16 @@ bool ResourceManager::Initialize() {
     success &= InitializeTextures();
     success &= InitializeMeshes();
     success &= InitializeDisplayLists();
+    if (RendererMode::IsModern()) {
+        try {
+            fontAtlas = FontAtlas::Load("./fonts/DroidSansMono.ttf");
+            fontTexture = std::make_shared<GpuTexture>(fontAtlas.image, TextureUploadOptions{false, false});
+            for (int i = 0; i < FontAtlas::Count; ++i) fontGlyphs[i].SetGeometry(fontAtlas.glyphs[i].geometry);
+        } catch (const std::exception& error) {
+            Logger::Get().Write("Font atlas initialization failed: %s\n", error.what());
+            success = false;
+        }
+    }
     
     if (success) {
         isInitialized = true;
@@ -37,6 +49,9 @@ bool ResourceManager::Initialize() {
 }
 
 void ResourceManager::Cleanup() {
+    for (auto& glyph : fontGlyphs) glyph = DisplayList(0);
+    fontTexture.reset();
+    fontAtlas = FontAtlas{};
     CleanupDisplayLists();
     RenderContext::Current().SetModernRenderer(nullptr);
     modernRenderer.reset();
@@ -183,17 +198,18 @@ void ResourceManager::PrepareMesh(igtl_QGLMesh& mesh, const char* fileName) {
 }
 
 void ResourceManager::CleanupDisplayLists() {
-    // Release VBOs before the shared program and while the context is current.
+    // Release VBOs before the shared program while the context is current.
+    // Keep empty facades usable by a subsequent Initialize (Close nulls them).
     terrainDraws = TerrainDrawBatches{};
     terrainGeometry.Clear();
-    cubeList1.Close(); cubeList2.Close(); bulletList.Close();
-    bodyList.Close(); turretList.Close(); cannonList.Close(); itemList.Close();
-    squareList.Close(); squareList2.Close();
-    bodyListEx.Close(); turretListEx.Close(); cannonListEx.Close();
-    bodyListEx2.Close(); turretListEx2.Close(); cannonListEx2.Close();
-    uiQuad.Close(); uiOutline.Close();
-    debugLine.Close();
-    enemyBody.Close(); enemyBarrel.Close(); enemyTurret.Close();
+    cubeList1 = DisplayList(1); cubeList2 = DisplayList(1); bulletList = DisplayList(1);
+    bodyList = DisplayList(1); turretList = DisplayList(1); cannonList = DisplayList(1); itemList = DisplayList(1);
+    squareList = DisplayList(1); squareList2 = DisplayList(1);
+    bodyListEx = DisplayList(1); turretListEx = DisplayList(1); cannonListEx = DisplayList(1);
+    bodyListEx2 = DisplayList(1); turretListEx2 = DisplayList(1); cannonListEx2 = DisplayList(1);
+    uiQuad = DisplayList(1); uiOutline = DisplayList(1);
+    debugLine = DisplayList(1);
+    enemyBody = DisplayList(1); enemyBarrel = DisplayList(1); enemyTurret = DisplayList(1);
     displayListsBuilt = false;
 }
 
