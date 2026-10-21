@@ -3,6 +3,7 @@
 #include "HUDLayout.h"
 #include "HUDMeterRenderer.h"
 #include "TargetingLineRenderer.h"
+#include "TextRenderer.h"
 #include "../App.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
@@ -156,6 +157,15 @@ void RenderingPipeline::RenderAllPlayerViews(const SceneData &scene)
     {
         RenderScene(scene, i);
     }
+    // Global diagnostics belong to the drawable, after all player-local views.
+    if (RendererMode::IsModern() && scene.uiData && viewportManager.GetScreenWidth() > 0 &&
+        viewportManager.GetScreenHeight() > 0) {
+        GLint previous[4];
+        glGetIntegerv(GL_VIEWPORT, previous);
+        glViewport(0, 0, viewportManager.GetScreenWidth(), viewportManager.GetScreenHeight());
+        TextRenderer::Render(resourceManager, TextRenderer::DebugLines(scene.uiData->debug));
+        glViewport(previous[0], previous[1], previous[2], previous[3]);
+    }
 }
 
 void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIndex)
@@ -299,6 +309,7 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
             if (const auto* hud = HUDLayout::FindPlayer(scene.uiData->playerHUDs, playerIndex)) {
                 TargetingLineRenderer::Render(resourceManager, *hud);
                 HUDMeterRenderer::Render(resourceManager, *hud);
+                TextRenderer::Render(resourceManager, TextRenderer::PlayerLines(*hud, viewportManager.GetViewport(playerIndex).width));
             }
             menuRenderer.RenderMenu(scene.uiData->menu);
         }

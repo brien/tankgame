@@ -18,6 +18,7 @@ set(TEST_SOURCES ${GAME_SOURCES})
 
 # Create test executable
 add_executable(tankgame_tests
+    test_font_atlas.cpp
     test_targeting_line.cpp
     test_hud_layout.cpp
     test_debug_lines.cpp
@@ -86,3 +87,5 @@ endif()
 # Discover tests for CTest
 include(GoogleTest)
 gtest_discover_tests(tankgame_tests)
+
+target_compile_definitions(tankgame_tests PRIVATE TANKGAME_TEST_FONT="${CMAKE_SOURCE_DIR}/runtime/fonts/DroidSansMono.ttf")

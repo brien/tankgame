@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-19
+**Status date:** 2026-10-21
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -15,7 +15,8 @@ reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
 application/toolchain boundaries. Shared water and effects are now implemented.
 Title-menu selection, player HUD meters/icons and targeting are now shared.
-Font/text, audio and browser UX remain deferred, so this is still a partial port.
+Cached diagnostic text is shared; additional UI text, audio and browser UX remain
+deferred, so this is still a partial port.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
 runtime qualification alongside macOS, and proceed with the first opaque terrain
@@ -23,6 +24,26 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 cached diagnostic text slice (2026-10-20–21)
+
+Modern native and Emscripten now render player-local FPS and a single global debug
+text overlay through a catalogue-owned ASCII font atlas and immutable glyph
+geometry. Numeric updates reuse GPU resources and the existing shared program.
+Font decoding has scoped SDL_ttf ownership; the text pass preserves scene depth
+and restores changed state. Resource cleanup also leaves geometry facades reusable,
+fixing a crash exposed by reinitialization testing.
+
+Native/browser Release builds pass, as do all 133 GL-enabled native tests. Linux
+one/two-viewport fixtures validate text visibility, depth/state, atlas identity and
+recreation; browser gameplay shows clean GL probes, stable uploads and shutdown.
+See [implementation and evidence](../../documentation/text-renderer-2026-10-20/README.md).
+
+This completes the initial cached text slice, not R5. Text is newly visible on the
+modern paths; compatibility text remains a placeholder and compatibility stays
+the native default. Calls/Tris still reflect placeholder DTO values. Menu/global UI
+consolidation, additional text, legacy font ownership and compatibility retirement
+remain. Deferred platform/runtime and multiplayer gates are unchanged.
 
 ## R5 animated targeting-line slice (2026-10-19)
 

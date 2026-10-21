@@ -6,6 +6,7 @@
 #include "../igtl_qmesh.h"
 #include "ModernRenderer.h"
 #include "TerrainGeometry.h"
+#include "FontAtlas.h"
 #include <stdexcept>
 
 enum class GeometryResource {
@@ -59,6 +60,10 @@ public:
     const ModernRenderer* GetModernRenderer() const { return modernRenderer.get(); }
     const TerrainDrawBatches& PrepareTerrain(const TerrainRenderData& terrain);
 
+    const FontAtlas& GetFontAtlas() const { return fontAtlas; }
+    const DisplayList& GetFontGlyph(unsigned char c) const { return fontGlyphs[FontAtlas::GlyphIndex(c)]; }
+    const std::shared_ptr<const GpuTexture>& GetFontTexture() const { return fontTexture; }
+
     // Compatibility aliases retained while non-migrated renderers are removed.
     const DisplayList& GetCubeList1() const { return cubeList1; }
     const DisplayList& GetCubeList2() const { return cubeList2; }
@@ -97,6 +102,9 @@ public:
 private:
     // Created before geometry upload and explicitly destroyed after all VBOs.
     std::unique_ptr<ModernRenderer> modernRenderer;
+    FontAtlas fontAtlas;
+    std::array<DisplayList, FontAtlas::Count> fontGlyphs;
+    std::shared_ptr<const GpuTexture> fontTexture;
     TerrainGeometry terrainGeometry;
     TerrainDrawBatches terrainDraws;
     // Display lists (moved from GraphicsTask)
