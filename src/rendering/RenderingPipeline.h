@@ -63,7 +63,7 @@ public:
     
     /**
      * Clears the shared framebuffer once, then renders scenes for all players
-     * (split-screen support).
+     * (split-screen support), followed by drawable-global menu/diagnostics.
      * 
      * @param scene Complete scene data containing all objects to render
      */
@@ -120,6 +120,7 @@ private:
     void RenderTerrain(const TerrainRenderData& terrain);
     void RenderGameObjects(const SceneData& scene);
     void RenderTransparentObjects(const SceneData& scene);
+    void RenderGlobalUI(const SceneData& scene);
     void RenderUIElements(const SceneData& scene, int playerIndex);
     
     // Object-specific rendering methods

@@ -1,0 +1,14 @@
+VideoTask::Start: graphics context ready at 1280x720.
+RenderingPipeline initializing... 
+BulletRenderer initialized successfully
+EffectRenderer initialized successfully
+RenderingPipeline Initialized Successfully: 1
+players=1 option=0: full-drawable reference matches, depth unchanged, viewport restored, GL_NO_ERROR
+players=1 option=1: full-drawable reference matches, depth unchanged, viewport restored, GL_NO_ERROR
+players=1 option=2: full-drawable reference matches, depth unchanged, viewport restored, GL_NO_ERROR
+players=2 option=0: full-drawable reference matches, depth unchanged, viewport restored, GL_NO_ERROR
+players=2 option=1: full-drawable reference matches, depth unchanged, viewport restored, GL_NO_ERROR
+players=2 option=2: full-drawable reference matches, depth unchanged, viewport restored, GL_NO_ERROR
+EffectRenderer cleaned up
+BulletRenderer cleaned up
+TerrainRenderer cleaned up 
