@@ -1,0 +1,5 @@
+[258080:1022/205607.234574:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[258080:1022/205607.824830:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[258080:1022/205607.825189:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+Gtk-Message: 20:56:08.030: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 20:56:08.031: Failed to load module "window-decorations-gtk-module"

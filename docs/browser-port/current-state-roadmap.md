@@ -25,6 +25,23 @@ checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
 
+## R5 unreachable legacy UI and font cleanup (2026-10-22)
+
+The obsolete `GraphicsTask` HUD/menu/text functions and write-only visibility
+flags are removed after a source reachability audit. The active pipeline already
+owns player-local HUD/FPS and global menu/debug submission in both backends.
+`GraphicsTask` no longer opens an unused 256-point font at construction, exits on
+its failure, or retains an unmatched SDL_ttf initialization reference. The modern
+catalogue remains the sole font owner through scoped atlas decoding.
+
+Native and browser Release builds pass, as do all 136 GL-enabled native tests.
+Browser UI smoke has four clean WebGL probes, stable uploads and clean shutdown.
+See the [audit and validation](../../documentation/legacy-ui-cleanup-2026-10-22/README.md).
+This completes the GraphicsTask UI/font cleanup slice only. Additional UI text,
+active compatibility HUD/deferred-source consolidation and the explicit renderer
+retirement decision remain. Compatibility stays the native default; Windows/macOS
+runtime and multiplayer robustness deferrals are unchanged.
+
 ## R5 owned UI snapshots and global menu slice (2026-10-21–22)
 
 SceneData now owns immutable UI snapshots, fixing the per-frame allocation leak
