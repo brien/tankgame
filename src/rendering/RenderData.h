@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 
 // Include Color.h for Color struct
 #include "../Color.h"
@@ -274,7 +275,7 @@ struct SceneData {
     std::vector<CameraData> cameras;
     
     // UI rendering data (menus, HUD, debug info)
-    UIRenderData* uiData;           // Pointer to avoid circular includes
+    std::shared_ptr<const UIRenderData> uiData; // Owned immutable frame snapshot; copies share lifetime
     
     // Game state needed for rendering decisions
     int numPlayers;             // Number of active players (affects viewport layout)
@@ -308,5 +309,6 @@ struct SceneData {
         items.clear();
         cameras.clear();
         debugLines.clear();
+        uiData.reset();
     }
 };

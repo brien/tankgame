@@ -24,8 +24,7 @@ SceneData SceneDataBuilder::BuildScene() const {
     scene.cameras = ExtractCameraData();
     
     // Extract UI data for HUD/Menu/Debug rendering
-    auto uiDataPtr = ExtractUIData();
-    scene.uiData = uiDataPtr.release();
+    scene.uiData = ExtractUIData();
     
     // Extract game state information
     ExtractGameState(scene);

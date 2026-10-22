@@ -1,0 +1,32 @@
+[
+  {
+    "case": "1-0",
+    "max_channel_difference": 1,
+    "different_channels": 1
+  },
+  {
+    "case": "1-1",
+    "max_channel_difference": 1,
+    "different_channels": 1
+  },
+  {
+    "case": "1-2",
+    "max_channel_difference": 1,
+    "different_channels": 1
+  },
+  {
+    "case": "2-0",
+    "max_channel_difference": 0,
+    "different_channels": 0
+  },
+  {
+    "case": "2-1",
+    "max_channel_difference": 0,
+    "different_channels": 0
+  },
+  {
+    "case": "2-2",
+    "max_channel_difference": 0,
+    "different_channels": 0
+  }
+]

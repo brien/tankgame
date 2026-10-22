@@ -18,6 +18,7 @@ set(TEST_SOURCES ${GAME_SOURCES})
 
 # Create test executable
 add_executable(tankgame_tests
+    test_scene_data.cpp
     test_font_atlas.cpp
     test_targeting_line.cpp
     test_hud_layout.cpp

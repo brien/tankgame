@@ -157,15 +157,54 @@ void RenderingPipeline::RenderAllPlayerViews(const SceneData &scene)
     {
         RenderScene(scene, i);
     }
-    // Global diagnostics belong to the drawable, after all player-local views.
-    if (RendererMode::IsModern() && scene.uiData && viewportManager.GetScreenWidth() > 0 &&
-        viewportManager.GetScreenHeight() > 0) {
-        GLint previous[4];
-        glGetIntegerv(GL_VIEWPORT, previous);
-        glViewport(0, 0, viewportManager.GetScreenWidth(), viewportManager.GetScreenHeight());
+    RenderGlobalUI(scene);
+}
+
+void RenderingPipeline::RenderGlobalUI(const SceneData& scene)
+{
+    const int width = viewportManager.GetScreenWidth();
+    const int height = viewportManager.GetScreenHeight();
+    if (!scene.uiData || width <= 0 || height <= 0) return;
+
+    GLint viewport[4], scissor[4];
+    glGetIntegerv(GL_VIEWPORT, viewport);
+    glGetIntegerv(GL_SCISSOR_BOX, scissor);
+    const GLboolean scissorEnabled = glIsEnabled(GL_SCISSOR_TEST);
+    glDisable(GL_SCISSOR_TEST);
+    glViewport(0, 0, width, height);
+    const Matrix4 projection = Matrix4::Perspective(45.0f, static_cast<float>(width) / height, .1f, 1000.0f);
+    if (RendererMode::IsModern()) {
+        const RenderContext saved = RenderContext::Current();
+        RenderContext::Current().SetProjection(projection);
+        menuRenderer.RenderMenu(scene.uiData->menu);
         TextRenderer::Render(resourceManager, TextRenderer::DebugLines(scene.uiData->debug));
-        glViewport(previous[0], previous[1], previous[2], previous[3]);
+        RenderContext::Current() = saved;
     }
+#ifndef __EMSCRIPTEN__
+    else {
+        // Compatibility UI uses matrix stacks and mutates fixed-function state.
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        GLint matrixMode;
+        glGetIntegerv(GL_MATRIX_MODE, &matrixMode);
+        glMatrixMode(GL_PROJECTION);
+        glPushMatrix();
+        glLoadIdentity();
+        gluPerspective(45.0, static_cast<double>(width) / height, .1, 1000.0);
+        glMatrixMode(GL_MODELVIEW);
+        glPushMatrix();
+        glLoadIdentity();
+        menuRenderer.RenderMenu(scene.uiData->menu);
+        hudRenderer.RenderDebugInfo(scene.uiData->debug);
+        glPopMatrix();
+        glMatrixMode(GL_PROJECTION);
+        glPopMatrix();
+        glMatrixMode(matrixMode);
+        glPopAttrib();
+    }
+#endif
+    glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
+    glScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
+    if (scissorEnabled) glEnable(GL_SCISSOR_TEST);
 }
 
 void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIndex)
@@ -311,7 +350,6 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
                 HUDMeterRenderer::Render(resourceManager, *hud);
                 TextRenderer::Render(resourceManager, TextRenderer::PlayerLines(*hud, viewportManager.GetViewport(playerIndex).width));
             }
-            menuRenderer.RenderMenu(scene.uiData->menu);
         }
         return;
     }
@@ -326,16 +364,6 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
     // Render player-specific HUD if we have HUD data for this player
     if (const auto* hud = HUDLayout::FindPlayer(uiData.playerHUDs, playerIndex)) {
         hudRenderer.RenderPlayerHUD(*hud);
-    }
-    
-    // Render menu if visible (menu is global, not player-specific)
-    if (uiData.menu.isVisible) {
-        menuRenderer.RenderMenu(uiData.menu);
-    }
-    
-    // Render debug info if enabled (only for player 0 to avoid duplication)
-    if (playerIndex == 0 && uiData.debug.showDebugInfo) {
-        hudRenderer.RenderDebugInfo(uiData.debug);
     }
 #endif
 }

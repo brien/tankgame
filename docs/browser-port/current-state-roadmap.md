@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-21
+**Status date:** 2026-10-22
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -24,6 +24,25 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 owned UI snapshots and global menu slice (2026-10-21–22)
+
+SceneData now owns immutable UI snapshots, fixing the per-frame allocation leak
+from SceneDataBuilder's released raw pointer. Copies retain ownership; Clear and
+replacement release it. Menu selection and diagnostics now render once after all
+player views against the whole drawable in both backends, while HUD/targeting/FPS
+remain player-local. The global pass restores viewport, scissor and camera state.
+
+Native and browser Release builds pass, as do all 135 GL-enabled native tests.
+Six Linux cases per backend verify visible menu selection against a single global
+reference, unchanged depth, restored viewport and clean GL probes. Browser gameplay
+has four clean WebGL probes, stable GPU uploads and clean shutdown. See the
+[implementation and evidence](../../documentation/global-ui-2026-10-21/README.md).
+
+This completes UI ownership/global scope, not R5. Additional text, legacy UI/font
+reachability cleanup and the explicit compatibility-retirement decision remain.
+Compatibility stays the native default. Windows/macOS runtime and multiplayer
+robustness deferrals are unchanged.
 
 ## R5 cached diagnostic text slice (2026-10-20–21)
 
