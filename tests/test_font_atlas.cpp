@@ -1,7 +1,20 @@
 #include <gtest/gtest.h>
 #include "rendering/FontAtlas.h"
 #include "rendering/TextRenderer.h"
+#include "GraphicsTask.h"
 #include <SDL2/SDL_ttf.h>
+
+TEST(FontAtlasTest, GraphicsTaskConstructionDoesNotAcquireTtf) {
+    // Construction precedes resource initialization and must not open an unused
+    // legacy font or retain a TTF reference across the catalogue's scoped loads.
+    const int initialized = TTF_WasInit();
+    {
+        GraphicsTask graphics;
+        EXPECT_EQ(TTF_WasInit(), initialized);
+        EXPECT_EQ(graphics.resourceManager, nullptr);
+    }
+    EXPECT_EQ(TTF_WasInit(), initialized);
+}
 
 TEST(FontAtlasTest, BundledFontProducesBoundedRgbaGlyphsAndCoverage) {
     const int initialized = TTF_WasInit();

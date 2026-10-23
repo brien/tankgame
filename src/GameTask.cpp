@@ -59,7 +59,6 @@ bool GameTask::Start()
         App::GetSingleton().graphicsTask->cams[i].SetPos(40.0, 60.0, 40.0);
         App::GetSingleton().graphicsTask->cams[i].SetFocus(30.0, 0.0, 40.0);
     }
-    App::GetSingleton().graphicsTask->drawHUD = false;
 
     LevelHandler::GetSingleton().Load("./levels/title@@.txt");
 
@@ -141,7 +140,6 @@ void GameTask::HandleCommonState()
 
 void GameTask::HandleMenuState()
 {
-    App::GetSingleton().graphicsTask->drawMenu = true;
     // Update GameWorld for menu effects (now handles FX through GameWorld)
     gameWorld.Update();
 
@@ -222,9 +220,6 @@ void GameTask::HandlePlayingState()
             LevelHandler::GetSingleton().NextLevel(false);
         }
     }
-
-    App::GetSingleton().graphicsTask->drawHUD = true;
-    App::GetSingleton().graphicsTask->drawMenu = false;
 
     // Process events first (handles collision queries, notifications, etc.)
     Events::ProcessQueuedEvents();

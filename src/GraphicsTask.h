@@ -18,7 +18,6 @@
 #include <GL/gl.h>
 #endif
 
-#include <SDL2/SDL_ttf.h>
 #include <memory>
 
 #include "ITask.h"
@@ -43,10 +42,9 @@
 class GraphicsTask : public ITask
 {
 public:
-    GraphicsTask();
+    GraphicsTask() = default;
     ~GraphicsTask() = default;
 
-    TTF_Font *defaultFont;
     ResourceManager& Resources() { return *resourceManager; }
     const ResourceManager& Resources() const { return *resourceManager; }
     
@@ -66,11 +64,7 @@ public:
     ItemRenderer itemRenderer;       // Handles all item/power-up rendering
     TankRenderer tankRenderer;     // Handles all tank rendering
     
-    void DrawHUD(Tank& player);
-    void DrawMenu(int option);
     void DrawSky();
-    void DrawTextTest();
-    void RenderText(const TTF_Font* Font, const GLubyte& R, const GLubyte& G, const GLubyte& B, const double& X, const double& Y, const double& Z, const char* Text);
     
     // Centralized rendering methods
     void InitializeNewRenderingPipeline();
@@ -82,10 +76,6 @@ public:
     void Update();
     void Stop();
     
-    bool drawHUD = true;
-    bool drawMenu = false;
 private:
     class GameWorld* gameWorld = nullptr;  // Non-owning pointer to GameWorld (owned by GameTask)
-    
-    void RenderLegacyUIElements();  // Legacy HUD/UI rendering
 };

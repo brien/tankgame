@@ -1,0 +1,29 @@
+[  1%] Built target gtest
+[  2%] Built target gtest_main
+[  3%] Built target gmock
+[  4%] Built target gmock_main
+[  5%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Bullet.cpp.o
+[  5%] Building CXX object src/CMakeFiles/tankgame-linux.dir/FX.cpp.o
+[  6%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GameCubeInputHandler.cpp.o
+[  7%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/Bullet.cpp.o
+[  8%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GameTask.cpp.o
+[  9%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GenericJoystickInputHandler.cpp.o
+[ 10%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GraphicsTask.cpp.o
+[ 11%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/FX.cpp.o
+[ 11%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/GameCubeInputHandler.cpp.o
+[ 12%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/GameTask.cpp.o
+[ 13%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Item.cpp.o
+[ 13%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/GenericJoystickInputHandler.cpp.o
+[ 13%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/GraphicsTask.cpp.o
+[ 13%] Building CXX object src/CMakeFiles/tankgame-linux.dir/KeyboardMouseInputHandler.cpp.o
+[ 13%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/Item.cpp.o
+[ 13%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Player.cpp.o
+[ 14%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/KeyboardMouseInputHandler.cpp.o
+[ 14%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/LevelHandler.cpp.o
+[ 14%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/Player.cpp.o
+[ 15%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux
+[ 50%] Built target tankgame-linux
+[ 51%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/PlayerManager.cpp.o
+[ 51%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/Tank.cpp.o
+[ 52%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame_tests
+[100%] Built target tankgame_tests
