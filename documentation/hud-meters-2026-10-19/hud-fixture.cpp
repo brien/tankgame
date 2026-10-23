@@ -21,7 +21,7 @@ int main() {
     graphics.resourceManager.reset(new ResourceManager);
     auto& resources = graphics.Resources();
     if (!resources.Initialize()) return 2;
-    HUDRenderer reference;
+    HUDRenderer reference(resources);
     if (!reference.Initialize()) return 3;
     const bool modern = RendererMode::IsModern();
     for (int players = 1; players <= 2; ++players) {
@@ -94,5 +94,5 @@ int main() {
             std::printf("players=%d scenario=%d depth unchanged; GL_NO_ERROR%s\n",players,scenario,modern?"; state/context restored":"");
         }
     }
-    reference.Cleanup(); resources.Cleanup(); TTF_CloseFont(graphics.defaultFont); video.Stop();
+    reference.Cleanup(); resources.Cleanup(); video.Stop();
 }

@@ -1,0 +1,77 @@
+-- Using the multi-header code from /home/deck/Dropbox/work/Programming/tankgame/build-browser/_deps/nlohmann_json-src/include/
+-- Configuring done (1.6s)
+-- Generating done (0.1s)
+-- Build files have been written to: /home/deck/Dropbox/work/Programming/tankgame/build-browser
+[  2%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Bullet.cpp.o
+[  2%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Camera.cpp.o
+[  4%] Building CXX object src/CMakeFiles/tankgame-linux.dir/DisplayList.cpp.o
+[  5%] Building CXX object src/CMakeFiles/tankgame-linux.dir/FX.cpp.o
+[  6%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GameCubeInputHandler.cpp.o
+[  8%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GameTask.cpp.o
+[  9%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GameWorld.cpp.o
+[ 11%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GenericJoystickInputHandler.cpp.o
+[ 12%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Geometry.cpp.o
+[ 13%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GeometryBuffer.cpp.o
+[ 15%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GlobalTimer.cpp.o
+[ 16%] Building CXX object src/CMakeFiles/tankgame-linux.dir/GraphicsTask.cpp.o
+[ 18%] Building CXX object src/CMakeFiles/tankgame-linux.dir/InputHandlerFactory.cpp.o
+[ 19%] Building CXX object src/CMakeFiles/tankgame-linux.dir/InputTask.cpp.o
+[ 20%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Item.cpp.o
+[ 22%] Building CXX object src/CMakeFiles/tankgame-linux.dir/KeyboardMouseInputHandler.cpp.o
+[ 23%] Building CXX object src/CMakeFiles/tankgame-linux.dir/LevelHandler.cpp.o
+[ 25%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Logger.cpp.o
+[ 26%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Player.cpp.o
+[ 27%] Building CXX object src/CMakeFiles/tankgame-linux.dir/PlayerManager.cpp.o
+[ 29%] Building CXX object src/CMakeFiles/tankgame-linux.dir/SoundTask.cpp.o
+[ 30%] Building CXX object src/CMakeFiles/tankgame-linux.dir/Tank.cpp.o
+[ 31%] Building CXX object src/CMakeFiles/tankgame-linux.dir/TankCollisionHelper.cpp.o
+[ 33%] Building CXX object src/CMakeFiles/tankgame-linux.dir/TankHandler.cpp.o
+[ 34%] Building CXX object src/CMakeFiles/tankgame-linux.dir/TankTypeManager.cpp.o
+[ 36%] Building CXX object src/CMakeFiles/tankgame-linux.dir/TaskHandler.cpp.o
+[ 37%] Building CXX object src/CMakeFiles/tankgame-linux.dir/TextureHandler.cpp.o
+[ 38%] Building CXX object src/CMakeFiles/tankgame-linux.dir/VideoTask.cpp.o
+[ 40%] Building CXX object src/CMakeFiles/tankgame-linux.dir/collision/CollisionSystem.cpp.o
+[ 41%] Building CXX object src/CMakeFiles/tankgame-linux.dir/combat/CombatSystem.cpp.o
+[ 43%] Building CXX object src/CMakeFiles/tankgame-linux.dir/igtl_qmesh.cpp.o
+[ 44%] Building CXX object src/CMakeFiles/tankgame-linux.dir/main.cpp.o
+[ 45%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/BaseRenderer.cpp.o
+[ 47%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/BulletDataExtractor.cpp.o
+[ 48%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/BulletRenderer.cpp.o
+[ 50%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/CameraManager.cpp.o
+[ 51%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/DebugLineRenderer.cpp.o
+[ 52%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/EffectDataExtractor.cpp.o
+[ 54%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/EffectRenderer.cpp.o
+[ 55%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/EnemyTankRendererImpl.cpp.o
+[ 56%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/FontAtlas.cpp.o
+[ 58%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/GLFunctions.cpp.o
+[ 59%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/GpuGeometry.cpp.o
+[ 61%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/GpuTexture.cpp.o
+[ 62%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/GraphicsCapabilities.cpp.o
+[ 63%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/HUDDataExtractor.cpp.o
+[ 65%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/HUDLayout.cpp.o
+[ 66%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/HUDMeterRenderer.cpp.o
+[ 68%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/HUDRenderer.cpp.o
+[ 69%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/IRenderer.cpp.o
+[ 70%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/ImageData.cpp.o
+[ 72%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/ItemDataExtractor.cpp.o
+[ 73%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/ItemRenderer.cpp.o
+[ 75%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/Matrix4.cpp.o
+[ 76%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/MenuRenderer.cpp.o
+[ 77%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/ModernRenderer.cpp.o
+[ 79%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/PlayerTankRenderer.cpp.o
+[ 80%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/PlayerTankRendererImpl.cpp.o
+[ 81%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/RenderContext.cpp.o
+[ 83%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/RendererMode.cpp.o
+[ 84%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/RenderingPipeline.cpp.o
+[ 86%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/ResourceManager.cpp.o
+[ 87%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/SceneDataBuilder.cpp.o
+[ 88%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TankDataExtractor.cpp.o
+[ 90%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TankRendererFactory.cpp.o
+[ 91%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TargetingLineRenderer.cpp.o
+[ 93%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TerrainGeometry.cpp.o
+[ 94%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TerrainRenderer.cpp.o
+[ 95%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TextRenderer.cpp.o
+[ 97%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/ViewportManager.cpp.o
+[ 98%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/BrowserDeferredRenderers.cpp.o
+[100%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux.html
+[100%] Built target tankgame-linux

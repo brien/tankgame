@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-22
+**Status date:** 2026-10-23
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -24,6 +24,28 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 active HUD consolidation (2026-10-23)
+
+The pipeline now routes player HUD and global diagnostics through one shared
+`HUDRenderer`, including in Emscripten. Modern targeting, meters and cached text
+retain their existing passes. Compatibility meters consume the same GL-free
+`HUDLayout` as modern rendering and restore their fixed-function state/matrices.
+The browser HUD substitute, duplicate meter calculations, unused HUD menu/text
+helpers and cached icon IDs are removed. Resources are borrowed explicitly from
+the pipeline catalogue instead of the App singleton.
+
+Native/browser Release builds and all 136 GL-enabled native tests pass. Ten Linux
+HUD fixture pairs match exactly, including the pre-change compatibility captures;
+both backends preserve meter-pass depth, state and camera matrices. Browser
+menu/gameplay/firing/shutdown passes four clean WebGL probes with stable uploads.
+See [implementation and evidence](../../documentation/hud-consolidation-2026-10-23/README.md).
+
+This completes active HUD/deferred-HUD consolidation, not all of R5. Additional UI
+text and the explicit compatibility-retirement decision remain. Compatibility
+text remains a placeholder; compatibility targeting retains its native reference.
+The unified tank browser substitute remains. Native defaults, Windows/macOS
+runtime deferrals and multiplayer robustness scope are unchanged.
 
 ## R5 unreachable legacy UI and font cleanup (2026-10-22)
 
