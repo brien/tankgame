@@ -1,0 +1,4 @@
+VideoTask::Start: graphics context ready at 1280x720.
+players=1: visible text, stable atlas, unchanged depth, restored state; GL_NO_ERROR
+players=2: visible text, stable atlas, unchanged depth, restored state; GL_NO_ERROR
+split seam clipped; scissor restored; GL_NO_ERROR

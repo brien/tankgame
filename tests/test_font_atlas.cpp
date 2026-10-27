@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <limits>
 #include "rendering/FontAtlas.h"
 #include "rendering/TextRenderer.h"
 #include "GraphicsTask.h"
@@ -60,4 +61,51 @@ TEST(UITextTest, PlayerVisibilityAndGlobalDebugFlagsAreIndependent) {
     debug.showPerformanceStats = false;
     ASSERT_EQ(TextRenderer::DebugLines(debug).size(), 2u);
     EXPECT_EQ(TextRenderer::DebugLines(debug)[0].text, "Calls: 0");
+}
+
+TEST(UITextTest, StatusUsesPlayerValuesColorsAndIndependentVisibility) {
+    HUDRenderData hud;
+    hud.health = 37; hud.maxHealth = 150;
+    hud.energy = 12; hud.maxEnergy = 200;
+    hud.comboNumber = 7; hud.special = 125;
+    hud.showFPSCounter = false;
+    const auto lines = TextRenderer::StatusLines(hud, 801, 301);
+    ASSERT_EQ(lines.size(), 4u);
+    EXPECT_EQ(lines[0].text, "Health: 37 / 150");
+    EXPECT_EQ(lines[1].text, "Energy: 12 / 200");
+    EXPECT_EQ(lines[2].text, "Combo: 7");
+    EXPECT_EQ(lines[3].text, "Special: 125");
+    EXPECT_FLOAT_EQ(lines[0].color.x, hud.healthColor.x);
+    EXPECT_FLOAT_EQ(lines[1].color.y, hud.energyColor.y);
+    EXPECT_FLOAT_EQ(lines[2].color.z, hud.comboColor.z);
+    EXPECT_FLOAT_EQ(lines[3].color.x, hud.specialColor.x);
+    hud.showHealthBar = hud.showComboMeter = false;
+    const auto hidden = TextRenderer::StatusLines(hud, 801, 301);
+    ASSERT_EQ(hidden.size(), 2u);
+    EXPECT_EQ(hidden[0].text, lines[1].text);
+    EXPECT_EQ(hidden[1].text, lines[3].text);
+    EXPECT_EQ(hidden[0].y, lines[1].y);
+    EXPECT_EQ(hidden[1].y, lines[3].y);
+    hud.showEnergyBar = hud.showSpecialMeter = false;
+    EXPECT_TRUE(TextRenderer::StatusLines(hud, 801, 301).empty());
+}
+
+TEST(UITextTest, StatusUsesLocalViewportAndHandlesInvalidNumbers) {
+    HUDRenderData hud;
+    const auto full = TextRenderer::StatusLines(hud, 801, 601);
+    const auto split = TextRenderer::StatusLines(hud, 801, 300);
+    ASSERT_EQ(full.size(), split.size());
+    for (std::size_t i = 0; i < full.size(); ++i) {
+        EXPECT_FLOAT_EQ(full[i].y - split[i].y, 301);
+        EXPECT_GE(split[i].y, 0);
+        EXPECT_LT(split[i].y + 18, 300);
+    }
+    EXPECT_TRUE(TextRenderer::StatusLines(hud, 0, 300).empty());
+    EXPECT_TRUE(TextRenderer::StatusLines(hud, 801, 0).empty());
+    hud.health = std::numeric_limits<float>::quiet_NaN();
+    hud.energy = std::numeric_limits<float>::infinity();
+    hud.maxEnergy = 0;
+    const auto invalid = TextRenderer::StatusLines(hud, 801, 300);
+    EXPECT_EQ(invalid[0].text, "Health: ? / 100");
+    EXPECT_EQ(invalid[1].text, "Energy: ? / 0");
 }

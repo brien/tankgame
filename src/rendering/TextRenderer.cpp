@@ -32,12 +32,54 @@ std::vector<UITextLine> TextRenderer::DebugLines(const DebugRenderData& data) {
     return lines;
 }
 
+std::vector<UITextLine> TextRenderer::StatusLines(const HUDRenderData& data, int width, int height) {
+    // Fixed rows keep changing values and visibility from moving other labels.
+    // Coordinates are local to the current drawable viewport, including splits.
+    if (width <= 0 || height <= 0) return {};
+    const float top = float(std::max(0, height - 96));
+    const auto number = [](float value) {
+        if (!std::isfinite(value)) return std::string("?");
+        char text[64];
+        std::snprintf(text, sizeof(text), "%.0f", value);
+        return std::string(text);
+    };
+    std::vector<UITextLine> lines;
+    if (data.showHealthBar)
+        lines.push_back({"Health: " + number(data.health) + " / " + number(data.maxHealth),
+            12, top, data.healthColor});
+    if (data.showEnergyBar)
+        lines.push_back({"Energy: " + number(data.energy) + " / " + number(data.maxEnergy),
+            12, top + 22, data.energyColor});
+    if (data.showComboMeter)
+        lines.push_back({"Combo: " + std::to_string(data.comboNumber),
+            12, top + 44, data.comboColor});
+    if (data.showSpecialMeter)
+        lines.push_back({"Special: " + number(data.special),
+            12, top + 66, data.specialColor});
+    return lines;
+}
+
 void TextRenderer::Render(ResourceManager& resources, const std::vector<UITextLine>& lines) {
     GLint viewport[4];
     glGetIntegerv(GL_VIEWPORT, viewport);
     if (lines.empty() || viewport[2] <= 0 || viewport[3] <= 0 || !resources.GetFontTexture()) return;
     const GLboolean depth = glIsEnabled(GL_DEPTH_TEST), blend = glIsEnabled(GL_BLEND);
     const GLboolean cull = glIsEnabled(GL_CULL_FACE);
+    const GLboolean scissor = glIsEnabled(GL_SCISSOR_TEST);
+    GLint scissorBox[4];
+    glGetIntegerv(GL_SCISSOR_BOX, scissorBox);
+    // A viewport transforms geometry but does not clip it. Keep long status
+    // values and very small split views inside their owning player's rectangle.
+    int left = viewport[0], bottom = viewport[1];
+    int right = left + viewport[2], top = bottom + viewport[3];
+    if (scissor) {
+        left = std::max(left, scissorBox[0]);
+        bottom = std::max(bottom, scissorBox[1]);
+        right = std::min(right, scissorBox[0] + scissorBox[2]);
+        top = std::min(top, scissorBox[1] + scissorBox[3]);
+    }
+    glEnable(GL_SCISSOR_TEST);
+    glScissor(left, bottom, std::max(0, right - left), std::max(0, top - bottom));
     GLboolean depthWrite;
     GLint srcRGB, dstRGB, srcAlpha, dstAlpha, equationRGB, equationAlpha, activeTexture, texture0;
     glGetBooleanv(GL_DEPTH_WRITEMASK, &depthWrite);
@@ -82,4 +124,6 @@ void TextRenderer::Render(ResourceManager& resources, const std::vector<UITextLi
     if (depth) glEnable(GL_DEPTH_TEST);
     if (blend) glEnable(GL_BLEND); else glDisable(GL_BLEND);
     if (cull) glEnable(GL_CULL_FACE);
+    glScissor(scissorBox[0], scissorBox[1], scissorBox[2], scissorBox[3]);
+    if (!scissor) glDisable(GL_SCISSOR_TEST);
 }
