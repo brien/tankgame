@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-23
+**Status date:** 2026-10-27
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -24,6 +24,26 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R5 player status text slice (2026-10-27)
+
+Modern native and Emscripten now display health/maximum, energy/maximum, combo
+count and special charge from each player's existing HUD snapshot. Labels follow
+meter visibility and colours, remain anchored to the local viewport, and reuse
+the catalogue's font atlas and glyph geometry. Text submission clips to the
+viewport intersected with any incoming scissor, preserving split-screen isolation
+and restoring the caller's scissor state.
+
+Native/browser Release builds pass, as do all 138 GL-enabled native tests. Linux
+one-/two-view text fixtures verify distinct player values, stable atlas identity,
+unchanged depth, state restoration, scissor intersection and seam clipping. Browser
+menu/gameplay/firing/shutdown passes four clean WebGL probes with stable uploads.
+See [implementation and evidence](../../documentation/hud-status-text-2026-10-27/README.md).
+
+This completes the player status text slice, not all of R5. Other UI text coverage
+and the explicit compatibility-retirement decision remain. Compatibility remains
+the native default with its existing text policy. Windows/macOS runtime and
+multiplayer robustness deferrals are unchanged.
 
 ## R5 active HUD consolidation (2026-10-23)
 

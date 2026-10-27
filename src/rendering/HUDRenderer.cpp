@@ -20,6 +20,7 @@ void HUDRenderer::RenderPlayerHUD(const HUDRenderData& data) {
         TargetingLineRenderer::Render(resources, data);
         HUDMeterRenderer::Render(resources, data);
         TextRenderer::Render(resources, TextRenderer::PlayerLines(data, viewport[2]));
+        TextRenderer::Render(resources, TextRenderer::StatusLines(data, viewport[2], viewport[3]));
         return;
     }
 #ifndef __EMSCRIPTEN__

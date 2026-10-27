@@ -10,6 +10,7 @@ struct UITextLine {
 };
 namespace TextRenderer {
 std::vector<UITextLine> PlayerLines(const HUDRenderData& data, int width);
+std::vector<UITextLine> StatusLines(const HUDRenderData& data, int width, int height);
 std::vector<UITextLine> DebugLines(const DebugRenderData& data);
 void Render(ResourceManager& resources, const std::vector<UITextLine>& lines);
 }

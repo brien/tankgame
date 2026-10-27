@@ -1,0 +1,70 @@
+{
+  "probes": [
+    {
+      "label": "title",
+      "menu": 31,
+      "text": 0,
+      "globalText": 0,
+      "statusText": 0,
+      "targeting": 0,
+      "bars": 0,
+      "icons": 0,
+      "uploads": 0,
+      "textureUploads": 0,
+      "minEnergyWidth": 1,
+      "maxEnergyWidth": 0,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "playing",
+      "menu": 70,
+      "text": 4407,
+      "globalText": 4111,
+      "statusText": 1628,
+      "targeting": 35,
+      "bars": 148,
+      "icons": 74,
+      "uploads": 4,
+      "textureUploads": 0,
+      "minEnergyWidth": 0.39990234375,
+      "maxEnergyWidth": 0.39990234375,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "firing",
+      "menu": 70,
+      "text": 8912,
+      "globalText": 8193,
+      "statusText": 3908,
+      "targeting": 85,
+      "bars": 360,
+      "icons": 180,
+      "uploads": 4,
+      "textureUploads": 0,
+      "minEnergyWidth": 0.0005331039428710938,
+      "maxEnergyWidth": 0.39990234375,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "cached",
+      "menu": 70,
+      "text": 11120,
+      "globalText": 10194,
+      "statusText": 5025,
+      "targeting": 109,
+      "bars": 464,
+      "icons": 232,
+      "uploads": 4,
+      "textureUploads": 0,
+      "minEnergyWidth": 0.0005331039428710938,
+      "maxEnergyWidth": 0.39990234375,
+      "error": 0,
+      "lost": false
+    }
+  ],
+  "errors": [],
+  "output": "We compiled against SDL version 2.28.4 ...\nBut we are linking against SDL version 2.28.4.\nVideoTask::Start: graphics context ready at 1280x720.\nGraphicsTask::Starting\nBulletRenderer initialized successfully\nEffectRenderer initialized successfully\nBrowser renderer unavailable: compatibility unified tank renderer is intentionally deferred; visual submission will be skipped.\nGraphicsTask: Initializing new centralized rendering pipeline\nRenderingPipeline initializing... \nBulletRenderer initialized successfully\nEffectRenderer initialized successfully\nRenderingPipeline Initialized Successfully: 1\nGraphicsTask: New rendering pipeline initialized successfully\nGraphicsTask::Started\nRenderer mode: modern\nLevelHandler: Successfully loaded metadata from: ./levels/title@@.json\nLevelHandler: finished loading file: ./levels/title@@.txt  \nGameWorld::Initialize() - Starting\nCollisionSystem::Initialize() - Subscribing to collision query events\nCollisionSystem::Initialize() - Subscriptions complete\nGameWorld initialized with collision and combat systems\nGraphicsTask: Setting GameWorld and recreating SceneDataBuilder\nGameTask: OnResume - Initializing systems...\nGameTask: Initializing PlayerManager...\nPlayerManager: Initialize called with GameWorld\nPlayerManager: Creating initial player...\nCreated Player 0\nPlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1\nPlayerManager: Player 0 using keyboard/mouse input mode\nPlayerManager: Input handler created successfully for player 0\nPlayerManager: Claiming existing tanks from TankHandler...\nPlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly\nPlayerManager: No valid tank found for Player 0 in TankHandler\nPlayerManager: Setting up controllers and input with synced preferences...\nPlayerManager: Detected 0 joysticks\nPlayerManager: Keeping TankHandler input preference isInputJoy=0\nPlayerManager: Using keyboard/mouse input (from TankHandler)\nPlayerManager: Keeping numPlayers=1 from initialization\nPlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1\nPlayerManager: Player 0 using keyboard/mouse input mode\nPlayerManager: Input handler created successfully for player 0\nPlayerManager: Initialized with 1 players\nPlayerManager initialized with 1 players\nGameTask: OnResume complete\nInitialization complete.\nRegistering non-blocking Emscripten browser frame loop.\nLevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)\nBrowser first frame completed: WebGL clear/render/swap path executed.\nBrowser perf: fps=40.79 avg_ms=24.517 recent_ms=17.000 max_ms=295.400 tick_ms=6.576 frames=41 interval_ms=1005.200\nGameWorld entities - Tanks: 0, Bullets: 0, Items: 0, Effects: 0 | FPS: 62.5\nGameTask: Setting up new game...\nGameTask: Cleared event queue\nLevelHandler: Successfully loaded metadata from: levels/level0@@.json\nLevelHandler: finished loading file: levels/level0@@.txt  \nGameTask: Spawning player tanks via PlayerManager...\n>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)\nPlayer 0: GameWorld::CreateTank returned tank=0x30e368\nPlayer 0: Tank position set to (14.00, 2.00, 113.00)\nPlayer 0: Tank::Init() completed\nTank collision layer updated to PLAYER_TANKS\nPlayer 0 took control of tank\nPlayer 0: TakeControlOf completed - identity set to PLAYER\nGameTask: Player tanks spawned\nGameTask: Game setup complete\nLevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)\nBrowser perf: fps=41.45 avg_ms=24.124 recent_ms=39.300 max_ms=77.500 tick_ms=24.052 frames=42 interval_ms=1013.200\nBrowser perf: fps=23.73 avg_ms=42.142 recent_ms=43.900 max_ms=54.300 tick_ms=41.742 frames=24 interval_ms=1011.400\nGameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 12 | FPS: 26.3\nBrowser perf: fps=22.24 avg_ms=44.961 recent_ms=40.200 max_ms=134.700 tick_ms=40.417 frames=23 interval_ms=1034.100\nBrowser perf: fps=24.57 avg_ms=40.696 recent_ms=42.100 max_ms=47.100 tick_ms=40.076 frames=25 interval_ms=1017.400\nBrowser perf: fps=19.45 avg_ms=51.415 recent_ms=44.200 max_ms=187.400 tick_ms=44.395 frames=20 interval_ms=1028.300\nGameWorld entities - Tanks: 6, Bullets: 6, Items: 0, Effects: 0 | FPS: 24.4\nBrowser perf: fps=23.59 avg_ms=42.383 recent_ms=42.200 max_ms=61.200 tick_ms=41.154 frames=24 interval_ms=1017.200\nGraphicsTask: Cleaning up new rendering pipeline\nEffectRenderer cleaned up\nBulletRenderer cleaned up\nTerrainRenderer cleaned up \nGraphicsTask: New rendering pipeline cleanup complete\nTerrainRenderer cleaned up \nBulletRenderer cleaned up\nEffectRenderer cleaned up\nGraphicsTask: Stopped \nBrowser frame loop stopped.\n"
+}
