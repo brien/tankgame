@@ -1,9 +1,6 @@
 #include "RenderingPipeline.h"
 #include "DebugLineRenderer.h"
 #include "HUDLayout.h"
-#include "HUDMeterRenderer.h"
-#include "TargetingLineRenderer.h"
-#include "TextRenderer.h"
 #include "../App.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
@@ -25,7 +22,7 @@
 
 RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &camera,
                                      ResourceManager &resources)
-    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), effectRenderer(&resources), enemyTankRenderer(&resources), menuRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
+    : viewportManager(viewport), cameraManager(camera), resourceManager(resources), terrainRenderer(&resources), effectRenderer(&resources), enemyTankRenderer(&resources), hudRenderer(resources), menuRenderer(&resources), renderStats{0, 0, 0, 0, 0.0f}
 {
 }
 
@@ -177,7 +174,7 @@ void RenderingPipeline::RenderGlobalUI(const SceneData& scene)
         const RenderContext saved = RenderContext::Current();
         RenderContext::Current().SetProjection(projection);
         menuRenderer.RenderMenu(scene.uiData->menu);
-        TextRenderer::Render(resourceManager, TextRenderer::DebugLines(scene.uiData->debug));
+        hudRenderer.RenderDebugInfo(scene.uiData->debug);
         RenderContext::Current() = saved;
     }
 #ifndef __EMSCRIPTEN__
@@ -343,29 +340,10 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
 
 void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex)
 {
-    if (RendererMode::IsModern()) {
-        if (scene.uiData) {
-            if (const auto* hud = HUDLayout::FindPlayer(scene.uiData->playerHUDs, playerIndex)) {
-                TargetingLineRenderer::Render(resourceManager, *hud);
-                HUDMeterRenderer::Render(resourceManager, *hud);
-                TextRenderer::Render(resourceManager, TextRenderer::PlayerLines(*hud, viewportManager.GetViewport(playerIndex).width));
-            }
-        }
-        return;
-    }
-#ifndef __EMSCRIPTEN__
-    // Only render UI if we have UI data
-    if (!scene.uiData) {
-        return;
-    }
-    
-    const UIRenderData& uiData = *scene.uiData;
-    
-    // Render player-specific HUD if we have HUD data for this player
-    if (const auto* hud = HUDLayout::FindPlayer(uiData.playerHUDs, playerIndex)) {
+    if (!scene.uiData) return;
+    if (const auto* hud = HUDLayout::FindPlayer(scene.uiData->playerHUDs, playerIndex)) {
         hudRenderer.RenderPlayerHUD(*hud);
     }
-#endif
 }
 
 void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)

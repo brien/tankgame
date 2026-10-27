@@ -1,0 +1,11 @@
+VideoTask::Start: graphics context ready at 1278x717.
+players=1 scenario=0 depth unchanged; GL_NO_ERROR; state/context restored
+players=1 scenario=1 depth unchanged; GL_NO_ERROR; state/context restored
+players=1 scenario=2 depth unchanged; GL_NO_ERROR; state/context restored
+players=1 scenario=3 depth unchanged; GL_NO_ERROR; state/context restored
+players=1 scenario=4 depth unchanged; GL_NO_ERROR; state/context restored
+players=2 scenario=0 depth unchanged; GL_NO_ERROR; state/context restored
+players=2 scenario=1 depth unchanged; GL_NO_ERROR; state/context restored
+players=2 scenario=2 depth unchanged; GL_NO_ERROR; state/context restored
+players=2 scenario=3 depth unchanged; GL_NO_ERROR; state/context restored
+players=2 scenario=4 depth unchanged; GL_NO_ERROR; state/context restored

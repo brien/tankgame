@@ -1,164 +1,94 @@
 #include "HUDRenderer.h"
 #include "HUDLayout.h"
-#include "RenderData.h"
-#include "../App.h"
-#include "../TextureHandler.h"
-
-#ifdef _WIN32
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
-
-#include <cstdio>
+#include "HUDMeterRenderer.h"
+#include "TargetingLineRenderer.h"
+#include "TextRenderer.h"
+#include "ResourceManager.h"
+#include "RendererMode.h"
+#include "GLFunctions.h"
 #include <cmath>
 
-HUDRenderer::HUDRenderer() : texturesLoaded(false) {
-    // Initialize texture array
-    for (int i = 0; i < TEXTURE_COUNT; ++i) {
-        hudTextures[i] = 0;
-    }
-}
+HUDRenderer::HUDRenderer(ResourceManager& resources) : resources(resources) {}
 
-bool HUDRenderer::Initialize() {
-    bool success = true;
-    
-    // Load HUD-specific textures
-    success &= LoadHUDTextures();
-    
-    return success;
-}
+bool HUDRenderer::Initialize() { return true; }
+void HUDRenderer::Cleanup() {}
 
-void HUDRenderer::Cleanup() {
-    CleanupHUDTextures();
-}
+void HUDRenderer::RenderPlayerHUD(const HUDRenderData& data) {
+    if (RendererMode::IsModern()) {
+        GLint viewport[4];
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        TargetingLineRenderer::Render(resources, data);
+        HUDMeterRenderer::Render(resources, data);
+        TextRenderer::Render(resources, TextRenderer::PlayerLines(data, viewport[2]));
+        return;
+    }
+#ifndef __EMSCRIPTEN__
+    // Keep the native targeting reference while sharing all meter descriptions.
+    // Preserve the caller's fixed-function state and both matrix stacks.
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    GLint matrixMode;
+    glGetIntegerv(GL_MATRIX_MODE, &matrixMode);
+    glMatrixMode(GL_MODELVIEW);
+    glDisable(GL_LIGHTING);
+    glEnable(GL_COLOR_MATERIAL);
+    glDisable(GL_CULL_FACE);
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    GLFunctions::BlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+    glLineWidth(1);
+    GLFunctions::ActiveTexture(GL_TEXTURE0);
+    glDisable(GL_TEXTURE_2D);
+    if (data.showTargeting) RenderTargetingLine(data);
+    glDepthMask(GL_FALSE);
 
-void HUDRenderer::RenderPlayerHUD(const HUDRenderData& hudData) {
-    SetupHUDRenderState();
-    
-    // Render targeting line in 3D space
-    if (hudData.showTargeting) {
-        RenderTargetingLine(hudData);
-    }
-    
-    // Switch to 2D rendering for HUD elements
-    SetupHUDProjection();
-    
-    // Render HUD bars and meters
-    if (hudData.showHealthBar) {
-        RenderHealthBar(hudData);
-    }
-    
-    if (hudData.showEnergyBar) {
-        RenderEnergyBar(hudData);
-    }
-    
-    // Show action cost indicators on energy bar
-    if (hudData.showEnergyBar) RenderActionCostIndicators(hudData);
-    
-    if (hudData.showComboMeter) {
-        RenderComboMeter(hudData);
-    }
-    
-    if (hudData.showSpecialMeter) {
-        RenderSpecialMeter(hudData);
-    }
-    
-    if (hudData.showFPSCounter) {
-        RenderFPSCounter(hudData);
-    }
-    
-    // Render debug information if enabled
-    if (hudData.showDebugInfo) {
-        // Debug meter visualization
-        glBegin(GL_QUADS);
-        float debugValue = 2.0f * hudData.deltaTime;
-        ApplyColor(Vector3(1.0f, debugValue, 1.0f));
-        glVertex3f(0.50f, -0.30f, 0);
-        glVertex3f(0.50f, -0.30f + debugValue, 0);
-        glVertex3f(0.50f + 0.01f, -0.30f + debugValue, 0);
-        glVertex3f(0.50f + 0.01f, -0.30f, 0);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glTranslatef(0, 0, -1);
+    glDisable(GL_DEPTH_TEST);
+    for (const auto& draw : HUDLayout::Build(data)) {
+        if (draw.blend == HUDLayout::Blend::Opaque) glDisable(GL_BLEND);
+        else {
+            glEnable(GL_BLEND);
+            if (draw.blend == HUDLayout::Blend::Additive) glBlendFunc(GL_ONE, GL_ONE);
+            else glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        }
+        if (draw.icon != HUDLayout::Icon::None) {
+            glEnable(GL_TEXTURE_2D);
+            const auto* textures = resources.GetTextureHandler().GetTextureArray();
+            glBindTexture(GL_TEXTURE_2D, textures[draw.icon == HUDLayout::Icon::Health ? TEXTURE_HEART : TEXTURE_BANG]);
+            glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
+        } else glDisable(GL_TEXTURE_2D);
+        glColor4f(draw.color.x, draw.color.y, draw.color.z, draw.alpha);
+        glBegin(draw.shape == HUDLayout::Shape::Line ? GL_LINES :
+                draw.shape == HUDLayout::Shape::Outline ? GL_LINE_LOOP : GL_QUADS);
+        glTexCoord2f(0, 0); glVertex3f(draw.x, draw.y, 0);
+        if (draw.shape != HUDLayout::Shape::Line) {
+            glTexCoord2f(1, 0); glVertex3f(draw.x + draw.width, draw.y, 0);
+        }
+        glTexCoord2f(1, 1); glVertex3f(draw.x + draw.width, draw.y + draw.height, 0);
+        if (draw.shape != HUDLayout::Shape::Line) {
+            glTexCoord2f(0, 1); glVertex3f(draw.x, draw.y + draw.height, 0);
+        }
         glEnd();
     }
-    
-    RestoreGameProjection();
-    CleanupHUDRenderState();
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(matrixMode);
+    glPopAttrib();
+#endif
 }
 
-void HUDRenderer::RenderAllPlayerHUDs(const std::vector<HUDRenderData>& playerHUDs) {
-    for (const auto& hudData : playerHUDs) {
-        RenderPlayerHUD(hudData);
-    }
+void HUDRenderer::RenderDebugInfo(const DebugRenderData& data) {
+    // Compatibility diagnostic text was a placeholder; preserve that policy.
+    if (RendererMode::IsModern()) TextRenderer::Render(resources, TextRenderer::DebugLines(data));
 }
 
-void HUDRenderer::RenderCompleteUI(const UIRenderData& uiData) {
-    // Render player HUDs
-    RenderAllPlayerHUDs(uiData.playerHUDs);
-    
-    // Render menu if visible
-    if (uiData.menu.isVisible) {
-        RenderMenu(uiData.menu);
-    }
-    
-    // Render debug information
-    if (uiData.debug.showDebugInfo) {
-        RenderDebugInfo(uiData.debug);
-    }
-}
-
-void HUDRenderer::RenderMenu(const MenuRenderData& menuData) {
-    if (!menuData.isVisible) {
-        return;
-    }
-    
-    SetupHUDProjection();
-    SetupHUDRenderState();
-    
-    RenderMenuBackground(menuData);
-    RenderMenuOptions(menuData);
-    
-    CleanupHUDRenderState();
-    RestoreGameProjection();
-}
-
-void HUDRenderer::RenderDebugInfo(const DebugRenderData& debugData) {
-    if (!debugData.showDebugInfo) {
-        return;
-    }
-    
-    SetupHUDProjection();
-    SetupTextRenderState();
-    
-    // Render performance stats
-    if (debugData.showPerformanceStats) {
-        char buffer[64];
-        sprintf(buffer, "FPS: %.1f", debugData.averageFPS);
-        RenderHUDText(buffer, -0.9f, 0.9f, debugData.performanceColor);
-        
-        sprintf(buffer, "Frame: %.2fms", debugData.frameTime);
-        RenderHUDText(buffer, -0.9f, 0.85f, debugData.performanceColor);
-    }
-    
-    // Render render stats
-    if (debugData.showRenderStats) {
-        char buffer[64];
-        sprintf(buffer, "Calls: %d", debugData.renderCallCount);
-        RenderHUDText(buffer, -0.9f, 0.8f, debugData.debugTextColor);
-        
-        sprintf(buffer, "Tris: %d", debugData.triangleCount);
-        RenderHUDText(buffer, -0.9f, 0.75f, debugData.debugTextColor);
-    }
-    
-    CleanupTextRenderState();
-    RestoreGameProjection();
-}
-
+#ifndef __EMSCRIPTEN__
 void HUDRenderer::RenderTargetingLine(const HUDRenderData& hudData) {
     glPushMatrix();
     
@@ -167,10 +97,11 @@ void HUDRenderer::RenderTargetingLine(const HUDRenderData& hudData) {
     glDisable(GL_TEXTURE_2D);
     
     // Set targeting line color
-    ApplyColor(hudData.targetingColor);
+    glColor3f(hudData.targetingColor.x, hudData.targetingColor.y, hudData.targetingColor.z);
     
     // Setup stippled line animation
-    SetupStippledLine(hudData.targetingAnimationTime);
+    glEnable(GL_LINE_STIPPLE);
+    glLineStipple(16, static_cast<int>(hudData.targetingAnimationTime));
     
     glBegin(GL_LINE_LOOP);
     
@@ -183,349 +114,13 @@ void HUDRenderer::RenderTargetingLine(const HUDRenderData& hudData) {
     float targetX = hudData.playerPosition.x + distance * cos(angle);
     float targetZ = hudData.playerPosition.z + distance * sin(angle);
     
-    ApplyColor(Vector3(0.0f, 0.0f, 0.0f)); // Black end point
+    glColor3f(0, 0, 0); // Black end point
     glVertex3f(targetX, hudData.playerPosition.y + 0.1f, targetZ);
     
     glEnd();
     
-    CleanupStippledLine();
-    glPopMatrix();
-}
-
-void HUDRenderer::RenderHealthBar(const HUDRenderData& hudData)
-{
-    float healthBarX = -0.95f;
-    float healthBarY = 0.90f;
-    float healthBarWidth = 0.40f;
-    float healthBarHeight = 0.04f;
-    // Health bar background
-    RenderQuad(healthBarX, healthBarY, healthBarWidth, healthBarHeight, Vector3(0.2f, 0.2f, 0.2f));
-
-    // Health bar fill
-    float healthPercent = 0.0f;
-    if (hudData.maxHealth > 0.0f) {
-        healthPercent = hudData.health / hudData.maxHealth;
-        if (healthPercent > 1.0f) healthPercent = 1.0f;
-        if (healthPercent < 0.0f) healthPercent = 0.0f;
-    }
-
-    RenderQuad(healthBarX, healthBarY, healthBarWidth * healthPercent, healthBarHeight, hudData.healthColor);
-
-    // Health bar border
-    glBegin(GL_LINE_LOOP);
-    ApplyColor(Vector3(1.0f, 0.8f, 0.8f));
-    glVertex3f(healthBarX, healthBarY + healthBarHeight, 0);
-    glVertex3f(healthBarX + healthBarWidth, healthBarY + healthBarHeight, 0);
-    glVertex3f(healthBarX + healthBarWidth, healthBarY, 0);
-    glVertex3f(healthBarX, healthBarY, 0);
-    glEnd();
-    
-    // Health icon
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
-    if (texturesLoaded) {
-        float iconX = healthBarX - 0.04f;  // Position icon to the left of the bar
-        RenderTexturedQuad(iconX, healthBarY, 0.03f, healthBarHeight, 
-                          hudTextures[TEXTURE_HEALTH_ICON], Vector3(1.0f, 0.6f, 0.6f));
-    }
-    glDisable(GL_BLEND);
-}
-
-void HUDRenderer::RenderEnergyBar(const HUDRenderData& hudData) {
-    float energyBarX = -0.95f;
-    float energyBarY = 0.85f;  // Slightly below health bar (health bar is at 0.90f)
-    float energyBarWidth = 0.40f;
-    float energyBarHeight = 0.04f;
-    
-    // Energy bar background
-    RenderQuad(energyBarX, energyBarY, energyBarWidth, energyBarHeight, Vector3(0.2f, 0.2f, 0.2f));
-    
-    // Energy bar fill
-    float energyPercent = 0.0f;
-    if (hudData.maxEnergy > 0.0f) {
-        energyPercent = hudData.energy / hudData.maxEnergy;
-        if (energyPercent > 1.0f) energyPercent = 1.0f;
-        if (energyPercent < 0.0f) energyPercent = 0.0f;
-    }
-    
-    RenderQuad(energyBarX, energyBarY, energyBarWidth * energyPercent, energyBarHeight, hudData.energyColor);
-    
-    // Energy bar border
-    glBegin(GL_LINE_LOOP);
-    ApplyColor(Vector3(0.5f, 1.0f, 1.0f));
-    glVertex3f(energyBarX, energyBarY + energyBarHeight, 0);
-    glVertex3f(energyBarX + energyBarWidth, energyBarY + energyBarHeight, 0);
-    glVertex3f(energyBarX + energyBarWidth, energyBarY, 0);
-    glVertex3f(energyBarX, energyBarY, 0);
-    glEnd();
-    
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
-    // Energy icon
-    if (texturesLoaded) {
-        float iconX = energyBarX - 0.04f;  // Position icon to the left of the bar
-        RenderTexturedQuad(iconX, energyBarY, 0.03f, energyBarHeight, 
-                          hudTextures[TEXTURE_ENERGY_ICON], Vector3(0.6f, 0.6f, 1.0f));
-    }
-    glDisable(GL_BLEND);
-}
-
-void HUDRenderer::RenderActionCostIndicators(const HUDRenderData& hudData) {
-    // Show fire cost indicator on energy bar
-    float energyBarX = -0.95f;
-    float energyBarY = 0.86f;
-    float energyBarWidth = 0.29f;
-    float energyBarHeight = 0.03f;
-    
-    if (hudData.maxEnergy > 0.0f) {
-        // Fire cost indicator line
-        float fireCostPercent = hudData.fireCost / hudData.maxEnergy;
-        float indicatorX = energyBarX + energyBarWidth * fireCostPercent;
-        
-        // Draw fire cost indicator line
-        glBegin(GL_LINES);
-        ApplyColor(hudData.canFire ? Vector3(1.0f, 0.8f, 0.2f) : Vector3(0.8f, 0.4f, 0.4f)); 
-        glVertex3f(indicatorX, energyBarY, 0);
-        glVertex3f(indicatorX, energyBarY + energyBarHeight, 0);
-        glEnd();
-        
-        // Optional: Show jump cost indicator if different from fire cost
-        if (hudData.jumpCost != hudData.fireCost) {
-            float jumpCostPercent = hudData.jumpCost / hudData.maxEnergy;
-            float jumpIndicatorX = energyBarX + energyBarWidth * jumpCostPercent;
-            
-            glBegin(GL_LINES);
-            ApplyColor(Vector3(0.2f, 1.0f, 0.8f)); // Cyan for jump cost
-            glVertex3f(jumpIndicatorX, energyBarY, 0);
-            glVertex3f(jumpIndicatorX, energyBarY + energyBarHeight, 0);
-            glEnd();
-        }
-    }
-}
-
-void HUDRenderer::RenderComboMeter(const HUDRenderData& hudData) {
-    float comboPercent = hudData.combo / 100.0f;
-    
-    glBegin(GL_QUADS);
-    ApplyColor(hudData.comboColor);
-    glVertex3f(0.50f, -0.37f, 0);
-    glVertex3f(0.50f, -0.37f + comboPercent, 0);
-    glVertex3f(0.50f + 0.01f, -0.37f + comboPercent, 0);
-    glVertex3f(0.50f + 0.01f, -0.37f, 0);
-    glEnd();
-}
-
-void HUDRenderer::RenderSpecialMeter(const HUDRenderData& hudData) {
-    float specialPercent = hudData.special / 100.0f;
-    
-    // Enable blending if special not available
-    if (!hudData.hasSpecialAvailable) {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-    
-    glBegin(GL_QUADS);
-    ApplyColor(hudData.specialColor, hudData.hasSpecialAvailable ? 1.0f : 0.5f);
-    glVertex3f(0.52f, -0.37f, 0);
-    glVertex3f(0.52f, -0.37f + specialPercent, 0);
-    glVertex3f(0.52f + 0.01f, -0.37f + specialPercent, 0);
-    glVertex3f(0.52f + 0.01f, -0.37f, 0);
-    glEnd();
-    
-    // Special ability cost indicators
-    float costPercentage = hudData.fireCost / 500.0f;
-    int numIndicators = HUDLayout::SpecialIndicatorCount(hudData);
-    
-    ApplyColor(Vector3(1.0f, 1.0f, 1.0f));
-    glBegin(GL_LINES);
-    for (int i = 1; i <= numIndicators; ++i) {
-        float y = -0.37f + costPercentage * i;
-        glVertex3f(0.52f, y, 0);
-        glVertex3f(0.52f + 0.01f, y, 0);
-    }
-    
-    // Base line
-    glVertex3f(0.52f, -0.37f, 0);
-    glVertex3f(0.52f + 0.01f, -0.37f, 0);
-    glEnd();
-    
-    if (!hudData.hasSpecialAvailable) {
-        glDisable(GL_BLEND);
-    }
-}
-
-void HUDRenderer::RenderFPSCounter(const HUDRenderData& hudData) {
-    char buffer[32];
-    sprintf(buffer, "FPS: %.2f", hudData.currentFPS);
-    
-    // For now, just position it somewhere visible
-    // TODO: Implement proper text rendering when TextRenderer is available
-    // RenderHUDText(buffer, 0.6f, 0.9f, Vector3(1.0f, 1.0f, 1.0f));
-}
-
-void HUDRenderer::RenderMenuBackground(const MenuRenderData& menuData) {
-    // Simple semi-transparent background
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    
-    glBegin(GL_QUADS);
-    ApplyColor(menuData.backgroundColor, menuData.fadeAlpha * 0.8f);
-    glVertex3f(-1.0f, -1.0f, 0);
-    glVertex3f(1.0f, -1.0f, 0);
-    glVertex3f(1.0f, 1.0f, 0);
-    glVertex3f(-1.0f, 1.0f, 0);
-    glEnd();
-    
-    glDisable(GL_BLEND);
-}
-
-void HUDRenderer::RenderMenuOptions(const MenuRenderData& menuData) {
-    float startY = 0.3f;
-    float spacing = 0.1f;
-    
-    for (int i = 0; i < menuData.numOptions; ++i) {
-        bool isSelected = (i == menuData.selectedOption);
-        Vector3 color = isSelected ? menuData.selectedColor : menuData.normalColor;
-        
-        if (i < static_cast<int>(menuData.optionEnabled.size()) && !menuData.optionEnabled[i]) {
-            color = menuData.disabledColor;
-        }
-        
-        float y = startY - i * spacing;
-        RenderMenuOption(menuData.menuOptions[i], 0.0f, y, isSelected, color);
-    }
-}
-
-void HUDRenderer::RenderMenuOption(const std::string& text, float x, float y, 
-                                  bool selected, const Vector3& color) {
-    // TODO: Implement proper text rendering when TextRenderer is available
-    // For now, just render a colored quad to indicate the option
-    if (selected) {
-        glBegin(GL_QUADS);
-        ApplyColor(color);
-        glVertex3f(x - 0.2f, y - 0.02f, 0);
-        glVertex3f(x + 0.2f, y - 0.02f, 0);
-        glVertex3f(x + 0.2f, y + 0.02f, 0);
-        glVertex3f(x - 0.2f, y + 0.02f, 0);
-        glEnd();
-    }
-}
-
-void HUDRenderer::SetupHUDProjection() {
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glTranslated(0, 0, -1);
-    
-    glDisable(GL_DEPTH_TEST);
-}
-
-void HUDRenderer::RestoreGameProjection() {
-    glEnable(GL_DEPTH_TEST);
-    
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    
-    glMatrixMode(GL_MODELVIEW);
-    glPopMatrix();
-}
-
-void HUDRenderer::SetupHUDRenderState() {
-    glDisable(GL_LIGHTING);
-    glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);  // Use proper alpha blending instead of additive
-    glDisable(GL_CULL_FACE);  // Disable face culling for 2D HUD elements
-}
-
-void HUDRenderer::CleanupHUDRenderState() {
-    glDisable(GL_BLEND);
-    glDisable(GL_COLOR_MATERIAL);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_CULL_FACE);  // Restore face culling
-}
-
-void HUDRenderer::SetupTextRenderState() {
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-}
-
-void HUDRenderer::CleanupTextRenderState() {
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
-}
-
-void HUDRenderer::ApplyColor(const Vector3& color, float alpha) {
-    glColor4f(color.x, color.y, color.z, alpha);
-}
-
-void HUDRenderer::SetupStippledLine(float animationTime) {
-    glEnable(GL_LINE_STIPPLE);
-    glLineStipple(16, static_cast<int>(animationTime));
-}
-
-void HUDRenderer::CleanupStippledLine() {
     glDisable(GL_LINE_STIPPLE);
+    glPopMatrix();
 }
 
-void HUDRenderer::RenderQuad(float x, float y, float width, float height, const Vector3& color) {
-    glBegin(GL_QUADS);
-    ApplyColor(color);
-    glVertex3f(x, y, 0);
-    glVertex3f(x + width, y, 0);
-    glVertex3f(x + width, y + height, 0);
-    glVertex3f(x, y + height, 0);
-    glEnd();
-}
-
-void HUDRenderer::RenderTexturedQuad(float x, float y, float width, float height, 
-                                    unsigned int textureId, const Vector3& color) {
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, textureId);
-    
-    glBegin(GL_QUADS);
-    ApplyColor(color);
-    glTexCoord2f(0, 1);
-    glVertex3f(x, y + height, 0);
-    glTexCoord2f(1, 1);
-    glVertex3f(x + width, y + height, 0);
-    glTexCoord2f(1, 0);
-    glVertex3f(x + width, y, 0);
-    glTexCoord2f(0, 0);
-    glVertex3f(x, y, 0);
-    glEnd();
-    
-    glDisable(GL_TEXTURE_2D);
-}
-
-void HUDRenderer::RenderHUDText(const char* text, float x, float y, const Vector3& color) {
-    // TODO: Implement when TextRenderer is available in Step 22
-    // For now, this is a placeholder
-}
-
-bool HUDRenderer::LoadHUDTextures() {
-    // Get texture handler from App
-    if (!App::GetSingleton().graphicsTask) {
-        return false;
-    }
-    
-    auto* textureArray = App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray();
-    
-    // Map HUD textures to existing game textures
-    hudTextures[TEXTURE_HEALTH_ICON] = textureArray[TEXTURE_HEART];
-    hudTextures[TEXTURE_ENERGY_ICON] = textureArray[TEXTURE_BANG];
-    // TODO: Load additional HUD-specific textures as needed
-    
-    texturesLoaded = true;
-    return true;
-}
-
-void HUDRenderer::CleanupHUDTextures() {
-    // HUD textures are managed by TextureHandler, so no cleanup needed
-    texturesLoaded = false;
-}
+#endif

@@ -11,11 +11,10 @@ set(GAME_SOURCES ${SOURCES})
 list(FILTER GAME_SOURCES EXCLUDE REGEX "/main\\.cpp$")
 set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
 
-# These renderers still use desktop compatibility OpenGL throughout their
-# implementations. The browser links deferred implementations for them while
-# retaining shared modern player, enemy, terrain/water, and effect renderers.
+# Only the legacy unified tank renderer still needs a browser substitute.
+# HUD orchestration and all modern visual passes compile from shared sources.
 if(EMSCRIPTEN)
-    list(FILTER SOURCES EXCLUDE REGEX "/rendering/(HUDRenderer|TankRenderer)\\.cpp$")
+    list(FILTER SOURCES EXCLUDE REGEX "/rendering/TankRenderer\\.cpp$")
     list(APPEND SOURCES
         "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
     )

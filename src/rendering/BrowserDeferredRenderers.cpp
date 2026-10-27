@@ -1,6 +1,5 @@
 #ifdef __EMSCRIPTEN__
 
-#include "HUDRenderer.h"
 #include "TankRenderer.h"
 
 #include "../Logger.h"
@@ -14,21 +13,6 @@ void LogDeferred(const char* subsystem)
         subsystem);
 }
 }
-
-HUDRenderer::HUDRenderer() : texturesLoaded(false) {}
-
-bool HUDRenderer::Initialize()
-{
-    LogDeferred("HUD text (targeting/meters/icons use the shared renderer)");
-    return BaseRenderer::Initialize();
-}
-
-void HUDRenderer::Cleanup() { BaseRenderer::Cleanup(); }
-void HUDRenderer::RenderPlayerHUD(const HUDRenderData&) {}
-void HUDRenderer::RenderAllPlayerHUDs(const std::vector<HUDRenderData>&) {}
-void HUDRenderer::RenderCompleteUI(const UIRenderData&) {}
-void HUDRenderer::RenderMenu(const MenuRenderData&) {}
-void HUDRenderer::RenderDebugInfo(const DebugRenderData&) {}
 
 TankRenderer::TankRenderer() : animationDrift(0.0f) {}
 
