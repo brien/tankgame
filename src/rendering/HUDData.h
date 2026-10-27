@@ -1,6 +1,7 @@
 #ifndef HUDDATA_H
 #define HUDDATA_H
 
+#include <cstdint>
 #include <vector>
 #include <string>
 #include "RenderData.h"  // For Vector3
@@ -159,8 +160,8 @@ struct DebugRenderData {
     // Performance metrics
     float frameTime;                    // Current frame time in milliseconds
     float averageFPS;                   // Average FPS over time
-    int renderCallCount;                // Number of render calls this frame
-    int triangleCount;                  // Number of triangles rendered
+    std::uint64_t renderCallCount;      // Draw calls in the last completed frame
+    std::uint64_t triangleCount;        // Submitted triangles in that frame
     
     // Debug colors
     Vector3 debugTextColor;             // Color for debug text

@@ -79,6 +79,8 @@ public:
         int effectsRendered;
         int itemsRendered;
         float renderTime;
+        // Last completed frame, including every player view and global UI.
+        ModernRenderer::SubmissionStats submissions;
     };
     
     const RenderStats& GetRenderStats() const { return renderStats; }

@@ -147,9 +147,7 @@ DebugRenderData HUDDataExtractor::ExtractDebugData(bool showDebug) {
         debugData.frameTime = GlobalTimer::dT * 1000.0f; // Convert to milliseconds
         debugData.averageFPS = 1.0f / GlobalTimer::dT;
         
-        // TODO: Extract render stats from rendering pipeline when available
-        debugData.renderCallCount = 0;
-        debugData.triangleCount = 0;
+        // Submission totals are supplied by the pipeline at presentation time.
     }
     
     return debugData;

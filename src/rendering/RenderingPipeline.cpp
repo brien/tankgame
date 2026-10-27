@@ -29,6 +29,7 @@ RenderingPipeline::RenderingPipeline(ViewportManager &viewport, CameraManager &c
 bool RenderingPipeline::Initialize()
 {
     Logger::Get().Write("RenderingPipeline initializing... \n");
+    renderStats = {};
     // Initialize all specialized renderers
     bool success = true;
 
@@ -60,6 +61,7 @@ bool RenderingPipeline::Initialize()
 
 void RenderingPipeline::Cleanup()
 {
+    renderStats = {};
     // Cleanup all specialized renderers
     if (tankRenderer)
     {
@@ -143,6 +145,8 @@ void RenderingPipeline::RenderScene(const SceneData &scene, int playerIndex)
 
 void RenderingPipeline::RenderAllPlayerViews(const SceneData &scene)
 {
+    const auto* modern = resourceManager.GetModernRenderer();
+    const auto before = modern ? modern->GetSubmissionStats() : ModernRenderer::SubmissionStats{};
     // A viewport limits rasterization, but it does not limit glClear. Clear the
     // shared framebuffer once before rendering any player so that a later view
     // cannot erase an earlier one. The viewports do not overlap, so their depth
@@ -155,6 +159,9 @@ void RenderingPipeline::RenderAllPlayerViews(const SceneData &scene)
         RenderScene(scene, i);
     }
     RenderGlobalUI(scene);
+    const auto after = modern ? modern->GetSubmissionStats() : ModernRenderer::SubmissionStats{};
+    renderStats.submissions.drawCalls = after.drawCalls - before.drawCalls;
+    renderStats.submissions.triangles = after.triangles - before.triangles;
 }
 
 void RenderingPipeline::RenderGlobalUI(const SceneData& scene)
@@ -174,7 +181,12 @@ void RenderingPipeline::RenderGlobalUI(const SceneData& scene)
         const RenderContext saved = RenderContext::Current();
         RenderContext::Current().SetProjection(projection);
         menuRenderer.RenderMenu(scene.uiData->menu);
-        hudRenderer.RenderDebugInfo(scene.uiData->debug);
+        // Display the preceding complete frame so the counts include global
+        // diagnostics themselves without mutating the immutable scene snapshot.
+        auto debug = scene.uiData->debug;
+        debug.renderCallCount = renderStats.submissions.drawCalls;
+        debug.triangleCount = renderStats.submissions.triangles;
+        hudRenderer.RenderDebugInfo(debug);
         RenderContext::Current() = saved;
     }
 #ifndef __EMSCRIPTEN__

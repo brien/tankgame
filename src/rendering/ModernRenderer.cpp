@@ -140,6 +140,9 @@ void ModernRenderer::Draw(const GpuGeometry& geometry, const float* mvp,
     const GLenum mode = geometry.DrawMode() == GeometryDrawMode::LINES ? GL_LINES :
         geometry.DrawMode() == GeometryDrawMode::LINE_LOOP ? GL_LINE_LOOP : GL_TRIANGLES;
     glDrawArrays(mode, 0, static_cast<GLsizei>(geometry.VertexCount()));
+    ++submissionStats.drawCalls;
+    if (geometry.DrawMode() == GeometryDrawMode::TRIANGLES)
+        submissionStats.triangles += geometry.VertexCount() / 3;
     GLFunctions::BindBuffer(GL_ARRAY_BUFFER, 0);
 }
 

@@ -2,6 +2,11 @@
 
 #include <cstdlib>
 #include <cstring>
+#include <stdexcept>
+
+#include "rendering/ModernRenderer.h"
+#include "rendering/GpuGeometry.h"
+#include "rendering/Matrix4.h"
 
 #include "App.h"
 #include "rendering/GLFunctions.h"
@@ -69,4 +74,33 @@ TEST_F(VideoStartupTest, RefreshesDrawablePixelsAfterWindowResize)
         EXPECT_EQ(VideoTask::scrHeight, height);
     }
     EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+}
+
+// Exercise the actual submission boundary, including quad triangulation and
+// line topology, independently of the selected game renderer.
+
+TEST_F(VideoStartupTest, CountsSubmittedDrawsAndTriangles)
+{
+    ModernRenderer renderer;
+    const Matrix4 identity;
+    const BasicMaterial material;
+    const GpuGeometry quad(SimpleGeometry::CreateHorizontalSquare());
+    const GpuGeometry loop(SimpleGeometry::CreateHorizontalSquare(.5f, PrimitiveTopology::LINE_LOOP));
+    Geometry segment;
+    segment.topology = PrimitiveTopology::LINES;
+    segment.vertices.resize(2);
+    const GpuGeometry line(segment);
+    EXPECT_EQ(renderer.GetSubmissionStats().drawCalls, 0u);
+    EXPECT_THROW(renderer.Draw(quad, nullptr, material, identity.Data(), false), std::invalid_argument);
+    EXPECT_EQ(renderer.GetSubmissionStats().drawCalls, 0u);
+    renderer.Draw(quad, identity.Data(), material, identity.Data(), false);
+    renderer.Draw(quad, identity.Data(), material, identity.Data(), false);
+    renderer.Draw(loop, identity.Data(), material, identity.Data(), false);
+    renderer.Draw(line, identity.Data(), material, identity.Data(), false);
+    EXPECT_EQ(renderer.GetSubmissionStats().drawCalls, 4u);
+    EXPECT_EQ(renderer.GetSubmissionStats().triangles, 4u);
+    EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+    ModernRenderer recreated;
+    EXPECT_EQ(recreated.GetSubmissionStats().drawCalls, 0u);
+    EXPECT_EQ(recreated.GetSubmissionStats().triangles, 0u);
 }

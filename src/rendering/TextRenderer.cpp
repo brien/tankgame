@@ -4,6 +4,7 @@
 #include "GLFunctions.h"
 #include <algorithm>
 #include <cstdio>
+#include <cinttypes>
 #include <cmath>
 
 std::vector<UITextLine> TextRenderer::MenuLines(const MenuRenderData& data, int width, int height) {
@@ -42,9 +43,9 @@ std::vector<UITextLine> TextRenderer::DebugLines(const DebugRenderData& data) {
         lines.push_back({text, 12, 94, data.performanceColor});
     }
     if (data.showRenderStats) {
-        std::snprintf(text, sizeof(text), "Calls: %d", data.renderCallCount);
+        std::snprintf(text, sizeof(text), "Calls: %" PRIu64, data.renderCallCount);
         lines.push_back({text, 12, 116, data.debugTextColor});
-        std::snprintf(text, sizeof(text), "Tris: %d", data.triangleCount);
+        std::snprintf(text, sizeof(text), "Tris: %" PRIu64, data.triangleCount);
         lines.push_back({text, 12, 138, data.debugTextColor});
     }
     return lines;
