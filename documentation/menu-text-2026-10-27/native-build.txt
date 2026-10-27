@@ -1,0 +1,17 @@
+[  1%] Built target gtest
+[  2%] Built target gmock
+[  3%] Built target gtest_main
+[  4%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/HUDDataExtractor.cpp.o
+[  4%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/HUDRenderer.cpp.o
+[  5%] Built target gmock_main
+[  6%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/MenuRenderer.cpp.o
+[  6%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/rendering/HUDDataExtractor.cpp.o
+[  7%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/rendering/HUDRenderer.cpp.o
+[  7%] Building CXX object src/CMakeFiles/tankgame-linux.dir/rendering/TextRenderer.cpp.o
+[  8%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/rendering/MenuRenderer.cpp.o
+[  8%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/__/src/rendering/TextRenderer.cpp.o
+[  9%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux
+[ 47%] Built target tankgame-linux
+[ 48%] Building CXX object tests/CMakeFiles/tankgame_tests.dir/test_font_atlas.cpp.o
+[ 49%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame_tests
+[100%] Built target tankgame_tests
