@@ -146,3 +146,15 @@ TEST(UITextTest, MenuLegendHandlesHiddenDisabledAndIncompleteSnapshots) {
     menu.numOptions = -1;
     EXPECT_TRUE(TextRenderer::MenuLines(menu, 801, 301).empty());
 }
+
+TEST(TextRendererTest, FormatsLargeSubmissionCountsWithoutTruncation)
+{
+    DebugRenderData debug;
+    debug.showDebugInfo = debug.showRenderStats = true;
+    debug.renderCallCount = 4294967296ULL;
+    debug.triangleCount = 18446744073709551615ULL;
+    const auto lines = TextRenderer::DebugLines(debug);
+    ASSERT_EQ(lines.size(), 2u);
+    EXPECT_EQ(lines[0].text, "Calls: 4294967296");
+    EXPECT_EQ(lines[1].text, "Tris: 18446744073709551615");
+}

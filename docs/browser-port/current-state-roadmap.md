@@ -25,6 +25,25 @@ checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
 
+## R5 live render telemetry slice (2026-10-27)
+
+Modern native and Emscripten diagnostics now show measured draw calls and submitted
+triangles instead of placeholder zeros. The shared submission boundary counts
+actual calls; the pipeline records each complete frame across player views and
+global UI. Diagnostics show the preceding completed frame, including the debug
+text itself, without changing immutable UI snapshots. Lines count as calls only.
+
+Native/browser builds pass, as do all 142 GL-enabled native tests and modern
+startup checks. Linux one-/two-view fixtures verify frame boundaries, global text,
+unchanged depth and snapshot ownership. Browser gameplay/firing/shutdown passes
+seven clean WebGL probes with stable uploads; captured gameplay counts match the
+independent WebGL probe. See [implementation and evidence](../../documentation/render-telemetry-2026-10-27/README.md).
+
+This completes the R5 telemetry follow-up. Compatibility remains the native
+default. Broader visual approval and the explicit retirement decision remain;
+Windows/macOS runtime and multiplayer robustness deferrals are unchanged.
+Earlier dated sections retain their historical remaining-work lists.
+
 ## R5 title menu text slice (2026-10-27)
 
 Modern native and Emscripten now display a global mode legend through the existing

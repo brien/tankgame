@@ -1,0 +1,10 @@
+VideoTask::Start: graphics context ready at 1280x720.
+RenderingPipeline initializing...
+BulletRenderer initialized successfully
+EffectRenderer initialized successfully
+RenderingPipeline Initialized Successfully: 1
+players=1: frame totals, global text reference, immutable DTO, depth and GL checks passed
+players=2: frame totals, global text reference, immutable DTO, depth and GL checks passed
+EffectRenderer cleaned up
+BulletRenderer cleaned up
+TerrainRenderer cleaned up
