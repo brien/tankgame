@@ -2,6 +2,7 @@
 #include <limits>
 #include "rendering/FontAtlas.h"
 #include "rendering/TextRenderer.h"
+#include "rendering/HUDDataExtractor.h"
 #include "GraphicsTask.h"
 #include <SDL2/SDL_ttf.h>
 
@@ -108,4 +109,40 @@ TEST(UITextTest, StatusUsesLocalViewportAndHandlesInvalidNumbers) {
     const auto invalid = TextRenderer::StatusLines(hud, 801, 300);
     EXPECT_EQ(invalid[0].text, "Health: ? / 100");
     EXPECT_EQ(invalid[1].text, "Energy: ? / 0");
+}
+
+TEST(UITextTest, MenuLegendMatchesModesAndTracksSelection) {
+    for (int selected = 0; selected < 3; ++selected) {
+        const auto menu = HUDDataExtractor::ExtractMenuData(selected, true);
+        const auto lines = TextRenderer::MenuLines(menu, 801, 601);
+        ASSERT_EQ(lines.size(), 3u);
+        const char* names[] = {"Single player", "Co-op", "Versus"};
+        for (int i = 0; i < 3; ++i) {
+            EXPECT_EQ(lines[i].text, std::string(i == selected ? "> " : "  ") + names[i]);
+            EXPECT_FLOAT_EQ(lines[i].color.y, i == selected ? menu.selectedColor.y : menu.normalColor.y);
+            EXPECT_LT(lines[i].y + 18, 72);
+        }
+    }
+}
+
+TEST(UITextTest, MenuLegendHandlesHiddenDisabledAndIncompleteSnapshots) {
+    auto menu = HUDDataExtractor::ExtractMenuData(1, false);
+    EXPECT_TRUE(TextRenderer::MenuLines(menu, 801, 601).empty());
+    menu.isVisible = true;
+    EXPECT_TRUE(TextRenderer::MenuLines(menu, 0, 601).empty());
+    EXPECT_TRUE(TextRenderer::MenuLines(menu, 801, 0).empty());
+    menu.optionEnabled[1] = false;
+    auto lines = TextRenderer::MenuLines(menu, 801, 301);
+    ASSERT_EQ(lines.size(), 3u);
+    EXPECT_FLOAT_EQ(lines[1].color.y, menu.disabledColor.y);
+    menu.numOptions = 9;
+    menu.optionEnabled.clear();
+    EXPECT_EQ(TextRenderer::MenuLines(menu, 801, 301).size(), 3u);
+    menu.selectedOption = -1;
+    lines = TextRenderer::MenuLines(menu, 801, 301);
+    EXPECT_EQ(lines[0].text, "  Single player");
+    menu.menuOptions.clear();
+    EXPECT_TRUE(TextRenderer::MenuLines(menu, 801, 301).empty());
+    menu.numOptions = -1;
+    EXPECT_TRUE(TextRenderer::MenuLines(menu, 801, 301).empty());
 }

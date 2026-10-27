@@ -1,0 +1,2 @@
+[  1%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux.html
+[100%] Built target tankgame-linux

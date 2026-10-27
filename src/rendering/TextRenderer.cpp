@@ -6,6 +6,24 @@
 #include <cstdio>
 #include <cmath>
 
+std::vector<UITextLine> TextRenderer::MenuLines(const MenuRenderData& data, int width, int height) {
+    if (!data.isVisible || width <= 0 || height <= 0) return {};
+    std::vector<UITextLine> lines;
+    // A global legend complements the terrain's title artwork without placing
+    // glyphs over its baked-in labels. Keep clear of diagnostics starting at y=72.
+    const int count = std::min(std::max(0, data.numOptions),
+                               static_cast<int>(data.menuOptions.size()));
+    for (int i = 0; i < count; ++i) {
+        const bool enabled = i >= static_cast<int>(data.optionEnabled.size()) || data.optionEnabled[i];
+        const bool selected = i == data.selectedOption;
+        const Vector3 color = !enabled ? data.disabledColor :
+            (selected ? data.selectedColor : data.normalColor);
+        lines.push_back({std::string(selected ? "> " : "  ") + data.menuOptions[i],
+                         12, 12.0f + 20.0f * i, color});
+    }
+    return lines;
+}
+
 std::vector<UITextLine> TextRenderer::PlayerLines(const HUDRenderData& data, int width) {
     if (!data.showFPSCounter || width <= 0) return {};
     char text[64];

@@ -110,7 +110,8 @@ MenuRenderData HUDDataExtractor::ExtractMenuData(int menuState, bool isVisible) 
     menuData.type = MenuType::MAIN_MENU; // For now, assume main menu
     
     // Based on the original menu system, there are 3 options (0, 1, 2)
-    menuData.menuOptions = {"Start Game", "Options", "Quit"};
+    // Match GameTask::HandleMenuState: these select modes, not settings/exit.
+    menuData.menuOptions = {"Single player", "Co-op", "Versus"};
     menuData.optionEnabled = {true, true, true};
     menuData.numOptions = 3;
     

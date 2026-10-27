@@ -4,6 +4,7 @@
 #include "RenderContext.h"
 #include "RendererMode.h"
 #include "GLFunctions.h"
+#include "TextRenderer.h"
 
 MenuRenderer::MenuRenderer(ResourceManager* resources) : resources(resources) {}
 
@@ -23,6 +24,11 @@ void MenuRenderer::RenderMenu(const MenuRenderData& menuData) {
 
     if (RendererMode::IsModern()) {
         RenderModernMenu(menuData);
+        if (resources) {
+            GLint viewport[4];
+            glGetIntegerv(GL_VIEWPORT, viewport);
+            TextRenderer::Render(*resources, TextRenderer::MenuLines(menuData, viewport[2], viewport[3]));
+        }
         return;
     }
 #ifndef __EMSCRIPTEN__

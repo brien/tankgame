@@ -25,6 +25,25 @@ checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
 
+## R5 title menu text slice (2026-10-27)
+
+Modern native and Emscripten now display a global mode legend through the existing
+font atlas. Menu snapshot labels match the actual Single player / Co-op / Versus
+choices, replacing unused placeholder settings/exit labels. Selection follows
+navigation and the legend hides during gameplay. The existing global menu pass
+keeps it independent of player count and clear of the title terrain lettering.
+
+Native/browser builds and all 140 GL-enabled native tests pass. Six Linux modern
+and six compatibility fixtures verify global placement, unchanged depth and
+restored viewport state. Browser selection/gameplay/firing/shutdown passes seven
+clean WebGL probes; menu navigation performs no uploads and menu glyph submissions
+stop during gameplay. See [implementation and evidence](../../documentation/menu-text-2026-10-27/README.md).
+
+This completes the title menu text slice within R5. Broader UI/platform validation
+and the explicit compatibility-retirement decision remain. Compatibility stays
+the native default; Windows/macOS runtime and multiplayer robustness deferrals
+are unchanged. Earlier sections retain their historical remaining-work lists.
+
 ## R5 player status text slice (2026-10-27)
 
 Modern native and Emscripten now display health/maximum, energy/maximum, combo

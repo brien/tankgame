@@ -12,5 +12,6 @@ namespace TextRenderer {
 std::vector<UITextLine> PlayerLines(const HUDRenderData& data, int width);
 std::vector<UITextLine> StatusLines(const HUDRenderData& data, int width, int height);
 std::vector<UITextLine> DebugLines(const DebugRenderData& data);
+std::vector<UITextLine> MenuLines(const MenuRenderData& data, int width, int height);
 void Render(ResourceManager& resources, const std::vector<UITextLine>& lines);
 }
