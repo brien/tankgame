@@ -1,0 +1,442 @@
+{
+  "probes": [
+    {
+      "label": "playing",
+      "frames": 49,
+      "energy": 0.39990234375,
+      "uploads": 4,
+      "hidden": false,
+      "focused": true,
+      "paused": false,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "blurred",
+      "frames": 69,
+      "energy": 0.300048828125,
+      "uploads": 4,
+      "hidden": false,
+      "focused": false,
+      "paused": true,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "blurred-wait",
+      "frames": 69,
+      "energy": 0.300048828125,
+      "uploads": 4,
+      "hidden": false,
+      "focused": false,
+      "paused": true,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "hidden",
+      "frames": 69,
+      "energy": 0.300048828125,
+      "uploads": 4,
+      "hidden": true,
+      "focused": false,
+      "paused": true,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "hidden-wait",
+      "frames": 69,
+      "energy": 0.300048828125,
+      "uploads": 4,
+      "hidden": true,
+      "focused": false,
+      "paused": true,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "resumed",
+      "frames": 82,
+      "energy": 0.3935546875,
+      "uploads": 4,
+      "hidden": false,
+      "focused": true,
+      "paused": false,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "no-stale-fire",
+      "frames": 119,
+      "energy": 0.39990234375,
+      "uploads": 4,
+      "hidden": false,
+      "focused": true,
+      "paused": false,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "before-fresh-fire",
+      "frames": 132,
+      "energy": 0.39990234375,
+      "uploads": 4,
+      "hidden": false,
+      "focused": true,
+      "paused": false,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "fresh-fire",
+      "frames": 162,
+      "energy": 0.1800537109375,
+      "uploads": 4,
+      "hidden": false,
+      "focused": true,
+      "paused": false,
+      "error": 0,
+      "lost": false
+    },
+    {
+      "label": "long-gap",
+      "frames": 234,
+      "energy": 0.39990234375,
+      "uploads": 4,
+      "hidden": false,
+      "focused": true,
+      "paused": false,
+      "error": 0,
+      "lost": false
+    }
+  ],
+  "errors": [],
+  "console": [
+    {
+      "level": 2,
+      "message": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."
+    },
+    {
+      "level": 1,
+      "message": "We compiled against SDL version 2.28.4 ..."
+    },
+    {
+      "level": 1,
+      "message": "But we are linking against SDL version 2.28.4."
+    },
+    {
+      "level": 1,
+      "message": "VideoTask::Start: graphics context ready at 1280x720."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "Browser renderer unavailable: compatibility unified tank renderer is intentionally deferred; visual submission will be skipped."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline initializing... "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Started"
+    },
+    {
+      "level": 1,
+      "message": "Renderer mode: modern"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: ./levels/title@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: ./levels/title@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameWorld::Initialize() - Starting"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscribing to collision query events"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscriptions complete"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld initialized with collision and combat systems"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Setting GameWorld and recreating SceneDataBuilder"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume - Initializing systems..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Initializing PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialize called with GameWorld"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Creating initial player..."
+    },
+    {
+      "level": 1,
+      "message": "Created Player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Claiming existing tanks from TankHandler..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: No valid tank found for Player 0 in TankHandler"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up controllers and input with synced preferences..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Detected 0 joysticks"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping TankHandler input preference isInputJoy=0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Using keyboard/mouse input (from TankHandler)"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping numPlayers=1 from initialization"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume complete"
+    },
+    {
+      "level": 1,
+      "message": "Initialization complete."
+    },
+    {
+      "level": 1,
+      "message": "Registering non-blocking Emscripten browser frame loop."
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "level": 1,
+      "message": "Browser first frame completed: WebGL clear/render/swap path executed."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Setting up new game..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Cleared event queue"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": ">>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: GameWorld::CreateTank returned tank=0x30ea60"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: Tank position set to (14.00, 2.00, 113.00)"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: Tank::Init() completed"
+    },
+    {
+      "level": 1,
+      "message": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "level": 1,
+      "message": "Player 0 took control of tank"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Player tanks spawned"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Game setup complete"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=50.81 avg_ms=19.682 recent_ms=17.900 max_ms=73.000 tick_ms=18.796 frames=51 interval_ms=1003.800"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 0 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=57.94 avg_ms=17.259 recent_ms=16.700 max_ms=57.700 tick_ms=14.588 frames=58 interval_ms=1001.000"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 107 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Browser perf: fps=57.41 avg_ms=17.419 recent_ms=19.300 max_ms=34.800 tick_ms=15.360 frames=58 interval_ms=1010.300"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 30 | FPS: 55.6"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    },
+    {
+      "level": 1,
+      "message": "Browser frame loop stopped."
+    }
+  ],
+  "output": "We compiled against SDL version 2.28.4 ...\nBut we are linking against SDL version 2.28.4.\nVideoTask::Start: graphics context ready at 1280x720.\nGraphicsTask::Starting\nBulletRenderer initialized successfully\nEffectRenderer initialized successfully\nBrowser renderer unavailable: compatibility unified tank renderer is intentionally deferred; visual submission will be skipped.\nGraphicsTask: Initializing new centralized rendering pipeline\nRenderingPipeline initializing... \nBulletRenderer initialized successfully\nEffectRenderer initialized successfully\nRenderingPipeline Initialized Successfully: 1\nGraphicsTask: New rendering pipeline initialized successfully\nGraphicsTask::Started\nRenderer mode: modern\nLevelHandler: Successfully loaded metadata from: ./levels/title@@.json\nLevelHandler: finished loading file: ./levels/title@@.txt  \nGameWorld::Initialize() - Starting\nCollisionSystem::Initialize() - Subscribing to collision query events\nCollisionSystem::Initialize() - Subscriptions complete\nGameWorld initialized with collision and combat systems\nGraphicsTask: Setting GameWorld and recreating SceneDataBuilder\nGameTask: OnResume - Initializing systems...\nGameTask: Initializing PlayerManager...\nPlayerManager: Initialize called with GameWorld\nPlayerManager: Creating initial player...\nCreated Player 0\nPlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1\nPlayerManager: Player 0 using keyboard/mouse input mode\nPlayerManager: Input handler created successfully for player 0\nPlayerManager: Claiming existing tanks from TankHandler...\nPlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly\nPlayerManager: No valid tank found for Player 0 in TankHandler\nPlayerManager: Setting up controllers and input with synced preferences...\nPlayerManager: Detected 0 joysticks\nPlayerManager: Keeping TankHandler input preference isInputJoy=0\nPlayerManager: Using keyboard/mouse input (from TankHandler)\nPlayerManager: Keeping numPlayers=1 from initialization\nPlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1\nPlayerManager: Player 0 using keyboard/mouse input mode\nPlayerManager: Input handler created successfully for player 0\nPlayerManager: Initialized with 1 players\nPlayerManager initialized with 1 players\nGameTask: OnResume complete\nInitialization complete.\nRegistering non-blocking Emscripten browser frame loop.\nLevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)\nBrowser first frame completed: WebGL clear/render/swap path executed.\nGameTask: Setting up new game...\nGameTask: Cleared event queue\nLevelHandler: Successfully loaded metadata from: levels/level0@@.json\nLevelHandler: finished loading file: levels/level0@@.txt  \nGameTask: Spawning player tanks via PlayerManager...\n>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)\nPlayer 0: GameWorld::CreateTank returned tank=0x30ea60\nPlayer 0: Tank position set to (14.00, 2.00, 113.00)\nPlayer 0: Tank::Init() completed\nTank collision layer updated to PLAYER_TANKS\nPlayer 0 took control of tank\nPlayer 0: TakeControlOf completed - identity set to PLAYER\nGameTask: Player tanks spawned\nGameTask: Game setup complete\nLevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)\nBrowser perf: fps=50.81 avg_ms=19.682 recent_ms=17.900 max_ms=73.000 tick_ms=18.796 frames=51 interval_ms=1003.800\nGameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 0 | FPS: 62.5\nGameWorld entities - Tanks: 6, Bullets: 1, Items: 0, Effects: 0 | FPS: 58.8\nBrowser perf: fps=57.94 avg_ms=17.259 recent_ms=16.700 max_ms=57.700 tick_ms=14.588 frames=58 interval_ms=1001.000\nGameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 107 | FPS: 58.8\nBrowser perf: fps=57.41 avg_ms=17.419 recent_ms=19.300 max_ms=34.800 tick_ms=15.360 frames=58 interval_ms=1010.300\nGameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 30 | FPS: 55.6\nGraphicsTask: Cleaning up new rendering pipeline\nEffectRenderer cleaned up\nBulletRenderer cleaned up\nTerrainRenderer cleaned up \nGraphicsTask: New rendering pipeline cleanup complete\nTerrainRenderer cleaned up \nBulletRenderer cleaned up\nEffectRenderer cleaned up\nGraphicsTask: Stopped \nBrowser frame loop stopped.\n"
+}

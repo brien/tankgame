@@ -20,6 +20,8 @@ int InputTask::jdA[MAX_JOYSTICKS][MAX_JOYSTICKS] = {0};
 
 unsigned int InputTask::buttons = 0;
 unsigned int InputTask::oldButtons = 0;
+std::vector<Uint8> InputTask::suppressedKeys;
+unsigned int InputTask::suppressedButtons = 0;
 
 InputTask::InputTask()
 {
@@ -41,7 +43,9 @@ bool InputTask::Start()
     const Uint8 *tempKeys = SDL_GetKeyboardState(&keyCount);
     keys = new Uint8[keyCount];
     memcpy(keys, tempKeys, sizeof(Uint8) * keyCount);
-    oldKeys = new Uint8[keyCount];
+    oldKeys = new Uint8[keyCount]();
+    suppressedKeys.assign(keyCount, 0);
+    buttons = oldButtons = suppressedButtons = 0;
     dX = dY = 0;
 #ifndef __EMSCRIPTEN__
     SDL_SetRelativeMouseMode(SDL_TRUE);
@@ -56,9 +60,16 @@ void InputTask::Update()
     SDL_PumpEvents();
     oldButtons = buttons;
     buttons = SDL_GetRelativeMouseState(&dX, &dY);
+    suppressedButtons &= buttons;
+    buttons &= ~suppressedButtons;
     memcpy(oldKeys, keys, sizeof(unsigned char) * keyCount);
     const Uint8 *tempKeys = SDL_GetKeyboardState(&keyCount);
     memcpy(keys, tempKeys, sizeof(unsigned char) * keyCount);
+    for (int i = 0; i < keyCount; ++i)
+    {
+        suppressedKeys[i] &= keys[i] != 0;
+        if (suppressedKeys[i]) keys[i] = 0;
+    }
 
     for (int i = 0; i < SDL_NumJoysticks(); i++)
     {
@@ -70,6 +81,18 @@ void InputTask::Update()
             }
         }
     }
+}
+
+void InputTask::ResetForFocusChange()
+{
+    if (keys) memset(keys, 0, keyCount);
+    if (oldKeys) memset(oldKeys, 0, keyCount);
+    suppressedKeys.assign(keyCount, 1);
+    suppressedButtons = ~0u;
+    buttons = oldButtons = 0;
+    SDL_GetRelativeMouseState(nullptr, nullptr);
+    dX = dY = 0;
+    memset(jdA, 0, sizeof(jdA));
 }
 
 int InputTask::GetAxis(int joystickId, int axis)
@@ -108,7 +131,10 @@ void InputTask::Stop()
     {
         SDL_JoystickClose(joysticks[i]);
     }
+    delete[] keys;
     delete[] oldKeys;
     keys = 0;
     oldKeys = 0;
+    keyCount = 0;
+    suppressedKeys.clear();
 }

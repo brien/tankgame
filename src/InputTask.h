@@ -7,6 +7,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 using namespace std;
 
 #include <SDL2/SDL.h>
@@ -17,6 +18,8 @@ class InputTask : public ITask
 private:
     const static int MAX_JOYSTICKS = 4;
     const static int MAX_JOYSTICK_AXES = 4;
+    static std::vector<Uint8> suppressedKeys;
+    static unsigned int suppressedButtons;
 
 public:
     InputTask();
@@ -25,6 +28,9 @@ public:
     bool Start();
     void Update();
     void Stop();
+
+    // Discard stale edges/deltas; held controls must be released before reuse.
+    static void ResetForFocusChange();
 
     static SDL_Joystick *joysticks[MAX_JOYSTICKS];
     static string joynames[2];

@@ -21,6 +21,7 @@
 #include <SDL2/SDL.h>
 #ifdef __EMSCRIPTEN__
 #include <emscripten.h>
+#include "BrowserFramePolicy.h"
 #endif
 
 #include "App.h"
@@ -145,6 +146,45 @@ void App::Run(int argc, char *argv[])
 #ifdef __EMSCRIPTEN__
 namespace
 {
+// Use independent listeners: replacing Emscripten's focus callbacks would
+// interfere with SDL's own keyboard/window bookkeeping.
+EM_JS(void, InstallBrowserActivity, (), {
+    const state = {changed: true};
+    const update = () => { state.changed = true; };
+    document.addEventListener('visibilitychange', update);
+    window.addEventListener('focus', update);
+    window.addEventListener('blur', update);
+    const status = document.createElement('div');
+    status.setAttribute('role', 'status');
+    status.style.cssText = 'position:fixed;top:12px;left:50%;transform:translateX(-50%);padding:12px 20px;background:#111;color:#fff;font:16px sans-serif;z-index:1000;pointer-events:none';
+    status.textContent = 'Paused — return to this window to resume';
+    status.hidden = true;
+    document.body.appendChild(status);
+    state.status = status;
+    state.remove = () => {
+        document.removeEventListener('visibilitychange', update);
+        window.removeEventListener('focus', update);
+        window.removeEventListener('blur', update);
+        status.remove();
+    };
+    Module.tankgameActivity = state;
+});
+
+EM_JS(int, ReadBrowserActivity, (), {
+    const state = Module.tankgameActivity;
+    const hidden = document.hidden;
+    const focused = document.hasFocus();
+    state.status.hidden = !hidden && focused;
+    const flags = (hidden ? 1 : 0) | (focused ? 2 : 0) | (state.changed ? 4 : 0);
+    state.changed = false;
+    return flags;
+});
+
+EM_JS(void, RemoveBrowserActivity, (), {
+    Module.tankgameActivity.remove();
+    delete Module.tankgameActivity;
+});
+
 void BrowserFrame(void *appPointer)
 {
     // Callback spacing includes browser scheduling/presentation; Tick time is
@@ -155,14 +195,26 @@ void BrowserFrame(void *appPointer)
     static double maxFrame = 0.0;
     static unsigned frames = 0;
     const double start = emscripten_get_now();
+    App *app = static_cast<App *>(appPointer);
+    static BrowserFramePolicy policy;
+    const int activity = ReadBrowserActivity();
+    const auto decision = policy.NextFrame(start, activity & 1, activity & 2, activity & 4);
+    if (decision.reset)
+    {
+        app->globalTimer->Reset();
+        InputTask::ResetForFocusChange();
+        previousStart = elapsed = tickTime = maxFrame = 0.0;
+        frames = 0;
+    }
+    if (!decision.tick) return;
     const double frameTime = previousStart > 0.0 ? start - previousStart : 0.0;
     previousStart = start;
-    App *app = static_cast<App *>(appPointer);
     static bool firstFrame = true;
     if (!app->Tick())
     {
         Logger::Get().Write("Browser frame loop stopped.\n");
         emscripten_cancel_main_loop();
+        RemoveBrowserActivity();
         app->Shutdown();
         return;
     }
@@ -202,6 +254,7 @@ int main(int argc, char *argv[])
         return 1;
     }
     Logger::Get().Write("Registering non-blocking Emscripten browser frame loop.\n");
+    InstallBrowserActivity();
     emscripten_set_main_loop_arg(BrowserFrame, App::GetSingletonPtr(), 0, true);
 #else
     App::GetSingleton().Run(argc, argv);
