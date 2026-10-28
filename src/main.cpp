@@ -149,7 +149,7 @@ namespace
 // Use independent listeners: replacing Emscripten's focus callbacks would
 // interfere with SDL's own keyboard/window bookkeeping.
 EM_JS(void, InstallBrowserActivity, (), {
-    const state = {changed: true};
+    const state = {changed: true, disposed: false};
     const update = () => { state.changed = true; };
     document.addEventListener('visibilitychange', update);
     window.addEventListener('focus', update);
@@ -161,7 +161,56 @@ EM_JS(void, InstallBrowserActivity, (), {
     status.hidden = true;
     document.body.appendChild(status);
     state.status = status;
+    const canvas = Module.canvas;
+    const capture = document.createElement('button');
+    capture.type = 'button';
+    capture.id = 'tankgame-mouse-capture';
+    capture.setAttribute('aria-live', 'polite');
+    capture.style.cssText = 'position:fixed;bottom:12px;left:50%;transform:translateX(-50%);padding:12px 20px;z-index:1000;background:#111;color:#fff;opacity:1';
+    const refreshCapture = () => {
+        const locked = document.pointerLockElement === canvas;
+        capture.textContent = locked ? 'Mouse captured — Esc to release' : 'Capture mouse';
+        capture.disabled = locked;
+        capture.hidden = document.hidden || !document.hasFocus();
+    };
+    const failed = () => {
+        if (state.disposed) return;
+        refreshCapture();
+        capture.textContent = 'Mouse capture unavailable — retry';
+        capture.title = 'Keyboard controls remain available.';
+    };
+    const lockChanged = () => {
+        state.changed = true;
+        capture.title = "";
+        refreshCapture();
+    };
+    const activate = () => {
+        // Request synchronously in the button gesture. Never request on startup
+        // or automatically after Escape/blur; denial leaves keyboard play usable.
+        canvas.focus();
+        try {
+            const request = canvas.requestPointerLock();
+            if (request && request.catch) request.catch(failed);
+        } catch (error) { failed(); }
+    };
+    capture.addEventListener('click', activate);
+    document.addEventListener('pointerlockchange', lockChanged);
+    document.addEventListener('pointerlockerror', failed);
+    document.addEventListener('visibilitychange', refreshCapture);
+    window.addEventListener('focus', refreshCapture);
+    window.addEventListener('blur', refreshCapture);
+    document.body.appendChild(capture);
+    refreshCapture();
     state.remove = () => {
+        state.disposed = true;
+        capture.removeEventListener('click', activate);
+        document.removeEventListener('pointerlockchange', lockChanged);
+        document.removeEventListener('pointerlockerror', failed);
+        document.removeEventListener('visibilitychange', refreshCapture);
+        window.removeEventListener('focus', refreshCapture);
+        window.removeEventListener('blur', refreshCapture);
+        if (document.pointerLockElement === canvas) document.exitPointerLock();
+        capture.remove();
         document.removeEventListener('visibilitychange', update);
         window.removeEventListener('focus', update);
         window.removeEventListener('blur', update);
