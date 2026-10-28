@@ -1,0 +1,7 @@
+[  1%] Building CXX object src/CMakeFiles/tankgame-linux.dir/main.cpp.o
+/home/deck/Dropbox/work/Programming/tankgame/src/main.cpp:173:72: warning: empty character constant [-Winvalid-pp-token]
+  173 |     const shellDisplay = shellControls ? shellControls.style.display : '';
+      |                                                                        ^
+1 warning generated.
+[  2%] Linking CXX executable /home/deck/Dropbox/work/Programming/tankgame/runtime/tankgame-linux.html
+[100%] Built target tankgame-linux

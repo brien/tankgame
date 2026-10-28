@@ -1,0 +1,295 @@
+Test project /home/deck/Dropbox/work/Programming/tankgame/build
+        Start   1: BrowserFramePolicyTest.HiddenAndUnfocusedFramesNeverTick
+  1/145 Test   #1: BrowserFramePolicyTest.HiddenAndUnfocusedFramesNeverTick ....................................   Passed    0.05 sec
+        Start   2: BrowserFramePolicyTest.FocusRoundTripBetweenFramesAndLongGapsResetTiming
+  2/145 Test   #2: BrowserFramePolicyTest.FocusRoundTripBetweenFramesAndLongGapsResetTiming ....................   Passed    0.02 sec
+        Start   3: BrowserLifecycleTest.FocusResetClearsBothInputSnapshotsAndTimer
+  3/145 Test   #3: BrowserLifecycleTest.FocusResetClearsBothInputSnapshotsAndTimer .............................   Passed    0.03 sec
+        Start   4: SceneUIOwnershipTest.SnapshotSurvivesCopyAndIsReleasedByLastOwner
+  4/145 Test   #4: SceneUIOwnershipTest.SnapshotSurvivesCopyAndIsReleasedByLastOwner ...........................   Passed    0.02 sec
+        Start   5: SceneUIOwnershipTest.FrameReplacementReleasesPreviousSnapshot
+  5/145 Test   #5: SceneUIOwnershipTest.FrameReplacementReleasesPreviousSnapshot ...............................   Passed    0.03 sec
+        Start   6: FontAtlasTest.GraphicsTaskConstructionDoesNotAcquireTtf
+  6/145 Test   #6: FontAtlasTest.GraphicsTaskConstructionDoesNotAcquireTtf .....................................   Passed    0.02 sec
+        Start   7: FontAtlasTest.BundledFontProducesBoundedRgbaGlyphsAndCoverage
+  7/145 Test   #7: FontAtlasTest.BundledFontProducesBoundedRgbaGlyphsAndCoverage ...............................   Passed    0.04 sec
+        Start   8: FontAtlasTest.MissingFontUnwindsTtfAndUnsupportedBytesUseFallback
+  8/145 Test   #8: FontAtlasTest.MissingFontUnwindsTtfAndUnsupportedBytesUseFallback ...........................   Passed    0.02 sec
+        Start   9: UITextTest.PlayerVisibilityAndGlobalDebugFlagsAreIndependent
+  9/145 Test   #9: UITextTest.PlayerVisibilityAndGlobalDebugFlagsAreIndependent ................................   Passed    0.02 sec
+        Start  10: UITextTest.StatusUsesPlayerValuesColorsAndIndependentVisibility
+ 10/145 Test  #10: UITextTest.StatusUsesPlayerValuesColorsAndIndependentVisibility .............................   Passed    0.02 sec
+        Start  11: UITextTest.StatusUsesLocalViewportAndHandlesInvalidNumbers
+ 11/145 Test  #11: UITextTest.StatusUsesLocalViewportAndHandlesInvalidNumbers ..................................   Passed    0.02 sec
+        Start  12: UITextTest.MenuLegendMatchesModesAndTracksSelection
+ 12/145 Test  #12: UITextTest.MenuLegendMatchesModesAndTracksSelection .........................................   Passed    0.01 sec
+        Start  13: UITextTest.MenuLegendHandlesHiddenDisabledAndIncompleteSnapshots
+ 13/145 Test  #13: UITextTest.MenuLegendHandlesHiddenDisabledAndIncompleteSnapshots ............................   Passed    0.02 sec
+        Start  14: TextRendererTest.FormatsLargeSubmissionCountsWithoutTruncation
+ 14/145 Test  #14: TextRendererTest.FormatsLargeSubmissionCountsWithoutTruncation ..............................   Passed    0.02 sec
+        Start  15: TargetingLineTest.PreservesOriginLengthAndRotation
+ 15/145 Test  #15: TargetingLineTest.PreservesOriginLengthAndRotation ..........................................   Passed    0.02 sec
+        Start  16: TargetingLineTest.StippleUsesViewportPixelsAndExactWrappedNibbles
+ 16/145 Test  #16: TargetingLineTest.StippleUsesViewportPixelsAndExactWrappedNibbles ...........................   Passed    0.01 sec
+        Start  17: TargetingLineTest.ClipsBeforePerspectiveDivideAndRejectsInvisibleRays
+ 17/145 Test  #17: TargetingLineTest.ClipsBeforePerspectiveDivideAndRejectsInvisibleRays .......................   Passed    0.02 sec
+        Start  18: HUDLayoutTest.SparseAndReorderedPlayersRetainTheirViewportIdentity
+ 18/145 Test  #18: HUDLayoutTest.SparseAndReorderedPlayersRetainTheirViewportIdentity ..........................   Passed    0.02 sec
+        Start  19: HUDLayoutTest.HiddenMetersDoNotLeaveIconsOrCostMarkers
+ 19/145 Test  #19: HUDLayoutTest.HiddenMetersDoNotLeaveIconsOrCostMarkers ......................................   Passed    0.02 sec
+        Start  20: HUDLayoutTest.HealthAndEnergyFillStayWithinBarsForInvalidOrOverchargedValues
+ 20/145 Test  #20: HUDLayoutTest.HealthAndEnergyFillStayWithinBarsForInvalidOrOverchargedValues ................   Passed    0.02 sec
+        Start  21: HUDLayoutTest.ActionMarkersReflectAffordabilityAndDistinctCosts
+ 21/145 Test  #21: HUDLayoutTest.ActionMarkersReflectAffordabilityAndDistinctCosts .............................   Passed    0.02 sec
+        Start  22: HUDLayoutTest.SpecialTicksHandleZeroNegativeAndNonfiniteCostsWithoutUnboundedWork
+ 22/145 Test  #22: HUDLayoutTest.SpecialTicksHandleZeroNegativeAndNonfiniteCostsWithoutUnboundedWork ...........   Passed    0.02 sec
+        Start  23: DebugLinesTest.SegmentTransformPreservesEndpointsIncludingNegativeAndZeroComponents
+ 23/145 Test  #23: DebugLinesTest.SegmentTransformPreservesEndpointsIncludingNegativeAndZeroComponents .........   Passed    0.02 sec
+        Start  24: DebugLinesTest.MarksOnlyLivePlayerAndEnemyOrigins
+ 24/145 Test  #24: DebugLinesTest.MarksOnlyLivePlayerAndEnemyOrigins ...........................................   Passed    0.02 sec
+        Start  25: DebugLinesTest.ReusedSceneDropsDebugLines
+ 25/145 Test  #25: DebugLinesTest.ReusedSceneDropsDebugLines ...................................................   Passed    0.02 sec
+        Start  26: TerrainGeometryTest.FlatSurfacePreservesLegacyStripEndpointsUVsAndClockwiseWinding
+ 26/145 Test  #26: TerrainGeometryTest.FlatSurfacePreservesLegacyStripEndpointsUVsAndClockwiseWinding ..........   Passed    0.01 sec
+        Start  27: TerrainGeometryTest.HeightAndLevelSelectExistingSurfaceTextures
+ 27/145 Test  #27: TerrainGeometryTest.HeightAndLevelSelectExistingSurfaceTextures .............................   Passed    0.02 sec
+        Start  28: TerrainGeometryTest.HeightCutoffAndNegativeFinalStripMatchCompatibility
+ 28/145 Test  #28: TerrainGeometryTest.HeightCutoffAndNegativeFinalStripMatchCompatibility .....................   Passed    0.02 sec
+        Start  29: TerrainGeometryTest.IsolatedStepEmitsFourOutwardClockwiseWallsWithRepeatingUVs
+ 29/145 Test  #29: TerrainGeometryTest.IsolatedStepEmitsFourOutwardClockwiseWallsWithRepeatingUVs ..............   Passed    0.02 sec
+        Start  30: TerrainGeometryTest.WallsRisingFromNegativeHeightUseBlockColor
+ 30/145 Test  #30: TerrainGeometryTest.WallsRisingFromNegativeHeightUseBlockColor ..............................   Passed    0.02 sec
+        Start  31: TerrainGeometryTest.FloatingCubeRetainsBoundsUVsColorAndCounterClockwiseWinding
+ 31/145 Test  #31: TerrainGeometryTest.FloatingCubeRetainsBoundsUVsColorAndCounterClockwiseWinding .............   Passed    0.02 sec
+        Start  32: TerrainGeometryTest.BoundaryRetainsCeilingRectangularCoordinatesAndUndergroundTranslation
+ 32/145 Test  #32: TerrainGeometryTest.BoundaryRetainsCeilingRectangularCoordinatesAndUndergroundTranslation ...   Passed    0.02 sec
+        Start  33: TerrainGeometryTest.CacheReusesUnchangedContentAndInvalidatesEditsReloadsAndColors
+ 33/145 Test  #33: TerrainGeometryTest.CacheReusesUnchangedContentAndInvalidatesEditsReloadsAndColors ..........   Passed    0.02 sec
+        Start  34: TerrainGeometryTest.CacheIgnoresUnusedFieldsAndCells
+ 34/145 Test  #34: TerrainGeometryTest.CacheIgnoresUnusedFieldsAndCells ........................................   Passed    0.02 sec
+        Start  35: TerrainGeometryTest.RejectsInvalidDimensionsBeforeReadingMaps
+ 35/145 Test  #35: TerrainGeometryTest.RejectsInvalidDimensionsBeforeReadingMaps ...............................   Passed    0.02 sec
+        Start  36: TerrainGeometryTest.LightingNormalsPreserveInheritedUpDirection
+ 36/145 Test  #36: TerrainGeometryTest.LightingNormalsPreserveInheritedUpDirection .............................   Passed    0.02 sec
+        Start  37: TerrainGeometryTest.WaterRibbonsSurroundNegativeCellWithLegacyUVsAndHeight
+ 37/145 Test  #37: TerrainGeometryTest.WaterRibbonsSurroundNegativeCellWithLegacyUVsAndHeight ..................   Passed    0.02 sec
+        Start  38: TerrainGeometryTest.WaterRetainsPreviousHeightAcrossRowsAndRefreshesCachedContent
+ 38/145 Test  #38: TerrainGeometryTest.WaterRetainsPreviousHeightAcrossRowsAndRefreshesCachedContent ...........   Passed    0.02 sec
+        Start  39: EnemyRendererTest.AllTypePairsUseLegacyEnemyGeometryAndExtractedColors
+ 39/145 Test  #39: EnemyRendererTest.AllTypePairsUseLegacyEnemyGeometryAndExtractedColors ......................   Passed    0.02 sec
+        Start  40: EnemyRendererTest.ComponentScalesAndLocalCannonOffsetMatchCompatibility
+ 40/145 Test  #40: EnemyRendererTest.ComponentScalesAndLocalCannonOffsetMatchCompatibility .....................   Passed    0.01 sec
+        Start  41: EnemyRendererTest.TurretAimIsRelativeToBodyAndOffsetRotatesWithAim
+ 41/145 Test  #41: EnemyRendererTest.TurretAimIsRelativeToBodyAndOffsetRotatesWithAim ..........................   Passed    0.02 sec
+        Start  42: EnemyRendererTest.PitchRollAndYawComposeInLegacyOrder
+ 42/145 Test  #42: EnemyRendererTest.PitchRollAndYawComposeInLegacyOrder .......................................   Passed    0.01 sec
+        Start  43: EnemyRendererTest.HealthMultiplierPreservesOverbrightColorsAndZeroHealthIsFinite
+ 43/145 Test  #43: EnemyRendererTest.HealthMultiplierPreservesOverbrightColorsAndZeroHealthIsFinite ............   Passed    0.02 sec
+        Start  44: EnemyRendererTest.FactorySelectsEnemyRendererAndRejectsDeadOrPlayerDataBeforeGL
+ 44/145 Test  #44: EnemyRendererTest.FactorySelectsEnemyRendererAndRejectsDeadOrPlayerDataBeforeGL .............   Passed    0.02 sec
+        Start  45: EnemyRendererTest.GeometryRetainsTriangleCountsBoundsAttributesAndWinding
+ 45/145 Test  #45: EnemyRendererTest.GeometryRetainsTriangleCountsBoundsAttributesAndWinding ...................   Passed    0.02 sec
+        Start  46: EnemyRendererTest.CatalogueOwnsDistinctStableEnemyResources
+ 46/145 Test  #46: EnemyRendererTest.CatalogueOwnsDistinctStableEnemyResources .................................   Passed    0.02 sec
+        Start  47: EffectRendererTest.AllTypesRetainScaleAndTextureSelection
+ 47/145 Test  #47: EffectRendererTest.AllTypesRetainScaleAndTextureSelection ...................................   Passed    0.02 sec
+        Start  48: EffectRendererTest.RotationOrderAndNegativeYawPreserveLegacyPose
+ 48/145 Test  #48: EffectRendererTest.RotationOrderAndNegativeYawPreserveLegacyPose ............................   Passed    0.02 sec
+        Start  49: EffectRendererTest.ZeroLifetimeScaleProducesFiniteCollapsedGeometry
+ 49/145 Test  #49: EffectRendererTest.ZeroLifetimeScaleProducesFiniteCollapsedGeometry .........................   Passed    0.02 sec
+        Start  50: EventBusTest.UnsubscribePreservesOtherOwnersAndQueuedEvents
+ 50/145 Test  #50: EventBusTest.UnsubscribePreservesOtherOwnersAndQueuedEvents .................................   Passed    0.02 sec
+        Start  51: EventBusTest.UnsubscribeDuringDispatchSkipsRemovedCallbacks
+ 51/145 Test  #51: EventBusTest.UnsubscribeDuringDispatchSkipsRemovedCallbacks .................................   Passed    0.02 sec
+        Start  52: EventBusTest.NewSubscriptionsBeginOnNextDispatchIncludingNestedPublish
+ 52/145 Test  #52: EventBusTest.NewSubscriptionsBeginOnNextDispatchIncludingNestedPublish ......................   Passed    0.02 sec
+        Start  53: EventBusTest.ClearingDuringDispatchInvalidatesSnapshotAndAllowsResubscription
+ 53/145 Test  #53: EventBusTest.ClearingDuringDispatchInvalidatesSnapshotAndAllowsResubscription ...............   Passed    0.02 sec
+        Start  54: EventLifecycleTest.RepeatedWorldShutdownAndDestructionLeaveNoCallbacks
+ 54/145 Test  #54: EventLifecycleTest.RepeatedWorldShutdownAndDestructionLeaveNoCallbacks ......................   Passed    0.02 sec
+        Start  55: EventLifecycleTest.WorldCanInitializeAgainAfterShutdown
+ 55/145 Test  #55: EventLifecycleTest.WorldCanInitializeAgainAfterShutdown .....................................   Passed    0.02 sec
+        Start  56: EventLifecycleTest.LevelReloadDiscardsEventsForDestroyedEntities
+ 56/145 Test  #56: EventLifecycleTest.LevelReloadDiscardsEventsForDestroyedEntities ............................   Passed    0.02 sec
+        Start  57: EventLifecycleTest.ShuttingDownOneWorldPreservesAnotherWorld
+ 57/145 Test  #57: EventLifecycleTest.ShuttingDownOneWorldPreservesAnotherWorld ................................   Passed    0.02 sec
+        Start  58: EventLifecycleTest.StandaloneSystemsUnsubscribeOnDestruction
+ 58/145 Test  #58: EventLifecycleTest.StandaloneSystemsUnsubscribeOnDestruction ................................   Passed    0.02 sec
+        Start  59: GeometryTest.CubeHasSixTexturedQuadFaces
+ 59/145 Test  #59: GeometryTest.CubeHasSixTexturedQuadFaces ....................................................   Passed    0.02 sec
+        Start  60: GeometryTest.HorizontalSquareCanDescribeFilledAndOutlineResources
+ 60/145 Test  #60: GeometryTest.HorizontalSquareCanDescribeFilledAndOutlineResources ...........................   Passed    0.02 sec
+        Start  61: GeometryTest.PrimitiveScaleIsAppliedToCpuPositions
+ 61/145 Test  #61: GeometryTest.PrimitiveScaleIsAppliedToCpuPositions ..........................................   Passed    0.01 sec
+        Start  62: GeometryTest.BulletPreservesTriangleAttributesAndLegacyOrdering
+ 62/145 Test  #62: GeometryTest.BulletPreservesTriangleAttributesAndLegacyOrdering .............................   Passed    0.02 sec
+        Start  63: GeometryTest.ItemFallbackPreservesLegacyQuad
+ 63/145 Test  #63: GeometryTest.ItemFallbackPreservesLegacyQuad ................................................   Passed    0.02 sec
+        Start  64: GeometryTest.MeshTriangleExtractionPreservesVertexAttributesAndOrder
+ 64/145 Test  #64: GeometryTest.MeshTriangleExtractionPreservesVertexAttributesAndOrder ........................   Passed    0.02 sec
+        Start  65: GeometryTest.MeshTriangleExtrusionPreservesLegacyFaceOffsetContract
+ 65/145 Test  #65: GeometryTest.MeshTriangleExtrusionPreservesLegacyFaceOffsetContract .........................   Passed    0.02 sec
+        Start  66: GeometryTest.ColoredMeshTrianglesPreservePerFaceColorsAndVertexOrder
+ 66/145 Test  #66: GeometryTest.ColoredMeshTrianglesPreservePerFaceColorsAndVertexOrder ........................   Passed    0.02 sec
+        Start  67: GeometryTest.ColoredExtrudedTrianglesCombineFaceOffsetAndColor
+ 67/145 Test  #67: GeometryTest.ColoredExtrudedTrianglesCombineFaceOffsetAndColor ..............................   Passed    0.02 sec
+        Start  68: GeometryTest.MeshEdgesPreserveFlagsOrderingAndVertexAttributes
+ 68/145 Test  #68: GeometryTest.MeshEdgesPreserveFlagsOrderingAndVertexAttributes ..............................   Passed    0.02 sec
+        Start  69: GeometryTest.ExtrudedAndColoredEdgesPreserveEdgeNormalOffsetAndColor
+ 69/145 Test  #69: GeometryTest.ExtrudedAndColoredEdgesPreserveEdgeNormalOffsetAndColor ........................   Passed    0.02 sec
+        Start  70: GeometryBufferTest.TriangulatesQuadsWithoutChangingWinding
+ 70/145 Test  #70: GeometryBufferTest.TriangulatesQuadsWithoutChangingWinding ..................................   Passed    0.02 sec
+        Start  71: GeometryBufferTest.PacksOnlyDeclaredAttributesInDeterministicOrder
+ 71/145 Test  #71: GeometryBufferTest.PacksOnlyDeclaredAttributesInDeterministicOrder ..........................   Passed    0.02 sec
+        Start  72: GeometryBufferTest.PreservesLineLoopAndRejectsIncompletePrimitives
+ 72/145 Test  #72: GeometryBufferTest.PreservesLineLoopAndRejectsIncompletePrimitives ..........................   Passed    0.02 sec
+        Start  73: GraphicsCapabilities.KeepsLegacyOffCoreProfiles
+ 73/145 Test  #73: GraphicsCapabilities.KeepsLegacyOffCoreProfiles .............................................   Passed    0.02 sec
+        Start  74: GraphicsCapabilities.SelectsMacCoreOnlyForModernRenderer
+ 74/145 Test  #74: GraphicsCapabilities.SelectsMacCoreOnlyForModernRenderer ....................................   Passed    0.02 sec
+        Start  75: GraphicsCapabilities.BuildsEachShaderDialect
+ 75/145 Test  #75: GraphicsCapabilities.BuildsEachShaderDialect ................................................   Passed    0.02 sec
+        Start  76: Matrix4Test.IdentityLeavesTranslationUnchanged
+ 76/145 Test  #76: Matrix4Test.IdentityLeavesTranslationUnchanged ..............................................   Passed    0.02 sec
+        Start  77: Matrix4Test.PostMultiplicationPreservesLegacyTransformOrder
+ 77/145 Test  #77: Matrix4Test.PostMultiplicationPreservesLegacyTransformOrder .................................   Passed    0.02 sec
+        Start  78: Matrix4Test.PerspectiveMatchesOpenGLConvention
+ 78/145 Test  #78: Matrix4Test.PerspectiveMatchesOpenGLConvention ..............................................   Passed    0.02 sec
+        Start  79: Matrix4Test.LookAtMovesEyeToOrigin
+ 79/145 Test  #79: Matrix4Test.LookAtMovesEyeToOrigin ..........................................................   Passed    0.02 sec
+        Start  80: Matrix4Test.RepresentativeTankCompositionKeepsLocalTurretOffset
+ 80/145 Test  #80: Matrix4Test.RepresentativeTankCompositionKeepsLocalTurretOffset .............................   Passed    0.02 sec
+        Start  81: Matrix4Test.NormalTransformPreservesPerpendicularityUnderNonuniformScale
+ 81/145 Test  #81: Matrix4Test.NormalTransformPreservesPerpendicularityUnderNonuniformScale ....................   Passed    0.02 sec
+        Start  82: Matrix4Test.NormalTransformHandlesReflectionAndSingularScale
+ 82/145 Test  #82: Matrix4Test.NormalTransformHandlesReflectionAndSingularScale ................................   Passed    0.02 sec
+        Start  83: RenderContextTest.ComposesProjectionViewModelInThatOrder
+ 83/145 Test  #83: RenderContextTest.ComposesProjectionViewModelInThatOrder ....................................   Passed    0.02 sec
+        Start  84: BasicMaterialTest.DefaultsToOpaqueWhiteWithoutTexture
+ 84/145 Test  #84: BasicMaterialTest.DefaultsToOpaqueWhiteWithoutTexture .......................................   Passed    0.02 sec
+        Start  85: TextureSettingsTest.PotImagesPreserveRequestedMipmapsAndRepeat
+ 85/145 Test  #85: TextureSettingsTest.PotImagesPreserveRequestedMipmapsAndRepeat ..............................   Passed    0.01 sec
+        Start  86: TextureSettingsTest.NpotImagesUseWebGlOneSafeSampling
+ 86/145 Test  #86: TextureSettingsTest.NpotImagesUseWebGlOneSafeSampling .......................................   Passed    0.02 sec
+        Start  87: BulletSpecialTest.FiringPatternsChargeAndCooldown
+ 87/145 Test  #87: BulletSpecialTest.FiringPatternsChargeAndCooldown ...........................................   Passed    0.02 sec
+        Start  88: BulletSpecialTest.BluePiercesEnemiesUsingPowerBeforeIncrease
+ 88/145 Test  #88: BulletSpecialTest.BluePiercesEnemiesUsingPowerBeforeIncrease ................................   Passed    0.02 sec
+        Start  89: BulletSpecialTest.BlueDoesNotPierceOrdinaryEnemyOrPlayerContacts
+ 89/145 Test  #89: BulletSpecialTest.BlueDoesNotPierceOrdinaryEnemyOrPlayerContacts ............................   Passed    0.02 sec
+        Start  90: BulletSpecialTest.PurpleAccelerationPreservesSignAndOrdinaryMotion
+ 90/145 Test  #90: BulletSpecialTest.PurpleAccelerationPreservesSignAndOrdinaryMotion ..........................   Passed    0.02 sec
+        Start  91: BulletSpecialTest.YellowChildrenPreserveEveryCombinationForBothPlayers
+ 91/145 Test  #91: BulletSpecialTest.YellowChildrenPreserveEveryCombinationForBothPlayers ......................   Passed    0.02 sec
+        Start  92: BulletSpecialTest.YellowOnlySplitsPlayerSpecialsWithBouncesRemaining
+ 92/145 Test  #92: BulletSpecialTest.YellowOnlySplitsPlayerSpecialsWithBouncesRemaining ........................   Passed    0.02 sec
+        Start  93: BulletSpecialTest.QueuedWallCollisionSpawnsBeforeUpdateAndCleansUpChildren
+ 93/145 Test  #93: BulletSpecialTest.QueuedWallCollisionSpawnsBeforeUpdateAndCleansUpChildren ..................   Passed    0.02 sec
+        Start  94: SampleTest.BasicAssertion
+ 94/145 Test  #94: SampleTest.BasicAssertion ...................................................................   Passed    0.02 sec
+        Start  95: MathTest.Addition
+ 95/145 Test  #95: MathTest.Addition ...........................................................................   Passed    0.02 sec
+        Start  96: MathTest.Subtraction
+ 96/145 Test  #96: MathTest.Subtraction ........................................................................   Passed    0.02 sec
+        Start  97: PlayerTest.Constructor_InitializesPlayerIndex
+ 97/145 Test  #97: PlayerTest.Constructor_InitializesPlayerIndex ...............................................   Passed    0.02 sec
+        Start  98: PlayerTest.Constructor_InitializesWithNullTank
+ 98/145 Test  #98: PlayerTest.Constructor_InitializesWithNullTank ..............................................   Passed    0.02 sec
+        Start  99: PlayerTest.Constructor_InitializesScoreToZero
+ 99/145 Test  #99: PlayerTest.Constructor_InitializesScoreToZero ...............................................   Passed    0.02 sec
+        Start 100: PlayerTest.Constructor_InitializesComboToZero
+100/145 Test #100: PlayerTest.Constructor_InitializesComboToZero ...............................................   Passed    0.02 sec
+        Start 101: PlayerTest.Constructor_InitializesSpecialChargeToZero
+101/145 Test #101: PlayerTest.Constructor_InitializesSpecialChargeToZero .......................................   Passed    0.02 sec
+        Start 102: PlayerTest.Constructor_InitializesWinsToZero
+102/145 Test #102: PlayerTest.Constructor_InitializesWinsToZero ................................................   Passed    0.02 sec
+        Start 103: PlayerTest.AddScore_IncreasesScore
+103/145 Test #103: PlayerTest.AddScore_IncreasesScore ..........................................................   Passed    0.02 sec
+        Start 104: PlayerTest.AddScore_AccumulatesMultipleTimes
+104/145 Test #104: PlayerTest.AddScore_AccumulatesMultipleTimes ................................................   Passed    0.02 sec
+        Start 105: PlayerTest.ResetScore_SetsScoreToZero
+105/145 Test #105: PlayerTest.ResetScore_SetsScoreToZero .......................................................   Passed    0.02 sec
+        Start 106: PlayerTest.AddCombo_IncreasesComboValue
+106/145 Test #106: PlayerTest.AddCombo_IncreasesComboValue .....................................................   Passed    0.02 sec
+        Start 107: PlayerTest.AddCombo_AccumulatesComboPoints
+107/145 Test #107: PlayerTest.AddCombo_AccumulatesComboPoints ..................................................   Passed    0.02 sec
+        Start 108: PlayerTest.AddCombo_AddsSpecialCharge
+108/145 Test #108: PlayerTest.AddCombo_AddsSpecialCharge .......................................................   Passed    0.02 sec
+        Start 109: PlayerTest.ResetCombo_ClearsAllComboValues
+109/145 Test #109: PlayerTest.ResetCombo_ClearsAllComboValues ..................................................   Passed    0.02 sec
+        Start 110: PlayerTest.IncrementHitCombo_IncreasesHitCombo
+110/145 Test #110: PlayerTest.IncrementHitCombo_IncreasesHitCombo ..............................................   Passed    0.02 sec
+        Start 111: PlayerTest.ResetHitCombo_SetsHitComboToZero
+111/145 Test #111: PlayerTest.ResetHitCombo_SetsHitComboToZero .................................................   Passed    0.02 sec
+        Start 112: PlayerTest.AddSpecialCharge_IncreasesCharge
+112/145 Test #112: PlayerTest.AddSpecialCharge_IncreasesCharge .................................................   Passed    0.02 sec
+        Start 113: PlayerTest.AddSpecialCharge_CapsAtMaximum
+113/145 Test #113: PlayerTest.AddSpecialCharge_CapsAtMaximum ...................................................   Passed    0.02 sec
+        Start 114: PlayerTest.AddSpecialCharge_AccumulatesUpToMax
+114/145 Test #114: PlayerTest.AddSpecialCharge_AccumulatesUpToMax ..............................................   Passed    0.02 sec
+        Start 115: PlayerTest.UseSpecialCharge_DecreasesCharge
+115/145 Test #115: PlayerTest.UseSpecialCharge_DecreasesCharge .................................................   Passed    0.02 sec
+        Start 116: PlayerTest.UseSpecialCharge_FlooredAtZero
+116/145 Test #116: PlayerTest.UseSpecialCharge_FlooredAtZero ...................................................   Passed    0.02 sec
+        Start 117: PlayerTest.SetSpecialCharge_SetsExactValue
+117/145 Test #117: PlayerTest.SetSpecialCharge_SetsExactValue ..................................................   Passed    0.02 sec
+        Start 118: PlayerTest.CanUseSpecial_ReturnsTrueWhenSufficientCharge
+118/145 Test #118: PlayerTest.CanUseSpecial_ReturnsTrueWhenSufficientCharge ....................................   Passed    0.02 sec
+        Start 119: PlayerTest.CanUseSpecial_ReturnsFalseWhenInsufficientCharge
+119/145 Test #119: PlayerTest.CanUseSpecial_ReturnsFalseWhenInsufficientCharge .................................   Passed    0.02 sec
+        Start 120: PlayerTest.AddWin_IncreasesWinCount
+120/145 Test #120: PlayerTest.AddWin_IncreasesWinCount .........................................................   Passed    0.02 sec
+        Start 121: PlayerTest.AddWin_AccumulatesMultipleWins
+121/145 Test #121: PlayerTest.AddWin_AccumulatesMultipleWins ...................................................   Passed    0.02 sec
+        Start 122: PlayerTest.ResetWins_SetsWinsToZero
+122/145 Test #122: PlayerTest.ResetWins_SetsWinsToZero .........................................................   Passed    0.02 sec
+        Start 123: PlayerTest.TakeControlOf_NullTank_DoesNotCrash
+123/145 Test #123: PlayerTest.TakeControlOf_NullTank_DoesNotCrash ..............................................   Passed    0.02 sec
+        Start 124: PlayerTest.ReleaseTank_HandlesNullTank
+124/145 Test #124: PlayerTest.ReleaseTank_HandlesNullTank ......................................................   Passed    0.02 sec
+        Start 125: PlayerTest.MultiplePlayersHaveUniqueIndices
+125/145 Test #125: PlayerTest.MultiplePlayersHaveUniqueIndices .................................................   Passed    0.02 sec
+        Start 126: PlayerTest.FullGameScenario_ScoreComboAndSpecial
+126/145 Test #126: PlayerTest.FullGameScenario_ScoreComboAndSpecial ............................................   Passed    0.01 sec
+        Start 127: TankDataExtractorRegression.ExtractRenderData_MapsCoreFields
+127/145 Test #127: TankDataExtractorRegression.ExtractRenderData_MapsCoreFields ................................   Passed    0.02 sec
+        Start 128: TankDataExtractorRegression.ExtractPlayerDataFromPointers_FiltersDead
+128/145 Test #128: TankDataExtractorRegression.ExtractPlayerDataFromPointers_FiltersDead .......................   Passed    0.02 sec
+        Start 129: TankDataExtractorRegression.ExtractPlayerDataFromPointers_FiltersNull
+129/145 Test #129: TankDataExtractorRegression.ExtractPlayerDataFromPointers_FiltersNull .......................   Passed    0.02 sec
+        Start 130: TankDataExtractorRegression.ExtractPlayerDataFromPointers_PreservesAliveOrder
+130/145 Test #130: TankDataExtractorRegression.ExtractPlayerDataFromPointers_PreservesAliveOrder ...............   Passed    0.02 sec
+        Start 131: TankDataExtractorRegression.ExtractPlayerDataFromPointers_ClampsNumPlayersSafely
+131/145 Test #131: TankDataExtractorRegression.ExtractPlayerDataFromPointers_ClampsNumPlayersSafely ............   Passed    0.02 sec
+        Start 132: PlayerManagerRegressionTest.GetPlayerByTankId_MapsLegacyPlayerIds
+132/145 Test #132: PlayerManagerRegressionTest.GetPlayerByTankId_MapsLegacyPlayerIds ...........................   Passed    0.02 sec
+        Start 133: PlayerManagerRegressionTest.GetPlayerByTankId_RejectsInvalidIds
+133/145 Test #133: PlayerManagerRegressionTest.GetPlayerByTankId_RejectsInvalidIds .............................   Passed    0.02 sec
+        Start 134: PlayerManagerRegressionTest.ResetHitComboByTankId_OnlyResetsTargetPlayer
+134/145 Test #134: PlayerManagerRegressionTest.ResetHitComboByTankId_OnlyResetsTargetPlayer ....................   Passed    0.02 sec
+        Start 135: PlayerManagerRegressionTest.EnsurePlayerTankSetup_RevalidatesPlayerIdentityFields
+135/145 Test #135: PlayerManagerRegressionTest.EnsurePlayerTankSetup_RevalidatesPlayerIdentityFields ...........   Passed    0.02 sec
+        Start 136: RendererResourceCatalogueTest.RepeatedGeometryLookupReturnsSameResource
+136/145 Test #136: RendererResourceCatalogueTest.RepeatedGeometryLookupReturnsSameResource .....................   Passed    0.02 sec
+        Start 137: RendererResourceCatalogueTest.UnknownTypedLookupsFailExplicitly
+137/145 Test #137: RendererResourceCatalogueTest.UnknownTypedLookupsFailExplicitly .............................   Passed    0.02 sec
+        Start 138: ViewportManagerTest.SinglePlayerUsesEntireFramebuffer
+138/145 Test #138: ViewportManagerTest.SinglePlayerUsesEntireFramebuffer .......................................   Passed    0.02 sec
+        Start 139: ViewportManagerTest.TwoPlayersUseNonOverlappingHorizontalHalves
+139/145 Test #139: ViewportManagerTest.TwoPlayersUseNonOverlappingHorizontalHalves .............................   Passed    0.02 sec
+        Start 140: ViewportManagerTest.CoopAndVersusSharePlayerIndexLayout
+140/145 Test #140: ViewportManagerTest.CoopAndVersusSharePlayerIndexLayout .....................................   Passed    0.02 sec
+        Start 141: ViewportManagerTest.ResizingSplitScreenCoversEveryDrawablePixel
+141/145 Test #141: ViewportManagerTest.ResizingSplitScreenCoversEveryDrawablePixel .............................   Passed    0.02 sec
+        Start 142: ViewportManagerTest.EmptyViewsKeepPlayerIndicesUntilRestored
+142/145 Test #142: ViewportManagerTest.EmptyViewsKeepPlayerIndicesUntilRestored ................................   Passed    0.02 sec
+        Start 143: VideoStartupTest.LoadsTextureFunctionsBeforeUpload
+143/145 Test #143: VideoStartupTest.LoadsTextureFunctionsBeforeUpload ..........................................   Passed    0.93 sec
+        Start 144: VideoStartupTest.RefreshesDrawablePixelsAfterWindowResize
+144/145 Test #144: VideoStartupTest.RefreshesDrawablePixelsAfterWindowResize ...................................   Passed    0.92 sec
+        Start 145: VideoStartupTest.CountsSubmittedDrawsAndTriangles
+145/145 Test #145: VideoStartupTest.CountsSubmittedDrawsAndTriangles ...........................................   Passed    0.92 sec
+
+100% tests passed, 0 tests failed out of 145
+
+Total Test time (real) =   5.47 sec
