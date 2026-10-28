@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-27
+**Status date:** 2026-10-28
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -24,6 +24,26 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R6 browser focus and timing slice (2026-10-28)
+
+The browser callback now suspends game ticks while the document is hidden or its
+window is unfocused. A visible pause message explains how to resume. Returning
+resets simulation timing and keyboard/mouse snapshots; held controls must be
+released before reuse. Focus round trips between callbacks are retained, and
+callback gaps over 250 ms discard elapsed simulation time rather than causing a
+large catch-up step. Native scheduling and renderer defaults remain unchanged.
+
+Native/browser builds pass, all 145 GL-enabled native tests pass, and all three
+modern startup tests pass. Chromium blur/hide/resume, stale/fresh firing, long-gap
+recovery and shutdown pass ten clean WebGL probes with stable uploads. See
+[implementation and evidence](../../documentation/browser-lifecycle-2026-10-27/README.md).
+
+This is an initial R6 lifecycle slice, not release qualification or closure of
+R5's visual approval gates. Compatibility retirement remains a separate explicit
+decision. Audio, pointer-lock acquisition/loss UX, gamepad lifecycle, context
+recovery, packaging and the wider browser/platform matrix remain open; existing
+Windows/macOS runtime and multiplayer robustness deferrals are unchanged.
 
 ## R5 live render telemetry slice (2026-10-27)
 

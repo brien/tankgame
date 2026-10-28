@@ -1,0 +1,18 @@
+Note: Google Test filter = VideoStartupTest.*
+[==========] Running 3 tests from 1 test suite.
+[----------] Global test environment set-up.
+[----------] 3 tests from VideoStartupTest
+[ RUN      ] VideoStartupTest.LoadsTextureFunctionsBeforeUpload
+VideoTask::Start: graphics context ready at 1280x720.
+[       OK ] VideoStartupTest.LoadsTextureFunctionsBeforeUpload (832 ms)
+[ RUN      ] VideoStartupTest.RefreshesDrawablePixelsAfterWindowResize
+VideoTask::Start: graphics context ready at 1280x720.
+[       OK ] VideoStartupTest.RefreshesDrawablePixelsAfterWindowResize (64 ms)
+[ RUN      ] VideoStartupTest.CountsSubmittedDrawsAndTriangles
+VideoTask::Start: graphics context ready at 1280x720.
+[       OK ] VideoStartupTest.CountsSubmittedDrawsAndTriangles (81 ms)
+[----------] 3 tests from VideoStartupTest (979 ms total)
+
+[----------] Global test environment tear-down
+[==========] 3 tests from 1 test suite ran. (979 ms total)
+[  PASSED  ] 3 tests.
