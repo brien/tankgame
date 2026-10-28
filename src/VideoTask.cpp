@@ -11,6 +11,9 @@
 
 #include <SDL2/SDL.h>
 #include <iostream>
+#ifdef __EMSCRIPTEN__
+#include <emscripten.h>
+#endif
 
 int VideoTask::scrWidth = 800;
 int VideoTask::scrHeight = 600;
@@ -142,6 +145,10 @@ bool VideoTask::Start()
         fclose(filein);
     }
 
+#ifdef __EMSCRIPTEN__
+    // Browser fullscreen must be requested explicitly from a user gesture.
+    flags &= ~SDL_WINDOW_FULLSCREEN_DESKTOP;
+#endif
     flags |= SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI;
     window = SDL_CreateWindow("tankgame", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, scrWidth, scrHeight, flags);
     if (!window)
@@ -190,6 +197,41 @@ void VideoTask::Update()
 
 bool VideoTask::RefreshDrawableSize()
 {
+#ifdef __EMSCRIPTEN__
+    if (window)
+    {
+        const bool fullscreen = EM_ASM_INT({ return document.fullscreenElement === Module.canvas.parentElement; });
+        int width, height;
+        SDL_GetWindowSize(window, &width, &height);
+        if (fullscreen)
+        {
+            if (!windowedWidth)
+            {
+                windowedWidth = width;
+                windowedHeight = height;
+            }
+            const int targetWidth = EM_ASM_INT({ return Module.canvas.parentElement.clientWidth; });
+            const int targetHeight = EM_ASM_INT({ return Module.canvas.parentElement.clientHeight; });
+            if (targetWidth > 0 && targetHeight > 0 && (width != targetWidth || height != targetHeight))
+                SDL_SetWindowSize(window, targetWidth, targetHeight);
+            // SDL retains CSS dimensions when DPI returns to 1. Keep the
+            // displayed surface equal to the logical window, not stale zoom.
+            EM_ASM({
+                Module.canvas.style.width = $0 + 'px';
+                Module.canvas.style.height = $1 + 'px';
+            }, targetWidth, targetHeight);
+        }
+        else if (windowedWidth)
+        {
+            SDL_SetWindowSize(window, windowedWidth, windowedHeight);
+            EM_ASM({
+                Module.canvas.style.width = $0 + 'px';
+                Module.canvas.style.height = $1 + 'px';
+            }, windowedWidth, windowedHeight);
+            windowedWidth = windowedHeight = 0;
+        }
+    }
+#endif
     scrWidth = 0;
     scrHeight = 0;
     if (window) SDL_GL_GetDrawableSize(window, &scrWidth, &scrHeight);

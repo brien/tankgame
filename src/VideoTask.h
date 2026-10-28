@@ -22,6 +22,10 @@ public:
     bool RefreshDrawableSize();
 
 protected:
+#ifdef __EMSCRIPTEN__
+    int windowedWidth = 0;
+    int windowedHeight = 0;
+#endif
     int flags;
     SDL_Window *window = nullptr;
     SDL_Renderer *sdlRenderer;

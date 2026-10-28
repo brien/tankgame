@@ -25,6 +25,27 @@ checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
 
+## R6 browser fullscreen slice (2026-10-28)
+
+An explicit Enter/Exit fullscreen control now keeps the game canvas, pause message
+and mouse capture controls on one fullscreen surface. Gesture requests report
+failure with retry; fullscreen alone does not capture the mouse. SDL window and
+CSS dimensions follow the fullscreen surface and restore on exit, including
+DPI/zoom round trips. Keyboard activation bypasses SDL's cancellation of native
+button defaults. Shutdown releases fullscreen and removes the controls/listeners.
+Native settings and compatibility defaults remain unchanged.
+
+Native/browser builds and all 145 GL-enabled native tests pass. Chromium checks
+entry/exit, rejection/retry, keyboard activation, capture, DPI resizing and shutdown
+with clean WebGL probes and stable uploads. See
+[implementation and evidence](../../documentation/browser-fullscreen-2026-10-28/README.md).
+
+This completes the initial fullscreen slice, not R6 release qualification.
+Physical Escape/display behavior and the wider browser matrix remain manual gates.
+Audio, gamepad lifecycle, context recovery, complete packaging and windowed
+responsive layout remain open; existing platform/runtime and multiplayer
+robustness deferrals are unchanged.
+
 ## R6 browser mouse capture slice (2026-10-28)
 
 An explicit, keyboard-accessible Capture mouse button now requests pointer lock

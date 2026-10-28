@@ -1,0 +1,6 @@
+[718183:1028/164819.723577:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[718183:1028/164819.945585:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+[718183:1028/164819.945741:ERROR:dbus/bus.cc:406] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+Gtk-Message: 16:48:20.021: Failed to load module "colorreload-gtk-module"
+Gtk-Message: 16:48:20.022: Failed to load module "window-decorations-gtk-module"
+(electron) 'console-message' arguments are deprecated and will be removed. Please use Event<WebContentsConsoleMessageEventParams> object instead.

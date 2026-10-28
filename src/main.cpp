@@ -162,6 +162,59 @@ EM_JS(void, InstallBrowserActivity, (), {
     document.body.appendChild(status);
     state.status = status;
     const canvas = Module.canvas;
+    const stage = canvas.parentElement;
+    // Fullscreen the game surface so pause and input controls stay accessible.
+    stage.id = 'tankgame-surface';
+    stage.appendChild(status);
+    const style = document.createElement('style');
+    style.textContent = '#tankgame-surface:fullscreen { border:0; background:#000; } #tankgame-surface:fullscreen canvas { margin:0; }';
+    document.head.appendChild(style);
+    const shellControls = document.getElementById('controls');
+    const shellDisplay = shellControls ? shellControls.style.display : '';
+    if (shellControls) shellControls.style.display = 'none';
+    const fullscreen = document.createElement('button');
+    fullscreen.type = 'button';
+    fullscreen.id = 'tankgame-fullscreen';
+    fullscreen.setAttribute('aria-live', 'polite');
+    fullscreen.style.cssText = 'position:fixed;bottom:12px;right:12px;padding:12px 20px;z-index:1000;background:#111;color:#fff';
+    const refreshFullscreen = () => {
+        fullscreen.textContent = document.fullscreenElement === stage ? 'Exit fullscreen' : 'Enter fullscreen';
+        fullscreen.hidden = document.hidden || !document.hasFocus();
+    };
+    const fullscreenFailed = () => {
+        if (state.disposed) return;
+        refreshFullscreen();
+        fullscreen.textContent = 'Fullscreen unavailable — retry';
+    };
+    const fullscreenChanged = () => {
+        state.changed = true;
+        refreshFullscreen();
+    };
+    const toggleFullscreen = () => {
+        canvas.focus();
+        try {
+            const request = document.fullscreenElement === stage ? document.exitFullscreen() : stage.requestFullscreen();
+            if (request && request.catch) request.catch(fullscreenFailed);
+        } catch (error) { fullscreenFailed(); }
+    };
+    // SDL listens on window and cancels Space/Tab defaults. Keep button keys
+    // local so native keyboard activation and focus traversal remain available.
+    const controlKey = event => event.stopPropagation();
+    const canvasTab = event => {
+        if (event.key === 'Tab') event.stopPropagation();
+    };
+    canvas.addEventListener('keydown', canvasTab);
+    canvas.addEventListener('keyup', canvasTab);
+    fullscreen.addEventListener('keydown', controlKey);
+    fullscreen.addEventListener('keyup', controlKey);
+    fullscreen.addEventListener('click', toggleFullscreen);
+    document.addEventListener('fullscreenchange', fullscreenChanged);
+    document.addEventListener('fullscreenerror', fullscreenFailed);
+    document.addEventListener('visibilitychange', refreshFullscreen);
+    window.addEventListener('focus', refreshFullscreen);
+    window.addEventListener('blur', refreshFullscreen);
+    stage.appendChild(fullscreen);
+    refreshFullscreen();
     const capture = document.createElement('button');
     capture.type = 'button';
     capture.id = 'tankgame-mouse-capture';
@@ -193,16 +246,37 @@ EM_JS(void, InstallBrowserActivity, (), {
             if (request && request.catch) request.catch(failed);
         } catch (error) { failed(); }
     };
+    capture.addEventListener('keydown', controlKey);
+    capture.addEventListener('keyup', controlKey);
     capture.addEventListener('click', activate);
     document.addEventListener('pointerlockchange', lockChanged);
     document.addEventListener('pointerlockerror', failed);
     document.addEventListener('visibilitychange', refreshCapture);
     window.addEventListener('focus', refreshCapture);
     window.addEventListener('blur', refreshCapture);
-    document.body.appendChild(capture);
+    stage.appendChild(capture);
     refreshCapture();
     state.remove = () => {
         state.disposed = true;
+        canvas.removeEventListener('keydown', canvasTab);
+        canvas.removeEventListener('keyup', canvasTab);
+        fullscreen.removeEventListener('keydown', controlKey);
+        fullscreen.removeEventListener('keyup', controlKey);
+        fullscreen.removeEventListener('click', toggleFullscreen);
+        document.removeEventListener('fullscreenchange', fullscreenChanged);
+        document.removeEventListener('fullscreenerror', fullscreenFailed);
+        document.removeEventListener('visibilitychange', refreshFullscreen);
+        window.removeEventListener('focus', refreshFullscreen);
+        window.removeEventListener('blur', refreshFullscreen);
+        if (document.fullscreenElement === stage) {
+            const request = document.exitFullscreen();
+            if (request && request.catch) request.catch(() => {});
+        }
+        fullscreen.remove();
+        style.remove();
+        if (shellControls) shellControls.style.display = shellDisplay;
+        capture.removeEventListener('keydown', controlKey);
+        capture.removeEventListener('keyup', controlKey);
         capture.removeEventListener('click', activate);
         document.removeEventListener('pointerlockchange', lockChanged);
         document.removeEventListener('pointerlockerror', failed);
