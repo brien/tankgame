@@ -25,6 +25,25 @@ checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
 
+## R6 browser mouse capture slice (2026-10-28)
+
+An explicit, keyboard-accessible Capture mouse button now requests pointer lock
+from a user gesture. The cue shows how to release capture, reports rejection with
+retry, and leaves keyboard play available. Lock transitions use the existing
+input/timer reset boundary, including transitions between callbacks. Shutdown
+releases capture and removes listeners/UI. Native input behavior is unchanged.
+
+Native/browser builds and all 145 GL-enabled native tests pass. Chromium smoke
+covers capture, relative-motion delivery, programmatic release, recapture, blur,
+injected permission rejection, retry and shutdown, with clean WebGL probes and
+stable uploads. See [implementation and evidence](../../documentation/browser-pointer-lock-2026-10-28/README.md).
+
+This completes the initial pointer-lock UX slice, not R6 release qualification.
+Physical Escape behavior and the wider browser/device matrix still require manual
+qualification. Audio, gamepad lifecycle, context recovery and complete packaging
+remain open. Native compatibility remains the default; existing platform runtime,
+visual-approval and multiplayer robustness deferrals remain unchanged.
+
 ## R6 browser focus and timing slice (2026-10-28)
 
 The browser callback now suspends game ticks while the document is hidden or its
