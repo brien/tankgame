@@ -35,21 +35,42 @@ if(EMSCRIPTEN)
     # shell together with the JavaScript, WebAssembly, and preload data files.
     set_target_properties(${EXECUTABLE_NAME} PROPERTIES SUFFIX ".html")
 
-    # file_packager uses '@' to separate host and virtual paths, while the
-    # shipped level filenames themselves contain '@@'. Stage just the two
-    # required levels in a directory so that delimiter is never ambiguous.
+    # Stage level names containing '@' so file_packager never parses them as
+    # source/destination delimiters. Include every shipped level and metadata.
     set(BROWSER_LEVEL_ASSETS "${CMAKE_CURRENT_BINARY_DIR}/browser-assets/levels")
+    file(REMOVE_RECURSE "${BROWSER_LEVEL_ASSETS}")
     file(MAKE_DIRECTORY "${BROWSER_LEVEL_ASSETS}")
-    foreach(BROWSER_LEVEL_FILE
-            "title@@.txt" "title@@.json" "level0@@.txt" "level0@@.json")
-        configure_file(
-            "${CMAKE_SOURCE_DIR}/runtime/levels/${BROWSER_LEVEL_FILE}"
-            "${BROWSER_LEVEL_ASSETS}/${BROWSER_LEVEL_FILE}"
-            COPYONLY
-        )
+    file(GLOB BROWSER_LEVEL_FILES CONFIGURE_DEPENDS
+        "${CMAKE_SOURCE_DIR}/runtime/levels/*.txt"
+        "${CMAKE_SOURCE_DIR}/runtime/levels/*.json")
+    foreach(BROWSER_LEVEL_FILE IN LISTS BROWSER_LEVEL_FILES)
+        get_filename_component(BROWSER_LEVEL_NAME "${BROWSER_LEVEL_FILE}" NAME)
+        configure_file("${BROWSER_LEVEL_FILE}" "${BROWSER_LEVEL_ASSETS}/${BROWSER_LEVEL_NAME}" COPYONLY)
     endforeach()
+    # Only codecs/assets actually referenced by SoundTask are needed.
+    set(BROWSER_SOUND_ASSETS "${CMAKE_CURRENT_BINARY_DIR}/browser-assets/sounds")
+    file(MAKE_DIRECTORY "${BROWSER_SOUND_ASSETS}")
+    foreach(BROWSER_SOUND_FILE TGTest3.ogg cowbell.wav shatter.wav shatter2.wav
+            hit3.wav shot.wav xphone.wav gain.wav jump.wav land.wav elastik.wav)
+        configure_file("${CMAKE_SOURCE_DIR}/runtime/sounds/${BROWSER_SOUND_FILE}"
+            "${BROWSER_SOUND_ASSETS}/${BROWSER_SOUND_FILE}" COPYONLY)
+    endforeach()
+    file(GLOB_RECURSE BROWSER_STATIC_ASSETS CONFIGURE_DEPENDS
+        "${CMAKE_SOURCE_DIR}/runtime/fonts/*"
+        "${CMAKE_SOURCE_DIR}/runtime/texture/*"
+        "${BROWSER_SOUND_ASSETS}/*")
+    set_property(TARGET ${EXECUTABLE_NAME} APPEND PROPERTY LINK_DEPENDS
+        "${CMAKE_SOURCE_DIR}/web/shell.html" ${BROWSER_LEVEL_FILES} ${BROWSER_STATIC_ASSETS}
+        "${CMAKE_SOURCE_DIR}/runtime/settings.txt"
+        "${CMAKE_SOURCE_DIR}/runtime/nowbody.gsm" "${CMAKE_SOURCE_DIR}/runtime/nowturret.gsm"
+        "${CMAKE_SOURCE_DIR}/runtime/cannon.gsm" "${CMAKE_SOURCE_DIR}/runtime/body.gsm")
 
+    # Resource recovery uses C++ exceptions to report shader/upload failures.
+    target_compile_options(${EXECUTABLE_NAME} PRIVATE "-fexceptions")
     target_link_options(${EXECUTABLE_NAME} PRIVATE
+        "-fexceptions"
+        "--shell-file=${CMAKE_SOURCE_DIR}/web/shell.html"
+        "--preload-file=${BROWSER_SOUND_ASSETS}@/sounds"
         "--preload-file=${CMAKE_SOURCE_DIR}/runtime/fonts@/fonts"
         "--preload-file=${CMAKE_SOURCE_DIR}/runtime/texture@/texture"
         "--preload-file=${CMAKE_SOURCE_DIR}/runtime/settings.txt@/settings.txt"

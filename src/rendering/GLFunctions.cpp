@@ -8,7 +8,13 @@ bool Initialize(std::string&) { return true; }
 void Shutdown() {}
 bool IsInitialized() { return true; }
 #define TG_DIRECT(ret, name, args, call) ret name args { return gl##name call; }
-TG_DIRECT(GLuint, CreateShader, (GLenum a), (a))
+GLuint CreateShader(GLenum type)
+{
+    const GLuint shader = glCreateShader(type);
+    // Emscripten 3.1.64 can return a table index even when WebGL returned null.
+    // Normalize that result at the platform boundary before shaderSource uses it.
+    return glIsShader(shader) ? shader : 0;
+}
 TG_DIRECT(void, ShaderSource, (GLuint a, GLsizei b, const GLchar* const* c, const GLint* d), (a,b,c,d))
 TG_DIRECT(void, CompileShader, (GLuint a), (a)) TG_DIRECT(void, GetShaderiv, (GLuint a, GLenum b, GLint* c), (a,b,c))
 TG_DIRECT(void, GetShaderInfoLog, (GLuint a, GLsizei b, GLsizei* c, GLchar* d), (a,b,c,d)) TG_DIRECT(void, DeleteShader, (GLuint a), (a))

@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tankgame</title>
+<style>
+html,body { margin:0; background:#111; color:#eee; font:16px system-ui,sans-serif; }
+canvas { display:block; border:0; outline-offset:-3px; }
+#status { position:fixed; top:12px; left:12px; z-index:1100; background:#111; padding:8px; }
+#retry { position:fixed; top:65px; left:20px; z-index:1101; }
+#help { margin:8px; font-size:14px; }
+button { cursor:pointer; font:inherit; }
+button:focus-visible,canvas:focus-visible { outline:3px solid #ffd65a; }
+#output { display:none; }
+@media(max-width:650px) { button { max-width:30%; font-size:12px !important; padding:8px !important; } }
+</style>
+</head>
+<body>
+<div id="surface"><canvas id="canvas" tabindex="0" aria-label="Tankgame. Use arrow keys to choose a mode and Enter to play." oncontextmenu="event.preventDefault()"></canvas></div>
+<div id="status" role="status" aria-live="polite">Downloading game…</div>
+<button id="retry" hidden onclick="location.reload()">Reload and retry</button>
+<p id="help">Arrows: choose mode · Enter: play · WASD: move · Mouse: aim/fire · Esc: menu/quit. Gamepad: left stick move, right stick aim, A fire, B jump, RB special. Settings reset on reload.</p>
+<textarea id="output" aria-label="Game log" readonly></textarea>
+<script>
+const statusElement = document.getElementById('status');
+let failed = false;
+const fail = message => {
+    failed = true;
+    statusElement.hidden = false;
+    statusElement.textContent = message + ' Reload to retry.';
+    document.getElementById('retry').hidden = false;
+};
+var Module = {
+    canvas: document.getElementById('canvas'),
+    print: text => {
+        const output = document.getElementById('output');
+        output.value = (output.value + text + '\n').slice(-65536);
+        console.log(text);
+    },
+    printErr: text => console.error(text),
+    setStatus: text => {
+        if (failed) return;
+        statusElement.textContent = text;
+        statusElement.hidden = !text;
+    },
+    monitorRunDependencies: count => Module.setStatus(count ? 'Loading game assets… (' + count + ' remaining)' : ''),
+    onAbort: reason => fail('Unable to start game: ' + reason),
+    onExit: () => Module.setStatus('Game stopped. Reload to play again.')
+};
+window.addEventListener('error', event => fail(event.message || 'Unable to download game'), true);
+window.addEventListener('unhandledrejection', () => fail('Unable to load game'));
+</script>
+{{{ SCRIPT }}}
+</body>
+</html>

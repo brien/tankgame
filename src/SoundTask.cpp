@@ -57,16 +57,19 @@ bool SoundTask::Start()
 
         if (-1 == SDL_InitSubSystem(SDL_INIT_AUDIO))
         {
-            return false;
+            disable = true;
+            return true;
         }
 
         if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
         {
             Logger::Get().Write("Unable to open audio! Running without sound.\n");
             disable = true;
+            SDL_QuitSubSystem(SDL_INIT_AUDIO);
             return true;
         }
 
+        opened = true;
         Mix_AllocateChannels(16);
         Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
 
@@ -94,6 +97,7 @@ bool SoundTask::Start()
 
 void SoundTask::OnSuspend()
 {
+    SetActive(false);
 }
 
 void SoundTask::Update()
@@ -103,11 +107,12 @@ void SoundTask::Update()
 
 void SoundTask::OnResume()
 {
+    SetActive(true);
 }
 
 void SoundTask::PlayChannel(int ID)
 {
-    if (!disable)
+    if (!disable && opened && active)
     {
         if (ID == cowbellChannel)
         {
@@ -154,57 +159,46 @@ void SoundTask::PlayChannel(int ID)
 
 void SoundTask::PlayMusic(int ID)
 {
-    if (ID < 0)
-    {
-        ID = musicID + 1;
-    }
-    if (!disable && Mix_PausedMusic() == 0)
-    {
-        if (ID > 7)
-            ID = 0;
-        if (ID == 0)
-        {
-            Mix_FreeMusic(music);
-            music = Mix_LoadMUS("sounds/TGTest3.ogg");
-            Mix_PlayMusic(music, -1);
-            musicID = ID;
-        }
-    }
+    if (ID < 0) ID = musicID + 1;
+    if (ID > 7) ID = 0;
+    if (disable || !opened || ID != 0) return;
+    musicID = ID;
+    if (music && !Mix_PlayingMusic()) Mix_PlayMusic(music, -1);
+    if (!active || musicPaused) Mix_PauseMusic();
 }
 
 void SoundTask::PauseMusic()
 {
-    if (!disable)
+    if (disable || !opened) return;
+    musicPaused = !musicPaused;
+    if (musicPaused || !active) Mix_PauseMusic();
+    else Mix_ResumeMusic();
+}
+
+void SoundTask::SetActive(bool value)
+{
+    if (active == value) return;
+    active = value;
+    if (!opened) return;
+    if (!active)
     {
-        if (Mix_PausedMusic() == 0)
-        {
-            Mix_PauseMusic();
-        }
-        else
-        {
-            Mix_ResumeMusic();
-        }
+        Mix_HaltChannel(-1);
+        Mix_PauseMusic();
     }
+    else if (!musicPaused) Mix_ResumeMusic();
 }
 
 void SoundTask::Stop()
 {
-    if (!disable)
-    {
-        Mix_FreeChunk(cowbell);
-        Mix_FreeChunk(fire);
-        Mix_FreeChunk(xphone);
-        Mix_FreeChunk(energy);
-        Mix_FreeChunk(jump);
-        Mix_FreeChunk(death);
-        Mix_FreeChunk(death2);
-        Mix_FreeChunk(hit);
-        Mix_FreeChunk(bounce);
-
-        Mix_HaltMusic();
-        Mix_FreeMusic(music);
-        music = NULL;
-
-        Mix_CloseAudio();
-    }
+    if (!opened) return;
+    Mix_HaltChannel(-1);
+    Mix_HaltMusic();
+    for (Mix_Chunk* chunk : {cowbell, fire, xphone, energy, jump, land, death, death2, hit, bounce})
+        Mix_FreeChunk(chunk);
+    cowbell = fire = xphone = energy = jump = land = death = death2 = hit = bounce = nullptr;
+    Mix_FreeMusic(music);
+    music = nullptr;
+    Mix_CloseAudio();
+    SDL_QuitSubSystem(SDL_INIT_AUDIO);
+    opened = false;
 }

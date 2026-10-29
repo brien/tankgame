@@ -1,4 +1,7 @@
 #include "KeyboardMouseInputHandler.h"
+#ifdef __EMSCRIPTEN__
+#include "GenericJoystickInputHandler.h"
+#endif
 #include "Tank.h"
 #include "InputTask.h"
 #include "App.h"
@@ -8,6 +11,21 @@
 
 void KeyboardMouseInputHandler::HandleInput(Tank& tank)
 {
+#ifdef __EMSCRIPTEN__
+    // Browser pads can appear only after their first button gesture. Keep the
+    // keyboard handler available and use the standard pad while it is active.
+    bool padActive = false;
+    for (int axis = 0; axis < 4; ++axis)
+        padActive |= std::abs(InputTask::GetAxis(tank.jid, axis)) > 5000;
+    for (int button = 0; button < 16; ++button)
+        padActive |= InputTask::GetButton(tank.jid, button) != 0;
+    if (padActive)
+    {
+        GenericJoystickInputHandler joystick;
+        joystick.HandleInput(tank);
+        return;
+    }
+#endif
     tank.RotTurret(InputTask::dX * 2);
 
     if ((tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(1))

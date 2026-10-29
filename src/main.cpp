@@ -50,11 +50,6 @@ bool App::Initialize(int argc, char *argv[])
     videoTask = new VideoTask;
     graphicsTask = new GraphicsTask;
     soundTask = new SoundTask;
-#ifdef __EMSCRIPTEN__
-    // Browser audio requires a user gesture. It is not a startup dependency for
-    // the bootstrap renderer, so leave it disabled until a later audio milestone.
-    soundTask->disable = true;
-#endif
     gameTask = new GameTask;
     globalTimer = new GlobalTimer;
     inputTask = new InputTask;
@@ -110,7 +105,9 @@ bool App::Initialize(int argc, char *argv[])
 
     quit = false;
 
-#ifndef __EMSCRIPTEN__
+#ifdef __EMSCRIPTEN__
+    soundTask->SetActive(false);
+#else
     soundTask->PlayMusic(0);
 #endif
 
@@ -144,13 +141,26 @@ void App::Run(int argc, char *argv[])
 }
 
 #ifdef __EMSCRIPTEN__
+extern "C" EMSCRIPTEN_KEEPALIVE void ActivateBrowserAudio()
+{
+    App::GetSingleton().soundTask->SetActive(true);
+    App::GetSingleton().soundTask->PlayMusic(0);
+}
+
 namespace
 {
 // Use independent listeners: replacing Emscripten's focus callbacks would
 // interfere with SDL's own keyboard/window bookkeeping.
 EM_JS(void, InstallBrowserActivity, (), {
     const state = {changed: true, disposed: false};
-    const update = () => { state.changed = true; };
+    const update = () => {
+        state.changed = true;
+        if (Module.SDL2 && Module.SDL2.audioContext) {
+            const active = !document.hidden && document.hasFocus() && !state.contextLost;
+            const request = active && state.audioEnabled ? Module.SDL2.audioContext.resume() : Module.SDL2.audioContext.suspend();
+            if (request && request.catch) request.catch(() => {});
+        }
+    };
     document.addEventListener('visibilitychange', update);
     window.addEventListener('focus', update);
     window.addEventListener('blur', update);
@@ -256,8 +266,55 @@ EM_JS(void, InstallBrowserActivity, (), {
     window.addEventListener('blur', refreshCapture);
     stage.appendChild(capture);
     refreshCapture();
+    const audio = document.createElement('button');
+    audio.id = 'tankgame-audio';
+    audio.type = 'button';
+    audio.textContent = 'Enable sound';
+    audio.style.cssText = 'position:fixed;bottom:12px;left:12px;padding:12px 20px;z-index:1000;background:#111;color:#fff';
+    audio.setAttribute('aria-live', 'polite');
+    state.audioEnabled = false;
+    const enableAudio = async () => {
+        try {
+            if (!Module.SDL2.audioContext) throw new Error('Audio unavailable');
+            await Module.SDL2.audioContext.resume();
+            if (state.disposed) return;
+            if (Module.SDL2.audioContext.state !== 'running') throw new Error('Audio suspended');
+            state.audioEnabled = true;
+            _ActivateBrowserAudio();
+            audio.textContent = 'Sound enabled';
+            audio.disabled = true;
+            canvas.focus();
+        } catch (error) {
+            if (!state.disposed) audio.textContent = 'Sound unavailable — retry';
+        }
+    };
+    audio.addEventListener('click', enableAudio);
+    audio.addEventListener('keydown', controlKey);
+    audio.addEventListener('keyup', controlKey);
+    stage.appendChild(audio);
+    const contextLost = event => {
+        event.preventDefault();
+        state.contextLost = true;
+        state.changed = true;
+        update();
+        status.textContent = 'Graphics interrupted — waiting for recovery';
+        status.hidden = false;
+    };
+    const contextRestored = () => {
+        state.contextLost = false;
+        state.restore = true;
+        update();
+    };
+    canvas.addEventListener('webglcontextlost', contextLost);
+    canvas.addEventListener('webglcontextrestored', contextRestored);
     state.remove = () => {
         state.disposed = true;
+        canvas.removeEventListener('webglcontextlost', contextLost);
+        canvas.removeEventListener('webglcontextrestored', contextRestored);
+        audio.removeEventListener('click', enableAudio);
+        audio.removeEventListener('keydown', controlKey);
+        audio.removeEventListener('keyup', controlKey);
+        audio.remove();
         canvas.removeEventListener('keydown', canvasTab);
         canvas.removeEventListener('keyup', canvasTab);
         fullscreen.removeEventListener('keydown', controlKey);
@@ -297,10 +354,11 @@ EM_JS(int, ReadBrowserActivity, (), {
     const state = Module.tankgameActivity;
     const hidden = document.hidden;
     const focused = document.hasFocus();
-    state.status.hidden = !hidden && focused;
+    state.status.hidden = !hidden && focused && !state.contextLost;
+    if (!state.contextLost) state.status.textContent = 'Paused — return to this window to resume';
     const flags = (hidden ? 1 : 0) | (focused ? 2 : 0) | (state.changed ? 4 : 0);
     state.changed = false;
-    return flags;
+    return flags | (state.contextLost ? 8 : 0) | (state.restore ? 16 : 0) | (state.audioEnabled ? 32 : 0);
 });
 
 EM_JS(void, RemoveBrowserActivity, (), {
@@ -321,7 +379,35 @@ void BrowserFrame(void *appPointer)
     App *app = static_cast<App *>(appPointer);
     static BrowserFramePolicy policy;
     const int activity = ReadBrowserActivity();
-    const auto decision = policy.NextFrame(start, activity & 1, activity & 2, activity & 4);
+    static bool resourcesLost = false;
+    if ((activity & 8) && !resourcesLost)
+    {
+        app->graphicsTask->Stop();
+        resourcesLost = true;
+    }
+    if ((activity & 16) && !(activity & 8))
+    {
+        // Loss and restoration may both arrive between animation callbacks.
+        if (!resourcesLost) app->graphicsTask->Stop();
+        bool recovered = false;
+        try { recovered = app->graphicsTask->Start(); }
+        catch (const std::exception& error) {
+            Logger::Get().Write("Graphics recovery failed: %s\n", error.what());
+        }
+        if (!recovered)
+        {
+            EM_ASM({ Module.onAbort('Graphics recovery failed'); });
+            emscripten_cancel_main_loop();
+            RemoveBrowserActivity();
+            TaskHandler::GetSingleton().KillAllTasks();
+            app->Shutdown();
+            return;
+        }
+        resourcesLost = false;
+        EM_ASM({ Module.tankgameActivity.restore = false; });
+    }
+    const auto decision = policy.NextFrame(start, (activity & 1) || (activity & 8), activity & 2, activity & 4);
+    app->soundTask->SetActive(decision.tick && (activity & 32));
     if (decision.reset)
     {
         app->globalTimer->Reset();
@@ -342,7 +428,8 @@ void BrowserFrame(void *appPointer)
         return;
     }
 
-    if (frameTime > 0.0)
+    static const bool profile = EM_ASM_INT({ return new URLSearchParams(location.search).has('profile'); });
+    if (profile && frameTime > 0.0)
     {
         elapsed += frameTime;
         tickTime += emscripten_get_now() - start;
@@ -374,6 +461,7 @@ int main(int argc, char *argv[])
     if (!App::GetSingleton().Initialize(argc, argv))
     {
         Logger::Get().Write("FATAL: Browser application initialization failed.\n");
+        EM_ASM({ Module.onAbort('Game initialization failed'); });
         return 1;
     }
     Logger::Get().Write("Registering non-blocking Emscripten browser frame loop.\n");

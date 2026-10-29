@@ -7,6 +7,7 @@
 
 void GenericJoystickInputHandler::HandleInput(Tank& tank)
 {
+    if (!InputTask::HasJoystick(tank.jid)) return;
     // Fire controls
     if ((tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE) && 
         (InputTask::GetButton(tank.jid, 0) || InputTask::GetButton(tank.jid, 3) || InputTask::GetButton(tank.jid, 7)))
@@ -70,7 +71,11 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     }
     
     // Turret rotation - different for JOYSTICK_GENERIC vs EXTREME_3D/OTHER
+#ifdef __EMSCRIPTEN__
+    if (true) // Standard browser mapping: right stick X is axis 2.
+#else
     if (tank.inputMode == InputMode::MODE_JOYSTICK_GENERIC)
+#endif
     {
         if (InputTask::GetAxis(tank.jid, 2) < -6000)
         {
@@ -105,22 +110,22 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
 
     // Camera controls via hat switch
     auto& cam = App::GetSingleton().graphicsTask->cams[tank.identity.GetPlayerIndex()];
-    if (SDL_JoystickGetHat(InputTask::joysticks[tank.jid], 0) == SDL_HAT_UP)
+    if (InputTask::GetHat(tank.jid) == SDL_HAT_UP)
     {
         cam.ydist = 0.8;
         cam.xzdist = 1.0;
     }
-    else if (SDL_JoystickGetHat(InputTask::joysticks[tank.jid], 0) == SDL_HAT_DOWN)
+    else if (InputTask::GetHat(tank.jid) == SDL_HAT_DOWN)
     {
         cam.ydist = 1.2;
         cam.xzdist = 2;
     }
-    else if (SDL_JoystickGetHat(InputTask::joysticks[tank.jid], 0) == SDL_HAT_LEFT)
+    else if (InputTask::GetHat(tank.jid) == SDL_HAT_LEFT)
     {
         cam.ydist = 3.2;
         cam.xzdist = 2.2;
     }
-    else if (SDL_JoystickGetHat(InputTask::joysticks[tank.jid], 0) == SDL_HAT_RIGHT)
+    else if (InputTask::GetHat(tank.jid) == SDL_HAT_RIGHT)
     {
         cam.ydist = 20.2;
         cam.xzdist = 0.2;

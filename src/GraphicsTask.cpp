@@ -133,7 +133,7 @@ bool GraphicsTask::Start()
 
     Logger::Get().Write("GraphicsTask::Started\n");
     Logger::Get().Write("Renderer mode: %s\n", RendererMode::Name());
-    return true;
+    return renderingPipeline != nullptr;
 }
 
 void GraphicsTask::Stop()
@@ -145,6 +145,8 @@ void GraphicsTask::Stop()
     terrainRenderer.Cleanup();
     bulletRenderer.Cleanup();
     effectRenderer.Cleanup();
+    itemRenderer.Cleanup();
+    tankRenderer.Cleanup();
 
     Logger::Get().Write("GraphicsTask: Stopped \n");
 }
@@ -256,6 +258,8 @@ void GraphicsTask::InitializeNewRenderingPipeline()
         if (!renderingPipeline->Initialize())
         {
             Logger::Get().Write("ERROR: Failed to initialize RenderingPipeline\n");
+            renderingPipeline->Cleanup();
+            renderingPipeline.reset();
             return;
         }
 
@@ -264,6 +268,8 @@ void GraphicsTask::InitializeNewRenderingPipeline()
     catch (const std::exception &e)
     {
         Logger::Get().Write("ERROR: Exception during rendering pipeline initialization: %s\n", e.what());
+        if (renderingPipeline) renderingPipeline->Cleanup();
+        renderingPipeline.reset();
     }
 }
 

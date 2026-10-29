@@ -221,13 +221,18 @@ bool VideoTask::RefreshDrawableSize()
                 Module.canvas.style.height = $1 + 'px';
             }, targetWidth, targetHeight);
         }
-        else if (windowedWidth)
+        else
         {
-            SDL_SetWindowSize(window, windowedWidth, windowedHeight);
+            // Windowed play follows the available page area; use the same SDL
+            // logical-size / drawable-size boundary as fullscreen and desktop.
+            const int targetWidth = EM_ASM_INT({ return Math.max(1, Math.floor(window.innerWidth)); });
+            const int targetHeight = EM_ASM_INT({ return Math.max(1, Math.floor(window.innerHeight - 112)); });
+            if (width != targetWidth || height != targetHeight)
+                SDL_SetWindowSize(window, targetWidth, targetHeight);
             EM_ASM({
                 Module.canvas.style.width = $0 + 'px';
                 Module.canvas.style.height = $1 + 'px';
-            }, windowedWidth, windowedHeight);
+            }, targetWidth, targetHeight);
             windowedWidth = windowedHeight = 0;
         }
     }
