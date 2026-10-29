@@ -20,6 +20,8 @@ private:
     const static int MAX_JOYSTICK_AXES = 4;
     static std::vector<Uint8> suppressedKeys;
     static unsigned int suppressedButtons;
+    static bool suppressedJoysticks[MAX_JOYSTICKS];
+    static void RefreshJoysticks();
 
 public:
     InputTask();
@@ -40,6 +42,8 @@ public:
     static Uint8 *oldKeys;
     static int keyCount;
 
+    static bool HasJoystick(int joystickId);
+    static Uint8 GetHat(int joystickId);
     static int GetAxis(int joystickId, int axis);
     static unsigned char GetButton(int joystickId, int bid);
 

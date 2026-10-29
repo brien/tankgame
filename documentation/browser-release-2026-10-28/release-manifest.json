@@ -1,0 +1,9 @@
+{
+  "version": "53999c5ab2300804",
+  "sha256": {
+    "tankgame-linux.html": "b568e61a3ada8798eec47f9c1103b65be9b08df9ca9afd778665c6d80696af49",
+    "tankgame-linux.js": "ce4f723ec6c65d3b0cf7d6c585b4a1af2b29c9e785cc21d716083167d09cc58e",
+    "tankgame-linux.wasm": "9fd6da483c536b6b8f6236b0425a55a0edb5d4f58b0badeab3044410ef0952ba",
+    "tankgame-linux.data": "30c77967f29d398c51c3dd0ca0a7e7da836f08cf8fa03a2a2e196cac040efe63"
+  }
+}

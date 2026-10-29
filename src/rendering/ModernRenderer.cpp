@@ -16,6 +16,8 @@ namespace
 GLuint CompileShader(GLenum type, const char* source)
 {
     const GLuint shader = GLFunctions::CreateShader(type);
+    if (!shader)
+        throw std::runtime_error("Unable to allocate modern renderer shader");
     GLFunctions::ShaderSource(shader, 1, &source, nullptr);
     GLFunctions::CompileShader(shader);
     GLint compiled = GL_FALSE;
@@ -51,8 +53,20 @@ public:
         const std::string vertexSource = BuildVertexShader(dialect);
         const std::string fragmentSource = BuildFragmentShader(dialect);
         const GLuint vertex = CompileShader(GL_VERTEX_SHADER, vertexSource.c_str());
-        const GLuint fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
+        GLuint fragment = 0;
+        try {
+            fragment = CompileShader(GL_FRAGMENT_SHADER, fragmentSource.c_str());
+        } catch (...) {
+            GLFunctions::DeleteShader(vertex);
+            throw;
+        }
         handle = GLFunctions::CreateProgram();
+        if (!handle)
+        {
+            GLFunctions::DeleteShader(vertex);
+            GLFunctions::DeleteShader(fragment);
+            throw std::runtime_error("Unable to allocate modern renderer program");
+        }
         GLFunctions::AttachShader(handle, vertex);
         GLFunctions::AttachShader(handle, fragment);
         GLFunctions::BindAttribLocation(handle, 0, "aPosition");

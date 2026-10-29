@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-28
+**Status date:** 2026-10-29
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -15,8 +15,10 @@ reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
 program; platform differences stay at GL loading, context/shader dialect, and
 application/toolchain boundaries. Shared water and effects are now implemented.
 Title-menu selection, player HUD meters/icons and targeting are now shared.
-Cached diagnostic text is shared; additional UI text, audio and browser UX remain
-deferred, so this is still a partial port.
+Cached diagnostic, menu and player status text are shared. Browser audio, gamepad
+lifecycle, context recovery, responsive sizing and release packaging are now
+implemented. Cross-platform visual/runtime approval and release qualification
+remain open; this is not yet a qualified full release.
 
 **Current owner decision (terrain follow-up):** defer Windows modern-renderer
 runtime qualification alongside macOS, and proceed with the first opaque terrain
@@ -24,6 +26,31 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## R6 interaction and release implementation (2026-10-28–29)
+
+Browser audio now uses the existing SDL_mixer OGG/WAV path with explicit sound
+activation, rejection/retry, focus/visibility suspension and complete teardown.
+Joystick hotplug handling preserves player slots and bounds axis reads; browser
+standard pads work alongside keyboard controls and suppress held input after
+reconnection/focus changes. WebGL context loss suspends play and rebuilds the
+rendering catalogue on restoration while retaining gameplay state.
+
+The browser now has a responsive windowed canvas and an accessible loading/error/
+retry shell. All shipped level maps/metadata and referenced audio are packaged.
+Settings explicitly retain read-only defaults. A pinned browser CI build and
+content-versioned release packaging complement the desktop build matrix.
+Per-frame browser performance logging requires `?profile`. Native/browser builds,
+147 GL-enabled native tests, three explicit modern startup tests and all 31 local
+Chromium lifecycle/failure-path checks pass.
+
+See [implementation, validation and hosting instructions](../../documentation/browser-release-2026-10-28/README.md).
+The older dated sections below are historical remaining-work lists. Current open
+items are qualification/owner gates: broader browser/device and long-session
+checks, visual approval, deferred Windows/macOS runtime checks, and an explicit
+compatibility retirement decision. Compatibility remains the native default;
+multiplayer/session-state robustness remains deferred. No claim of a completed
+release matrix or approval is made by this implementation.
 
 ## R6 browser fullscreen slice (2026-10-28)
 

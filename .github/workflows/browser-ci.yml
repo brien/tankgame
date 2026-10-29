@@ -1,0 +1,26 @@
+name: Browser CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: '3.1.64'
+          actions-cache-folder: emsdk-cache
+      - name: Configure
+        run: emcmake cmake -S . -B build-browser -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF
+      - name: Build
+        run: cmake --build build-browser --parallel 4
+      - name: Package
+        run: python3 tools/package-browser.py --output browser-release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: tankgame-browser
+          path: browser-release/
+          if-no-files-found: error

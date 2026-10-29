@@ -18,43 +18,50 @@ public:
     void PlayChannel(int ID);
     void PlayMusic(int ID);
     void PauseMusic();
+    void SetActive(bool active);
 
-    Mix_Music *music;
+private:
+    bool opened = false;
+    bool active = true;
+    bool musicPaused = false;
+public:
 
-    Mix_Chunk *cowbell;
-    Mix_Chunk *fire;
-    Mix_Chunk *xphone;
-    Mix_Chunk *energy;
+    Mix_Music *music = nullptr;
 
-    Mix_Chunk *jump;
-    Mix_Chunk *land;
+    Mix_Chunk *cowbell = nullptr;
+    Mix_Chunk *fire = nullptr;
+    Mix_Chunk *xphone = nullptr;
+    Mix_Chunk *energy = nullptr;
 
-    Mix_Chunk *death;
-    Mix_Chunk *death2;
-    Mix_Chunk *hit;
-    Mix_Chunk *bounce;
+    Mix_Chunk *jump = nullptr;
+    Mix_Chunk *land = nullptr;
+
+    Mix_Chunk *death = nullptr;
+    Mix_Chunk *death2 = nullptr;
+    Mix_Chunk *hit = nullptr;
+    Mix_Chunk *bounce = nullptr;
 
     int audio_rate;
     Uint16 audio_format;
     int audio_channels;
     int audio_buffers;
 
-    int cowbellChannel;
-    int fireChannel;
-    int xphoneChannel;
-    int energyChannel;
+    int cowbellChannel = 0;
+    int fireChannel = 2;
+    int xphoneChannel = 1;
+    int energyChannel = 3;
 
-    int jumpChannel;
-    int landChannel;
+    int jumpChannel = 4;
+    int landChannel = 5;
 
-    int deathChannel;
-    int death2Channel;
-    int hitChannel;
-    int bounceChannel;
+    int deathChannel = 6;
+    int death2Channel = 7;
+    int hitChannel = 8;
+    int bounceChannel = 9;
 
     static unsigned int samplingRate;
 
     bool disable;
 
-    int musicID;
+    int musicID = 0;
 };
