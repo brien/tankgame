@@ -40,13 +40,15 @@ TEST(EnemyRendererTest, AllTypePairsUseLegacyEnemyGeometryAndExtractedColors) {
     }
 }
 
-TEST(EnemyRendererTest, ComponentScalesAndLocalCannonOffsetMatchCompatibility) {
+TEST(EnemyRendererTest, ComponentScalesAndLocalCannonOffsetMatchNativeTankRenderer) {
     TankRenderData tank;
     tank.position = Vector3(10, 2, -3);
     const auto draws = EnemyTankRendererImpl::BuildDraws(tank);
+    // Native TankRenderer leaves 0.06 * 10 after the body; both upper
+    // components therefore use 0.06, with a 0.06 world-space cannon offset.
     ExpectPoint(draws[0].model, 5, 2, 3, 10.3f, 2.12f, -2.82f);
-    ExpectPoint(draws[1].model, 3, 4, 2, 10.3f, 2.4f, -2.8f);
-    ExpectPoint(draws[2].model, 5, 4, .25f, 10.6f, 2.4f, -2.975f);
+    ExpectPoint(draws[1].model, 3, 4, 2, 10.18f, 2.24f, -2.88f);
+    ExpectPoint(draws[2].model, 5, 4, .25f, 10.36f, 2.24f, -2.985f);
 }
 
 TEST(EnemyRendererTest, TurretAimIsRelativeToBodyAndOffsetRotatesWithAim) {
@@ -56,12 +58,12 @@ TEST(EnemyRendererTest, TurretAimIsRelativeToBodyAndOffsetRotatesWithAim) {
     tank.turretRotation.y = 90;
     const auto draws = EnemyTankRendererImpl::BuildDraws(tank);
     ExpectPoint(draws[0].model, 5, 2, 3, 9.82f, 2.12f, -2.7f);
-    ExpectPoint(draws[1].model, 3, 4, 2, 9.7f, 2.4f, -3.2f);
-    ExpectPoint(draws[2].model, 5, 4, .25f, 9.4f, 2.4f, -3.025f);
+    ExpectPoint(draws[1].model, 3, 4, 2, 9.82f, 2.24f, -3.12f);
+    ExpectPoint(draws[2].model, 5, 4, .25f, 9.64f, 2.24f, -3.015f);
     tank.turretRotation.y = 0;
     const auto aimed = EnemyTankRendererImpl::BuildDraws(tank);
     ExpectPoint(aimed[0].model, 5, 2, 3, 9.82f, 2.12f, -2.7f);
-    ExpectPoint(aimed[2].model, 5, 4, .25f, 9.975f, 2.4f, -2.4f);
+    ExpectPoint(aimed[2].model, 5, 4, .25f, 9.985f, 2.24f, -2.64f);
 }
 
 TEST(EnemyRendererTest, PitchRollAndYawComposeInLegacyOrder) {
@@ -73,8 +75,8 @@ TEST(EnemyRendererTest, PitchRollAndYawComposeInLegacyOrder) {
     // Body Rx * Ry(-yaw) * Rz maps (x,y,z) to (-z,y,x).
     ExpectPoint(draws[0].model, 5, 2, 3, 9.82f, 2.12f, -2.7f);
     // Relative turret Rx * Ry(-yaw) maps (x,y,z) to (-z,-x,y).
-    ExpectPoint(draws[1].model, 3, 4, 2, 9.6f, 1.7f, -3.2f);
-    ExpectPoint(draws[2].model, 5, 4, .25f, 9.6f, 1.4f, -3.025f);
+    ExpectPoint(draws[1].model, 3, 4, 2, 9.76f, 1.82f, -3.12f);
+    ExpectPoint(draws[2].model, 5, 4, .25f, 9.76f, 1.64f, -3.015f);
 }
 
 TEST(EnemyRendererTest, HealthMultiplierPreservesOverbrightColorsAndZeroHealthIsFinite) {
