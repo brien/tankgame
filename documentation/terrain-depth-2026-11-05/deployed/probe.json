@@ -1,0 +1,8 @@
+{
+  "depth": 24,
+  "medium": 10,
+  "high": 23,
+  "renderer": "ANGLE (AMD, AMD Custom GPU 0405 (radeonsi vangogh ACO), OpenGL ES 3.2)",
+  "framebufferComplete": true,
+  "error": 0
+}

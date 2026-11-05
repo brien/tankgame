@@ -37,3 +37,15 @@ TEST(GraphicsCapabilities, BuildsEachShaderDialect)
     EXPECT_NE(webFragment.find("precision mediump float"), std::string::npos);
     EXPECT_NE(webFragment.find("texture2D"), std::string::npos);
 }
+
+TEST(GraphicsCapabilities, WebTransformsUseHighPrecisionWithPortableVaryings)
+{
+    const std::string vertex = BuildVertexShader(ShaderDialect::GLSLES100);
+    const std::string fragment = BuildFragmentShader(ShaderDialect::GLSLES100);
+    EXPECT_NE(vertex.find("precision highp float;"), std::string::npos);
+    // Keep inter-stage precision compatible with GLES2 fragment implementations
+    // that only support mediump floats. The transform itself stays highp.
+    EXPECT_NE(vertex.find("varying mediump vec4 vColor;"), std::string::npos);
+    EXPECT_NE(vertex.find("varying mediump vec2 vUV;"), std::string::npos);
+    EXPECT_NE(fragment.find("precision mediump float;"), std::string::npos);
+}

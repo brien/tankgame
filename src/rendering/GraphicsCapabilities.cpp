@@ -22,7 +22,11 @@ ShaderDialect ChooseShaderDialect(GraphicsPlatform platform, bool)
 std::string BuildVertexShader(ShaderDialect dialect)
 {
     const bool core = dialect == ShaderDialect::GLSL150Core;
-    const std::string preamble = dialect == ShaderDialect::GLSLES100 ? "precision mediump float;\n" :
+    const bool web = dialect == ShaderDialect::GLSLES100;
+    // World positions and the combined projection matrix must not be rounded
+    // to mediump: distant terrain faces can otherwise acquire the same depth.
+    // Vertex highp is required by GLES2; fragment highp is not.
+    const std::string preamble = web ? "precision highp float;\n" :
         core ? "#version 150 core\n" : "#version 120\n";
     return preamble +
         (core ? "in vec3 aPosition;\nin vec3 aColor;\nin vec2 aUV;\nin vec3 aNormal;\n"
@@ -30,7 +34,8 @@ std::string BuildVertexShader(ShaderDialect dialect)
         "uniform bool uTargeting;\n"
         "uniform mat4 uNormalTransform; uniform bool uLit; uniform mat4 uMvp;\nuniform vec4 uDefaultColor;\nuniform bool uHasColor;\n" +
         (core ? "out vec4 vColor;\nout vec2 vUV;\n"
-              : "varying vec4 vColor;\nvarying vec2 vUV;\n") +
+              : web ? "varying mediump vec4 vColor;\nvarying mediump vec2 vUV;\n"
+                    : "varying vec4 vColor;\nvarying vec2 vUV;\n") +
         "void main() { gl_Position = uMvp * vec4(aPosition, 1.0);"
         // RGB vertex colours have no alpha channel; retain material opacity.
         " vColor = uHasColor ? vec4(aColor, uDefaultColor.a) : uDefaultColor;"
