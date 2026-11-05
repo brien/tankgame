@@ -28,13 +28,13 @@ std::array<EnemyTankDraw, 3> EnemyTankRendererImpl::BuildDraws(const TankRenderD
         Matrix4::Rotation(tank.bodyRotation.x, 1, 0, 0) *
         Matrix4::Rotation(-tank.bodyRotation.y, 0, 1, 0) *
         Matrix4::Rotation(tank.bodyRotation.z, 0, 0, 1);
-    const Matrix4 aim = body * Matrix4::Rotation(tank.turretRotation.x, 1, 0, 0) *
+    const Matrix4 aim = body * Matrix4::Scale(.6f, .6f, .6f) * Matrix4::Rotation(tank.turretRotation.x, 1, 0, 0) *
         Matrix4::Rotation(-tank.turretRotation.y, 0, 1, 0) *
         Matrix4::Rotation(tank.turretRotation.z, 0, 0, 1);
     const BasicMaterial secondary = EnemyMaterial(tank.secondaryColor, tank.health, tank.maxHealth);
     const BasicMaterial primary = EnemyMaterial(tank.primaryColor, tank.health, tank.maxHealth);
-    // Compatibility restores each component scale before applying relative aim
-    // and the 0.1 local-X cannon offset. Never inherit the body's 0.06 scale.
+    // The native TankRenderer scales the body by 0.06, then by 10, leaving
+    // a 0.6 scale for the upper assembly and its local-X cannon offset.
     return {{{GeometryResource::EnemyBody, body * Matrix4::Scale(.06f, .06f, .06f), secondary},
              {GeometryResource::EnemyBarrel, aim * Matrix4::Scale(.1f, .1f, .1f), primary},
              {GeometryResource::EnemyTurret, aim * Matrix4::Translation(.1f, 0, 0) *
@@ -264,7 +264,7 @@ void EnemyTankRendererImpl::DrawBody(float r, float g, float b, float energy, fl
     glVertex3i(4, 0, 4);
     
     glEnd();
-    glScalef(1.0f/0.06f, 1.0f/0.06f, 1.0f/0.06f); // Restore scale
+    glScalef(10, 10, 10); // Preserve TankRenderer's residual 0.6 upper-assembly scale
 }
 
 void EnemyTankRendererImpl::DrawBarrel(float r, float g, float b, float energy, float maxEnergy) {
