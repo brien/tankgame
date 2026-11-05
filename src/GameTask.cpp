@@ -139,8 +139,7 @@ void GameTask::HandleCommonState()
 
 void GameTask::HandleMenuState()
 {
-    // Update GameWorld for menu effects (now handles FX through GameWorld)
-    gameWorld.Update();
+    // Keep the previous world frozen while the player chooses a new game.
 
     if (InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1))
     {
@@ -207,6 +206,13 @@ void GameTask::HandleMenuState()
 
 void GameTask::HandlePlayingState()
 {
+    // Leave gameplay before processing events, movement, or combat this frame.
+    if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
+    {
+        TransitionToState(GameState::MENU);
+        return;
+    }
+
     if (debug)
     {
         if (InputTask::KeyDown(SDL_SCANCODE_H))
@@ -231,11 +237,6 @@ void GameTask::HandlePlayingState()
     // Item management (TODO: move to GameWorld or ItemManager)
     LevelHandler::GetSingleton().UpdateItems();
     LevelHandler::GetSingleton().ItemCollision();
-
-    if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
-    {
-        TransitionToState(GameState::MENU);
-    }
 
     if (gameOver)
     {
