@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-10-29
+**Status date:** 2026-11-05
 
 **Authority:** this document describes the implementation now present and the
 forward plan. The older feasibility, architecture, audit, and migration documents
@@ -26,6 +26,20 @@ slice. Preserve both platforms' build support and the existing three-desktop CI
 checks. The earlier Windows report did not identify renderer mode; neither
 platform is newly runtime-qualified here. Multiplayer robustness remains deferred
 and low priority.
+
+## Manual QA terrain precision fix (2026-11-05)
+
+QA B02 exposed flickering dark platform-top streaks in Chrome/Linux on AMD Vangogh.
+The deployed package matched release `53999c5ab2300804`; the corruption was
+reproduced locally in diagonal views with a 24-bit depth buffer. The WebGL vertex
+shader had reduced camera/world transforms to mediump precision. It now uses highp
+while preserving mediump color/UV varyings and the existing fragment shader.
+
+Native/browser builds, all 148 GL-enabled native tests, and all 31 browser smoke
+checks pass. The reproduced streaks disappear in the rebuilt diagonal-view captures.
+See [before/after evidence and redeployment instructions](../../documentation/terrain-depth-2026-11-05/README.md).
+Release `3badb10675e04d13` is packaged locally; public deployment and the tester's
+Chrome 155 retest remain pending. Existing release/visual-approval gates remain open.
 
 ## R6 interaction and release implementation (2026-10-28–29)
 
