@@ -17,7 +17,7 @@ public:
     void OnResume() override;
 
     // Public getter methods for private flags
-    bool IsGameStarted() const { return gameStarted; }
+    bool IsGameStarted() const { return currentState != GameState::MENU; }
     bool IsDebugMode() const { return debug; }
     bool IsPaused() const { return paused; }
     bool IsVersusMode() const { return versus; }
@@ -28,6 +28,8 @@ public:
     const PlayerManager* GetPlayerManager() const { return &playerManager; }
 
 private:
+    friend class GameTaskStateTest;
+
     enum class GameState { MENU, PLAYING, GAME_OVER };
     GameState currentState;
 
@@ -47,7 +49,6 @@ private:
 
     bool paused;
     bool debug;
-    bool gameStarted;
     bool gameOver;
     int menuState;
     bool versus;

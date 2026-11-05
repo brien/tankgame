@@ -35,7 +35,6 @@ void GameTask::SetUpGame()
 
 GameTask::GameTask()
 {
-    gameStarted = false;
     versus = false;
     gameOver = false;
     menuState = 0;
@@ -156,7 +155,6 @@ void GameTask::HandleMenuState()
         playerManager.SetNumPlayers(std::min(currentPlayers, 2));
         versus = (menuState == 2);
         SetUpGame();
-        gameStarted = true;
         TransitionToState(GameState::PLAYING);
     }
 
