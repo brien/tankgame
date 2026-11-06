@@ -6,6 +6,11 @@
 > [current-state-roadmap.md](current-state-roadmap.md) for the phase-by-phase status,
 > architectural delta, conditional audit, and revised renderer-convergence roadmap.
 
+> **Delivery closeout (2026-11-06):** implementation and owner-reported desktop
+> testing/hosted-browser delivery are complete for the tested configurations.
+> See the current roadmap for retained compatibility support and explicitly
+> deferred qualification work; the original phases below are historical.
+
 ## Principles and continuous gates
 
 This is a future implementation sequence, not work performed by this analysis.

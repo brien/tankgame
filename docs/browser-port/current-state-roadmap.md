@@ -1,31 +1,88 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-11-05
+**Status date:** 2026-11-06
 
-**Authority:** this document describes the implementation now present and the
-forward plan. The older feasibility, architecture, audit, and migration documents
-remain the historical record of the pre-implementation recommendation.
+**Authority:** the closeout below is the current plan. Dated implementation reports
+and the original reconciliation that follow are historical evidence; their open
+items do not override this closeout.
 
-## Executive assessment
+## Browser delivery closeout
 
-The shared modern renderer now covers player body/turret and ring/star overlays,
-bullets/items, enemy bodies/turrets, and textured opaque terrain on native desktop
-and Emscripten. Native compatibility remains the default, fallback, and visual
-reference. `ResourceManager` owns the CPU/GPU catalogue and the single modern
-program; platform differences stay at GL loading, context/shader dialect, and
-application/toolchain boundaries. Shared water and effects are now implemented.
-Title-menu selection, player HUD meters/icons and targeting are now shared.
-Cached diagnostic, menu and player status text are shared. Browser audio, gamepad
-lifecycle, context recovery, responsive sizing and release packaging are now
-implemented. Cross-platform visual/runtime approval and release qualification
-remain open; this is not yet a qualified full release.
+The browser port is implemented and deployed. On 2026-11-06 the owner reported
+successful manual testing on Linux, Windows and macOS, and confirmed that the
+current game works when deployed to a webserver. This closes general desktop
+runtime and hosted-browser delivery checks for the configurations tested.
 
-**Current owner decision (terrain follow-up):** defer Windows modern-renderer
-runtime qualification alongside macOS, and proceed with the first opaque terrain
-slice. Preserve both platforms' build support and the existing three-desktop CI
-checks. The earlier Windows report did not identify renderer mode; neither
-platform is newly runtime-qualified here. Multiplayer robustness remains deferred
-and low priority.
+This is owner-reported acceptance, not a new automated test run. Browser/OS
+versions, desktop renderer selections, deployment URL/package hash, test-case
+coverage and session duration were not supplied. The report does not establish
+an exhaustive browser/device matrix, exact visual parity or resolution of the
+historically deferred multiplayer failures.
+
+The reviewed repository revision is `295d976` (macOS modern vertex-array fix),
+following the terrain precision, enemy upper-assembly scale and Escape-menu fixes.
+The tested/deployed revision was not independently identified; no package hash
+is inferred from the report.
+
+| Milestone | Implementation status | Closeout disposition |
+| --- | --- | --- |
+| R1 — shared modern player path | Implemented | Closed for browser delivery. |
+| R2 — renderer/resource contract and desktop portability | Implemented | General desktop runtime success reported by owner; per-renderer matrix is not claimed. |
+| R3 — shared opaque world | Implemented | Terrain, entities, materials and lighting delivered; exhaustive visual parity deferred. |
+| R4 — effects and view handling | Implemented | Water, effects, overlays, debug lines, split-screen rendering and resize delivered; multiplayer robustness remains separate. |
+| R5 — UI/text and native cutover decision | UI/text implemented | Retain compatibility support; defer native default changes and retirement. |
+| R6 — browser lifecycle and release | Implemented and deployment confirmed | Close current delivery; defer broader qualification rather than claiming it passed. |
+
+## Remaining-item dispositions
+
+The owner authorized proceeding with remaining work or skipping it as necessary.
+For this closeout, retain the working implementation and make these scope choices:
+
+- **Compatibility retirement: deferred.** Keep Linux/Windows defaults and the
+  selectable modern path. macOS requires `TANKGAME_RENDERER=modern`; its
+  compatibility context is unsupported. Browser always uses modern rendering.
+  Removal/default changes should be a separate change with explicit renderer
+  coverage and visual approval, not a prerequisite for using the browser port.
+- **Broader qualification: deferred.** Existing Chromium automation and the owner's
+  manual report support delivery in tested environments. Firefox, Safari, mobile,
+  physical gamepad/audio-device combinations, exhaustive recovery scenarios and
+  extended soak/performance budgets are not newly qualified. Use the
+  [manual QA plan](manual-qa-test-plan.md) and
+  [results sheet](manual-qa-results-template.md) when expanding coverage or
+  investigating a regression. No universal browser/device support claim is made.
+- **Multiplayer/session-state robustness: deferred, low priority.** Keep the
+  historical crash and return-to-single-player findings as open backlog until
+  specifically reproduced and fixed or verified resolved. Successful general
+  gameplay testing alone does not close these findings.
+- **Settings persistence: skipped for this release.** Packaged read-only defaults
+  reset on reload; persistence is a future feature, not unfinished port work.
+- **Additional asset/build refactors: deferred.** Full preloading and the existing
+  shared C++ build are sufficient for this delivery. Staged downloads, indexed
+  geometry optimization and further target decomposition need a concrete benefit.
+- **Documentation reconciliation: completed here.** Current status supersedes old
+  phase tables; README includes browser build/package/run guidance and the required
+  macOS renderer selection. Historical evidence is preserved below.
+
+No further browser feature implementation is required for the current delivery
+scope. Reopen the relevant item for a reproduced defect, new support target or
+planned renderer retirement. Deferred checks are coverage gaps, not passing tests.
+
+## Implemented platform decisions
+
+The earlier decision list is historical. Current code uses WebGL/GLES2 with GLSL
+ES 1.00, desktop OpenGL 2.1/GLSL 1.20 on Linux/Windows, and OpenGL 3.2 core/GLSL
+1.50 on macOS. Shader variants share generated source; desktop renderer selection
+uses `TANKGAME_RENDERER`. Browser audio uses SDL_mixer OGG/WAV with explicit user
+activation. All shipped levels and required assets are preloaded, and settings
+remain read-only. See the [release implementation and hosting guide](../../documentation/browser-release-2026-10-28/README.md)
+for packaging and the existing automated evidence.
+
+## Historical implementation and planning record
+
+Everything below records earlier milestones and planning snapshots. Statements
+such as “not started”, “deployment pending”, “runtime deferred” and lists of human
+decisions describe their original dates. Use the closeout above for current scope
+and status, including the retained qualification and multiplayer gaps.
 
 ## Manual QA terrain precision fix (2026-11-05)
 
@@ -781,7 +838,7 @@ acceptable first release. WebGL 1 versus WebGL 2, exact shader dialect managemen
 manifest shape, and whether to use a portable graphics library were intentionally
 left for proof-of-concept evidence.
 
-## Verified current runtime inventory
+## Historical runtime inventory (2026-09-28)
 
 | Claim | Finding and evidence quality |
 | --- | --- |
@@ -1170,7 +1227,7 @@ risk.
 * **Retire afterward:** startup audio/input exclusions, hand-maintained minimal
   preload list, bootstrap diagnostics and temporary fallback if parity was approved.
 
-## Platform validation and test protection
+## Historical platform validation and test protection
 
 | Platform | Current evidence | Gap/action |
 | --- | --- | --- |
@@ -1218,7 +1275,7 @@ milestone reports rather than represented as a new run.
 * `documentation/browser-runtime-performance.md` is the authoritative local
   performance/run record, not a promise of portable 60 FPS.
 
-## Human decisions still required
+## Historical human decision list (superseded by closeout)
 
 1. Decide the compatibility fallback retirement timeline after broader visual
    coverage; shared convergence and this narrow enemy migration are authorized.

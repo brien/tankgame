@@ -84,7 +84,12 @@ files are available. This single-threaded build needs no SharedArrayBuffer or
 cross-origin isolation headers. Deploy under a versioned subdirectory to prevent
 mixing HTML/JS/WASM/data from different builds. No service worker is installed.
 
-## Remaining release gates
+## Remaining release gates (historical, 2026-10-29)
+
+The [2026-11-06 delivery closeout](../../docs/browser-port/current-state-roadmap.md)
+supersedes this gate list: the owner reports successful desktop testing and hosted
+deployment. Broader qualification and renderer retirement are explicitly deferred.
+The evidence and package version above remain specific to this October milestone.
 
 This implementation does not retire the native compatibility renderer or change
 its default. Visual approval, real Windows/macOS runtime qualification (currently
