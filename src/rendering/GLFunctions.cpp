@@ -7,6 +7,7 @@ namespace GLFunctions {
 bool Initialize(std::string&) { return true; }
 void Shutdown() {}
 bool IsInitialized() { return true; }
+bool IsCoreProfile() { return false; }
 #define TG_DIRECT(ret, name, args, call) ret name args { return gl##name call; }
 GLuint CreateShader(GLenum type)
 {
@@ -35,12 +36,16 @@ TG_DIRECT(void, BlendEquationSeparate, (GLenum a, GLenum b), (a,b))
 #else
 namespace {
 bool initialized = false;
+bool coreProfile = false;
 #ifdef _WIN32
 #define TG_GL_CALL APIENTRY
 #else
 #define TG_GL_CALL
 #endif
 #define TG_PROC(ret, name, args) using name##Proc = ret (TG_GL_CALL*) args; name##Proc p##name = nullptr
+TG_PROC(void, GenVertexArrays, (GLsizei, GLuint*));
+TG_PROC(void, BindVertexArray, (GLuint));
+TG_PROC(void, DeleteVertexArrays, (GLsizei, const GLuint*));
 TG_PROC(GLuint, CreateShader, (GLenum)); TG_PROC(void, ShaderSource, (GLuint, GLsizei, const GLchar* const*, const GLint*));
 TG_PROC(void, CompileShader, (GLuint)); TG_PROC(void, GetShaderiv, (GLuint, GLenum, GLint*)); TG_PROC(void, GetShaderInfoLog, (GLuint, GLsizei, GLsizei*, GLchar*)); TG_PROC(void, DeleteShader, (GLuint));
 TG_PROC(GLuint, CreateProgram, ()); TG_PROC(void, AttachShader, (GLuint, GLuint)); TG_PROC(void, BindAttribLocation, (GLuint, GLuint, const GLchar*)); TG_PROC(void, LinkProgram, (GLuint));
@@ -69,6 +74,13 @@ bool Initialize(std::string& error)
     if (initialized) return true;
     std::string missing;
 #define TG_LOAD(name) Load(p##name, "gl" #name, missing)
+    int profile = 0;
+    SDL_GL_GetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, &profile);
+    coreProfile = (profile & SDL_GL_CONTEXT_PROFILE_CORE) != 0;
+    // GL 2.1 and WebGL 1 do not require vertex array objects.
+    if (coreProfile) {
+        TG_LOAD(GenVertexArrays); TG_LOAD(BindVertexArray); TG_LOAD(DeleteVertexArrays);
+    }
     TG_LOAD(BlendFuncSeparate); TG_LOAD(BlendEquationSeparate);
     TG_LOAD(CreateShader); TG_LOAD(ShaderSource); TG_LOAD(CompileShader); TG_LOAD(GetShaderiv); TG_LOAD(GetShaderInfoLog); TG_LOAD(DeleteShader);
     TG_LOAD(CreateProgram); TG_LOAD(AttachShader); TG_LOAD(BindAttribLocation); TG_LOAD(LinkProgram); TG_LOAD(GetProgramiv); TG_LOAD(GetProgramInfoLog); TG_LOAD(DeleteProgram); TG_LOAD(GetUniformLocation); TG_LOAD(UseProgram);
@@ -84,9 +96,13 @@ bool Initialize(std::string& error)
     if (!missing.empty()) { error = "Missing required OpenGL functions: " + missing; return false; }
     initialized = true; return true;
 }
-void Shutdown() { initialized = false; }
+void Shutdown() { initialized = false; coreProfile = false; }
 bool IsInitialized() { return initialized; }
+bool IsCoreProfile() { return coreProfile; }
 #define TG_FORWARD(ret, name, args, call) ret name args { return p##name call; }
+TG_FORWARD(void, GenVertexArrays, (GLsizei a, GLuint* b), (a,b))
+TG_FORWARD(void, BindVertexArray, (GLuint a), (a))
+TG_FORWARD(void, DeleteVertexArrays, (GLsizei a, const GLuint* b), (a,b))
 TG_FORWARD(GLuint, CreateShader, (GLenum a), (a)) TG_FORWARD(void, ShaderSource, (GLuint a, GLsizei b, const GLchar* const* c, const GLint* d), (a,b,c,d))
 TG_FORWARD(void, CompileShader, (GLuint a), (a)) TG_FORWARD(void, GetShaderiv, (GLuint a, GLenum b, GLint* c), (a,b,c)) TG_FORWARD(void, GetShaderInfoLog, (GLuint a, GLsizei b, GLsizei* c, GLchar* d), (a,b,c,d)) TG_FORWARD(void, DeleteShader, (GLuint a), (a))
 TG_FORWARD(GLuint, CreateProgram, (), ()) TG_FORWARD(void, AttachShader, (GLuint a, GLuint b), (a,b)) TG_FORWARD(void, BindAttribLocation, (GLuint a, GLuint b, const GLchar* c), (a,b,c)) TG_FORWARD(void, LinkProgram, (GLuint a), (a))

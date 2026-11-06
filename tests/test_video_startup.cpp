@@ -104,3 +104,77 @@ TEST_F(VideoStartupTest, CountsSubmittedDrawsAndTriangles)
     EXPECT_EQ(recreated.GetSubmissionStats().drawCalls, 0u);
     EXPECT_EQ(recreated.GetSubmissionStats().triangles, 0u);
 }
+
+#ifndef __EMSCRIPTEN__
+// Exercise the macOS context contract on any desktop driver that supports it.
+class CoreRendererTest : public ::testing::Test
+{
+protected:
+    SDL_Window* window = nullptr;
+    SDL_GLContext context = nullptr;
+    bool videoInitialized = false;
+
+    void SetUp() override
+    {
+        const char* enabled = std::getenv("TANKGAME_TEST_GL");
+        if (!enabled || std::strcmp(enabled, "1") != 0)
+            GTEST_SKIP() << "Set TANKGAME_TEST_GL=1 to test a real graphics context";
+        ASSERT_EQ(SDL_InitSubSystem(SDL_INIT_VIDEO), 0) << SDL_GetError();
+        videoInitialized = true;
+        SDL_GL_ResetAttributes();
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 2);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+        window = SDL_CreateWindow("Core renderer test", 0, 0, 64, 64,
+                                  SDL_WINDOW_OPENGL | SDL_WINDOW_HIDDEN);
+        ASSERT_NE(window, nullptr) << SDL_GetError();
+        context = SDL_GL_CreateContext(window);
+        ASSERT_NE(context, nullptr) << SDL_GetError();
+        std::string error;
+        ASSERT_TRUE(GLFunctions::Initialize(error)) << error;
+        ASSERT_TRUE(GLFunctions::IsCoreProfile());
+    }
+
+    void TearDown() override
+    {
+        if (context) {
+            GLFunctions::Shutdown();
+            SDL_GL_DeleteContext(context);
+        }
+        if (window) SDL_DestroyWindow(window);
+        if (videoInitialized) {
+            SDL_GL_ResetAttributes();
+            SDL_QuitSubSystem(SDL_INIT_VIDEO);
+        }
+    }
+};
+
+TEST_F(CoreRendererTest, DrawsVisiblePixelsAfterVertexArrayBindingChanges)
+{
+    const Matrix4 identity;
+    BasicMaterial material;
+    material.green = material.blue = 0.0f;
+    Geometry triangle;
+    triangle.topology = PrimitiveTopology::TRIANGLES;
+    triangle.vertices = {{-1, -1, 0}, {1, -1, 0}, {0, 1, 0}};
+    const GpuGeometry geometry(triangle);
+    glViewport(0, 0, 64, 64);
+    glClearColor(0, 0, 0, 1);
+    // Also cover destruction/recreation while the same context remains alive.
+    for (int iteration = 0; iteration < 2; ++iteration) {
+        ModernRenderer renderer;
+        for (int draw = 0; draw < 2; ++draw) {
+            GLFunctions::BindVertexArray(0);
+            glClear(GL_COLOR_BUFFER_BIT);
+            renderer.Draw(geometry, identity.Data(), material, identity.Data(), false);
+            unsigned char pixel[4] = {};
+            glReadPixels(32, 32, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+            EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+            EXPECT_GT(pixel[0], 240);
+            EXPECT_LT(pixel[1], 10);
+            EXPECT_LT(pixel[2], 10);
+        }
+    }
+    EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+}
+#endif

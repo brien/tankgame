@@ -30,6 +30,7 @@ public:
     SubmissionStats GetSubmissionStats() const { return submissionStats; }
 
 private:
+    unsigned int vertexArray = 0;
     mutable SubmissionStats submissionStats;
     class ShaderProgram;
     std::unique_ptr<ShaderProgram> program;
