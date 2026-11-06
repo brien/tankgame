@@ -49,7 +49,8 @@ public:
 #elif defined(_WIN32)
         platform = GraphicsPlatform::Windows;
 #endif
-        const ShaderDialect dialect = ChooseShaderDialect(platform, true);
+        const ShaderDialect dialect = GLFunctions::IsCoreProfile()
+            ? ShaderDialect::GLSL150Core : ChooseShaderDialect(platform, true);
         const std::string vertexSource = BuildVertexShader(dialect);
         const std::string fragmentSource = BuildFragmentShader(dialect);
         const GLuint vertex = CompileShader(GL_VERTEX_SHADER, vertexSource.c_str());
@@ -114,14 +115,34 @@ public:
     GLint texture = -1;
 };
 
-ModernRenderer::ModernRenderer() : program(new ShaderProgram) {}
-ModernRenderer::~ModernRenderer() = default;
+ModernRenderer::ModernRenderer() : program(new ShaderProgram)
+{
+#ifndef __EMSCRIPTEN__
+    if (GLFunctions::IsCoreProfile()) {
+        GLFunctions::GenVertexArrays(1, &vertexArray);
+        if (!vertexArray)
+            throw std::runtime_error("Unable to allocate modern renderer vertex array");
+    }
+#endif
+}
+
+ModernRenderer::~ModernRenderer()
+{
+#ifndef __EMSCRIPTEN__
+    if (vertexArray) GLFunctions::DeleteVertexArrays(1, &vertexArray);
+#endif
+}
 
 void ModernRenderer::Draw(const GpuGeometry& geometry, const float* mvp,
                           const BasicMaterial& material, const float* normalTransform, bool lighting) const
 {
     if (mvp == nullptr) throw std::invalid_argument("ModernRenderer MVP matrix cannot be null");
     const GeometryAttributeLayout& layout = geometry.Layout();
+    // Core contexts have no default VAO. Rebind ours on every submission since
+    // other rendering code may change the current vertex array between draws.
+#ifndef __EMSCRIPTEN__
+    if (vertexArray) GLFunctions::BindVertexArray(vertexArray);
+#endif
     GLFunctions::UseProgram(program->handle);
     GLFunctions::BindBuffer(GL_ARRAY_BUFFER, geometry.BufferHandle());
     const GLsizei stride = static_cast<GLsizei>(layout.strideFloats * sizeof(float));

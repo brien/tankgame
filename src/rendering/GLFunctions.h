@@ -13,6 +13,12 @@ namespace GLFunctions
 bool Initialize(std::string& error);
 void Shutdown();
 bool IsInitialized();
+bool IsCoreProfile();
+#ifndef __EMSCRIPTEN__
+void GenVertexArrays(GLsizei count, GLuint* arrays);
+void BindVertexArray(GLuint array);
+void DeleteVertexArrays(GLsizei count, const GLuint* arrays);
+#endif
 
 GLuint CreateShader(GLenum type);
 void ShaderSource(GLuint shader, GLsizei count, const GLchar* const* source, const GLint* length);
