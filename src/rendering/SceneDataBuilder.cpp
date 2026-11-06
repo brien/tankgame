@@ -283,7 +283,7 @@ std::unique_ptr<UIRenderData> SceneDataBuilder::ExtractUIData() const {
     // Use the comprehensive UI data extraction method
     bool gameStarted = App::GetSingleton().gameTask->IsGameStarted();
     bool isPaused = App::GetSingleton().gameTask->IsPaused();
-    bool showMenu = !gameStarted; // Show menu when game hasn't started
+    bool showMenu = !gameStarted; // Includes returning to the menu after gameplay
     int menuState = App::GetSingleton().gameTask->GetMenuState();
     bool showDebug = App::GetSingleton().gameTask->IsDebugMode();
     
