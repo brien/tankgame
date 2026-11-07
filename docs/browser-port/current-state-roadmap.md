@@ -89,6 +89,16 @@ retains two viewports in both modes, reproducing the deferred session-state bug.
 Synthetic firing remains unverified. Windows/macOS modern-default runtime and
 broader visual approval remain open; step 2 is partial and compatibility is retained.
 
+## Regression preservation (2026-11-07)
+
+Step 3 now has an [explicit baseline and contract inventory](renderer-regression-baselines.md).
+Existing geometry/layout assertions and recorded screenshots are preserved. New
+modern-only GoogleTest checks promote effect visibility, depth/state, occlusion
+and split-screen isolation from the historical fixture. Linux CI enables graphics
+tests under Xvfb/software OpenGL. No compatibility renderer is needed to evaluate
+these contracts, and no new visual owner approval is implied. Platform qualification
+and compatibility removal remain open.
+
 ## Implemented platform decisions
 
 The earlier decision list is historical. Current code uses WebGL/GLES2 with GLSL

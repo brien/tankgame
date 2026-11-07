@@ -28,6 +28,7 @@ add_executable(tankgame_tests
     test_terrain_geometry.cpp
     test_enemy_renderer.cpp
     test_effect_renderer.cpp
+    test_modern_effect_rendering.cpp
     test_event_lifecycle.cpp
     test_geometry.cpp
     test_geometry_buffer.cpp
@@ -89,7 +90,8 @@ endif()
 
 # Discover tests for CTest
 include(GoogleTest)
-gtest_discover_tests(tankgame_tests)
+gtest_discover_tests(tankgame_tests
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/runtime")
 
 target_compile_definitions(tankgame_tests PRIVATE TANKGAME_TEST_FONT="${CMAKE_SOURCE_DIR}/runtime/fonts/DroidSansMono.ttf")
 
