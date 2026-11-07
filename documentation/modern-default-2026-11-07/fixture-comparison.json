@@ -1,0 +1,56 @@
+[
+  {
+    "outlineDepthDifferences": 0,
+    "pixelsAboveOneChannelValue": 0,
+    "frame": 0,
+    "differingPixels": 1,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 3.616898148148148e-07
+  },
+  {
+    "outlineDepthDifferences": 2,
+    "pixelsAboveOneChannelValue": 2,
+    "frame": 1,
+    "differingPixels": 9,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 51,
+    "meanChannelDifference": 8.933738425925926e-05
+  },
+  {
+    "outlineDepthDifferences": 1,
+    "pixelsAboveOneChannelValue": 1,
+    "frame": 2,
+    "differingPixels": 11,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 69,
+    "meanChannelDifference": 5.967881944444444e-05
+  },
+  {
+    "outlineDepthDifferences": 2,
+    "pixelsAboveOneChannelValue": 2,
+    "frame": 3,
+    "differingPixels": 5,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 92,
+    "meanChannelDifference": 0.00013780381944444444
+  },
+  {
+    "outlineDepthDifferences": 1,
+    "pixelsAboveOneChannelValue": 1,
+    "frame": 4,
+    "differingPixels": 19,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 102,
+    "meanChannelDifference": 8.282696759259259e-05
+  },
+  {
+    "outlineDepthDifferences": 0,
+    "pixelsAboveOneChannelValue": 0,
+    "frame": 5,
+    "differingPixels": 20,
+    "silhouetteDifferences": 0,
+    "maxChannelDifference": 1,
+    "meanChannelDifference": 7.2337962962962966e-06
+  }
+]

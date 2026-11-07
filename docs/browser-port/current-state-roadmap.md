@@ -79,6 +79,16 @@ enabled. Windows/macOS runtime and browser gameplay were not rerun for this chan
 the browser selection branch remains unconditional modern. This validates step 1,
 not the broader visual qualification or compatibility-removal steps.
 
+## Modern-default runtime qualification (2026-11-07)
+
+Step 2 now has [Linux runtime and effects evidence](../../documentation/modern-default-2026-11-07/README.md).
+Unset default and explicit compatibility runs both render gameplay, menu returns
+and co-op views and exit cleanly. Six deterministic effect comparisons pass with
+clean GL probes and preserved depth/state. Returning from co-op to single-player
+retains two viewports in both modes, reproducing the deferred session-state bug.
+Synthetic firing remains unverified. Windows/macOS modern-default runtime and
+broader visual approval remain open; step 2 is partial and compatibility is retained.
+
 ## Implemented platform decisions
 
 The earlier decision list is historical. Current code uses WebGL/GLES2 with GLSL
