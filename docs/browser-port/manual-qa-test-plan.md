@@ -470,7 +470,7 @@ retirement remain separate owner decisions.
 The owner should launch native builds with the working directory set to `runtime`,
 where `settings.txt`, textures, levels and sounds live. On Linux/macOS, a modern
 launch is `TANKGAME_RENDERER=modern ./tankgame-linux` or
-`TANKGAME_RENDERER=modern ./tankgame-mac` from that directory. Compatibility on
-supported desktops requires the variable unset. Windows launchers should set the
+`TANKGAME_RENDERER=modern ./tankgame-mac` from that directory. Modern is now the default. Compatibility on
+Linux/Windows requires `TANKGAME_RENDERER=compatibility`; it is unsupported on macOS. Windows launchers should set the
 same environment variable and use the actual executable filename in the package.
 Supply ready-to-run launchers to the tester rather than requiring shell knowledge.

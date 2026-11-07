@@ -92,3 +92,23 @@ include(GoogleTest)
 gtest_discover_tests(tankgame_tests)
 
 target_compile_definitions(tankgame_tests PRIVATE TANKGAME_TEST_FONT="${CMAKE_SOURCE_DIR}/runtime/fonts/DroidSansMono.ttf")
+
+# Test process-wide renderer selection without requiring a graphics context.
+if(NOT EMSCRIPTEN)
+    add_executable(renderer_mode_tests
+        test_renderer_mode.cpp
+        ${CMAKE_SOURCE_DIR}/src/rendering/RendererMode.cpp)
+    set_target_properties(renderer_mode_tests PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    target_include_directories(renderer_mode_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    add_test(NAME RendererMode.DefaultModern COMMAND ${CMAKE_COMMAND} -E env
+        --unset=TANKGAME_RENDERER $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME RendererMode.ExplicitModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=modern $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME RendererMode.ExplicitCompatibility COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=compatibility $<TARGET_FILE:renderer_mode_tests> compatibility)
+    add_test(NAME RendererMode.EmptyUsesModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER= $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME RendererMode.UnknownUsesModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=unknown $<TARGET_FILE:renderer_mode_tests> modern)
+endif()

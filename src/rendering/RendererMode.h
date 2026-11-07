@@ -1,8 +1,8 @@
 #pragma once
 
 // Process-wide renderer selection. Emscripten always uses the programmable
-// renderer. Desktop defaults to the compatibility renderer and accepts
-// TANKGAME_RENDERER=modern for the convergence path.
+// renderer. Desktop defaults to modern; TANKGAME_RENDERER=compatibility
+// explicitly selects the fallback on Linux/Windows (unsupported on macOS).
 class RendererMode
 {
 public:
