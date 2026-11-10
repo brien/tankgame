@@ -102,7 +102,15 @@ if(NOT EMSCRIPTEN)
         ${CMAKE_SOURCE_DIR}/src/rendering/RendererMode.cpp)
     set_target_properties(renderer_mode_tests PROPERTIES
         RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-    target_include_directories(renderer_mode_tests PRIVATE ${CMAKE_SOURCE_DIR}/src)
+    # Match the application/test include policy: src/math.h must not shadow
+    # the system <math.h> included transitively by libc++ headers on macOS.
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
+        target_compile_options(renderer_mode_tests PRIVATE
+            "-iquote${CMAKE_SOURCE_DIR}/src")
+    else()
+        target_include_directories(renderer_mode_tests PRIVATE
+            ${CMAKE_SOURCE_DIR}/src)
+    endif()
     add_test(NAME RendererMode.DefaultModern COMMAND ${CMAKE_COMMAND} -E env
         --unset=TANKGAME_RENDERER $<TARGET_FILE:renderer_mode_tests> modern)
     add_test(NAME RendererMode.ExplicitModern COMMAND ${CMAKE_COMMAND} -E env
