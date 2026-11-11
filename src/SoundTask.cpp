@@ -57,13 +57,14 @@ bool SoundTask::Start()
 
         if (-1 == SDL_InitSubSystem(SDL_INIT_AUDIO))
         {
+            Logger::Get().Write("Unable to initialize SDL audio: %.512s\n", SDL_GetError());
             disable = true;
             return true;
         }
 
         if (Mix_OpenAudio(audio_rate, audio_format, audio_channels, audio_buffers))
         {
-            Logger::Get().Write("Unable to open audio! Running without sound.\n");
+            Logger::Get().Write("Unable to open audio! Running without sound: %.512s\n", Mix_GetError());
             disable = true;
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
             return true;
@@ -73,7 +74,19 @@ bool SoundTask::Start()
         Mix_AllocateChannels(16);
         Mix_QuerySpec(&audio_rate, &audio_format, &audio_channels);
 
+        SDL_version compiled;
+        SDL_MIXER_VERSION(&compiled);
+        const SDL_version* linked = Mix_Linked_Version();
+        Logger::Get().Write("SDL_mixer compiled %d.%d.%d, linked %d.%d.%d; audio %d Hz, %d channels, format 0x%x.\n",
+                            compiled.major, compiled.minor, compiled.patch,
+                            linked->major, linked->minor, linked->patch,
+                            audio_rate, audio_channels, static_cast<unsigned int>(audio_format));
+
         music = Mix_LoadMUS("sounds/TGTest3.ogg");
+        if (!music)
+            Logger::Get().Write("Unable to load music 'sounds/TGTest3.ogg' (relative to working directory): %.512s\n", Mix_GetError());
+        else
+            Logger::Get().Write("Loaded music 'sounds/TGTest3.ogg'.\n");
 
         cowbell = Mix_LoadWAV("sounds/cowbell.wav");
 
@@ -163,7 +176,13 @@ void SoundTask::PlayMusic(int ID)
     if (ID > 7) ID = 0;
     if (disable || !opened || ID != 0) return;
     musicID = ID;
-    if (music && !Mix_PlayingMusic()) Mix_PlayMusic(music, -1);
+    if (music && !Mix_PlayingMusic())
+    {
+        if (Mix_PlayMusic(music, -1) == -1)
+            Logger::Get().Write("Unable to start music 'sounds/TGTest3.ogg': %.512s\n", Mix_GetError());
+        else
+            Logger::Get().Write("Music playback started (active=%d, musicPaused=%d).\n", active, musicPaused);
+    }
     if (!active || musicPaused) Mix_PauseMusic();
 }
 
@@ -173,6 +192,8 @@ void SoundTask::PauseMusic()
     musicPaused = !musicPaused;
     if (musicPaused || !active) Mix_PauseMusic();
     else Mix_ResumeMusic();
+    Logger::Get().Write("Music toggle: loaded=%d, active=%d, requestedPause=%d, playing=%d, paused=%d.\n",
+                        music != nullptr, active, musicPaused, Mix_PlayingMusic(), Mix_PausedMusic());
 }
 
 void SoundTask::SetActive(bool value)
