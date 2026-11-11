@@ -88,6 +88,15 @@ bool SoundTask::Start()
         else
             Logger::Get().Write("Loaded music 'sounds/TGTest3.ogg'.\n");
 
+        const char* audioDriver = SDL_GetCurrentAudioDriver();
+        Logger::Get().Write("Audio driver: %.128s; available music decoders: %d.\n",
+                            audioDriver ? audioDriver : "unknown", Mix_GetNumMusicDecoders());
+        for (int i = 0; i < Mix_GetNumMusicDecoders(); ++i)
+        {
+            const char* decoder = Mix_GetMusicDecoder(i);
+            Logger::Get().Write("Available music decoder: %.128s\n", decoder ? decoder : "unknown");
+        }
+
         cowbell = Mix_LoadWAV("sounds/cowbell.wav");
 
         death = Mix_LoadWAV("sounds/shatter.wav");
@@ -115,7 +124,29 @@ void SoundTask::OnSuspend()
 
 void SoundTask::Update()
 {
-    // we don't need to do anything, SDL_mixer does the work
+    // Sample briefly after starting/toggling music, without per-frame log spam.
+    if (!opened || musicDiagnosticSamplesRemaining == 0) return;
+    const Uint32 now = SDL_GetTicks();
+    if (now - lastMusicDiagnosticTick < 1000) return;
+    lastMusicDiagnosticTick = now;
+    --musicDiagnosticSamplesRemaining;
+    LogMusicState("progress");
+}
+
+void SoundTask::LogMusicState(const char* reason)
+{
+    Logger::Get().Write("Music %s: tick=%u, loaded=%d, active=%d, requestedPause=%d, playing=%d, paused=%d, volume=%d/%d.\n",
+                        reason, static_cast<unsigned int>(SDL_GetTicks()), music != nullptr,
+                        active, musicPaused, Mix_PlayingMusic(), Mix_PausedMusic(),
+                        Mix_VolumeMusic(-1), MIX_MAX_VOLUME);
+#if SDL_MIXER_VERSION_ATLEAST(2, 6, 0)
+    if (music)
+        Logger::Get().Write("Music stream: position=%.3f s, duration=%.3f s, objectVolume=%d/%d (negative times mean unavailable).\n",
+                            Mix_GetMusicPosition(music), Mix_MusicDuration(music),
+                            Mix_GetMusicVolume(music), MIX_MAX_VOLUME);
+#else
+    Logger::Get().Write("Music stream position diagnostics require SDL_mixer 2.6.0 or newer.\n");
+#endif
 }
 
 void SoundTask::OnResume()
@@ -181,9 +212,14 @@ void SoundTask::PlayMusic(int ID)
         if (Mix_PlayMusic(music, -1) == -1)
             Logger::Get().Write("Unable to start music 'sounds/TGTest3.ogg': %.512s\n", Mix_GetError());
         else
+        {
             Logger::Get().Write("Music playback started (active=%d, musicPaused=%d).\n", active, musicPaused);
+            lastMusicDiagnosticTick = SDL_GetTicks();
+            musicDiagnosticSamplesRemaining = 3;
+        }
     }
     if (!active || musicPaused) Mix_PauseMusic();
+    LogMusicState("play request");
 }
 
 void SoundTask::PauseMusic()
@@ -192,8 +228,9 @@ void SoundTask::PauseMusic()
     musicPaused = !musicPaused;
     if (musicPaused || !active) Mix_PauseMusic();
     else Mix_ResumeMusic();
-    Logger::Get().Write("Music toggle: loaded=%d, active=%d, requestedPause=%d, playing=%d, paused=%d.\n",
-                        music != nullptr, active, musicPaused, Mix_PlayingMusic(), Mix_PausedMusic());
+    LogMusicState("toggle");
+    lastMusicDiagnosticTick = SDL_GetTicks();
+    musicDiagnosticSamplesRemaining = 3;
 }
 
 void SoundTask::SetActive(bool value)
@@ -207,6 +244,7 @@ void SoundTask::SetActive(bool value)
         Mix_PauseMusic();
     }
     else if (!musicPaused) Mix_ResumeMusic();
+    LogMusicState("activity change");
 }
 
 void SoundTask::Stop()
@@ -222,4 +260,5 @@ void SoundTask::Stop()
     Mix_CloseAudio();
     SDL_QuitSubSystem(SDL_INIT_AUDIO);
     opened = false;
+    musicDiagnosticSamplesRemaining = 0;
 }

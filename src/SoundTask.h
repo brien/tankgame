@@ -24,6 +24,9 @@ private:
     bool opened = false;
     bool active = true;
     bool musicPaused = false;
+    void LogMusicState(const char* reason);
+    Uint32 lastMusicDiagnosticTick = 0;
+    int musicDiagnosticSamplesRemaining = 0;
 public:
 
     Mix_Music *music = nullptr;
