@@ -43,7 +43,7 @@ macOS:
 
 ```sh
 cd runtime
-TANKGAME_RENDERER=modern ./tankgame-mac
+./tankgame-mac
 ```
 
 On Windows, the current CMake target is also named `tankgame-linux`, producing
@@ -51,9 +51,11 @@ On Windows, the current CMake target is also named `tankgame-linux`, producing
 build with `cmake --build build --config Release`, then run
 `.\Release\tankgame-linux.exe` from the `runtime` directory.
 
-macOS requires the modern renderer. Linux and Windows retain compatibility
-rendering by default; set `TANKGAME_RENDERER=modern` to select the shared modern
-renderer. The browser always uses modern rendering.
+Modern rendering is the default on all platforms. On Linux and Windows, set
+`TANKGAME_RENDERER=compatibility` to use the retained legacy renderer; macOS does
+not support that fallback. `TANKGAME_RENDERER=modern` explicitly selects modern
+rendering; unset, empty or unrecognized values also select modern. The browser
+always uses modern rendering regardless of the setting.
 
 ## Browser build and hosting
 

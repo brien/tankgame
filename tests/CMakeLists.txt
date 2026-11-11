@@ -28,6 +28,7 @@ add_executable(tankgame_tests
     test_terrain_geometry.cpp
     test_enemy_renderer.cpp
     test_effect_renderer.cpp
+    test_modern_effect_rendering.cpp
     test_event_lifecycle.cpp
     test_geometry.cpp
     test_geometry_buffer.cpp
@@ -89,6 +90,35 @@ endif()
 
 # Discover tests for CTest
 include(GoogleTest)
-gtest_discover_tests(tankgame_tests)
+gtest_discover_tests(tankgame_tests
+    WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}/runtime")
 
 target_compile_definitions(tankgame_tests PRIVATE TANKGAME_TEST_FONT="${CMAKE_SOURCE_DIR}/runtime/fonts/DroidSansMono.ttf")
+
+# Test process-wide renderer selection without requiring a graphics context.
+if(NOT EMSCRIPTEN)
+    add_executable(renderer_mode_tests
+        test_renderer_mode.cpp
+        ${CMAKE_SOURCE_DIR}/src/rendering/RendererMode.cpp)
+    set_target_properties(renderer_mode_tests PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
+    # Match the application/test include policy: src/math.h must not shadow
+    # the system <math.h> included transitively by libc++ headers on macOS.
+    if(CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
+        target_compile_options(renderer_mode_tests PRIVATE
+            "-iquote${CMAKE_SOURCE_DIR}/src")
+    else()
+        target_include_directories(renderer_mode_tests PRIVATE
+            ${CMAKE_SOURCE_DIR}/src)
+    endif()
+    add_test(NAME RendererMode.DefaultModern COMMAND ${CMAKE_COMMAND} -E env
+        --unset=TANKGAME_RENDERER $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME RendererMode.ExplicitModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=modern $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME RendererMode.ExplicitCompatibility COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=compatibility $<TARGET_FILE:renderer_mode_tests> compatibility)
+    add_test(NAME RendererMode.EmptyUsesModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER= $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME RendererMode.UnknownUsesModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=unknown $<TARGET_FILE:renderer_mode_tests> modern)
+endif()

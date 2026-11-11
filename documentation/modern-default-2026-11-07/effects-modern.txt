@@ -1,0 +1,23 @@
+VideoTask::Start: graphics context ready at 1280x720.
+EffectRenderer initialized successfully
+frame 0 effects GL error=0
+frame 0: additive quads preserve depth, outgoing state valid
+fixture frame 0: GL error=0
+frame 1 effects GL error=0
+frame 1: additive quads preserve depth, outgoing state valid
+fixture frame 1: GL error=0
+frame 2 effects GL error=0
+frame 2: additive quads preserve depth, outgoing state valid
+fixture frame 2: GL error=0
+frame 3 effects GL error=0
+frame 3: additive quads preserve depth, outgoing state valid
+fixture frame 3: GL error=0
+frame 4 effects GL error=0
+frame 4: additive quads preserve depth, outgoing state valid
+fixture frame 4: GL error=0
+frame 5 effects GL error=0
+frame 5: additive quads preserve depth, outgoing state valid
+fixture frame 5: GL error=0
+occlusion view 0: changed pixels=0, other view preserved
+occlusion view 1: changed pixels=8061, other view preserved
+EffectRenderer cleaned up

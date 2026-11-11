@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-11-06
+**Status date:** 2026-11-07
 
 **Authority:** the closeout below is the current plan. Dated implementation reports
 and the original reconciliation that follow are historical evidence; their open
@@ -30,7 +30,7 @@ is inferred from the report.
 | R2 — renderer/resource contract and desktop portability | Implemented | General desktop runtime success reported by owner; per-renderer matrix is not claimed. |
 | R3 — shared opaque world | Implemented | Terrain, entities, materials and lighting delivered; exhaustive visual parity deferred. |
 | R4 — effects and view handling | Implemented | Water, effects, overlays, debug lines, split-screen rendering and resize delivered; multiplayer robustness remains separate. |
-| R5 — UI/text and native cutover decision | UI/text implemented | Retain compatibility support; defer native default changes and retirement. |
+| R5 — UI/text and native cutover decision | UI/text implemented | Modern is now the desktop default; retain explicit Linux/Windows compatibility fallback. |
 | R6 — browser lifecycle and release | Implemented and deployment confirmed | Close current delivery; defer broader qualification rather than claiming it passed. |
 
 ## Remaining-item dispositions
@@ -38,11 +38,13 @@ is inferred from the report.
 The owner authorized proceeding with remaining work or skipping it as necessary.
 For this closeout, retain the working implementation and make these scope choices:
 
-- **Compatibility retirement: deferred.** Keep Linux/Windows defaults and the
-  selectable modern path. macOS requires `TANKGAME_RENDERER=modern`; its
-  compatibility context is unsupported. Browser always uses modern rendering.
-  Removal/default changes should be a separate change with explicit renderer
-  coverage and visual approval, not a prerequisite for using the browser port.
+- **Compatibility retirement: staged (2026-11-07).** The owner authorized step 1:
+  modern is now the desktop default. `TANKGAME_RENDERER=compatibility` retains
+  the Linux/Windows fallback; macOS rejects compatibility as before. Explicit
+  `modern`, unset, empty and unrecognized values select modern. Browser always
+  uses modern rendering. Context profiles and rendering algorithms are unchanged.
+  Compatibility removal remains deferred pending renderer coverage and visual
+  approval; this default change does not claim new cross-platform visual testing.
 - **Broader qualification: deferred.** Existing Chromium automation and the owner's
   manual report support delivery in tested environments. Firefox, Safari, mobile,
   physical gamepad/audio-device combinations, exhaustive recovery scenarios and
@@ -61,11 +63,41 @@ For this closeout, retain the working implementation and make these scope choice
   geometry optimization and further target decomposition need a concrete benefit.
 - **Documentation reconciliation: completed here.** Current status supersedes old
   phase tables; README includes browser build/package/run guidance and the required
-  macOS renderer selection. Historical evidence is preserved below.
+  macOS launch guidance. Historical evidence is preserved below.
 
 No further browser feature implementation is required for the current delivery
 scope. Reopen the relevant item for a reproduced defect, new support target or
 planned renderer retirement. Deferred checks are coverage gaps, not passing tests.
+
+## Default-switch validation (2026-11-07)
+
+Linux Release configure/build succeeds. With `TANKGAME_RENDERER` unset and
+`TANKGAME_TEST_GL=1`, all 158 CTest cases pass, including five fresh-process
+renderer-selection cases and the graphics tests. With
+`TANKGAME_RENDERER=compatibility`, all three `VideoStartupTest` cases pass with GL
+enabled. Windows/macOS runtime and browser gameplay were not rerun for this change;
+the browser selection branch remains unconditional modern. This validates step 1,
+not the broader visual qualification or compatibility-removal steps.
+
+## Modern-default runtime qualification (2026-11-07)
+
+Step 2 now has [Linux runtime and effects evidence](../../documentation/modern-default-2026-11-07/README.md).
+Unset default and explicit compatibility runs both render gameplay, menu returns
+and co-op views and exit cleanly. Six deterministic effect comparisons pass with
+clean GL probes and preserved depth/state. Returning from co-op to single-player
+retains two viewports in both modes, reproducing the deferred session-state bug.
+Synthetic firing remains unverified. Windows/macOS modern-default runtime and
+broader visual approval remain open; step 2 is partial and compatibility is retained.
+
+## Regression preservation (2026-11-07)
+
+Step 3 now has an [explicit baseline and contract inventory](renderer-regression-baselines.md).
+Existing geometry/layout assertions and recorded screenshots are preserved. New
+modern-only GoogleTest checks promote effect visibility, depth/state, occlusion
+and split-screen isolation from the historical fixture. Linux CI enables graphics
+tests under Xvfb/software OpenGL. No compatibility renderer is needed to evaluate
+these contracts, and no new visual owner approval is implied. Platform qualification
+and compatibility removal remain open.
 
 ## Implemented platform decisions
 

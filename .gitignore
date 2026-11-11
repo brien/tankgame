@@ -498,3 +498,6 @@ applog.txt
 
 # Informal old-renderer reference retained locally
 /screenshots/Screenshot_20250905_090421.png
+
+# CMake GoogleTest discovery metadata when tests use runtime assets
+/runtime/cmake_test_discovery_*.json

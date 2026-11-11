@@ -1,0 +1,15 @@
+title
+idle
+firing
+firing seconds 10
+firing-sustained
+moved
+jump
+returned-menu
+restart
+coop
+coop-moved
+coop-menu
+single-after-coop
+exit 0
+process status before cleanup 0
