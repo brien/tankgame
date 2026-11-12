@@ -65,11 +65,14 @@ LevelHandler::LevelHandler() : drawFloor(true), drawWalls(false), drawTop(false)
 
 void LevelHandler::Init()
 {
+    metadata = LevelMetadata{};
     levelChangePending = false;
+    advanceLevel = false;
     levelNumber = 48;
     sizeX = MAX_SIZE_X;
     sizeZ = MAX_SIZE_Z;
     colorNumber = 0;
+    colorNumber2 = 0;
     drawFloor = true;
     drawWalls = false;
     drawTop = false;

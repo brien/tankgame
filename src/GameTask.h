@@ -19,7 +19,7 @@ public:
     // Public getter methods for private flags
     bool IsGameStarted() const { return currentState != GameState::MENU; }
     bool IsDebugMode() const { return debug; }
-    bool IsPaused() const { return paused; }
+    bool IsPaused() const { return currentState == GameState::PAUSED; }
     bool IsVersusMode() const { return versus; }
     int GetMenuState() const { return menuState; }
     
@@ -30,12 +30,13 @@ public:
 private:
     friend class GameTaskStateTest;
 
-    enum class GameState { MENU, PLAYING, GAME_OVER };
+    enum class GameState { MENU, PLAYING, PAUSED, GAME_OVER };
     GameState currentState;
 
     void HandleCommonState();
     void HandleMenuState();
     void HandlePlayingState();
+    void HandlePausedState();
     void HandleGameOverState();
 
     void SetUpGame();
@@ -47,7 +48,6 @@ private:
     GameWorld gameWorld;
     PlayerManager playerManager;
 
-    bool paused;
     bool debug;
     bool gameOver;
     int menuState;

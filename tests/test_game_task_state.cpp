@@ -120,14 +120,12 @@ TEST_F(GameTaskStateTest, GameOverKeepsGameplayViewUntilReturningToMenu) {
 }
 
 TEST_F(GameTaskStateTest, MenuFramesFreezeWorldWhileAllowingSelection) {
-    Play();
     FX* effect = CreateMovingEffect();
     // Verify this live entity would move and age if updated.
     effect->Update();
     ASSERT_GT(effect->x, 1.0f);
     const float x = effect->x;
     const float age = effect->time;
-    ReturnToMenu();
 
     InputTask::keys[SDL_SCANCODE_RIGHT] = 1;
     task.Update();
@@ -146,9 +144,101 @@ TEST_F(GameTaskStateTest, EscapeStopsSimulationOnTheTransitionFrame) {
     InputTask::keys[SDL_SCANCODE_ESCAPE] = 1;
     task.Update();
 
-    ExpectMenu(true);
+    ExpectMenu(false);
+    EXPECT_TRUE(task.IsPaused());
     EXPECT_FLOAT_EQ(effect->x, 1.0f);
     EXPECT_FLOAT_EQ(effect->time, 0.0f);
+}
+
+TEST_F(GameTaskStateTest, EnterResumesPausedSessionWithoutResettingIt) {
+    for (int mode = 0; mode < 3; ++mode) {
+        SCOPED_TRACE(mode);
+        StartMode(mode);
+        auto* player = task.GetPlayerManager()->GetPlayer(0);
+        auto* tank = player->GetControlledTank();
+        player->AddScore(100);
+        FX* effect = CreateMovingEffect();
+
+        InputTask::keys[SDL_SCANCODE_ESCAPE] = 1;
+        task.Update();
+        ASSERT_TRUE(task.IsPaused());
+        InputTask::keys[SDL_SCANCODE_ESCAPE] = 0;
+        task.Update();
+        EXPECT_FLOAT_EQ(effect->time, 0);
+
+        InputTask::keys[SDL_SCANCODE_RETURN] = 1;
+        task.Update();
+        InputTask::keys[SDL_SCANCODE_RETURN] = 0;
+        EXPECT_FALSE(task.IsPaused());
+        ExpectMenu(false);
+        EXPECT_EQ(task.IsVersusMode(), mode == 2);
+        EXPECT_EQ(task.GetPlayerManager()->GetPlayer(0), player);
+        EXPECT_EQ(player->GetControlledTank(), tank);
+        EXPECT_EQ(player->GetScore(), 100);
+
+        task.Update();
+        EXPECT_GT(effect->x, 1);
+        EXPECT_GT(effect->time, 0);
+    }
+}
+
+TEST_F(GameTaskStateTest, PauseFreezesModeUntilSecondEscapeEndsSession) {
+    for (int mode = 0; mode < 3; ++mode) {
+        StartMode(mode);
+        auto* player = task.GetPlayerManager()->GetPlayer(0);
+        player->AddScore(100);
+        player->AddWin();
+        player->AddCombo(10, 2);
+        player->SetSpecialCharge(50);
+        FX* effect = CreateMovingEffect();
+        auto* bullet = World().CreateBullet(Bullet{});
+        World().CreateItem(1, 2, 3, TankType::TYPE_RED);
+        Events::Post(BulletTimeoutEvent(bullet, 100));
+        auto& level = LevelHandler::GetSingleton();
+        level.RequestNextLevel(true);
+        InputTask::keys[SDL_SCANCODE_ESCAPE] = 1;
+        task.Update();
+        ASSERT_TRUE(task.IsPaused());
+        ExpectMenu(false);
+
+        // Holding Escape is still the first press, not a second transition.
+        InputTask::oldKeys[SDL_SCANCODE_ESCAPE] = 1;
+        for (int frame = 0; frame < 10; ++frame) task.Update();
+        EXPECT_TRUE(task.IsPaused());
+        EXPECT_FLOAT_EQ(effect->x, 1);
+        EXPECT_FLOAT_EQ(effect->time, 0);
+        EXPECT_EQ(level.levelNumber, 48);
+        EXPECT_EQ(player->GetScore(), 100);
+        EXPECT_EQ(task.IsVersusMode(), mode == 2);
+        EXPECT_FALSE(World().GetBullets().empty());
+
+        InputTask::keys[SDL_SCANCODE_ESCAPE] = 0;
+        task.Update();
+        InputTask::oldKeys[SDL_SCANCODE_ESCAPE] = 0;
+        InputTask::keys[SDL_SCANCODE_ESCAPE] = 1;
+        task.Update();
+        InputTask::keys[SDL_SCANCODE_ESCAPE] = 0;
+        ExpectMenu(true);
+        EXPECT_FALSE(task.IsPaused());
+        EXPECT_FALSE(task.IsVersusMode());
+        // Neither queued events nor a deferred reload may resurrect the game.
+        Events::ProcessQueuedEvents();
+        level.ProcessPendingLevelChange();
+        EXPECT_TRUE(World().GetTanks().empty());
+        EXPECT_TRUE(World().GetBullets().empty());
+        EXPECT_TRUE(World().GetItems().empty());
+        EXPECT_TRUE(World().GetFX().empty());
+        EXPECT_EQ(level.fileName, "levels/title@@.txt");
+        player = task.GetPlayerManager()->GetPlayer(0);
+        EXPECT_EQ(player->GetControlledTank(), nullptr);
+        EXPECT_EQ(player->GetScore(), 0);
+        EXPECT_EQ(player->GetWins(), 0);
+        EXPECT_FLOAT_EQ(player->GetCombo(), 0);
+        EXPECT_FLOAT_EQ(player->GetSpecialCharge(), 0);
+        StartMode(mode);
+        EXPECT_FALSE(task.IsPaused());
+        ExpectOwnedPlayers(mode == 0 ? 1 : 2);
+    }
 }
 
 TEST_F(GameTaskStateTest, EveryModeTransitionStartsFreshSession) {

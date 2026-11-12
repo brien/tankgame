@@ -23,7 +23,6 @@ void GameTask::SetUpGame()
     versus = (menuState == 2);
     playerManager.ResetSession(menuState == 0 ? 1 : 2, versus);
     gameOver = false;
-    paused = false;
     timer = 0;
 
     LevelHandler::GetSingleton().SetPlayerManager(&playerManager);
@@ -48,7 +47,6 @@ GameTask::GameTask()
     gameOver = false;
     menuState = 0;
     timer = 0;
-    paused = false;
     debug = false;
     currentState = GameState::MENU;
 #ifndef __EMSCRIPTEN__
@@ -70,7 +68,6 @@ bool GameTask::Start()
 
     LevelHandler::GetSingleton().Load("./levels/title@@.txt");
 
-    paused = false;
     debug = false;
     
     // Initialize GameWorld with collision and combat systems
@@ -123,6 +120,9 @@ void GameTask::Update()
     case GameState::PLAYING:
         HandlePlayingState();
         break;
+    case GameState::PAUSED:
+        HandlePausedState();
+        break;
     case GameState::GAME_OVER:
         HandleGameOverState();
         break;
@@ -148,7 +148,7 @@ void GameTask::HandleCommonState()
 
 void GameTask::HandleMenuState()
 {
-    // Keep the previous world frozen while the player chooses a new game.
+    // Menu frames do not advance the simulation.
 
     if (InputTask::KeyDown(SDL_SCANCODE_RETURN) || InputTask::MouseDown(1))
     {
@@ -208,10 +208,10 @@ void GameTask::HandleMenuState()
 
 void GameTask::HandlePlayingState()
 {
-    // Leave gameplay before processing events, movement, or combat this frame.
+    // Pause before processing events, movement, or combat this frame.
     if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
     {
-        TransitionToState(GameState::MENU);
+        TransitionToState(GameState::PAUSED);
         return;
     }
 
@@ -248,6 +248,18 @@ void GameTask::HandlePlayingState()
     }
 }
 
+void GameTask::HandlePausedState()
+{
+    if (InputTask::KeyDown(SDL_SCANCODE_ESCAPE))
+    {
+        TransitionToState(GameState::MENU);
+    }
+    else if (InputTask::KeyDown(SDL_SCANCODE_RETURN))
+    {
+        TransitionToState(GameState::PLAYING);
+    }
+}
+
 void GameTask::HandleGameOverState()
 {
     if (InputTask::KeyDown(SDL_SCANCODE_RETURN))
@@ -258,5 +270,23 @@ void GameTask::HandleGameOverState()
 
 void GameTask::TransitionToState(GameState newState)
 {
+    if (newState == GameState::MENU && currentState != GameState::MENU)
+    {
+        // Drop events holding entity pointers before destroying the old world.
+        Events::Clear();
+        playerManager.ReleaseTanks();
+        gameWorld.Clear();
+        playerManager.ResetSession(1, false);
+        versus = false;
+        gameOver = false;
+        timer = 0;
+
+        auto& level = LevelHandler::GetSingleton();
+        level.Init(); // Also cancels deferred level changes.
+        if (!level.Load("levels/title@@.txt"))
+        {
+            Logger::Get().Write("LevelHandler failed to load title level.\n");
+        }
+    }
     currentState = newState;
 }
