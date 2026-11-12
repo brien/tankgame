@@ -1,0 +1,101 @@
+{
+  "checks": [
+    {
+      "label": "mode 1 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 0",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 1",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 2",
+      "value": true
+    },
+    {
+      "label": "mode 0 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 2 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 2 reload 0",
+      "value": true
+    },
+    {
+      "label": "mode 2 reload 1",
+      "value": true
+    },
+    {
+      "label": "mode 2 reload 2",
+      "value": true
+    },
+    {
+      "label": "mode 0 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 1 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 0",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 1",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 2",
+      "value": true
+    },
+    {
+      "label": "mode 2 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 2 reload 0",
+      "value": true
+    },
+    {
+      "label": "mode 2 reload 1",
+      "value": true
+    },
+    {
+      "label": "mode 2 reload 2",
+      "value": true
+    },
+    {
+      "label": "mode 1 viewport",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 0",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 1",
+      "value": true
+    },
+    {
+      "label": "mode 1 reload 2",
+      "value": true
+    },
+    {
+      "label": "mode 0 viewport",
+      "value": true
+    },
+    {
+      "label": "clean shutdown",
+      "value": true
+    }
+  ],
+  "errors": []
+}

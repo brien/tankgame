@@ -73,15 +73,13 @@ Tank *Player::CreatePlayerTank(float x, float y, float z)
 
     if (tank)
     {
-        // Set position
-        tank->SetPosition(x, y, z);
-        Logger::Get().Write("Player %d: Tank position set to (%.2f, %.2f, %.2f)\n", playerIndex, tank->x, tank->y, tank->z);
-
         // Initialize tank for player use
         tank->Init();
         // Apply the starting weapon stats on every spawn, including respawns.
         // Init resets tank state but leaves attack at its constructor value.
         tank->SetType(tank->type1, tank->type2);
+        // Init sets the default spawn; apply the requested player/versus spawn last.
+        tank->SetPosition(x, y, z);
         Logger::Get().Write("Player %d: Tank::Init() completed\n", playerIndex);
 
         // Take control
@@ -205,97 +203,12 @@ void Player::CheckItemCollisions()
 
 void Player::Update()
 {
-    static int logCounter = 0;
-
-    // Update combo decay
-    UpdateComboDecay();
-
-    // Check for item collisions
-    CheckItemCollisions();
-
-    // Handle input and physics if we have a tank
+    // GameWorld owns physics; PlayerManager owns death timers and round changes.
     if (controlledTank && controlledTank->alive)
     {
-        if (logCounter % 120 == 0)
-        { // Log every 2 seconds
-            TANKGAME_LOG_DEBUG("Player %d processing NextFrame + input for tank\n", playerIndex);
-        }
-
-        // Physics and game state update (was done by TankHandler::UpdatePlayerStates)
-        controlledTank->NextFrame();
-
-        // Input processing
+        CheckItemCollisions();
         HandleInput();
-
-        // Reset dead time (was done by TankHandler::UpdatePlayerStates)
-        controlledTank->deadtime = 0.0f;
     }
-
-    // Handle respawn if tank is dead
-    if (!controlledTank || !controlledTank->alive)
-    {
-        if (controlledTank && !controlledTank->alive)
-        {
-            // Handle death logic (was in TankHandler::UpdatePlayerStates)
-            controlledTank->Die();
-
-            // Check respawn timing
-            bool shouldRespawn = false;
-            if (App::GetSingleton().gameTask->IsVersusMode())
-            {
-                if (controlledTank->deadtime > VERSUS_RESPAWN_DELAY)
-                {
-                    Logger::Get().Write("===== Player %d: Respawn timer expired in versus mode (deadtime=%.2f) - calling NextLevel(true) =====\n", playerIndex, controlledTank->deadtime);
-                    shouldRespawn = true;
-                    ReleaseTank(); // Release before NextLevel to avoid dangling pointer
-                    Logger::Get().Write("Player %d: Tank released, controlledTank is now null\n", playerIndex);
-                    LevelHandler::GetSingleton().NextLevel(true);
-                    Logger::Get().Write("Player %d: NextLevel(true) completed\n", playerIndex);
-                }
-            }
-            else
-            {
-                if (controlledTank->deadtime > PLAYER_RESPAWN_DELAY)
-                {
-                    Logger::Get().Write("===== Player %d: Respawn timer expired (deadtime=%.2f) - calling NextLevel(false) =====\n", playerIndex, controlledTank->deadtime);
-                    shouldRespawn = true;
-                    ReleaseTank(); // Release before NextLevel to avoid dangling pointer
-                    Logger::Get().Write("Player %d: Tank released, controlledTank is now null\n", playerIndex);
-                    LevelHandler::GetSingleton().NextLevel(false);
-                    Logger::Get().Write("Player %d: NextLevel(false) completed\n", playerIndex);
-                }
-            }
-
-            // Only increment deadtime and log if we didn't respawn (tank still exists)
-            if (!shouldRespawn && controlledTank)
-            {
-                controlledTank->deadtime += GlobalTimer::dT;
-
-                if (logCounter % 60 == 0)
-                { // Log every 1 second
-                    TANKGAME_LOG_DEBUG("Player %d tank dead - deadtime: %.2f\n", playerIndex, controlledTank->deadtime);
-                }
-            }
-        }
-        else
-        {
-            // No tank at all - respawn immediately
-            Logger::Get().Write("***** Player %d has no tank - calling Respawn() *****\n", playerIndex);
-            Respawn();
-            if (controlledTank)
-            {
-                Logger::Get().Write("Player %d: Respawn() completed - new tank created at (%.2f, %.2f, %.2f), identity=%s\n",
-                                    playerIndex, controlledTank->x, controlledTank->y, controlledTank->z,
-                                    controlledTank->identity.IsPlayer() ? "PLAYER" : "ENEMY");
-            }
-            else
-            {
-                Logger::Get().Write("Player %d: WARNING - Respawn() completed but controlledTank is still null!\n", playerIndex);
-            }
-        }
-    }
-
-    logCounter++;
 }
 
 void Player::OnTankDestroyed()

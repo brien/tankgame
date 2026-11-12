@@ -497,10 +497,7 @@ void Tank::Fall()
 
         if (highest < -10 && identity.IsPlayer())
         {
-            LevelHandler::GetSingleton().NextLevel(true);
-            x = LevelHandler::GetSingleton().start[0];
-            z = LevelHandler::GetSingleton().start[1];
-            y = 24;
+            LevelHandler::GetSingleton().RequestNextLevel(true);
         }
         else
         {
@@ -954,14 +951,6 @@ void Tank::NextFrame()
     if (health <= 0 && alive)
     {
         alive = false;
-        if (identity.IsPlayer() && App::GetSingleton().gameTask->IsVersusMode())
-        {
-            // Award win to the other player in versus mode
-            Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(identity.GetLegacyId());
-            if (player) {
-                player->AddWin();
-            }
-        }
     }
     else
     {

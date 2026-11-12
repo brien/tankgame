@@ -52,10 +52,14 @@ For this closeout, retain the working implementation and make these scope choice
   [manual QA plan](manual-qa-test-plan.md) and
   [results sheet](manual-qa-results-template.md) when expanding coverage or
   investigating a regression. No universal browser/device support claim is made.
-- **Multiplayer/session-state robustness: deferred, low priority.** Keep the
-  historical crash and return-to-single-player findings as open backlog until
-  specifically reproduced and fixed or verified resolved. Successful general
-  gameplay testing alone does not close these findings.
+- **Multiplayer/session-state follow-up (2026-11-12): implemented.** The retained
+  co-op-to-single-player failure is fixed, along with stale player pointers and
+  unsafe level reloads during entity updates, inconsistent versus mode/scoring,
+  overwritten versus spawns and a level-filename buffer overflow. Native tests,
+  sanitizer checks and Linux/Chromium smoke evidence are recorded in the
+  [multiplayer report](../../documentation/multiplayer-session-2026-11-12/README.md).
+  Extended multiplayer soak and physical-controller/platform coverage remain
+  open; these fixes do not establish that every historical crash is resolved.
 - **Settings persistence: skipped for this release.** Packaged read-only defaults
   reset on reload; persistence is a future feature, not unfinished port work.
 - **Additional asset/build refactors: deferred.** Full preloading and the existing

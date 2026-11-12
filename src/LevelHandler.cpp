@@ -65,6 +65,7 @@ LevelHandler::LevelHandler() : drawFloor(true), drawWalls(false), drawTop(false)
 
 void LevelHandler::Init()
 {
+    levelChangePending = false;
     levelNumber = 48;
     sizeX = MAX_SIZE_X;
     sizeZ = MAX_SIZE_Z;
@@ -118,13 +119,7 @@ bool LevelHandler::Load(const char filePath[])
         }
         else
         {
-            // fileName=new char[Strlen(filePath)+1];
-            // fileName[Strlen(filePath)]='\n';
-
-            for (int k = Strlen(filePath); k > -1; k--)
-            {
-                fileName[k] = filePath[k];
-            }
+            fileName = filePath;
 
             // These two lines get the map size
             // The last two characters in the file's name are the map's size.
@@ -209,9 +204,23 @@ bool LevelHandler::Load(const char filePath[])
         }
     }
 
-    levelNumber = fileName[5];
+    // Load(nullptr) is used to initialize an empty test world.
 
     return false;
+}
+
+void LevelHandler::RequestNextLevel(bool forward)
+{
+    // Coalesce requests from both players; a death/retry takes priority.
+    advanceLevel = levelChangePending ? advanceLevel && forward : forward;
+    levelChangePending = true;
+}
+
+void LevelHandler::ProcessPendingLevelChange()
+{
+    if (!levelChangePending) return;
+    levelChangePending = false;
+    NextLevel(advanceLevel);
 }
 
 void LevelHandler::NextLevel(bool forb)
@@ -225,6 +234,7 @@ void LevelHandler::NextLevel(bool forb)
     
     // Clear GameWorld entities (bullets, effects, items) 
     Logger::Get().Write("LevelHandler: Clearing GameWorld...\n");
+    if (players) players->ReleaseTanks();
     gameWorld->Clear();
     Logger::Get().Write("LevelHandler: GameWorld cleared\n");
 
@@ -258,7 +268,8 @@ void LevelHandler::NextLevel(bool forb)
         fileName[12] = levelNumber - 25;
     }
 
-    Load(fileName);
+    const std::string nextFile = fileName;
+    Load(nextFile.c_str());
 
     // Replace hardcoded color logic with metadata-driven approach
     if (metadata.theme.useSpecialColoring)
@@ -280,6 +291,7 @@ void LevelHandler::NextLevel(bool forb)
     }
 
     TankHandler::GetSingleton().Init();
+    if (players) players->SpawnPlayerTanks();
 
     return;
 }

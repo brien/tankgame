@@ -55,6 +55,8 @@ public:
     void UpdateVersusMode();
     
     // Player tank management
+    void ReleaseTanks();
+    void ResetSession(int count, bool versus);
     void SpawnPlayerTanks();
     void RespawnDeadPlayers();
     void ClaimExistingTanks(); // Take control of tanks created by TankHandler
@@ -97,6 +99,7 @@ private:
     // Game settings
     int difficulty = 1; // 0=easy, 1=normal, 2=hard
     bool versusMode = false;
+    bool roundResolved = false;
     
     // GameWorld reference
     GameWorld* gameWorld = nullptr;

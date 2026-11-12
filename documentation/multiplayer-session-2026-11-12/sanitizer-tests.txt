@@ -1,0 +1,1503 @@
+Note: Google Test filter = GameTaskStateTest.*:EventLifecycleTest.LevelReloadDiscardsEventsForDestroyedEntities
+[==========] Running 11 tests from 2 test suites.
+[----------] Global test environment set-up.
+[----------] 10 tests from GameTaskStateTest
+[ RUN      ] GameTaskStateTest.ReturningFromGameplayRestoresVisibleMenu
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+[       OK ] GameTaskStateTest.ReturningFromGameplayRestoresVisibleMenu (4 ms)
+[ RUN      ] GameTaskStateTest.GameOverKeepsGameplayViewUntilReturningToMenu
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+[       OK ] GameTaskStateTest.GameOverKeepsGameplayViewUntilReturningToMenu (1 ms)
+[ RUN      ] GameTaskStateTest.MenuFramesFreezeWorldWhileAllowingSelection
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+[       OK ] GameTaskStateTest.MenuFramesFreezeWorldWhileAllowingSelection (1 ms)
+[ RUN      ] GameTaskStateTest.EscapeStopsSimulationOnTheTransitionFrame
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+[       OK ] GameTaskStateTest.EscapeStopsSimulationOnTheTransitionFrame (0 ms)
+[ RUN      ] GameTaskStateTest.EveryModeTransitionStartsFreshSession
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe1700
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe2180
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe2c00
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe3680
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe3840
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe42c0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe4d40
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe4f00
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe5980
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe5b40
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe65c0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe7040
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe7200
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe7c80
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe7e40
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe88c0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe8a80
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfe9500
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfe96c0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfea140
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfea300
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfead80
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfeb800
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfeb9c0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfec440
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfec600
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfed080
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfed240
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfedcc0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfede80
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+[       OK ] GameTaskStateTest.EveryModeTransitionStartsFreshSession (41 ms)
+[ RUN      ] GameTaskStateTest.CoopDeathReloadsBothPlayersAndDiscardsOldEvents
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfeeac0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfeec80
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager: Player 0 tank is DEAD (deadtime=1.00)
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(false) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdfef700
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdfef8c0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+Player::HandleInput() - Player 0 processing input via NEW PlayerManager path (tank id=-1)
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(false) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff0340
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff0500
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(false) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff0f80
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff1140
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(false) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff1bc0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff1d80
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+[       OK ] GameTaskStateTest.CoopDeathReloadsBothPlayersAndDiscardsOldEvents (11 ms)
+[ RUN      ] GameTaskStateTest.VersusAwardsOneWinPerRoundAndRestoresBothPlayers
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff29c0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff2b80
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+Player 0 wins the round!
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(true) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level1@@.json
+LevelHandler: finished loading file: levels/level1@@.txt  
+>>> CreatePlayerTank called for player 0 at (64.00, 0.00, 64.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff3d00
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (64.00, 0.00, 64.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff3ec0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+Player 0 wins the round!
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(true) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level2@@.json
+LevelHandler: finished loading file: levels/level2@@.txt  
+>>> CreatePlayerTank called for player 0 at (64.00, 7.00, 64.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff5c80
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (64.00, 7.00, 64.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff5e40
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+Player 0 wins the round!
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(true) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level3@@.json
+LevelHandler: finished loading file: levels/level3@@.txt  
+>>> CreatePlayerTank called for player 0 at (64.00, 0.00, 64.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff8a00
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (64.00, 0.00, 64.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdff8bc0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdff9640
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+[       OK ] GameTaskStateTest.VersusAwardsOneWinPerRoundAndRestoresBothPlayers (10 ms)
+[ RUN      ] GameTaskStateTest.SimultaneousVersusDeathsDoNotAwardWin
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdffa280
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdffa440
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(true) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level1@@.json
+LevelHandler: finished loading file: levels/level1@@.txt  
+>>> CreatePlayerTank called for player 0 at (64.00, 0.00, 64.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdffb5c0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (64.00, 0.00, 64.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdffb780
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+[       OK ] GameTaskStateTest.SimultaneousVersusDeathsDoNotAwardWin (5 ms)
+[ RUN      ] GameTaskStateTest.InputLevelAdvanceIsAppliedAfterBothPlayersUpdate
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdffc3c0
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 113.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdffc580
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+Tank -1 FALL: y=2.000 vy=-1.600 dy=-0.160 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+
+========== LevelHandler::NextLevel(true) called ==========
+LevelHandler: Clearing GameWorld...
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+LevelHandler: GameWorld cleared
+LevelHandler: Successfully loaded metadata from: levels/level1@@.json
+LevelHandler: finished loading file: levels/level1@@.txt  
+>>> CreatePlayerTank called for player 0 at (3.00, 0.00, 110.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdffd700
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (3.00, 0.00, 110.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdffd8c0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 2 players
+PlayerManager::NextFrame() - Complete
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+[       OK ] GameTaskStateTest.InputLevelAdvanceIsAppliedAfterBothPlayersUpdate (5 ms)
+[ RUN      ] GameTaskStateTest.VersusUsesDistinctAuthoredSpawns
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+Created Player 1
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Setting up input for player 1 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 1 using generic joystick input mode
+PlayerManager: Input handler created successfully for player 1
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (114.00, 2.00, 52.00)
+Player 0: GameWorld::CreateTank returned tank=0x7cf4cdffe500
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+>>> CreatePlayerTank called for player 1 at (14.00, 2.00, 13.00)
+Player 1: GameWorld::CreateTank returned tank=0x7cf4cdffe6c0
+Player 1: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 1 took control of tank
+Player 1: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+Tank collision layer updated to ENEMY_TANKS
+Player 0 released tank control
+Tank collision layer updated to ENEMY_TANKS
+Player 1 released tank control
+[       OK ] GameTaskStateTest.VersusUsesDistinctAuthoredSpawns (3 ms)
+[----------] 10 tests from GameTaskStateTest (84 ms total)
+
+[----------] 1 test from EventLifecycleTest
+[ RUN      ] EventLifecycleTest.LevelReloadDiscardsEventsForDestroyedEntities
+LevelHandler: No metadata file found: reload-level0.json, using defaults
+LevelHandler: finished loading file: reload-level0.txt  
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+
+========== LevelHandler::NextLevel(false) called ==========
+LevelHandler: Clearing GameWorld...
+LevelHandler: GameWorld cleared
+LevelHandler: No metadata file found: reload-level0.json, using defaults
+LevelHandler: finished loading file: reload-level0.txt  
+[       OK ] EventLifecycleTest.LevelReloadDiscardsEventsForDestroyedEntities (5 ms)
+[----------] 1 test from EventLifecycleTest (5 ms total)
+
+[----------] Global test environment tear-down
+[==========] 11 tests from 2 test suites ran. (90 ms total)
+[  PASSED  ] 11 tests.

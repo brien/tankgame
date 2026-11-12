@@ -184,34 +184,12 @@ void PlayerManager::NextFrame() {
                         TANKGAME_LOG_DEBUG("PlayerManager: Player %d tank is DEAD (deadtime=%.2f)\n", i, tank->deadtime);
                     }
                     
-                    // Increment deadtime FIRST, before checking respawn
+                    if (tank->deadtime == 0.0f) tank->Die();
                     tank->deadtime += GlobalTimer::dT;
-                    tank->Die();
-                    
-                    if (versusMode) {
-                        if (tank->deadtime > VERSUS_RESPAWN_DELAY) {
-                            Logger::Get().Write("PlayerManager: Calling NextLevel for versus mode (deadtime=%.2f)\n", tank->deadtime);
-                            LevelHandler::GetSingleton().NextLevel(true);
-                            // Tank pointer is now invalid after NextLevel - don't use it again
-                            break; // Exit the loop to avoid using stale pointers
-                        }
-                    } else {
-                        if (tank->deadtime > PLAYER_RESPAWN_DELAY) {
-                            Logger::Get().Write("PlayerManager: Calling NextLevel for player respawn (deadtime=%.2f)\n", tank->deadtime);
-                            
-                            // Release the old dead tank before NextLevel clears it
-                            players[i]->ReleaseTank();
-                            
-                            LevelHandler::GetSingleton().NextLevel(false);
-                            
-                            // After NextLevel, create new player tank at spawn position
-                            Logger::Get().Write("PlayerManager: Creating new player tank after respawn\n");
-                            SetPlayerSpawnPosition(players[i].get(), i);
-                            Logger::Get().Write("PlayerManager: Player %d respawned with new tank\n", i);
-                            
-                            // Exit the loop to avoid using stale pointers
-                            break;
-                        }
+                    const float delay = versusMode ? VERSUS_RESPAWN_DELAY : PLAYER_RESPAWN_DELAY;
+                    if (tank->deadtime > delay) {
+                        LevelHandler::GetSingleton().RequestNextLevel(versusMode);
+                        break;
                     }
                 }
             } else {
@@ -225,7 +203,24 @@ void PlayerManager::NextFrame() {
     TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - Complete\n");
 }
 
+void PlayerManager::ReleaseTanks() {
+    for (auto& player : players) {
+        if (player) player->ReleaseTank();
+    }
+}
+
+void PlayerManager::ResetSession(int count, bool versus) {
+    ReleaseTanks();
+    for (auto& player : players) player.reset();
+    numPlayers = std::max(1, std::min(count, MAX_PLAYERS));
+    versusMode = versus;
+    roundResolved = false;
+    for (int i = 0; i < numPlayers; ++i) CreatePlayer(i);
+    SetupPlayerControls();
+}
+
 void PlayerManager::SpawnPlayerTanks() {
+    roundResolved = false;
     for (int i = 0; i < numPlayers; i++) {
         if (players[i] && !players[i]->HasTank()) {
             if (versusMode) {
@@ -577,7 +572,7 @@ void PlayerManager::ResetHitComboByTankId(int tankId) {
 
 void PlayerManager::UpdateVersusMode() {
     // Versus mode logic (migrated from TankHandler)  
-    if (!versusMode) return;
+    if (!versusMode || roundResolved) return;
     
     // Check for winner in versus mode
     int alivePlayers = 0;
@@ -593,6 +588,8 @@ void PlayerManager::UpdateVersusMode() {
         }
     }
     
+    if (alivePlayers < numPlayers) roundResolved = true;
+
     // If only one player alive in versus, they win
     if (alivePlayers == 1 && lastAlivePlayer >= 0) {
         players[lastAlivePlayer]->AddWin();

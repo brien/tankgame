@@ -16,6 +16,7 @@ using namespace std;
 // Forward declarations
 struct TerrainRenderData;
 class GameWorld;
+class PlayerManager;
 enum class FxType;
 
 /**
@@ -57,7 +58,7 @@ public:
     int start[2];
     int enemy[16][2];
 
-    char fileName[18];
+    std::string fileName;
     int sizeX;
     int sizeZ;
 
@@ -69,6 +70,7 @@ public:
 
     // Interface to GameWorld
     void SetGameWorld(GameWorld* world) { gameWorld = world; }
+    void SetPlayerManager(PlayerManager* manager) { players = manager; }
     
     // Descriptive FX helper methods (encapsulate effect creation logic)
     void CreateItemCollectionFX(float x, float y, float z, const Color& color);
@@ -92,6 +94,9 @@ public:
 
     int Strlen(const char *stringy);
 
+    void RequestNextLevel(bool forward);
+    void ProcessPendingLevelChange();
+    // Immediate reload: entity/input updates must use RequestNextLevel instead.
     void NextLevel(bool forb);
 
     // Enemy count calculation for level scaling
@@ -108,6 +113,9 @@ public:
     static int ConvertInternalToLogicalLevel(int internalLevel);
 
 private:
+    PlayerManager* players = nullptr;
+    bool levelChangePending = false;
+    bool advanceLevel = false;
     static const int MAX_SIZE_X = 128;
     static const int MAX_SIZE_Z = 128;
 

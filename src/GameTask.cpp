@@ -18,6 +18,15 @@ void GameTask::SetUpGame()
     Events::Clear();
     Logger::Get().Write("GameTask: Cleared event queue\n");
     
+    playerManager.ReleaseTanks();
+    gameWorld.Clear();
+    versus = (menuState == 2);
+    playerManager.ResetSession(menuState == 0 ? 1 : 2, versus);
+    gameOver = false;
+    paused = false;
+    timer = 0;
+
+    LevelHandler::GetSingleton().SetPlayerManager(&playerManager);
     LevelHandler::GetSingleton().Init();
     if (!LevelHandler::GetSingleton().Load("levels/level0@@.txt"))
     {
@@ -145,16 +154,9 @@ void GameTask::HandleMenuState()
     {
         // isInputJoy managed by PlayerManager
         playerManager.SetInputJoystick(false);
-        if (menuState > 0)
-        {
-            playerManager.SetNumPlayers(2);
-        }
-        // Immediately clamp to prevent array bounds issues
-        int currentPlayers = playerManager.GetNumPlayers();
-        playerManager.SetNumPlayers(std::min(currentPlayers, 2));
-        versus = (menuState == 2);
         SetUpGame();
         TransitionToState(GameState::PLAYING);
+        return;
     }
 
     if (InputTask::KeyDown(SDL_SCANCODE_I))
@@ -165,7 +167,7 @@ void GameTask::HandleMenuState()
 
     if (InputTask::KeyDown(SDL_SCANCODE_2))
     {
-        playerManager.SetNumPlayers(2);
+        menuState = 1;
     }
 
     if (menuState == 0)
@@ -217,11 +219,11 @@ void GameTask::HandlePlayingState()
     {
         if (InputTask::KeyDown(SDL_SCANCODE_H))
         {
-            LevelHandler::GetSingleton().NextLevel(true);
+            LevelHandler::GetSingleton().RequestNextLevel(true);
         }
         if (InputTask::KeyDown(SDL_SCANCODE_L))
         {
-            LevelHandler::GetSingleton().NextLevel(false);
+            LevelHandler::GetSingleton().RequestNextLevel(false);
         }
     }
 
@@ -237,6 +239,8 @@ void GameTask::HandlePlayingState()
     // Item management (TODO: move to GameWorld or ItemManager)
     LevelHandler::GetSingleton().UpdateItems();
     LevelHandler::GetSingleton().ItemCollision();
+
+    if (!gameOver) LevelHandler::GetSingleton().ProcessPendingLevelChange();
 
     if (gameOver)
     {

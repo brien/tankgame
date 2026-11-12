@@ -48,11 +48,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
     
     if (InputTask::KeyDown(SDL_SCANCODE_T))
     {
-        float oldy = tank.y;
-        LevelHandler::GetSingleton().NextLevel(true);
-        tank.x = LevelHandler::GetSingleton().start[0];
-        tank.z = LevelHandler::GetSingleton().start[1];
-        tank.y = oldy;
+        LevelHandler::GetSingleton().RequestNextLevel(true);
     }
 
     if (InputTask::KeyStillDown(SDL_SCANCODE_W))
