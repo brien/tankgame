@@ -79,6 +79,9 @@ Tank *Player::CreatePlayerTank(float x, float y, float z)
 
         // Initialize tank for player use
         tank->Init();
+        // Apply the starting weapon stats on every spawn, including respawns.
+        // Init resets tank state but leaves attack at its constructor value.
+        tank->SetType(tank->type1, tank->type2);
         Logger::Get().Write("Player %d: Tank::Init() completed\n", playerIndex);
 
         // Take control

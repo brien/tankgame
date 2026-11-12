@@ -46,6 +46,34 @@ protected:
     }
 };
 
+TEST_F(BulletSpecialTest, FreshPlayerAndRespawnCanKillEnemyWithoutPickups) {
+    for (int p = 0; p < 2; ++p) {
+        auto* player = task.GetPlayerManager()->GetPlayer(p);
+        for (int spawn = 0; spawn < 2; ++spawn) {
+            SCOPED_TRACE(p);
+            SCOPED_TRACE(spawn);
+            Tank* tank = player->CreatePlayerTank(30, 2, 30);
+            ASSERT_NE(tank, nullptr);
+            tank->fireTimer = tank->fireRate + 1;
+            const size_t before = world.GetBullets().size();
+            tank->Fire(1);
+            ASSERT_EQ(world.GetBullets().size(), before + 1);
+            auto* bullet = world.GetBullets().back().get();
+            EXPECT_FALSE(bullet->GetIsSpecial());
+            EXPECT_FLOAT_EQ(bullet->GetPower(), 200);
+
+            Tank enemy;
+            enemy.Init();
+            enemy.identity = TankIdentity::Enemy(10);
+            Hit(bullet, &enemy);
+            EXPECT_LE(enemy.health, 0);
+            EXPECT_FALSE(bullet->IsAlive());
+            tank->alive = false;
+            player->ReleaseTank();
+        }
+    }
+}
+
 TEST_F(BulletSpecialTest, FiringPatternsChargeAndCooldown) {
     Tank* tanks[2] = {world.CreateTank(), world.CreateTank()};
     for (int p = 0; p < 2; ++p) {

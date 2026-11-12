@@ -1,5 +1,12 @@
 # Windows music stops immediately
 
+## Confirmation (2026-11-12)
+
+The owner confirmed that the Windows audio fix works and that regression testing
+on the other platforms passed. This closes the runtime confirmation left open
+in the implementation report below; platform versions and test details were not
+provided.
+
 The supplied Windows log reports SDL 2.32.10, SDL_mixer 2.8.2 and WASAPI.
 The Ogg loads and starts, but by tick 632 it is no longer playing. Position
 remains at 0.032 seconds, despite a duration of 178.312 seconds and both
