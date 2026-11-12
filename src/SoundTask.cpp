@@ -50,7 +50,10 @@ bool SoundTask::Start()
         hitChannel = 8;
         bounceChannel = 9;
 
-        audio_rate = 22050;
+        // Match the music's 44.1 kHz rate. With small device buffers, SDL2's
+        // downsampling delay can exhaust SDL_mixer's no-output retry limit
+        // and stop Ogg playback before the first audible buffer.
+        audio_rate = static_cast<int>(samplingRate);
         audio_format = AUDIO_S16;
         audio_channels = 2;
         audio_buffers = 2048;

@@ -1,0 +1,2220 @@
+We compiled against SDL version 2.32.10 ...
+But we are linking against SDL version 2.32.10.
+VideoTask::Start: graphics context ready at 1280x720.
+GraphicsTask::Starting
+BulletRenderer initialized successfully
+EffectRenderer initialized successfully
+GraphicsTask: Initializing new centralized rendering pipeline
+RenderingPipeline initializing... 
+BulletRenderer initialized successfully
+EffectRenderer initialized successfully
+RenderingPipeline Initialized Successfully: 1
+GraphicsTask: New rendering pipeline initialized successfully
+GraphicsTask::Started
+Renderer mode: modern
+SDL_mixer compiled 2.8.2, linked 2.8.2; audio 22050 Hz, 2 channels, format 0x8010.
+Loaded music 'sounds/TGTest3.ogg'.
+Audio driver: wasapi; available music decoders: 2.
+Available music decoder: WAVE
+Available music decoder: OGG
+LevelHandler: Successfully loaded metadata from: ./levels/title@@.json
+LevelHandler: finished loading file: ./levels/title@@.txt  
+GameWorld::Initialize() - Starting
+CollisionSystem::Initialize() - Subscribing to collision query events
+CollisionSystem::Initialize() - Subscriptions complete
+GameWorld initialized with collision and combat systems
+GraphicsTask: Setting GameWorld and recreating SceneDataBuilder
+GameTask: OnResume - Initializing systems...
+GameTask: Initializing PlayerManager...
+PlayerManager: Initialize called with GameWorld
+PlayerManager: Creating initial player...
+Created Player 0
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Claiming existing tanks from TankHandler...
+PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly
+PlayerManager: No valid tank found for Player 0 in TankHandler
+PlayerManager: Setting up controllers and input with synced preferences...
+PlayerManager: Detected 0 joysticks
+PlayerManager: Keeping TankHandler input preference isInputJoy=0
+PlayerManager: Using keyboard/mouse input (from TankHandler)
+PlayerManager: Keeping numPlayers=1 from initialization
+PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1
+PlayerManager: Player 0 using keyboard/mouse input mode
+PlayerManager: Input handler created successfully for player 0
+PlayerManager: Initialized with 1 players
+PlayerManager initialized with 1 players
+GameTask: OnResume complete
+Music playback started (active=1, musicPaused=0).
+Music play request: tick=362, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128.
+Music stream: position=0.000 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+Initialization complete.
+Entering native TaskHandler execute loop.
+LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)
+Music toggle: tick=632, loaded=1, active=1, requestedPause=1, playing=0, paused=1, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+Music toggle: tick=847, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+GameTask: Setting up new game...
+GameTask: Cleared event queue
+LevelHandler: Successfully loaded metadata from: levels/level0@@.json
+LevelHandler: finished loading file: levels/level0@@.txt  
+GameTask: Spawning player tanks via PlayerManager...
+>>> CreatePlayerTank called for player 0 at (14.00, 2.00, 113.00)
+Player 0: GameWorld::CreateTank returned tank=000001fa83385840
+Player 0: Tank position set to (14.00, 2.00, 113.00)
+Player 0: Tank::Init() completed
+Tank collision layer updated to PLAYER_TANKS
+Player 0 took control of tank
+Player 0: TakeControlOf completed - identity set to PLAYER
+GameTask: Player tanks spawned
+GameTask: Game setup complete
+LevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)
+Tank -1 FALL: y=24.000 vy=-0.034 dy=-0.001 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager: Processing Player 0 via NEW PlayerManager system
+Player 0 processing NextFrame + input for tank
+Player::HandleInput() - Player 0 processing input via NEW PlayerManager path (tank id=-1)
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music toggle: tick=1514, loaded=1, active=1, requestedPause=1, playing=0, paused=1, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Tank -1 FALL: y=22.979 vy=-2.036 dy=-0.033 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music toggle: tick=1713, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music toggle: tick=1963, loaded=1, active=1, requestedPause=1, playing=0, paused=1, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Tank -1 FALL: y=19.959 vy=-4.036 dy=-0.065 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager: Processing Player 0 via NEW PlayerManager system
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music toggle: tick=2329, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Tank -1 FALL: y=14.950 vy=-6.032 dy=-0.097 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music toggle: tick=2579, loaded=1, active=1, requestedPause=1, playing=0, paused=1, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music toggle: tick=2746, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Tank -1 FALL: y=7.933 vy=-8.034 dy=-0.137 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager: Processing Player 0 via NEW PlayerManager system
+Player 0 processing NextFrame + input for tank
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+Tank -1 JUMP START: vy=0.400 energy=100.0 y=2.467
+PlayerManager::NextFrame() - Complete
+GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 46 | FPS: 62.5
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+Tank -1 JUMP START: vy=0.400 energy=100.0 y=2.496
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Tank -1 FALL: y=2.508 vy=0.317 dy=0.006 isJumping=1
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+Tank -1 JUMP START: vy=0.400 energy=100.0 y=2.535
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music progress: tick=3746, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+Tank -1 JUMP START: vy=0.400 energy=100.0 y=2.510
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Tank -1 FALL: y=2.518 vy=-0.388 dy=-0.007 isJumping=0
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager: Processing Player 0 via NEW PlayerManager system
+Player::HandleInput() - Player 0 processing input via NEW PlayerManager path (tank id=-1)
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 90 | FPS: 58.8
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Music progress: tick=4747, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128.
+Music stream: position=0.032 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable).
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+Tank::Fire - id=-1, creating bullet at (15.61, 2.00, 114.32)
+GameWorld::CreateBullet - tankId=-1, pos=(16.04, 2.25, 114.63)
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (16.50, 2.25, 114.95)
+CollisionSystem::OnPointCollisionQuery - pos=(16.50, 2.25, 114.95)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(16.50, 2.25, 114.95) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(16.27, 2.25, 114.79) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (16.93, 2.25, 115.26)
+CollisionSystem::OnPointCollisionQuery - pos=(16.93, 2.25, 115.26)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(16.93, 2.25, 115.26) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(16.72, 2.25, 115.10) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (17.36, 2.25, 115.56)
+CollisionSystem::OnPointCollisionQuery - pos=(17.36, 2.25, 115.56)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(17.36, 2.25, 115.56) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(17.15, 2.25, 115.41) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (17.85, 2.25, 115.90)
+CollisionSystem::OnPointCollisionQuery - pos=(17.85, 2.25, 115.90)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(17.85, 2.25, 115.90) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(17.61, 2.25, 115.73) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (18.31, 2.25, 116.23)
+CollisionSystem::OnPointCollisionQuery - pos=(18.31, 2.25, 116.23)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(18.31, 2.25, 116.23) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(18.08, 2.25, 116.06) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (18.74, 2.25, 116.53)
+CollisionSystem::OnPointCollisionQuery - pos=(18.74, 2.25, 116.53)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(18.74, 2.25, 116.53) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(18.52, 2.25, 116.38) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (19.20, 2.25, 116.85)
+CollisionSystem::OnPointCollisionQuery - pos=(19.20, 2.25, 116.85)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(19.20, 2.25, 116.85) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(18.97, 2.25, 116.69) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (19.66, 2.25, 117.18)
+CollisionSystem::OnPointCollisionQuery - pos=(19.66, 2.25, 117.18)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(19.66, 2.25, 117.18) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(19.43, 2.25, 117.01) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (20.06, 2.25, 117.46)
+CollisionSystem::OnPointCollisionQuery - pos=(20.06, 2.25, 117.46)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(20.06, 2.25, 117.46) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(19.86, 2.25, 117.32) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (20.52, 2.25, 117.78)
+CollisionSystem::OnPointCollisionQuery - pos=(20.52, 2.25, 117.78)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(20.52, 2.25, 117.78) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(20.29, 2.25, 117.62) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (20.95, 2.25, 118.09)
+CollisionSystem::OnPointCollisionQuery - pos=(20.95, 2.25, 118.09)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(20.95, 2.25, 118.09) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(20.73, 2.25, 117.94) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (21.44, 2.25, 118.43)
+CollisionSystem::OnPointCollisionQuery - pos=(21.44, 2.25, 118.43)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(21.44, 2.25, 118.43) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(21.19, 2.25, 118.26) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (21.89, 2.25, 118.75)
+CollisionSystem::OnPointCollisionQuery - pos=(21.89, 2.25, 118.75)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(21.89, 2.25, 118.75) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(21.67, 2.25, 118.59) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (22.35, 2.25, 119.08)
+CollisionSystem::OnPointCollisionQuery - pos=(22.35, 2.25, 119.08)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(22.35, 2.25, 119.08) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(22.12, 2.25, 118.91) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager: Processing Player 0 via NEW PlayerManager system
+Player 0 processing NextFrame + input for tank
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (22.78, 2.25, 119.38)
+CollisionSystem::OnPointCollisionQuery - pos=(22.78, 2.25, 119.38)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(22.78, 2.25, 119.38) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(22.57, 2.25, 119.23) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (23.22, 2.25, 119.68)
+CollisionSystem::OnPointCollisionQuery - pos=(23.22, 2.25, 119.68)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(23.22, 2.25, 119.68) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(23.00, 2.25, 119.53) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+Tank::Fire - id=-1, creating bullet at (15.68, 2.00, 114.38)
+GameWorld::CreateBullet - tankId=-1, pos=(16.10, 2.25, 114.70)
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (23.70, 2.25, 120.03)
+CollisionSystem::OnPointCollisionQuery - pos=(23.70, 2.25, 120.03)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(23.70, 2.25, 120.03) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(23.46, 2.25, 119.86) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (16.58, 2.25, 115.05)
+CollisionSystem::OnPointCollisionQuery - pos=(16.58, 2.25, 115.05)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(16.58, 2.25, 115.05) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(16.34, 2.25, 114.87) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (24.13, 2.25, 120.33)
+CollisionSystem::OnPointCollisionQuery - pos=(24.13, 2.25, 120.33)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(24.13, 2.25, 120.33) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(23.92, 2.25, 120.18) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (17.00, 2.25, 115.36)
+CollisionSystem::OnPointCollisionQuery - pos=(17.00, 2.25, 115.36)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(17.00, 2.25, 115.36) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(16.79, 2.25, 115.21) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (24.59, 2.25, 120.65)
+CollisionSystem::OnPointCollisionQuery - pos=(24.59, 2.25, 120.65)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(24.59, 2.25, 120.65) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(24.36, 2.25, 120.49) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (17.46, 2.25, 115.70)
+CollisionSystem::OnPointCollisionQuery - pos=(17.46, 2.25, 115.70)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(17.46, 2.25, 115.70) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(17.23, 2.25, 115.53) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (25.02, 2.25, 120.96)
+CollisionSystem::OnPointCollisionQuery - pos=(25.02, 2.25, 120.96)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(25.02, 2.25, 120.96) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(24.81, 2.25, 120.81) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (17.88, 2.25, 116.01)
+CollisionSystem::OnPointCollisionQuery - pos=(17.88, 2.25, 116.01)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(17.88, 2.25, 116.01) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(17.67, 2.25, 115.85) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (25.48, 2.25, 121.28)
+CollisionSystem::OnPointCollisionQuery - pos=(25.48, 2.25, 121.28)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(25.48, 2.25, 121.28) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(25.25, 2.25, 121.12) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (18.33, 2.25, 116.34)
+CollisionSystem::OnPointCollisionQuery - pos=(18.33, 2.25, 116.34)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(18.33, 2.25, 116.34) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(18.11, 2.25, 116.18) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (25.94, 2.25, 121.60)
+CollisionSystem::OnPointCollisionQuery - pos=(25.94, 2.25, 121.60)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(25.94, 2.25, 121.60) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(25.71, 2.25, 121.44) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (18.78, 2.25, 116.68)
+CollisionSystem::OnPointCollisionQuery - pos=(18.78, 2.25, 116.68)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(18.78, 2.25, 116.68) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(18.56, 2.25, 116.51) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (26.35, 2.25, 121.89)
+CollisionSystem::OnPointCollisionQuery - pos=(26.35, 2.25, 121.89)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(26.35, 2.25, 121.89) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(26.14, 2.25, 121.75) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (19.18, 2.25, 116.97)
+CollisionSystem::OnPointCollisionQuery - pos=(19.18, 2.25, 116.97)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(19.18, 2.25, 116.97) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(18.98, 2.25, 116.82) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (26.80, 2.25, 122.21)
+CollisionSystem::OnPointCollisionQuery - pos=(26.80, 2.25, 122.21)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(26.80, 2.25, 122.21) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(26.57, 2.25, 122.05) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (19.63, 2.25, 117.30)
+CollisionSystem::OnPointCollisionQuery - pos=(19.63, 2.25, 117.30)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(19.63, 2.25, 117.30) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(19.41, 2.25, 117.14) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (27.26, 2.25, 122.54)
+CollisionSystem::OnPointCollisionQuery - pos=(27.26, 2.25, 122.54)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(27.26, 2.25, 122.54) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(27.03, 2.25, 122.37) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (20.08, 2.25, 117.64)
+CollisionSystem::OnPointCollisionQuery - pos=(20.08, 2.25, 117.64)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(20.08, 2.25, 117.64) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(19.86, 2.25, 117.47) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (27.69, 2.25, 122.84)
+CollisionSystem::OnPointCollisionQuery - pos=(27.69, 2.25, 122.84)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(27.69, 2.25, 122.84) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(27.48, 2.25, 122.69) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (20.51, 2.25, 117.95)
+CollisionSystem::OnPointCollisionQuery - pos=(20.51, 2.25, 117.95)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(20.51, 2.25, 117.95) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(20.30, 2.25, 117.80) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (28.18, 2.25, 123.18)
+CollisionSystem::OnPointCollisionQuery - pos=(28.18, 2.25, 123.18)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(28.18, 2.25, 123.18) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(27.94, 2.25, 123.01) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (20.99, 2.25, 118.31)
+CollisionSystem::OnPointCollisionQuery - pos=(20.99, 2.25, 118.31)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(20.99, 2.25, 118.31) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(20.75, 2.25, 118.13) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (28.64, 2.25, 123.51)
+CollisionSystem::OnPointCollisionQuery - pos=(28.64, 2.25, 123.51)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(28.64, 2.25, 123.51) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(28.41, 2.25, 123.34) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (21.44, 2.25, 118.64)
+CollisionSystem::OnPointCollisionQuery - pos=(21.44, 2.25, 118.64)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(21.44, 2.25, 118.64) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(21.21, 2.25, 118.47) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (29.10, 2.25, 123.83)
+CollisionSystem::OnPointCollisionQuery - pos=(29.10, 2.25, 123.83)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(29.10, 2.25, 123.83) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(28.87, 2.25, 123.67) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (21.89, 2.25, 118.97)
+CollisionSystem::OnPointCollisionQuery - pos=(21.89, 2.25, 118.97)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(21.89, 2.25, 118.97) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(21.66, 2.25, 118.81) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (29.53, 2.25, 124.13)
+CollisionSystem::OnPointCollisionQuery - pos=(29.53, 2.25, 124.13)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(29.53, 2.25, 124.13) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(29.31, 2.25, 123.98) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (22.31, 2.25, 119.29)
+CollisionSystem::OnPointCollisionQuery - pos=(22.31, 2.25, 119.29)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(22.31, 2.25, 119.29) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(22.10, 2.25, 119.13) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (29.99, 2.25, 124.46)
+CollisionSystem::OnPointCollisionQuery - pos=(29.99, 2.25, 124.46)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(29.99, 2.25, 124.46) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(29.76, 2.25, 124.29) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (22.76, 2.25, 119.62)
+CollisionSystem::OnPointCollisionQuery - pos=(22.76, 2.25, 119.62)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(22.76, 2.25, 119.62) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(22.54, 2.25, 119.45) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (30.45, 2.25, 124.78)
+CollisionSystem::OnPointCollisionQuery - pos=(30.45, 2.25, 124.78)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(30.45, 2.25, 124.78) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(30.22, 2.25, 124.62) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (23.21, 2.25, 119.95)
+CollisionSystem::OnPointCollisionQuery - pos=(23.21, 2.25, 119.95)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(23.21, 2.25, 119.95) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(22.99, 2.25, 119.79) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+GameWorld entities - Tanks: 6, Bullets: 2, Items: 0, Effects: 94 | FPS: 58.8
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (30.88, 2.25, 125.08)
+CollisionSystem::OnPointCollisionQuery - pos=(30.88, 2.25, 125.08)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(30.88, 2.25, 125.08) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(30.66, 2.25, 124.93) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (23.64, 2.25, 120.27)
+CollisionSystem::OnPointCollisionQuery - pos=(23.64, 2.25, 120.27)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(23.64, 2.25, 120.27) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(23.43, 2.25, 120.11) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (31.34, 2.25, 125.41)
+CollisionSystem::OnPointCollisionQuery - pos=(31.34, 2.25, 125.41)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(31.34, 2.25, 125.41) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(31.11, 2.25, 125.24) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (24.09, 2.25, 120.60)
+CollisionSystem::OnPointCollisionQuery - pos=(24.09, 2.25, 120.60)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(24.09, 2.25, 120.60) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(23.86, 2.25, 120.43) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (31.79, 2.25, 125.73)
+CollisionSystem::OnPointCollisionQuery - pos=(31.79, 2.25, 125.73)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(31.79, 2.25, 125.73) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(31.57, 2.25, 125.57) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (24.54, 2.25, 120.93)
+CollisionSystem::OnPointCollisionQuery - pos=(24.54, 2.25, 120.93)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(24.54, 2.25, 120.93) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(24.32, 2.25, 120.77) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (32.23, 2.25, 126.03)
+CollisionSystem::OnPointCollisionQuery - pos=(32.23, 2.25, 126.03)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(32.23, 2.25, 126.03) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(32.01, 2.25, 125.88) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (24.97, 2.25, 121.25)
+CollisionSystem::OnPointCollisionQuery - pos=(24.97, 2.25, 121.25)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(24.97, 2.25, 121.25) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(24.75, 2.25, 121.09) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (32.66, 2.25, 126.34)
+CollisionSystem::OnPointCollisionQuery - pos=(32.66, 2.25, 126.34)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(32.66, 2.25, 126.34) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(32.44, 2.25, 126.19) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (25.39, 2.25, 121.56)
+CollisionSystem::OnPointCollisionQuery - pos=(25.39, 2.25, 121.56)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(25.39, 2.25, 121.56) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(25.18, 2.25, 121.40) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (33.14, 2.25, 126.68)
+CollisionSystem::OnPointCollisionQuery - pos=(33.14, 2.25, 126.68)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(33.14, 2.25, 126.68) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(32.90, 2.25, 126.51) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (25.87, 2.25, 121.91)
+CollisionSystem::OnPointCollisionQuery - pos=(25.87, 2.25, 121.91)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(25.87, 2.25, 121.91) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(25.63, 2.25, 121.74) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (33.58, 2.25, 126.98)
+CollisionSystem::OnPointCollisionQuery - pos=(33.58, 2.25, 126.98)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(33.58, 2.25, 126.98) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(33.36, 2.25, 126.83) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+Bullet::CheckForCollisions - Publishing PointCollisionQuery for level at (26.29, 2.25, 122.23)
+CollisionSystem::OnPointCollisionQuery - pos=(26.29, 2.25, 122.23)
+CollisionSystem::OnPointCollisionQuery - result=0
+Bullet::CheckForCollisions - PointCollisionQuery result=0
+CollisionSystem::OnSphereCollisionQuery - pos=(26.29, 2.25, 122.23) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+CollisionSystem::OnSphereCollisionQuery - pos=(26.08, 2.25, 122.07) radius=0.10
+CollisionSystem::OnSphereCollisionQuery - found 0 entities
+PlayerManager::NextFrame() - Starting
+PlayerManager::NextFrame() - UpdatePlayerCombos
+PlayerManager::NextFrame() - UpdatePlayerTargeting
+PlayerManager::NextFrame() - UpdateVersusMode
+PlayerManager::NextFrame() - Updating 1 players
+PlayerManager::NextFrame() - Complete
+GraphicsTask: Cleaning up new rendering pipeline
+EffectRenderer cleaned up
+BulletRenderer cleaned up
+TerrainRenderer cleaned up 
+GraphicsTask: New rendering pipeline cleanup complete
+TerrainRenderer cleaned up 
+BulletRenderer cleaned up
+EffectRenderer cleaned up
+GraphicsTask: Stopped 
