@@ -9,6 +9,7 @@
 #include "GlobalTimer.h"
 #include <algorithm>
 #include <cmath>
+#include <limits>
 #include <SDL2/SDL.h>
 
 // Static constexpr member definitions (required for ODR-use in C++17)
@@ -533,26 +534,27 @@ void PlayerManager::UpdatePlayerTargeting() {
         if (!playerTank || !playerTank->alive) continue;
         
         // Find closest enemy tank for targeting
-        float closestDistance = 99999.0f;
+        float closestDistanceSquared = std::numeric_limits<float>::infinity();
         const auto& allTanks = gameWorld->GetTanks();
         
         for (const auto& tankPtr : allTanks) {
             if (!tankPtr || !tankPtr->IsAlive()) continue;
             if (tankPtr.get() == playerTank) continue; // Skip self
-            if (tankPtr->isPlayer) continue; // Skip other players in versus
+            if (tankPtr->isPlayer && !versusMode) continue;
             
             float dx = tankPtr->x - playerTank->x;
             float dz = tankPtr->z - playerTank->z;
-            float distance = std::sqrt(dx * dx + dz * dz);
+            float distanceSquared = dx * dx + dz * dz;
             
-            if (distance < closestDistance) {
-                closestDistance = distance;
+            if (distanceSquared < closestDistanceSquared) {
+                closestDistanceSquared = distanceSquared;
+                // The ring faces +X at zero and renders with a negative Y rotation.
+                // Keep the last direction when the target overlaps the player.
+                if (distanceSquared > 0.0f) {
+                    playerTank->rrl = toDegrees(std::atan2(dz, dx));
+                }
             }
         }
-        
-        // Store closest distance in TankHandler for compatibility
-        // (Some systems may still read this)
-        // Targeting distance is managed by PlayerManager
     }
 }
 

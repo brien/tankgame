@@ -103,3 +103,75 @@ TEST_F(PlayerManagerRegressionTest, EnsurePlayerTankSetup_RevalidatesPlayerIdent
     EXPECT_TRUE(tank->isPlayer);
     EXPECT_EQ(tank->jid, 0u);
 }
+
+TEST_F(PlayerManagerRegressionTest, TargetingTracksEnemyDirectionAcrossAllQuadrants) {
+    Tank* player = gameWorld.CreateTank();
+    playerManager.GetPlayer(0)->TakeControlOf(player);
+    player->alive = true;
+    player->x = 10.0f;
+    player->z = 20.0f;
+    Tank* enemy = gameWorld.CreateTank();
+    enemy->alive = true;
+    enemy->isPlayer = false;
+
+    const float offsets[][3] = {
+        {5, 0, 0}, {5, 5, 45}, {0, 5, 90}, {-5, 5, 135},
+        {-5, 0, 180}, {-5, -5, -135}, {0, -5, -90}, {5, -5, -45}
+    };
+    for (const auto& offset : offsets) {
+        enemy->x = player->x + offset[0];
+        enemy->z = player->z + offset[1];
+        playerManager.UpdatePlayerTargeting();
+        EXPECT_NEAR(player->rrl, offset[2], 0.001f);
+    }
+}
+
+TEST_F(PlayerManagerRegressionTest, TargetingSelectsNearestLivingEnemyAndRetargets) {
+    Tank* player = gameWorld.CreateTank();
+    playerManager.GetPlayer(0)->TakeControlOf(player);
+    player->alive = true;
+    player->x = player->z = 0.0f;
+    Tank* nearEnemy = gameWorld.CreateTank();
+    nearEnemy->alive = true;
+    nearEnemy->isPlayer = false;
+    nearEnemy->x = 0.0f;
+    nearEnemy->z = 2.0f;
+    Tank* farEnemy = gameWorld.CreateTank();
+    farEnemy->alive = true;
+    farEnemy->isPlayer = false;
+    farEnemy->x = -5.0f;
+    farEnemy->z = 0.0f;
+
+    playerManager.UpdatePlayerTargeting();
+    EXPECT_NEAR(player->rrl, 90.0f, 0.001f);
+    nearEnemy->alive = false;
+    playerManager.UpdatePlayerTargeting();
+    EXPECT_NEAR(player->rrl, 180.0f, 0.001f);
+    farEnemy->x = farEnemy->z = 0.0f;
+    playerManager.UpdatePlayerTargeting();
+    EXPECT_NEAR(player->rrl, 180.0f, 0.001f);
+    farEnemy->alive = false;
+    playerManager.UpdatePlayerTargeting();
+    EXPECT_NEAR(player->rrl, 180.0f, 0.001f);
+}
+
+TEST_F(PlayerManagerRegressionTest, TargetingIncludesOtherPlayerOnlyInVersusMode) {
+    playerManager.SetNumPlayers(2);
+    Tank* first = gameWorld.CreateTank();
+    Tank* second = gameWorld.CreateTank();
+    playerManager.GetPlayer(0)->TakeControlOf(first);
+    playerManager.GetPlayer(1)->TakeControlOf(second);
+    first->alive = second->alive = true;
+    first->x = first->z = second->x = 0.0f;
+    second->z = 5.0f;
+    first->rrl = 45.0f;
+    second->rrl = 45.0f;
+
+    playerManager.UpdatePlayerTargeting();
+    EXPECT_FLOAT_EQ(first->rrl, 45.0f);
+    EXPECT_FLOAT_EQ(second->rrl, 45.0f);
+    playerManager.SetVersusMode(true);
+    playerManager.UpdatePlayerTargeting();
+    EXPECT_NEAR(first->rrl, 90.0f, 0.001f);
+    EXPECT_NEAR(second->rrl, -90.0f, 0.001f);
+}
