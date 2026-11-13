@@ -35,6 +35,7 @@ add_executable(tankgame_tests
     test_graphics_capabilities.cpp
     test_matrix4.cpp
     test_material_texture.cpp
+    test_tank_jump.cpp
     test_bullet_special.cpp
     test_main.cpp
     test_player.cpp

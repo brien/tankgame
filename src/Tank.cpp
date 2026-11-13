@@ -12,6 +12,7 @@
 
 #include "Tank.h"
 
+#include <algorithm>
 #include <cmath>
 #include "App.h"
 #include "GameWorld.h"
@@ -840,9 +841,10 @@ void Tank::Jump()
 {
     if (energy > 0)
     {
-        // On first frame of jump, give strong upward velocity
-        if (jumpTime < 0.01f) {
-            vy = 0.4f;  // Strong initial jump velocity to overcome gravity
+        // A full 100-energy tank powers 0.4 seconds of thrust. This launch
+        // speed clears a two-block ledge with room to move onto it.
+        if (jumpTime == 0.0f) {
+            vy = 4.0f;
             isJumping = true;
             
             // Debug logging for player tanks
@@ -852,17 +854,13 @@ void Tank::Jump()
             }
         }
         
+        // Use the remaining energy for a partial final frame of thrust.
+        const float thrustTime = jumpCost > 0.0f
+            ? std::min(GlobalTimer::dT, energy / jumpCost)
+            : GlobalTimer::dT;
         jumpTime += GlobalTimer::dT;
-        energy -= jumpCost * GlobalTimer::dT;
-        
-        // Continue jump if we have energy
-        if (energy > 5)
-        {
-            // Add slight upward boost during jump for height control
-            vy += (jumpRate * GlobalTimer::dT);
-        }
-
-        // y += vy*GlobalTimer::dT;
+        energy = std::max(0.0f, energy - jumpCost * thrustTime);
+        vy += jumpRate * thrustTime;
 
         // Check for float collision with upward offset during jump
         if (TankCollisionHelper::CheckFourPointFloatCollision(*this, 0.2f))
