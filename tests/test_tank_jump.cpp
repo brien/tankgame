@@ -97,4 +97,22 @@ TEST_P(TankJumpTest, LastEnergyProvidesProportionalThrustWithoutGoingNegative) {
     EXPECT_FLOAT_EQ(tank.vy, velocity);
 }
 
+TEST_P(TankJumpTest, RegeneratedEnergyIsFullyConsumedByNextJump) {
+    Tank tank;
+    Prepare(tank, 0.0f);
+    tank.NextFrame();
+    ASSERT_GT(tank.energy, 0.0f);
+    ASSERT_LT(tank.energy, tank.jumpCost * GlobalTimer::dT);
+
+    tank.jumpTime = 0.1f;
+    tank.vy = 1.0f;
+    const float expectedVelocity = tank.vy + tank.jumpRate * (tank.energy / tank.jumpCost);
+    tank.Jump();
+    EXPECT_EQ(tank.energy, 0.0f);
+    EXPECT_NEAR(tank.vy, expectedVelocity, 0.00001f);
+    tank.Jump();
+    EXPECT_EQ(tank.energy, 0.0f);
+    EXPECT_NEAR(tank.vy, expectedVelocity, 0.00001f);
+}
+
 INSTANTIATE_TEST_SUITE_P(FrameRates, TankJumpTest, ::testing::Values(30, 60, 144, 240));

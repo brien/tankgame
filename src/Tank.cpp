@@ -855,11 +855,16 @@ void Tank::Jump()
         }
         
         // Use the remaining energy for a partial final frame of thrust.
-        const float thrustTime = jumpCost > 0.0f
-            ? std::min(GlobalTimer::dT, energy / jumpCost)
+        const float availableThrustTime = jumpCost > 0.0f
+            ? energy / jumpCost
             : GlobalTimer::dT;
+        const float thrustTime = std::min(GlobalTimer::dT, availableThrustTime);
         jumpTime += GlobalTimer::dT;
-        energy = std::max(0.0f, energy - jumpCost * thrustTime);
+        // Explicitly exhaust a partial final frame: multiplying the rounded
+        // energy / jumpCost back by jumpCost can leave a positive remainder.
+        energy = jumpCost > 0.0f && availableThrustTime <= GlobalTimer::dT
+            ? 0.0f
+            : std::max(0.0f, energy - jumpCost * thrustTime);
         vy += jumpRate * thrustTime;
 
         // Check for float collision with upward offset during jump
