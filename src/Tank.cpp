@@ -847,8 +847,8 @@ void Tank::Jump()
             vy = 4.0f;
             isJumping = true;
             
-            // Debug logging for player tanks
             if (identity.IsPlayer()) {
+                App::GetSingleton().soundTask->PlayChannel(4);
                 TANKGAME_LOG_DEBUG("Tank %d JUMP START: vy=%.3f energy=%.1f y=%.3f\n",
                                   identity.GetLegacyId(), vy, energy, y);
             }
@@ -872,10 +872,6 @@ void Tank::Jump()
         // Jump damn it
         Color primaryColor = GetPrimaryColor();
         CreateFX(FxType::TYPE_JUMP, x, y - .2, z, 0, .5 * vy * GlobalTimer::dT, 0, rx, ry, rz, primaryColor.r, primaryColor.g, primaryColor.b, 1);
-        if (!isJumping && identity.IsPlayer())
-        {
-            App::GetSingleton().soundTask->PlayChannel(4);
-        }
         isJumping = true;
     }
 }
