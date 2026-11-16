@@ -12,6 +12,7 @@
 
 // Static constexpr definitions (required in C++14 when ODR-used by std::min/max)
 constexpr float Player::SPECIAL_CHARGE_MAX;
+constexpr float Player::SPAWN_HEIGHT;
 #include "events/Events.h"
 #include "events/CollisionEvents.h"
 #include <cmath>
@@ -43,10 +44,20 @@ void Player::TakeControlOf(Tank *tank)
     }
 }
 
+void Player::RememberTankTypes()
+{
+    if (controlledTank)
+    {
+        savedType1 = controlledTank->type1;
+        savedType2 = controlledTank->type2;
+    }
+}
+
 void Player::ReleaseTank()
 {
     if (controlledTank)
     {
+        RememberTankTypes();
         controlledTank->isPlayer = false;
 
         // Update collision layer to enemy tanks
@@ -67,6 +78,8 @@ Tank *Player::CreatePlayerTank(float x, float y, float z)
         return nullptr;
     }
 
+    RememberTankTypes();
+
     // Create tank through GameWorld
     Tank *tank = gameWorld->CreateTank();
     Logger::Get().Write("Player %d: GameWorld::CreateTank returned tank=%p\n", playerIndex, (void *)tank);
@@ -75,9 +88,8 @@ Tank *Player::CreatePlayerTank(float x, float y, float z)
     {
         // Initialize tank for player use
         tank->Init();
-        // Apply the starting weapon stats on every spawn, including respawns.
-        // Init resets tank state but leaves attack at its constructor value.
-        tank->SetType(tank->type1, tank->type2);
+        // Restore both the colors and weapon stats from the previous tank.
+        tank->SetType(savedType1, savedType2);
         // Init sets the default spawn; apply the requested player/versus spawn last.
         tank->SetPosition(x, y, z);
         Logger::Get().Write("Player %d: Tank::Init() completed\n", playerIndex);
@@ -216,6 +228,7 @@ void Player::OnTankDestroyed()
     if (controlledTank)
     {
         Logger::Get().Write("Player %d tank destroyed\n", playerIndex);
+        RememberTankTypes();
         controlledTank = nullptr;
 
         // TODO: Start respawn timer
@@ -235,7 +248,7 @@ void Player::Respawn()
     // Get spawn position from LevelHandler
     float spawnX = LevelHandler::GetSingleton().start[0];
     float spawnZ = LevelHandler::GetSingleton().start[1];
-    float spawnY = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(spawnX), static_cast<int>(spawnZ));
+    float spawnY = SPAWN_HEIGHT;
 
     Logger::Get().Write("Player %d spawning at position (%.2f, %.2f, %.2f)\n", playerIndex, spawnX, spawnY, spawnZ);
 

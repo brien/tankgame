@@ -344,8 +344,68 @@ TEST_F(GameTaskStateTest, VersusUsesDistinctAuthoredSpawns) {
         const auto* tank = manager->GetPlayer(p)->GetControlledTank();
         EXPECT_FLOAT_EQ(tank->x, level.enemy[8 + p][0]);
         EXPECT_FLOAT_EQ(tank->z, level.enemy[8 + p][1]);
-        EXPECT_FLOAT_EQ(tank->y, level.GetTerrainHeight(tank->x, tank->z));
+        EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
     }
     EXPECT_NE(manager->GetPlayer(0)->GetControlledTank()->x,
               manager->GetPlayer(1)->GetControlledTank()->x);
+}
+
+TEST_F(GameTaskStateTest, LevelChangesAndDeathsPreserveEachPlayersTypes) {
+    for (int mode = 0; mode < 3; ++mode) {
+        SCOPED_TRACE(mode);
+        StartMode(mode);
+        auto* manager = task.GetPlayerManager();
+        const TankType primary[] = {TankType::TYPE_PURPLE, TankType::TYPE_YELLOW};
+        const TankType secondary[] = {TankType::TYPE_YELLOW, TankType::TYPE_RED};
+        for (int p = 0; p < manager->GetNumPlayers(); ++p) {
+            auto* tank = manager->GetPlayer(p)->GetControlledTank();
+            EXPECT_EQ(tank->type1, TankType::TYPE_RED);
+            EXPECT_EQ(tank->type2, TankType::TYPE_BLUE);
+            EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+            tank->SetType(primary[p], secondary[p]);
+        }
+        for (bool advance : {true, false}) {
+            if (advance) {
+                LevelHandler::GetSingleton().RequestNextLevel(true);
+            } else {
+                auto* tank = manager->GetPlayer(0)->GetControlledTank();
+                tank->alive = false;
+                tank->deadtime = 2;
+                manager->NextFrame();
+            }
+            LevelHandler::GetSingleton().ProcessPendingLevelChange();
+            for (int p = 0; p < manager->GetNumPlayers(); ++p) {
+                auto* tank = manager->GetPlayer(p)->GetControlledTank();
+                ASSERT_NE(tank, nullptr);
+                EXPECT_EQ(tank->type1, primary[p]);
+                EXPECT_EQ(tank->type2, secondary[p]);
+                const auto config = TankTypeManager::GetConfig(primary[p], secondary[p]);
+                EXPECT_FLOAT_EQ(tank->attack, config.attack);
+                EXPECT_FLOAT_EQ(tank->fireRate, config.fireRate);
+                EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+                EXPECT_FALSE(tank->isGrounded);
+                tank->Fall();
+                EXPECT_LT(tank->y, Player::SPAWN_HEIGHT);
+                EXPECT_LT(tank->vy, 0);
+            }
+        }
+    }
+}
+
+TEST_F(GameTaskStateTest, DirectRespawnPreservesTypesBeforeAndAfterDestructionNotification) {
+    StartMode(0);
+    auto* player = task.GetPlayerManager()->GetPlayer(0);
+    for (bool notify : {false, true}) {
+        auto* tank = player->GetControlledTank();
+        tank->SetType(TankType::TYPE_BLUE, TankType::TYPE_PURPLE);
+        tank->alive = false;
+        if (notify) player->OnTankDestroyed();
+        player->Respawn();
+        tank = player->GetControlledTank();
+        ASSERT_NE(tank, nullptr);
+        EXPECT_TRUE(tank->alive);
+        EXPECT_EQ(tank->type1, TankType::TYPE_BLUE);
+        EXPECT_EQ(tank->type2, TankType::TYPE_PURPLE);
+        EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+    }
 }

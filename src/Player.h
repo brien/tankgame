@@ -26,6 +26,9 @@ public:
     Player(Player&&) = default;
     Player& operator=(Player&&) = default;
 
+    // Start high enough for the falling entrance to reveal the map.
+    static constexpr float SPAWN_HEIGHT = 24.0f;
+
     // === CORE PLAYER PROPERTIES ===
     int GetPlayerIndex() const { return playerIndex; }
     Tank* GetControlledTank() const { return controlledTank; }
@@ -127,6 +130,9 @@ private:
     // Tank control
     Tank* controlledTank = nullptr;  // Pointer to controlled tank in GameWorld EntityManager
 
+    TankType savedType1 = TankType::TYPE_RED;
+    TankType savedType2 = TankType::TYPE_BLUE;
+
     // Player statistics
     int score = 0;
     int wins = 0;
@@ -150,6 +156,7 @@ private:
     static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
 
     // Helper methods
+    void RememberTankTypes();
     void ApplyItemEffect(const class Item* item);
     void SetupTankForPlayer(Tank* tank);
 };

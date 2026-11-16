@@ -491,7 +491,7 @@ void PlayerManager::SetPlayerSpawnPosition(Player* player, int playerIndex) {
     // Use default spawn position from LevelHandler
     float spawnX = LevelHandler::GetSingleton().start[0];
     float spawnZ = LevelHandler::GetSingleton().start[1];
-    float spawnY = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(spawnX), static_cast<int>(spawnZ));
+    float spawnY = Player::SPAWN_HEIGHT;
     
     player->CreatePlayerTank(spawnX, spawnY, spawnZ);
 }
@@ -510,7 +510,7 @@ void PlayerManager::SetPlayerVersusPosition(Player* player, int playerIndex) {
         spawnZ = LevelHandler::GetSingleton().enemy[9][1];
     }
     
-    float spawnY = LevelHandler::GetSingleton().GetTerrainHeight(static_cast<int>(spawnX), static_cast<int>(spawnZ));
+    float spawnY = Player::SPAWN_HEIGHT;
     
     player->CreatePlayerTank(spawnX, spawnY, spawnZ);
 }
