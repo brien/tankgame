@@ -381,7 +381,7 @@ TEST_F(GameTaskStateTest, LevelChangesAndDeathsPreserveEachPlayersTypes) {
                 EXPECT_EQ(tank->type2, secondary[p]);
                 const auto config = TankTypeManager::GetConfig(primary[p], secondary[p]);
                 EXPECT_FLOAT_EQ(tank->attack, config.attack);
-                EXPECT_FLOAT_EQ(tank->fireRate, config.fireRate);
+                EXPECT_FLOAT_EQ(tank->fireRate, config.fireIntervalSeconds);
                 EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
                 EXPECT_FALSE(tank->isGrounded);
                 tank->Fall();

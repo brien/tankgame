@@ -1,30 +1,13 @@
 #pragma once
 
-#include <map>
+#include "gameplay/GameplayDefinitions.h"
 #include "Color.h"
 
-// Forward declaration
-enum class TankType;
+using TankConfig = Gameplay::TankTypeConfig;
 
-struct TankConfig
-{
-    float fireRate;
-    float attack;
-    float maxEnergy;        // Was: maxCharge (now consistent with Tank class)
-    float energyRegen;      // Was: chargeRegen (now consistent with Tank class)
-    float moveCost;
-    float fireCost;
-    float specialCost;      // Was: chargeCost (now consistent with Tank class)
-    int bounces;
-    float r, g, b;          // Tank type color
-};
-
+// Compatibility facade while gameplay consumers migrate to explicit definitions.
 class TankTypeManager
 {
-private:
-    static std::map<TankType, TankConfig> baseConfigs;
-    static std::map<std::pair<TankType, TankType>, TankConfig> comboConfigs;
-
 public:
     static bool Initialize();
     

@@ -16,6 +16,7 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     data.charge = tank.energy;      // Charge field now represents energy for actions
     data.maxCharge = tank.maxEnergy;
     data.fireCost = tank.fireCost;
+    data.specialChargeCost = tank.specialChargeCost;
     
     // Extract colors
     // Get colors dynamically from tank types

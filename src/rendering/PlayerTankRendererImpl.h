@@ -64,5 +64,4 @@ private:
     static constexpr float ROTATION_EFFECT_SPEED = 100.0f;
     static constexpr float EFFECT_SCALE_FACTOR = 0.2f;
     static constexpr float EFFECT_SCALE_RESTORE = 5.0f;
-    static constexpr float SPECIAL_CHARGE_THRESHOLD_DIVISOR = 5.0f;
 };

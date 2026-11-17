@@ -26,6 +26,7 @@ HUDRenderData HUDDataExtractor::ExtractPlayerHUD(const Tank& player, int playerI
     hudData.energy = player.energy;           // Now properly using energy field (was charge)
     hudData.maxEnergy = player.maxEnergy;     // Now properly using maxEnergy field (was maxCharge)
     hudData.fireCost = player.fireCost;
+    hudData.specialChargeCost = player.specialChargeCost;
     
     // Calculate firing ability (energy-based)
     hudData.canFire = (player.energy >= player.fireCost);
@@ -219,7 +220,7 @@ void HUDDataExtractor::ExtractComboAndSpecialData(const Tank& player, int player
         hudData.comboNumber = comboNumbers[arrayIndex];
         
         // Check if special ability is available
-        hudData.hasSpecialAvailable = (hudData.special >= hudData.fireCost / 5.0f);
+        hudData.hasSpecialAvailable = (hudData.special >= hudData.specialChargeCost);
     } else {
         // Default values if array access would be out of bounds
         hudData.combo = 0.0f;

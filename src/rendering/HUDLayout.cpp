@@ -16,8 +16,8 @@ const HUDRenderData* FindPlayer(const std::vector<HUDRenderData>& players, int p
 }
 
 int SpecialIndicatorCount(const HUDRenderData& data) {
-    const float count = (data.special / 100.0f) / (data.fireCost / 500.0f);
-    if (data.fireCost <= 0 || !std::isfinite(count) || count <= 0) return 0;
+    const float count = data.special / data.specialChargeCost;
+    if (data.specialChargeCost <= 0 || !std::isfinite(count) || count <= 0) return 0;
     // Bound malformed DTOs without changing the current game's cost range.
     return static_cast<int>(std::min(count, 1024.0f));
 }
@@ -49,7 +49,7 @@ std::vector<Draw> Build(const HUDRenderData& data) {
         draws.push_back({Shape::Quad, .52f, -.37f, .01f, data.special/100, data.specialColor,
             data.hasSpecialAvailable ? 1.0f : .5f, Icon::None,
             data.hasSpecialAvailable ? Blend::Opaque : Blend::Alpha});
-        const float step = data.fireCost / 500.0f;
+        const float step = data.specialChargeCost / 100.0f;
         for (int i = 1; i <= SpecialIndicatorCount(data); ++i)
             draws.push_back({Shape::Line, .52f, -.37f + step*i, .01f, 0, Vector3(1,1,1)});
         draws.push_back({Shape::Line, .52f, -.37f, .01f, 0, Vector3(1,1,1)});

@@ -27,6 +27,7 @@ TEST(TankDataExtractorRegression, ExtractRenderData_MapsCoreFields) {
     tank.energy = 42.0f;
     tank.maxEnergy = 80.0f;
     tank.fireCost = 9.5f;
+    tank.specialChargeCost = 3.0f;
 
     // Identity and status
     tank.alive = true;
@@ -61,6 +62,7 @@ TEST(TankDataExtractorRegression, ExtractRenderData_MapsCoreFields) {
     EXPECT_FLOAT_EQ(data.charge, tank.energy);
     EXPECT_FLOAT_EQ(data.maxCharge, tank.maxEnergy);
     EXPECT_FLOAT_EQ(data.fireCost, tank.fireCost);
+    EXPECT_FLOAT_EQ(data.specialChargeCost, tank.specialChargeCost);
 
     EXPECT_TRUE(data.alive);
     EXPECT_TRUE(data.isPlayer);

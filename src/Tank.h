@@ -28,16 +28,6 @@ enum class EnemyState
     ENEMY_STATE_COUNT
 };
 
-enum class TankType
-{
-    TYPE_GREY,
-    TYPE_RED,
-    TYPE_BLUE,
-    TYPE_YELLOW,
-    TYPE_PURPLE,
-    TANK_TYPE_COUNT
-};
-
 enum class InputMode
 {
     MODE_KEYBOARD_MOUSE,
@@ -85,7 +75,7 @@ public:
     float fireCost;         // Energy cost to fire
     float jumpCost;         // Energy cost to jump
     float moveCost;         // Energy cost for movement (if applicable)
-    float specialCost;      // Was: chargeCost (for special abilities)
+    float specialChargeCost; // Cost from the player special-charge meter
 
     float fireTimer;
     float fireRate;

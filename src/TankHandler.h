@@ -18,7 +18,6 @@ public:
     static constexpr int MAX_ENEMY_SPAWN_POSITIONS = 16;
     
     // Controller detection constants
-    static constexpr float SPECIAL_CHARGE_THRESHOLD_DIVISOR = 5.0f; // fireCost / 5
     static constexpr int ROTATION_STEP_DEGREES = 45;
     
     // Player positioning constants

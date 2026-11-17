@@ -56,13 +56,23 @@ TEST(HUDLayoutTest, ActionMarkersReflectAffordabilityAndDistinctCosts) {
 
 TEST(HUDLayoutTest, SpecialTicksHandleZeroNegativeAndNonfiniteCostsWithoutUnboundedWork) {
     HUDRenderData data;
-    data.special = 100; data.fireCost = 50;
+    data.special = 100; data.specialChargeCost = 10;
     EXPECT_EQ(HUDLayout::SpecialIndicatorCount(data), 10);
     for (float cost : {0.f, -10.f, std::numeric_limits<float>::infinity(),
                        std::numeric_limits<float>::quiet_NaN()}) {
-        data.fireCost = cost;
+        data.specialChargeCost = cost;
         EXPECT_EQ(HUDLayout::SpecialIndicatorCount(data), 0);
     }
-    data.fireCost = .00001f;
+    data.specialChargeCost = .00001f;
     EXPECT_EQ(HUDLayout::SpecialIndicatorCount(data), 1024);
+}
+
+TEST(HUDLayoutTest, SpecialTicksAreIndependentOfNormalFiringCost) {
+    HUDRenderData data;
+    data.special = 10;
+    data.specialChargeCost = 2;
+    data.fireCost = 10;
+    EXPECT_EQ(HUDLayout::SpecialIndicatorCount(data), 5);
+    data.fireCost = 100;
+    EXPECT_EQ(HUDLayout::SpecialIndicatorCount(data), 5);
 }

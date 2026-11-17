@@ -72,6 +72,8 @@ void Tank::CreateDeathExplosionFX()
 
 void Tank::SetType(TankType t1, TankType t2)
 {
+    // Resolve before mutation so an invalid type leaves the tank unchanged.
+    const auto config = TankTypeManager::GetConfig(t1, t2);
     type1 = t1;
     type2 = t2;
 
@@ -82,14 +84,13 @@ void Tank::SetType(TankType t1, TankType t2)
     fallRate = 16.0f;
 
     // Apply type-specific configuration
-    auto config = TankTypeManager::GetConfig(t1, t2);
-    fireRate = config.fireRate;
+    fireRate = config.fireIntervalSeconds;
     attack = config.attack;
     maxEnergy = config.maxEnergy;        // Now consistently named
     energyRegen = config.energyRegen;    // Now consistently named
     moveCost = config.moveCost;
-    fireCost = config.maxEnergy / 10.0f;  // Using consistent field name
-    specialCost = config.specialCost;     // Now consistently named
+    fireCost = config.fireCost;
+    specialChargeCost = config.specialChargeCost;
     bounces = config.bounces;
 
     // Colors are now handled dynamically via TankTypeManager
@@ -241,7 +242,7 @@ void Tank::Special(float dTpressed)
         return;
     }
 
-    if (player->CanUseSpecial(fireCost / 5) && fireTimer > fireRate)
+    if (player->CanUseSpecial(specialChargeCost) && fireTimer > fireRate)
     {
         // Get player tank from PlayerManager for audio positioning
         auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
@@ -408,7 +409,7 @@ void Tank::Special(float dTpressed)
 
         fireTimer = 0;
 
-        player->UseSpecialCharge(fireCost / 5);
+        player->UseSpecialCharge(specialChargeCost);
     }
 }
 
@@ -567,7 +568,7 @@ Tank::Tank()
     fireCost = 10.0f;       // Energy cost to fire
     jumpCost = 15.0f;       // Energy cost to jump
     moveCost = 0.1f;        // Energy cost for movement
-    specialCost = 25.0f;    // Energy cost for special abilities
+    specialChargeCost = TankTypeManager::GetConfig(type1, type2).specialChargeCost;
 
     collisionRadius = 0.0f;
     rotRate = 0.0f;
@@ -614,7 +615,7 @@ Tank::Tank(Tank&& other) noexcept
       fireCost(other.fireCost),
       jumpCost(other.jumpCost),
       moveCost(other.moveCost),
-      specialCost(other.specialCost),
+      specialChargeCost(other.specialChargeCost),
       fireTimer(other.fireTimer),
       fireRate(other.fireRate),
       bounces(other.bounces),
@@ -665,7 +666,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         fireCost = other.fireCost;
         jumpCost = other.jumpCost;
         moveCost = other.moveCost;
-        specialCost = other.specialCost;
+        specialChargeCost = other.specialChargeCost;
         fireTimer = other.fireTimer;
         fireRate = other.fireRate;
         bounces = other.bounces;
@@ -733,7 +734,7 @@ void Tank::Init()
     moveCost = 0;
     jumpCost = 150;
     fireCost = maxEnergy / 2;
-    specialCost = 200;
+    specialChargeCost = TankTypeManager::GetConfig(type1, type2).specialChargeCost;
 
     bounces = 2;
 

@@ -51,6 +51,8 @@ struct TankRenderData {
     float maxCharge;            // Maximum charge for charge bar percentage
     float fireCost;             // Cost to fire (for charge indicator line)
     
+    float specialChargeCost;    // Cost from the player special-charge meter
+
     // Tank colors
     Color primaryColor;              // Primary color (0.0 - 1.0)
     Color secondaryColor;           // Secondary color (0.0 - 1.0)
@@ -85,6 +87,7 @@ struct TankRenderData {
         , charge(0.0f)
         , maxCharge(100.0f)
         , fireCost(10.0f)
+        , specialChargeCost(0.0f)
         , primaryColor(1.0f, 1.0f, 1.0f, 1.0f)
         , secondaryColor(0.5f, 0.5f, 0.5f, 1.0f)
         , alive(true)

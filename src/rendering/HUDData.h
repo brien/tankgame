@@ -33,7 +33,7 @@ struct HUDRenderData {
     // Action costs (for UI indicators)
     float fireCost;                     // Energy cost to fire (for indicator line)
     float jumpCost;                     // Energy cost to jump
-    float specialCost;                  // Energy cost for special abilities
+    float specialChargeCost;                  // Cost from the special-charge meter
     
     // Special abilities and combo system
     float combo;                        // Combo meter (0.0 - 100.0)
@@ -77,7 +77,7 @@ struct HUDRenderData {
         maxEnergy(100.0f),
         fireCost(10.0f),
         jumpCost(15.0f),
-        specialCost(25.0f),
+        specialChargeCost(0.0f),
         combo(0.0f),
         special(0.0f),
         comboNumber(0),

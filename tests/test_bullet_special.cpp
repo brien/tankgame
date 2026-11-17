@@ -110,7 +110,7 @@ TEST_F(BulletSpecialTest, FiringPatternsChargeAndCooldown) {
                     EXPECT_TRUE(world.GetBullets()[i]->GetIsSpecial());
                     EXPECT_EQ(world.GetBullets()[i]->GetOwnerIdentity(), TankIdentity::Player(p));
                 }
-                EXPECT_FLOAT_EQ(player->GetSpecialCharge(), 100 - tank.fireCost / 5);
+                EXPECT_FLOAT_EQ(player->GetSpecialCharge(), 100 - tank.specialChargeCost);
                 EXPECT_FLOAT_EQ(tank.fireTimer, 0);
                 tank.Special(1);
                 tank.Fire(1);
@@ -123,6 +123,34 @@ TEST_F(BulletSpecialTest, FiringPatternsChargeAndCooldown) {
         }
     }
     for (int p = 0; p < 2; ++p) task.GetPlayerManager()->GetPlayer(p)->ReleaseTank();
+}
+
+TEST_F(BulletSpecialTest, ConfiguredNormalCostDoesNotChangeSpecialChargeCost) {
+    auto* player = task.GetPlayerManager()->GetPlayer(0);
+    Tank* tank = player->CreatePlayerTank(30, 2, 30);
+    ASSERT_NE(tank, nullptr);
+    tank->SetType(TankType::TYPE_BLUE, TankType::TYPE_BLUE);
+    ASSERT_FLOAT_EQ(tank->fireCost, 100);
+    tank->fireTimer = 1;
+    tank->energy = 99;
+    const auto before = world.GetBullets().size();
+    tank->Fire(1);
+    EXPECT_EQ(world.GetBullets().size(), before);
+    EXPECT_FLOAT_EQ(tank->energy, 99);
+    tank->energy = 100;
+    tank->Fire(1);
+    EXPECT_EQ(world.GetBullets().size(), before + 1);
+    EXPECT_FLOAT_EQ(tank->energy, 0);
+
+    tank->fireTimer = 1;
+    player->SetSpecialCharge(1.99f);
+    tank->Special(1);
+    EXPECT_EQ(world.GetBullets().size(), before + 1);
+    player->SetSpecialCharge(2);
+    tank->Special(1);
+    EXPECT_GT(world.GetBullets().size(), before + 1);
+    EXPECT_FLOAT_EQ(player->GetSpecialCharge(), 0);
+    EXPECT_FLOAT_EQ(tank->energy, 0);
 }
 
 TEST_F(BulletSpecialTest, BluePiercesEnemiesUsingPowerBeforeIncrease) {

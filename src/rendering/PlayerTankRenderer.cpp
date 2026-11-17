@@ -229,7 +229,7 @@ void PlayerTankRenderer::RenderEffectTurret(const Tank& player,
     Color secondaryColor = player.GetSecondaryColor();
     glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
 
-    if (special[playerIndex] >= player.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
+    if (special[playerIndex] >= player.specialChargeCost)
     {
         App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
     }
@@ -446,7 +446,7 @@ void PlayerTankRenderer::RenderEffectBody(const TankRenderData& tank)
 void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 {
     if (RendererMode::IsModern()) {
-    if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR) {
+    if (tank.charge >= tank.specialChargeCost) {
         BasicMaterial material = App::GetSingleton().graphicsTask->Resources().GetMaterial(MaterialResource::StarOverlay);
         material.red = tank.secondaryColor.r;
         material.green = tank.secondaryColor.g;
@@ -465,7 +465,7 @@ void PlayerTankRenderer::RenderEffectTurret(const TankRenderData& tank)
 
     glColor3f(tank.secondaryColor.r, tank.secondaryColor.g, tank.secondaryColor.b);
 
-    if (tank.charge >= tank.fireCost / SPECIAL_CHARGE_THRESHOLD_DIVISOR)
+    if (tank.charge >= tank.specialChargeCost)
     {
         App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
     }
