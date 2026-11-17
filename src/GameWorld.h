@@ -6,6 +6,8 @@
 #include "combat/CombatSystem.h"
 #include "Color.h"
 #include "FX.h"
+#include "gameplay/GameplayDefinitions.h"
+#include <memory>
 
 // Forward declarations for existing classes
 class Tank;
@@ -21,6 +23,7 @@ enum class TankType;
 class GameWorld {
 public:
     GameWorld();
+    explicit GameWorld(Gameplay::GameplayDefinitions definitions);
     ~GameWorld();
     GameWorld(const GameWorld&) = delete;
     GameWorld& operator=(const GameWorld&) = delete;
@@ -47,6 +50,9 @@ public:
     const auto& GetBullets() const { return bullets.GetEntities(); }
     const auto& GetFX() const { return effects.GetEntities(); }
     const auto& GetItems() const { return items.GetEntities(); }
+    const std::shared_ptr<const Gameplay::GameplayDefinitions>& GetGameplayDefinitions() const {
+        return gameplayDefinitions;
+    }
 
     // Initialize/shutdown systems
     void Initialize();
@@ -56,6 +62,8 @@ public:
     CollisionSystem& GetCollisionSystem() { return collisionSystem; }
 
 private:
+    // Immutable session definitions outlive every entity that consumes them.
+    std::shared_ptr<const Gameplay::GameplayDefinitions> gameplayDefinitions;
     EntityManager<Tank> tanks;
     EntityManager<Bullet> bullets;
     EntityManager<FX> effects;

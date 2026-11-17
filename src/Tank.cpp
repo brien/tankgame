@@ -70,30 +70,65 @@ void Tank::CreateDeathExplosionFX()
     CreateFX(FxType::TYPE_SMALL_SQUARE, x + .5, y, z - .5, 2, .01, 0, -2, ry, 90, secondaryColor.r, secondaryColor.g, secondaryColor.b, 1);
 }
 
+const Gameplay::GameplayDefinitions& Tank::Definitions() const
+{
+    return gameplayDefinitions ? *gameplayDefinitions : Gameplay::BuiltInDefinitions();
+}
+
+void Tank::ApplyStats(const Gameplay::ResolvedTankConfig& config, bool refill)
+{
+    maxHealth = config.tank.maxHealth;
+    healthRegen = config.tank.healthRegenPerSecond;
+    movRate = config.tank.moveSpeed;
+    rotRate = config.tank.rotationDegreesPerSecond;
+    jumpCost = config.tank.jumpEnergyPerSecond;
+    jumpRate = config.tank.jumpThrust;
+    fallRate = config.tank.gravity;
+    collisionRadius = config.tank.collisionRadius;
+    fireRate = config.weapon.fireIntervalSeconds;
+    attack = config.weapon.attack;
+    maxEnergy = config.weapon.maxEnergy;
+    energyRegen = config.weapon.energyRegen;
+    moveCost = config.weapon.moveCost;
+    fireCost = config.weapon.fireCost;
+    specialChargeCost = config.weapon.specialChargeCost;
+    bounces = config.weapon.bounces;
+    health = refill ? maxHealth : std::min(health, maxHealth);
+    energy = refill ? maxEnergy : std::min(energy, maxEnergy);
+    // Rebuild the same collision footprint for constructors and reconfiguration.
+    std::fill(std::begin(collisionPoints), std::end(collisionPoints), 0.0f);
+    const float corners[4][2] = {{1,1}, {-1,-1}, {-1,1}, {1,-1}};
+    for (int i = 0; i < 4; ++i) {
+        collisionPoints[i * 3] = corners[i][0] * collisionRadius;
+        collisionPoints[i * 3 + 2] = corners[i][1] * collisionRadius;
+    }
+}
+
+void Tank::ConfigureStats(const Gameplay::TankContext& context)
+{
+    const auto config = Gameplay::ResolveTank(Definitions(), type1, type2, context);
+    statContext = context;
+    ApplyStats(config, false);
+}
+
 void Tank::SetType(TankType t1, TankType t2)
 {
-    // Resolve before mutation so an invalid type leaves the tank unchanged.
-    const auto config = TankTypeManager::GetConfig(t1, t2);
+    const auto config = Gameplay::ResolveTank(Definitions(), t1, t2, statContext);
     type1 = t1;
     type2 = t2;
+    ApplyStats(config, false);
+}
 
-    // Common initialization
-    movRate = 5;
-    jumpCost = 250;
-    jumpRate = 18.0f;
-    fallRate = 16.0f;
+Color Tank::GetPrimaryColor() const
+{
+    const auto& config = Definitions().types.at(type1);
+    return Color(config.r, config.g, config.b, 1);
+}
 
-    // Apply type-specific configuration
-    fireRate = config.fireIntervalSeconds;
-    attack = config.attack;
-    maxEnergy = config.maxEnergy;        // Now consistently named
-    energyRegen = config.energyRegen;    // Now consistently named
-    moveCost = config.moveCost;
-    fireCost = config.fireCost;
-    specialChargeCost = config.specialChargeCost;
-    bounces = config.bounces;
-
-    // Colors are now handled dynamically via TankTypeManager
+Color Tank::GetSecondaryColor() const
+{
+    const auto& config = Definitions().types.at(type2);
+    return Color(config.r, config.g, config.b, 1);
 }
 
 // SetTankColors method removed - colors are now handled dynamically via TankTypeManager
@@ -440,14 +475,14 @@ void Tank::Fall()
                           identity.GetLegacyId(), y, vy, dy, isJumping);
     }
 
-    if (dy > 10.0f * GlobalTimer::dT)
+    if (dy > Definitions().tank.maxRiseSpeed * GlobalTimer::dT)
     {
-        dy = 10.0f * GlobalTimer::dT;
+        dy = Definitions().tank.maxRiseSpeed * GlobalTimer::dT;
     }
 
-    if (dy < -15.0f * GlobalTimer::dT)
+    if (dy < -Definitions().tank.maxFallSpeed * GlobalTimer::dT)
     {
-        dy = -15.0f * GlobalTimer::dT;
+        dy = -Definitions().tank.maxFallSpeed * GlobalTimer::dT;
     }
 
     y += dy;
@@ -527,7 +562,8 @@ void Tank::Fall()
     }
 }
 
-Tank::Tank()
+Tank::Tank(std::shared_ptr<const Gameplay::GameplayDefinitions> definitions)
+    : gameplayDefinitions(std::move(definitions))
 {
     x = y = z = 0.0f;
     vx = vy = vz = 0.0f;
@@ -553,35 +589,10 @@ Tank::Tank()
     isGrounded = false;
     turbo = false;
 
-    // === REFACTORED: Initialize new clear system ===
-    // Health system (survival)
-    health = 100.0f;        // Was: energy (but was actually health)
-    maxHealth = 100.0f;     // Was: maxEnergy
-    healthRegen = 0.5f;     // Slow health regeneration
-    
-    // Energy system (actions)
-    energy = 100.0f;        // Was: charge (now clearly for actions)
-    maxEnergy = 100.0f;     // Was: maxCharge
-    energyRegen = 2.0f;     // Fast energy regeneration
-    
-    // Action costs
-    fireCost = 10.0f;       // Energy cost to fire
-    jumpCost = 15.0f;       // Energy cost to jump
-    moveCost = 0.1f;        // Energy cost for movement
-    specialChargeCost = TankTypeManager::GetConfig(type1, type2).specialChargeCost;
-
-    collisionRadius = 0.0f;
-    rotRate = 0.0f;
-    movRate = 0.0f;
-    jumpRate = 0.0f;
+    ApplyStats(Gameplay::ResolveTank(Definitions(), type1, type2, statContext), true);
     fireTimer = 0.0f;
-    fireRate = 0.0f;
-    fallRate = 0.0f;
     dist = 0.0f;
     control = 0;
-    bounces = 0.0f;
-    // Color fields removed - now handled dynamically via TankTypeManager
-    attack = 0.0f;
     alive = true;
     isPlayer = false;
 
@@ -645,7 +656,10 @@ Tank::Tank(Tank&& other) noexcept
       bonusTime(other.bonusTime),
       deadtime(other.deadtime),
       hitAlpha(other.hitAlpha),
-      hitNum(other.hitNum)
+      hitNum(other.hitNum),
+      gameWorld(other.gameWorld),
+      gameplayDefinitions(std::move(other.gameplayDefinitions)),
+      statContext(other.statContext)
 {
     // Copy collision points array
     for (int i = 0; i < 21; ++i) {
@@ -656,6 +670,9 @@ Tank::Tank(Tank&& other) noexcept
 Tank& Tank::operator=(Tank&& other) noexcept
 {
     if (this != &other) {
+        gameWorld = other.gameWorld;
+        gameplayDefinitions = std::move(other.gameplayDefinitions);
+        statContext = other.statContext;
         isPlayer = other.isPlayer;
         health = other.health;
         maxHealth = other.maxHealth;
@@ -717,59 +734,13 @@ void Tank::Init()
     turbo = false;
 
     fireTimer = 0;
-    fireRate = .5;
-
+    jumpTime = 0;
+    vx = vy = vz = 0;
     alive = true;
-    
-    // Health system (survival)  
-    health = 100; // Was 1000. temporarily set lower for testing
-    maxHealth = 100; // Was 1000. temporarily set lower for testing
-    healthRegen = 10;      // Was 100. slow health regen
-    
-    // Energy system (actions)
-    energy = 100;
-    maxEnergy = 100;
-    energyRegen = 50;
-
-    moveCost = 0;
-    jumpCost = 150;
-    fireCost = maxEnergy / 2;
-    specialChargeCost = TankTypeManager::GetConfig(type1, type2).specialChargeCost;
-
-    bounces = 2;
-
-    collisionRadius = 0.2;
-
-    collisionPoints[0] = collisionRadius;
-    collisionPoints[1] = 0;
-    collisionPoints[2] = collisionRadius;
-
-    collisionPoints[3] = -1 * collisionRadius;
-    collisionPoints[4] = 0;
-    collisionPoints[5] = -1 * collisionRadius;
-
-    collisionPoints[6] = -1 * collisionRadius;
-    collisionPoints[7] = 0;
-    collisionPoints[8] = collisionRadius;
-
-    collisionPoints[9] = collisionRadius;
-    collisionPoints[10] = 0;
-    collisionPoints[11] = -1 * collisionRadius;
-
-    collisionPoints[12] = 0;
-    collisionPoints[13] = 0;
-    collisionPoints[14] = 0;
-
-    collisionPoints[15] = 0;
-    collisionPoints[16] = 0;
-    collisionPoints[17] = 0;
-
-    collisionPoints[18] = 0;
-    collisionPoints[19] = 0;
-    collisionPoints[20] = 0;
+    ApplyStats(Gameplay::ResolveTank(Definitions(), type1, type2, statContext), true);
 
     x = LevelHandler::GetSingleton().start[0];
-    y = 24;
+    y = Definitions().player.spawnHeight;
     z = LevelHandler::GetSingleton().start[1];
     ;
     rx = 0;
@@ -779,10 +750,6 @@ void Tank::Init()
     rty = 0;
     rtz = 0;
 
-    rotRate = 150;
-    movRate = 5;
-    fallRate = 2;
-    jumpRate = .5;
 }
 
 void Tank::SetPosition(float _x, float _y, float _z)
@@ -820,15 +787,15 @@ void Tank::RotBody(bool forb)
 
 void Tank::RotTurret(float rate)
 {
-    float rtplus = rate * 10 * GlobalTimer::dT;
+    float rtplus = rate * Definitions().tank.turretInputScale * GlobalTimer::dT;
 
-    if (rtplus > 2.5)
+    if (rtplus > Definitions().tank.turretMaxStepDegrees)
     {
-        rtplus = 2.5;
+        rtplus = Definitions().tank.turretMaxStepDegrees;
     }
-    if (rtplus < -2.5)
+    if (rtplus < -Definitions().tank.turretMaxStepDegrees)
     {
-        rtplus = -2.5;
+        rtplus = -Definitions().tank.turretMaxStepDegrees;
     }
 
     rty += rtplus;
@@ -845,7 +812,7 @@ void Tank::Jump()
         // A full 100-energy tank powers 0.4 seconds of thrust. This launch
         // speed clears a two-block ledge with room to move onto it.
         if (jumpTime == 0.0f) {
-            vy = 4.0f;
+            vy = Definitions().tank.jumpLaunchSpeed;
             isJumping = true;
             
             if (identity.IsPlayer()) {
@@ -977,9 +944,9 @@ void Tank::NextFrame()
 
 bool Tank::Move(float rate)
 {
-    if (rate > 1.25)
+    if (rate > Definitions().tank.maxForwardInput)
     {
-        rate = 1.25;
+        rate = Definitions().tank.maxForwardInput;
     }
 
     bool forb = true;

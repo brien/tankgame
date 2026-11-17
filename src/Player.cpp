@@ -10,12 +10,14 @@
 #include "FX.h"        // For FxType enum
 #include "SoundTask.h" // For sound playback
 
-// Static constexpr definitions (required in C++14 when ODR-used by std::min/max)
-constexpr float Player::SPECIAL_CHARGE_MAX;
-constexpr float Player::SPAWN_HEIGHT;
 #include "events/Events.h"
 #include "events/CollisionEvents.h"
 #include <cmath>
+
+const Gameplay::PlayerRules& Player::GetRules() const
+{
+    return gameWorld ? gameWorld->GetGameplayDefinitions()->player : Gameplay::BuiltInDefinitions().player;
+}
 
 Player::Player(int playerIndex, GameWorld *world)
     : playerIndex(playerIndex), gameWorld(world)
@@ -59,6 +61,7 @@ void Player::ReleaseTank()
     {
         RememberTankTypes();
         controlledTank->isPlayer = false;
+        controlledTank->ConfigureStats({true, 2, 1});
 
         // Update collision layer to enemy tanks
         gameWorld->ReregisterTankCollision(controlledTank);
@@ -96,6 +99,9 @@ Tank *Player::CreatePlayerTank(float x, float y, float z)
 
         // Take control
         TakeControlOf(tank);
+        // Only a new spawn refills resources; taking control or retuning does not.
+        tank->health = tank->maxHealth;
+        tank->energy = tank->maxEnergy;
         Logger::Get().Write("Player %d: TakeControlOf completed - identity set to %s\n",
                             playerIndex, tank->identity.IsPlayer() ? "PLAYER" : "ENEMY");
     }
@@ -113,7 +119,7 @@ void Player::AddCombo(float comboPoints, int comboNum)
     comboNumber = comboNum;
 
     // Add special charge based on combo
-    float chargeBonus = comboPoints * 0.1f; // 10% of combo as special charge
+    float chargeBonus = comboPoints * GetRules().comboChargeFraction;
     AddSpecialCharge(chargeBonus);
 }
 
@@ -126,7 +132,7 @@ void Player::ResetCombo()
 
 void Player::AddSpecialCharge(float charge)
 {
-    specialCharge = std::min(specialCharge + charge, SPECIAL_CHARGE_MAX);
+    specialCharge = std::min(specialCharge + charge, GetRules().specialChargeMax);
 }
 
 void Player::UseSpecialCharge(float cost)
@@ -248,7 +254,7 @@ void Player::Respawn()
     // Get spawn position from LevelHandler
     float spawnX = LevelHandler::GetSingleton().start[0];
     float spawnZ = LevelHandler::GetSingleton().start[1];
-    float spawnY = SPAWN_HEIGHT;
+    float spawnY = GetSpawnHeight();
 
     Logger::Get().Write("Player %d spawning at position (%.2f, %.2f, %.2f)\n", playerIndex, spawnX, spawnY, spawnZ);
 
@@ -266,42 +272,17 @@ void Player::Respawn()
     }
 }
 
-void Player::ApplyDifficultySettings(int difficulty)
+void Player::ApplyDifficultySettings(int value)
 {
-    if (!controlledTank)
-        return;
-
-    // Apply difficulty multipliers based on TankHandler constants
-    switch (difficulty)
-    {
-    case 0: // Easy
-        controlledTank->maxHealth *= 3.0f;
-        controlledTank->health = controlledTank->maxHealth;
-        controlledTank->healthRegen *= 2.0f;
-        controlledTank->maxEnergy *= 1.5f;
-        controlledTank->energy = controlledTank->maxEnergy;
-        controlledTank->energyRegen *= 1.5f;
-        break;
-
-    case 1: // Normal
-        controlledTank->maxHealth *= 1.5f;
-        controlledTank->health = controlledTank->maxHealth;
-        controlledTank->healthRegen *= 1.5f;
-        controlledTank->maxEnergy *= 1.5f;
-        controlledTank->energy = controlledTank->maxEnergy;
-        controlledTank->energyRegen *= 1.5f;
-        break;
-
-    default: // Hard - no modifications
-        break;
-    }
+    difficulty = std::max(0, std::min(value, 2));
+    if (controlledTank) controlledTank->ConfigureStats({false, difficulty, 1});
 }
 
 void Player::UpdateComboDecay()
 {
     if (combo > 0.0f)
     {
-        combo -= COMBO_DECAY_RATE * GlobalTimer::dT;
+        combo -= GetRules().comboDecayPerSecond * GlobalTimer::dT;
         if (combo <= 0.0f)
         {
             ResetCombo();
@@ -314,19 +295,19 @@ void Player::ApplyItemEffect(const Item *item)
     if (!controlledTank || !item)
         return;
 
-    // Set tank type based on item
+    const bool matchingType = item->type == controlledTank->type1;
     controlledTank->SetType(item->type, controlledTank->type1);
 
     // Restore energy based on item type match
-    if (item->type == controlledTank->type1)
+    if (matchingType)
     {
         // Full energy for matching type
-        controlledTank->energy += controlledTank->maxEnergy;
+        controlledTank->energy += controlledTank->maxEnergy * GetRules().matchingPickupEnergyFraction;
     }
     else
     {
         // Half energy for non-matching type
-        controlledTank->energy += controlledTank->maxEnergy / 2;
+        controlledTank->energy += controlledTank->maxEnergy * GetRules().otherPickupEnergyFraction;
     }
 
     // Cap energy at maximum
@@ -336,7 +317,7 @@ void Player::ApplyItemEffect(const Item *item)
     }
 
     // Add score for item collection
-    AddScore(100); // Base score for item pickup
+    AddScore(GetRules().pickupScore);
 }
 
 void Player::SetupTankForPlayer(Tank *tank)
@@ -344,6 +325,7 @@ void Player::SetupTankForPlayer(Tank *tank)
     if (!tank)
         return;
 
+    tank->ConfigureStats({false, difficulty, 1});
     tank->isPlayer = true;
     tank->identity = TankIdentity::Player(playerIndex);
 

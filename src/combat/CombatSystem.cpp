@@ -89,11 +89,12 @@ void CombatSystem::OnBulletTimeout(const BulletTimeoutEvent& event) {
 }
 
 CombatSystem::CollisionOutcome CombatSystem::HandleBulletTankCollision(Bullet* bullet, Tank* tank) {
+    const auto& rules = bullet->GetGameplayDefinitions().combat;
     if (tank->identity == bullet->GetOwnerIdentity()) {
         // Self-collision (friendly fire or ricochet)
-        if (bullet->GetDT() > 0.5f) {
-            if (tank->health < tank->maxHealth * 2) {
-                tank->health += bullet->GetPower() / 2;
+        if (bullet->GetDT() > bullet->GetGameplayDefinitions().projectile.selfHitDelaySeconds) {
+            if (tank->health < tank->maxHealth * rules.friendlyResourceThresholdMultiplier) {
+                tank->health += bullet->GetPower() / rules.healthReturnDivisor;
             }
         }
         return CollisionOutcome::Consume;
@@ -113,7 +114,7 @@ CombatSystem::CollisionOutcome CombatSystem::HandleBulletTankCollision(Bullet* b
         if (bullet->GetOwnerIdentity().IsPlayer() && bullet->GetIsSpecial() && bullet->GetType1() == TankType::TYPE_BLUE) {
             // Blue special bullets don't die on hit, they get stronger
             outcome = CollisionOutcome::Continue;
-            bullet->SetPower(bullet->GetPower() + 100);
+            bullet->SetPower(bullet->GetPower() + rules.blueSpecialHitPowerBonus);
         }
         
         // Create collision effects
@@ -124,14 +125,15 @@ CombatSystem::CollisionOutcome CombatSystem::HandleBulletTankCollision(Bullet* b
 }
 
 void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
+    const auto& rules = bullet->GetGameplayDefinitions().combat;
     if (bullet->GetOwnerIdentity() == player->identity) {
         // Self-collision
-        if (bullet->GetDT() > 0.5f) {
+        if (bullet->GetDT() > bullet->GetGameplayDefinitions().projectile.selfHitDelaySeconds) {
             App::GetSingleton().soundTask->PlayChannel(3);
             if (player->health < player->maxHealth) {
-                player->health += bullet->GetPower() / 2;
+                player->health += bullet->GetPower() / rules.healthReturnDivisor;
             } else if (player->energy < player->maxEnergy) {
-                player->energy += bullet->GetPower() / 8;
+                player->energy += bullet->GetPower() / rules.energyReturnDivisor;
             }
         }
         return;
@@ -140,10 +142,10 @@ void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
     if (bullet->GetOwnerIdentity().IsPlayer() && !App::GetSingleton().gameTask->IsVersusMode()) {
         // Friendly fire in non-versus mode (healing)
         App::GetSingleton().soundTask->PlayChannel(3);
-        if (player->health < player->maxHealth * 2) {
-            player->health += bullet->GetPower() / 2;
-        } else if (player->energy < player->maxEnergy * 2) {
-            player->energy += bullet->GetPower() / 8;
+        if (player->health < player->maxHealth * rules.friendlyResourceThresholdMultiplier) {
+            player->health += bullet->GetPower() / rules.healthReturnDivisor;
+        } else if (player->energy < player->maxEnergy * rules.friendlyResourceThresholdMultiplier) {
+            player->energy += bullet->GetPower() / rules.energyReturnDivisor;
         }
     } else {
         // Hostile fire
@@ -174,6 +176,7 @@ void CombatSystem::ApplyTankDamage(Tank* tank, float damage, Bullet* source) {
 }
 
 void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bullet) {
+    const auto& rules = bullet->GetGameplayDefinitions().combat;
     // Safety: Validate playerIndex bounds for TankHandler arrays (size 2)
     if (playerIndex < 0 || playerIndex >= 2) {
         Logger::Get().Write("WARNING: UpdatePlayerCombos - invalid playerIndex=%d\n", playerIndex);
@@ -194,7 +197,7 @@ void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bul
     player->IncrementHitCombo();
     
     // Add to combo based on hit streak
-    float comboBonus = static_cast<float>(player->GetHitCombo()) / 10.0f;
+    float comboBonus = static_cast<float>(player->GetHitCombo()) / rules.hitComboDivisor;
     player->AddCombo(comboBonus, player->GetComboNumber());
     
     if (target->health <= 0) {
@@ -207,8 +210,8 @@ void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bul
         float dist = std::sqrt(distx * distx + distz * distz);
         
         // Combo bonuses based on conditions
-        if (player->GetHitCombo() > 9) {
-            player->AddCombo(player->GetComboNumber() / 2.0f, player->GetComboNumber());
+        if (player->GetHitCombo() > rules.streakThreshold) {
+            player->AddCombo(player->GetComboNumber() / rules.streakComboDivisor, player->GetComboNumber());
             playerTank->bonus = 23;
             playerTank->bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
@@ -216,8 +219,8 @@ void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bul
                 0, .01f, 0, 0, 0, 90, 0.5f, 0.5f, 0, 1));
         }
         
-        if (dist > 20) {
-            player->AddCombo(dist / 10.0f, player->GetComboNumber());
+        if (dist > rules.distanceThreshold) {
+            player->AddCombo(dist / rules.distanceComboDivisor, player->GetComboNumber());
             playerTank->bonus = 21;
             playerTank->bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
@@ -225,8 +228,8 @@ void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bul
                 0, .01f, 0, 0, 0, 90, 0, 1, 1, 1));
         }
         
-        if (bullet->GetBounces() > 0 && bullet->GetDT() < 10.0f) {
-            player->AddCombo(1 + bullet->GetDT() / 2.0f, player->GetComboNumber());
+        if (bullet->GetBounces() > 0 && bullet->GetDT() < rules.bounceBonusMaxAgeSeconds) {
+            player->AddCombo(rules.bounceBonusBase + bullet->GetDT() / rules.bounceAgeDivisor, player->GetComboNumber());
             playerTank->bonus = 22;
             playerTank->bonusTime = 0;
             Events::GetBus().Post(CreateFXEvent(static_cast<int>(FxType::TYPE_SMALL_SQUARE),
@@ -236,7 +239,7 @@ void CombatSystem::UpdatePlayerCombos(int playerIndex, Tank* target, Bullet* bul
         
         // Add kill bonus
         float currentCombo = player->GetCombo();
-        player->AddCombo(10.0f / (currentCombo / 10.0f + 1.0f), player->GetComboNumber());
+        player->AddCombo(rules.killBonus / (currentCombo / rules.killComboDivisor + 1.0f), player->GetComboNumber());
         
         // Update special charge if combo is higher
         if (player->GetCombo() > player->GetSpecialCharge()) {

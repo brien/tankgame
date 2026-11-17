@@ -150,6 +150,23 @@ TEST_F(GameTaskStateTest, EscapeStopsSimulationOnTheTransitionFrame) {
     EXPECT_FLOAT_EQ(effect->time, 0.0f);
 }
 
+TEST_F(GameTaskStateTest, PickupsAreProcessedOncePerPlayerPerFrame) {
+    StartMode(0);
+    auto* player = task.GetPlayerManager()->GetPlayer(0);
+    auto* tank = player->GetControlledTank();
+    ASSERT_NE(tank, nullptr);
+    LevelHandler::GetSingleton().Flatten(3);
+    tank->SetPosition(30, 3, 30);
+    tank->vy = 0;
+    GlobalTimer::dT = 0;
+    World().CreateItem(30, 3.1f, 30, TankType::TYPE_BLUE);
+    World().CreateItem(30, 3.1f, 30, TankType::TYPE_RED);
+    task.Update();
+    EXPECT_EQ(player->GetScore(), 100);
+    task.Update();
+    EXPECT_EQ(player->GetScore(), 200);
+}
+
 TEST_F(GameTaskStateTest, EnterResumesPausedSessionWithoutResettingIt) {
     for (int mode = 0; mode < 3; ++mode) {
         SCOPED_TRACE(mode);
@@ -344,7 +361,7 @@ TEST_F(GameTaskStateTest, VersusUsesDistinctAuthoredSpawns) {
         const auto* tank = manager->GetPlayer(p)->GetControlledTank();
         EXPECT_FLOAT_EQ(tank->x, level.enemy[8 + p][0]);
         EXPECT_FLOAT_EQ(tank->z, level.enemy[8 + p][1]);
-        EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+        EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
     }
     EXPECT_NE(manager->GetPlayer(0)->GetControlledTank()->x,
               manager->GetPlayer(1)->GetControlledTank()->x);
@@ -361,7 +378,7 @@ TEST_F(GameTaskStateTest, LevelChangesAndDeathsPreserveEachPlayersTypes) {
             auto* tank = manager->GetPlayer(p)->GetControlledTank();
             EXPECT_EQ(tank->type1, TankType::TYPE_RED);
             EXPECT_EQ(tank->type2, TankType::TYPE_BLUE);
-            EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+            EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
             tank->SetType(primary[p], secondary[p]);
         }
         for (bool advance : {true, false}) {
@@ -382,10 +399,15 @@ TEST_F(GameTaskStateTest, LevelChangesAndDeathsPreserveEachPlayersTypes) {
                 const auto config = TankTypeManager::GetConfig(primary[p], secondary[p]);
                 EXPECT_FLOAT_EQ(tank->attack, config.attack);
                 EXPECT_FLOAT_EQ(tank->fireRate, config.fireIntervalSeconds);
-                EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+                const auto resolved = Gameplay::ResolveTank(Gameplay::BuiltInDefinitions(),
+                    primary[p], secondary[p], {false, manager->GetDifficulty(), 1});
+                EXPECT_FLOAT_EQ(tank->maxHealth, resolved.tank.maxHealth);
+                EXPECT_FLOAT_EQ(tank->maxEnergy, resolved.weapon.maxEnergy);
+                EXPECT_FLOAT_EQ(tank->energyRegen, resolved.weapon.energyRegen);
+                EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
                 EXPECT_FALSE(tank->isGrounded);
                 tank->Fall();
-                EXPECT_LT(tank->y, Player::SPAWN_HEIGHT);
+                EXPECT_LT(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
                 EXPECT_LT(tank->vy, 0);
             }
         }
@@ -406,6 +428,6 @@ TEST_F(GameTaskStateTest, DirectRespawnPreservesTypesBeforeAndAfterDestructionNo
         EXPECT_TRUE(tank->alive);
         EXPECT_EQ(tank->type1, TankType::TYPE_BLUE);
         EXPECT_EQ(tank->type2, TankType::TYPE_PURPLE);
-        EXPECT_FLOAT_EQ(tank->y, Player::SPAWN_HEIGHT);
+        EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
     }
 }

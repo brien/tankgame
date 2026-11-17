@@ -41,7 +41,7 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.Move(true);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     
@@ -60,7 +60,7 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.Move(false);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
 

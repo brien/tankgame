@@ -76,3 +76,16 @@ TEST(HUDLayoutTest, SpecialTicksAreIndependentOfNormalFiringCost) {
     data.fireCost = 100;
     EXPECT_EQ(HUDLayout::SpecialIndicatorCount(data), 5);
 }
+
+TEST(HUDLayoutTest, SpecialMeterUsesConfiguredCapacity) {
+    HUDRenderData data;
+    data.showHealthBar = data.showEnergyBar = data.showComboMeter = false;
+    data.maxSpecialCharge = 40;
+    data.special = 20;
+    data.specialChargeCost = 10;
+    const auto draws = HUDLayout::Build(data);
+    ASSERT_EQ(draws.size(), 4u);
+    EXPECT_FLOAT_EQ(draws[0].height, .5f);
+    EXPECT_NEAR(draws[1].y, -.37f + .25f, .00001f);
+    EXPECT_NEAR(draws[2].y, -.37f + .5f, .00001f);
+}

@@ -47,7 +47,7 @@ class Tank : public Entity
     friend class TankCollisionHelper;
     
 public:
-    Tank();
+    explicit Tank(std::shared_ptr<const Gameplay::GameplayDefinitions> definitions = nullptr);
     ~Tank();
     
     // Delete copy constructor and copy assignment operator
@@ -104,6 +104,9 @@ public:
     void Kill() override { alive = false; }
 
     void Init();
+    // Refresh tuning without healing or resetting movement/cooldown state.
+    void ConfigureStats(const Gameplay::TankContext& context);
+    float GetTurboEnergyPerSecond() const { return statContext.enemy ? 0 : Definitions().tank.turboEnergyPerSecond; }
 
     float x, y, z;
     float vx, vy, vz;
@@ -147,15 +150,17 @@ public:
     TankType type2;
 
     // Dynamic color methods - replace hardcoded r,g,b fields
-    Color GetPrimaryColor() const { return TankTypeManager::GetTankTypeColor(type1); }
-    Color GetSecondaryColor() const { return TankTypeManager::GetTankTypeColor(type2); }
+    Color GetPrimaryColor() const;
+    Color GetSecondaryColor() const;
     
     // Convenience methods for RGB access (for legacy compatibility)
     void GetPrimaryColorRGB(float& r, float& g, float& b) const { 
-        TankTypeManager::GetTankTypeColor(type1, r, g, b); 
+        const auto color = GetPrimaryColor();
+        r = color.r; g = color.g; b = color.b;
     }
     void GetSecondaryColorRGB(float& r, float& g, float& b) const { 
-        TankTypeManager::GetTankTypeColor(type2, r, g, b); 
+        const auto color = GetSecondaryColor();
+        r = color.r; g = color.g; b = color.b;
     }
 
     float dist;
@@ -203,4 +208,8 @@ public:
 
 private:
     GameWorld* gameWorld = nullptr;
+    std::shared_ptr<const Gameplay::GameplayDefinitions> gameplayDefinitions;
+    Gameplay::TankContext statContext;
+    const Gameplay::GameplayDefinitions& Definitions() const;
+    void ApplyStats(const Gameplay::ResolvedTankConfig& config, bool refill);
 };

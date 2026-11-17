@@ -9,6 +9,8 @@
 #include "Entity.h"
 #include "Color.h"
 #include "TankIdentity.h"
+#include "gameplay/GameplayDefinitions.h"
+#include <memory>
 
 class Tank;
 enum class TankType;
@@ -18,7 +20,7 @@ class Bullet : public Entity
 {
 
 public:
-    Bullet();
+    explicit Bullet(std::shared_ptr<const Gameplay::GameplayDefinitions> definitions = nullptr);
     Bullet(const TankIdentity& ownerIdentity, float power,
            TankType type1, TankType type2,
            int maxbounces,
@@ -26,7 +28,8 @@ public:
            const Color& primaryColor,
            const Color& secondaryColor,
            float x, float y, float z,
-           float rx, float ry, float rz, bool isSpecial = false);
+           float rx, float ry, float rz, bool isSpecial = false,
+           std::shared_ptr<const Gameplay::GameplayDefinitions> definitions = nullptr);
     ~Bullet() = default;
     
     // Entity interface implementation
@@ -79,6 +82,9 @@ public:
     int GetBounces() const { return maxbounces; }
     float GetDT() const { return dT; }
     bool GetIsSpecial() const { return isSpecial; }
+    const Gameplay::GameplayDefinitions& GetGameplayDefinitions() const {
+        return gameplayDefinitions ? *gameplayDefinitions : Gameplay::BuiltInDefinitions();
+    }
     
     // Setters needed by CombatSystem
     void SetPower(float newPower) { power = newPower; }
@@ -87,6 +93,8 @@ public:
     void HandleLevelCollision(float xpp, float zpp, float ory);
 
 private:
+    // A projectile and its copied children retain their original session rules.
+    std::shared_ptr<const Gameplay::GameplayDefinitions> gameplayDefinitions;
     float x = 0.0f, y = 0.0f, z = 0.0f;
     float vx = 0.0f, vy = 0.0f, vz = 0.0f;
     float rx = 0.0f, ry = 0.0f, rz = 0.0f;
@@ -95,7 +103,7 @@ private:
     Color primaryColor = Color(0.5f, 0.5f, 0.5f, 1.0f);
     Color secondaryColor = Color(0.5f, 0.5f, 0.5f, 1.0f);
 
-    float moveRate = 33.0f;
+    float moveRate = 0.0f;
     float power = 0.0f;
 
     bool isSpecial = false;
@@ -107,7 +115,7 @@ private:
     TankType type2;
 
     float dT = 0.0f;
-    float maxdT = 100.0f;
+    float maxdT = 0.0f;
 
     int numbounces = 0;
     int maxbounces = 0;

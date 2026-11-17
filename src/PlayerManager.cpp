@@ -154,8 +154,6 @@ void PlayerManager::Update() {
 void PlayerManager::NextFrame() {
     // Update all players
     static int frameCounter = 0;
-    static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
-    static constexpr float VERSUS_RESPAWN_DELAY = 1.5f;
     
     TANKGAME_LOG_DEBUG("PlayerManager::NextFrame() - Starting\n");
     
@@ -187,7 +185,7 @@ void PlayerManager::NextFrame() {
                     
                     if (tank->deadtime == 0.0f) tank->Die();
                     tank->deadtime += GlobalTimer::dT;
-                    const float delay = versusMode ? VERSUS_RESPAWN_DELAY : PLAYER_RESPAWN_DELAY;
+                    const float delay = versusMode ? players[i]->GetRules().versusRespawnDelaySeconds : players[i]->GetRules().respawnDelaySeconds;
                     if (tank->deadtime > delay) {
                         LevelHandler::GetSingleton().RequestNextLevel(versusMode);
                         break;
@@ -491,7 +489,7 @@ void PlayerManager::SetPlayerSpawnPosition(Player* player, int playerIndex) {
     // Use default spawn position from LevelHandler
     float spawnX = LevelHandler::GetSingleton().start[0];
     float spawnZ = LevelHandler::GetSingleton().start[1];
-    float spawnY = Player::SPAWN_HEIGHT;
+    float spawnY = player->GetSpawnHeight();
     
     player->CreatePlayerTank(spawnX, spawnY, spawnZ);
 }
@@ -510,7 +508,7 @@ void PlayerManager::SetPlayerVersusPosition(Player* player, int playerIndex) {
         spawnZ = LevelHandler::GetSingleton().enemy[9][1];
     }
     
-    float spawnY = Player::SPAWN_HEIGHT;
+    float spawnY = player->GetSpawnHeight();
     
     player->CreatePlayerTank(spawnX, spawnY, spawnZ);
 }

@@ -54,20 +54,18 @@ void TankHandler::InitializeEnemyTanks()
             newTank->identity = TankIdentity::Enemy(i);
             SetEnemyPosition(*newTank, i);
             SetEnemyType(*newTank, i);
-            newTank->jumpCost = 0; // Enemy tanks don't pay jump cost
         }
     }
 }
 
 Tank TankHandler::CreateEnemyTank(int index)
 {
-    Tank tank;
+    Tank tank(gameWorld ? gameWorld->GetGameplayDefinitions() : nullptr);
     tank.Init();
     
     SetEnemyPosition(tank, index);
     SetEnemyType(tank, index);
     
-    tank.jumpCost = 0;
     
     // Set GameWorld reference
     tank.SetGameWorld(gameWorld);
@@ -96,16 +94,18 @@ void TankHandler::SetEnemyPosition(Tank& tank, int index)
 void TankHandler::SetEnemyType(Tank& tank, int index)
 {
     int levelOffset = LevelHandler::GetSingleton().levelNumber - 48;
+    const auto& rules = gameWorld ? gameWorld->GetGameplayDefinitions()->enemy : Gameplay::BuiltInDefinitions().enemy;
+    tank.ConfigureStats({true, 2, levelOffset == 0 && index == rules.openingLevelWeakenedIndex
+        ? rules.openingLevelAttackScale : 1.0f});
     
     if (levelOffset == 0)
     {
         tank.SetType(static_cast<TankType>(1 + index % 3), TankType::TYPE_GREY);
         if (tank.type1 == TankType::TYPE_BLUE)
             tank.SetType(TankType::TYPE_YELLOW, TankType::TYPE_GREY);
-        if (tank.identity.GetEnemyIndex() == 4)
+        if (tank.identity.GetEnemyIndex() == rules.openingLevelWeakenedIndex)
         {
             tank.SetType(TankType::TYPE_BLUE, TankType::TYPE_GREY);
-            tank.attack = tank.attack / 3;
         }
     }
     else

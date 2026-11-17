@@ -57,7 +57,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.Move(true);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     if (InputTask::KeyStillDown(SDL_SCANCODE_A))
@@ -66,7 +66,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.RotBody(false);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     if (InputTask::KeyStillDown(SDL_SCANCODE_D))
@@ -75,7 +75,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.RotBody(true);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     if (InputTask::KeyStillDown(SDL_SCANCODE_S))
@@ -84,7 +84,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.Move(false);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
 
@@ -107,7 +107,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.RotTurret(-300.0f * GlobalTimer::dT);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     if (InputTask::KeyStillDown(SDL_SCANCODE_RIGHT))
@@ -116,7 +116,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         if (tank.turbo)
         {
             tank.RotTurret(300.0f * GlobalTimer::dT);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
 

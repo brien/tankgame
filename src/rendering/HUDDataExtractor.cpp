@@ -199,7 +199,8 @@ void HUDDataExtractor::SetHUDColors(const Tank& player, HUDRenderData& hudData) 
     
     // Combo and special colors
     hudData.comboColor = Vector3(1.0f, 2.0f * (hudData.combo / 100.0f), 0.1f);
-    hudData.specialColor = Vector3(0.5f, hudData.special / 100.0f, 1.0f);
+    hudData.specialColor = Vector3(0.5f,
+        hudData.maxSpecialCharge > 0 ? hudData.special / hudData.maxSpecialCharge : 0, 1.0f);
 }
 
 void HUDDataExtractor::ExtractComboAndSpecialData(const Tank& player, int playerId, HUDRenderData& hudData) {
@@ -215,6 +216,8 @@ void HUDDataExtractor::ExtractComboAndSpecialData(const Tank& player, int player
     
     // Safely access arrays with bounds checking
     if (arrayIndex >= 0 && arrayIndex < playerMgr->GetNumPlayers()) {
+        if (const auto* owner = playerMgr->GetPlayer(arrayIndex))
+            hudData.maxSpecialCharge = owner->GetRules().specialChargeMax;
         hudData.combo = combos[arrayIndex];
         hudData.special = specials[arrayIndex];
         hudData.comboNumber = comboNumbers[arrayIndex];

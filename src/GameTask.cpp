@@ -236,9 +236,8 @@ void GameTask::HandlePlayingState()
     // Player management through PlayerManager
     playerManager.NextFrame();
     
-    // Item management (TODO: move to GameWorld or ItemManager)
+    // Pickups are handled once by Player::Update() during playerManager.NextFrame().
     LevelHandler::GetSingleton().UpdateItems();
-    LevelHandler::GetSingleton().ItemCollision();
 
     if (!gameOver) LevelHandler::GetSingleton().ProcessPendingLevelChange();
 

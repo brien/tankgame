@@ -25,7 +25,7 @@ enum class FxType;
 struct LevelMetadata {
     std::string name = "Unnamed Level";
     std::string author = "Unknown";
-    int difficulty = 1;
+    int difficulty = 1; // Descriptive level rating, not the selected player difficulty.
     
     struct Theme {
         Vector3 defaultColor = Vector3(1.0f, 1.0f, 1.0f);
@@ -36,7 +36,6 @@ struct LevelMetadata {
     
     struct Gameplay {
         float enemyMultiplier = 1.0f;
-        float itemSpawnRate = 1.0f;
         int baseEnemyCount = 5;
     } gameplay;
 };
@@ -101,6 +100,7 @@ public:
 
     // Enemy count calculation for level scaling
     int GetEnemyCountForLevel(int levelNumber) const;
+    const LevelMetadata& GetMetadata() const { return metadata; }
 
     int levelNumber;
     int colorNumber;

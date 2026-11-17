@@ -10,7 +10,6 @@
     },
     "gameplay": {
         "enemyMultiplier": 0.0,
-        "itemSpawnRate": 0.0,
         "baseEnemyCount": 0
     }
 }

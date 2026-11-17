@@ -24,6 +24,8 @@
 #include <iostream>
 #include <algorithm>
 #include <fstream>
+#include <limits>
+#include <stdexcept>
 
 void LevelHandler::CreateFX(FxType type, float x, float y, float z, float rx, float ry, float rz, float r, float g, float b, float a)
 {
@@ -80,6 +82,8 @@ void LevelHandler::Init()
 
 bool LevelHandler::Load(const char filePath[])
 {
+    // Every load starts independently, including empty worlds and missing maps.
+    metadata = LevelMetadata{};
 
     for (int q = 0; q < 128; q++)
     {
@@ -371,49 +375,11 @@ void LevelHandler::UpdateItems()
 
 void LevelHandler::ItemCollision()
 {
-    // All items now managed by GameWorld
-    if (!gameWorld)
-    {
-        return;
-    }
-
-    const auto& gameWorldItems = gameWorld->GetItems();
-    for (const auto& itemPtr : gameWorldItems)
-    {
-        if (!itemPtr->IsAlive()) continue;
-        
-        const Item& item = *itemPtr; // Dereference the unique_ptr
-        
-        // Check item collision with player tanks from PlayerManager
-        auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
-        int numPlayers = App::GetSingleton().gameTask->GetPlayerManager()->GetNumPlayers();
-        
-        for (int i = 0; i < numPlayers && i < 2; i++)
-        {
-            Tank* playerTank = playerTanks[i];
-            if (!playerTank) continue;
-            
-            if (playerTank->PointCollision(item.x, item.y, item.z))
-            {
-                playerTank->SetType(item.type, playerTank->type1);
-
-                if (item.type == playerTank->type1)
-                    playerTank->energy += playerTank->maxEnergy;
-                else
-                    playerTank->energy += playerTank->maxEnergy / 2;
-
-                if (playerTank->energy > playerTank->maxEnergy)
-                    playerTank->energy = playerTank->maxEnergy;
-
-                CreateItemCollectionFX(item.x, item.y, item.z, item.color);
-
-                App::GetSingleton().soundTask->PlayChannel(3);
-                
-                // Mark item for removal using Entity interface
-                itemPtr->Kill();
-                break;  // Exit the player loop since item is collected
-            }
-        }
+    // Share the player-owned pickup path, including rewards and difficulty stats.
+    if (!gameWorld) return;
+    auto* manager = App::GetSingleton().gameTask->GetPlayerManager();
+    for (int i = 0; i < manager->GetNumPlayers(); ++i) {
+        if (auto* player = manager->GetPlayer(i)) player->CheckItemCollisions();
     }
 }
 
@@ -690,19 +656,16 @@ void LevelHandler::populateTerrainRenderData(TerrainRenderData &renderData) cons
 
 int LevelHandler::GetEnemyCountForLevel(int levelNumber) const
 {
-    // Use metadata if available
-    int baseCount = metadata.gameplay.baseEnemyCount;
-    float multiplier = metadata.gameplay.enemyMultiplier;
+    // Preserve ASCII-based progression (including the 9 -> A gap), but avoid
+    // integer arithmetic overflow and out-of-range floating-point conversion.
+    const int baseCount = metadata.gameplay.baseEnemyCount;
+    const float progression = static_cast<float>(3.0 * (static_cast<double>(levelNumber) - 48.0));
+    // Keep the original float rounding for ordinary tuning values.
+    const float count = baseCount + progression * metadata.gameplay.enemyMultiplier;
+    if (static_cast<double>(count) <= baseCount) return baseCount;
+    if (static_cast<double>(count) >= std::numeric_limits<int>::max()) return std::numeric_limits<int>::max();
+    return static_cast<int>(count);
 
-    // Constants for enemy count calculation
-    const int BASE_LEVEL = 48;       // Starting level number
-    const int ENEMIES_PER_LEVEL = 3; // Additional enemies per level
-
-    // Calculate enemy count based on level progression
-    int count = static_cast<int>(baseCount + ENEMIES_PER_LEVEL * (levelNumber - BASE_LEVEL) * multiplier);
-
-    // Ensure we never have fewer than the base number of enemies
-    return std::max(count, baseCount);
 }
 
 // Legacy DrawTerrain_OLD() method removed - terrain rendering now handled by
@@ -716,7 +679,8 @@ std::string LevelHandler::GetMetadataPath(const std::string &levelPath) const
 {
     std::string metadataPath = levelPath;
     size_t dotPos = metadataPath.find_last_of('.');
-    if (dotPos != std::string::npos)
+    const size_t separator = metadataPath.find_last_of("/\\");
+    if (dotPos != std::string::npos && (separator == std::string::npos || dotPos > separator))
     {
         metadataPath = metadataPath.substr(0, dotPos) + ".json";
     }
@@ -727,90 +691,99 @@ std::string LevelHandler::GetMetadataPath(const std::string &levelPath) const
     return metadataPath;
 }
 
+namespace {
+void RequireMetadata(bool condition, const std::string& field) {
+    if (!condition) throw std::invalid_argument("invalid level metadata field: " + field);
+}
+
+int MetadataInteger(const nlohmann::json& object, const char* key, int fallback,
+                    int minimum, const std::string& path) {
+    if (!object.contains(key)) return fallback;
+    const auto& value = object.at(key);
+    RequireMetadata(value.is_number_integer(), path);
+    // All int values are exact in double; reject large unsigned JSON numbers
+    // before converting to the gameplay integer representation.
+    const double number = value.get<double>();
+    RequireMetadata(number >= minimum && number <= std::numeric_limits<int>::max(), path);
+    return static_cast<int>(number);
+}
+
+Vector3 MetadataColor(const nlohmann::json& color, const std::string& path) {
+    RequireMetadata(color.is_array() && color.size() == 3, path);
+    float channels[3];
+    for (size_t i = 0; i < 3; ++i) {
+        RequireMetadata(color.at(i).is_number(), path);
+        const double value = color.at(i).get<double>();
+        RequireMetadata(std::isfinite(value) && value >= 0 && value <= 1, path);
+        channels[i] = static_cast<float>(value);
+    }
+    return Vector3(channels[0], channels[1], channels[2]);
+}
+
+LevelMetadata ParseLevelMetadata(const nlohmann::json& json) {
+    RequireMetadata(json.is_object(), "root");
+    LevelMetadata candidate;
+    if (json.contains("name")) {
+        RequireMetadata(json.at("name").is_string(), "name");
+        candidate.name = json.at("name").get<std::string>();
+    }
+    if (json.contains("author")) {
+        RequireMetadata(json.at("author").is_string(), "author");
+        candidate.author = json.at("author").get<std::string>();
+    }
+    candidate.difficulty = MetadataInteger(json, "difficulty", candidate.difficulty, 0, "difficulty");
+    if (json.contains("theme")) {
+        const auto& theme = json.at("theme");
+        RequireMetadata(theme.is_object(), "theme");
+        if (theme.contains("defaultColor"))
+            candidate.theme.defaultColor = MetadataColor(theme.at("defaultColor"), "theme.defaultColor");
+        if (theme.contains("blockColor"))
+            candidate.theme.blockColor = MetadataColor(theme.at("blockColor"), "theme.blockColor");
+        if (theme.contains("useSpecialColoring")) {
+            RequireMetadata(theme.at("useSpecialColoring").is_boolean(), "theme.useSpecialColoring");
+            candidate.theme.useSpecialColoring = theme.at("useSpecialColoring").get<bool>();
+        }
+        candidate.theme.themeId = MetadataInteger(theme, "themeId", candidate.theme.themeId,
+                                                  -1, "theme.themeId");
+    }
+    if (json.contains("gameplay")) {
+        const auto& gameplay = json.at("gameplay");
+        RequireMetadata(gameplay.is_object(), "gameplay");
+        if (gameplay.contains("enemyMultiplier")) {
+            const auto& value = gameplay.at("enemyMultiplier");
+            RequireMetadata(value.is_number(), "gameplay.enemyMultiplier");
+            const double multiplier = value.get<double>();
+            RequireMetadata(std::isfinite(multiplier) && multiplier >= 0 &&
+                multiplier <= std::numeric_limits<float>::max(), "gameplay.enemyMultiplier");
+            candidate.gameplay.enemyMultiplier = static_cast<float>(multiplier);
+        }
+        candidate.gameplay.baseEnemyCount = MetadataInteger(gameplay, "baseEnemyCount",
+            candidate.gameplay.baseEnemyCount, 0, "gameplay.baseEnemyCount");
+        // itemSpawnRate was never consumed by gameplay. Ignore legacy copies,
+        // like other unknown keys, instead of implying an item-spawning control.
+    }
+    return candidate;
+}
+}
+
 bool LevelHandler::LoadMetadata(const std::string &levelPath)
 {
-    std::string metadataPath = GetMetadataPath(levelPath);
-
+    const std::string metadataPath = GetMetadataPath(levelPath);
     std::ifstream file(metadataPath);
-    if (!file.is_open())
-    {
+    if (!file.is_open()) {
         Logger::Get().Write("LevelHandler: No metadata file found: %s, using defaults\n", metadataPath.c_str());
         return false;
     }
-
-    try
-    {
-        nlohmann::json j;
-        file >> j;
-
-        // Load basic metadata
-        if (j.contains("name"))
-        {
-            metadata.name = j["name"].get<std::string>();
-        }
-        if (j.contains("author"))
-        {
-            metadata.author = j["author"].get<std::string>();
-        }
-        if (j.contains("difficulty"))
-        {
-            metadata.difficulty = j["difficulty"].get<int>();
-        }
-
-        // Load theme data
-        if (j.contains("theme"))
-        {
-            auto theme = j["theme"];
-            if (theme.contains("defaultColor"))
-            {
-                auto color = theme["defaultColor"];
-                metadata.theme.defaultColor = Vector3(
-                    color[0].get<float>(),
-                    color[1].get<float>(),
-                    color[2].get<float>());
-            }
-            if (theme.contains("blockColor"))
-            {
-                auto color = theme["blockColor"];
-                metadata.theme.blockColor = Vector3(
-                    color[0].get<float>(),
-                    color[1].get<float>(),
-                    color[2].get<float>());
-            }
-            if (theme.contains("useSpecialColoring"))
-            {
-                metadata.theme.useSpecialColoring = theme["useSpecialColoring"].get<bool>();
-            }
-            if (theme.contains("themeId"))
-            {
-                metadata.theme.themeId = theme["themeId"].get<int>();
-            }
-        }
-
-        // Load gameplay data
-        if (j.contains("gameplay"))
-        {
-            auto gameplay = j["gameplay"];
-            if (gameplay.contains("enemyMultiplier"))
-            {
-                metadata.gameplay.enemyMultiplier = gameplay["enemyMultiplier"].get<float>();
-            }
-            if (gameplay.contains("itemSpawnRate"))
-            {
-                metadata.gameplay.itemSpawnRate = gameplay["itemSpawnRate"].get<float>();
-            }
-            if (gameplay.contains("baseEnemyCount"))
-            {
-                metadata.gameplay.baseEnemyCount = gameplay["baseEnemyCount"].get<int>();
-            }
-        }
-
+    try {
+        // Commit only a complete, validated candidate; errors leave this load's
+        // fresh defaults intact. parse() also rejects trailing JSON content.
+        auto candidate = ParseLevelMetadata(nlohmann::json::parse(file));
+        metadata = std::move(candidate);
         Logger::Get().Write("LevelHandler: Successfully loaded metadata from: %s\n", metadataPath.c_str());
         return true;
-    }
-    catch (const std::exception &e)
-    {
-        Logger::Get().Write("LevelHandler: Error parsing metadata file %s: %s\n", metadataPath.c_str(), e.what());
+    } catch (const std::exception& error) {
+        Logger::Get().Write("LevelHandler: Invalid metadata file %s: %s; using defaults\n",
+                            metadataPath.c_str(), error.what());
         return false;
     }
 }
@@ -820,7 +793,7 @@ void LevelHandler::PrintMetadata() const
     Logger::Get().Write("Level Metadata:\n");
     Logger::Get().Write("  Name: %s\n", metadata.name.c_str());
     Logger::Get().Write("  Author: %s\n", metadata.author.c_str());
-    Logger::Get().Write("  Difficulty: %d\n", metadata.difficulty);
+    Logger::Get().Write("  Descriptive difficulty: %d\n", metadata.difficulty);
     Logger::Get().Write("  Default Color: (%.2f, %.2f, %.2f)\n",
                         metadata.theme.defaultColor.x, metadata.theme.defaultColor.y, metadata.theme.defaultColor.z);
     Logger::Get().Write("  Block Color: (%.2f, %.2f, %.2f)\n",

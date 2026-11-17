@@ -46,10 +46,11 @@ std::vector<Draw> Build(const HUDRenderData& data) {
     }
     if (data.showComboMeter) draws.push_back({Shape::Quad, .50f, -.37f, .01f, data.combo/100, data.comboColor});
     if (data.showSpecialMeter) {
-        draws.push_back({Shape::Quad, .52f, -.37f, .01f, data.special/100, data.specialColor,
+        const float scale = data.maxSpecialCharge > 0 ? 1.0f / data.maxSpecialCharge : 0;
+        draws.push_back({Shape::Quad, .52f, -.37f, .01f, data.special * scale, data.specialColor,
             data.hasSpecialAvailable ? 1.0f : .5f, Icon::None,
             data.hasSpecialAvailable ? Blend::Opaque : Blend::Alpha});
-        const float step = data.specialChargeCost / 100.0f;
+        const float step = data.specialChargeCost * scale;
         for (int i = 1; i <= SpecialIndicatorCount(data); ++i)
             draws.push_back({Shape::Line, .52f, -.37f + step*i, .01f, 0, Vector3(1,1,1)});
         draws.push_back({Shape::Line, .52f, -.37f, .01f, 0, Vector3(1,1,1)});

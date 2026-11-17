@@ -69,18 +69,18 @@ void Bullet::CreateWallImpactFX(float xpp, float zpp)
     }
 }
 
-Bullet::Bullet()
-    : x(0.0f), y(0.0f), z(0.0f),
+Bullet::Bullet(std::shared_ptr<const Gameplay::GameplayDefinitions> definitions)
+    : gameplayDefinitions(std::move(definitions)), x(0.0f), y(0.0f), z(0.0f),
       vx(0.0f), vy(0.0f), vz(0.0f),
       rx(0.0f), ry(0.0f), rz(0.0f),
       dty(0.0f),
       primaryColor(0.5f, 0.5f, 0.5f, 1.0f),
       secondaryColor(0.5f, 0.5f, 0.5f, 1.0f),
-      moveRate(33.0f), power(0.0f),
+      moveRate(GetGameplayDefinitions().projectile.speed), power(0.0f),
       isSpecial(false),
       id(0), ownerIdentity(TankIdentity::Enemy(0)),
       type1(), type2(),
-      dT(0.0f), maxdT(100.0f),
+      dT(0.0f), maxdT(GetGameplayDefinitions().projectile.lifetimeSeconds),
       numbounces(0), maxbounces(0),
       alive(true)
 {
@@ -93,59 +93,62 @@ Bullet::Bullet(const TankIdentity& ownerIdentity, float power,
                const Color& primaryColor,
                const Color& secondaryColor,
                float x, float y, float z,
-               float rx, float ry, float rz, bool isSpecial)
-    : x(x), y(y), z(z),
+               float rx, float ry, float rz, bool isSpecial,
+               std::shared_ptr<const Gameplay::GameplayDefinitions> definitions)
+    : gameplayDefinitions(std::move(definitions)), x(x), y(y), z(z),
       vx(0.0f), vy(0.0f), vz(0.0f),
       rx(rx), ry(ry), rz(rz),
       dty(0.0f),
       primaryColor(primaryColor),
       secondaryColor(secondaryColor),
-      moveRate(33.0f), power(power),
+      moveRate(GetGameplayDefinitions().projectile.speed), power(power),
       isSpecial(isSpecial),
       id(1), ownerIdentity(ownerIdentity),
       type1(type1), type2(type2),
-      dT(0.0f), maxdT(100.0f),
+      dT(0.0f), maxdT(GetGameplayDefinitions().projectile.lifetimeSeconds),
       numbounces(0), maxbounces(maxbounces),
       alive(true)
 {
+    const auto& rules = GetGameplayDefinitions().projectile;
     if (type1 == TankType::TYPE_PURPLE)
     {
-        dty = 320 * dTpressed;
+        dty = rules.purplePrimaryTurnScale * dTpressed;
         if (dTpressed < 0)
             dTpressed *= -1;
         this->power *= dTpressed;
-        if (this->power > 1000)
-            this->power = 1000;
-        if (this->power < 100)
-            this->power = 100;
+        if (this->power > rules.purpleMaxPower)
+            this->power = rules.purpleMaxPower;
+        if (this->power < rules.purpleMinPower)
+            this->power = rules.purpleMinPower;
     }
     else if (type2 == TankType::TYPE_PURPLE)
     {
-        this->power *= 0.5f;
-        dty = 160 * dTpressed;
+        this->power *= rules.purpleSecondaryPowerScale;
+        dty = rules.purpleSecondaryTurnScale * dTpressed;
         if (dTpressed < 0)
             dTpressed *= -1;
-        this->power += this->power * dTpressed / 2;
-        if (this->power > 1000)
-            this->power = 1000;
-        if (this->power < 100)
-            this->power = 100;
+        this->power += this->power * dTpressed / rules.purpleSecondaryChargeDivisor;
+        if (this->power > rules.purpleMaxPower)
+            this->power = rules.purpleMaxPower;
+        if (this->power < rules.purpleMinPower)
+            this->power = rules.purpleMinPower;
     }
 }
 
 void Bullet::NextFrame()
 {
+    const auto& rules = GetGameplayDefinitions().projectile;
     dT += GlobalTimer::dT;
 
     if (type1 == TankType::TYPE_PURPLE && isSpecial)
     {
         if (dty < 0)
         {
-            dty -= 1000 * GlobalTimer::dT;
+            dty -= rules.purpleSpecialTurnAcceleration * GlobalTimer::dT;
         }
         else
         {
-            dty += 1000 * GlobalTimer::dT;
+            dty += rules.purpleSpecialTurnAcceleration * GlobalTimer::dT;
         }
     }
 
@@ -188,7 +191,7 @@ void Bullet::NextFrame()
 
     // Check tank collisions (both players and enemies)
     // Use smaller radius to match original collision detection
-    SphereCollisionQuery tankQuery(x, y, z, 0.1f, CollisionLayer::ALL_TANKS, this);
+    SphereCollisionQuery tankQuery(x, y, z, rules.collisionRadius, CollisionLayer::ALL_TANKS, this);
     Events::GetBus().Publish(tankQuery);
     
     if (!tankQuery.results.empty()) {
@@ -199,8 +202,8 @@ void Bullet::NextFrame()
                 // Found a valid target (not the firing tank)
                 Events::GetBus().Post(BulletCollisionEvent(this, tank, x, y, z));
                 return; // CombatSystem will handle the collision response
-            } else if (tank && tank->identity == ownerIdentity && dT > 0.5f) {
-                // Allow collision with firing tank only after 0.5 seconds (for healing/self-damage)
+            } else if (tank && tank->identity == ownerIdentity && dT > rules.selfHitDelaySeconds) {
+                // Allow self-collision only after the configured grace period.
                 Events::GetBus().Post(BulletCollisionEvent(this, tank, x, y, z));
                 return;
             }
@@ -209,7 +212,7 @@ void Bullet::NextFrame()
     
     // Also check the previous position for fast-moving bullets
     if (xpp != 0 || zpp != 0) {
-        SphereCollisionQuery prevQuery(x - xpp / 2, y, z - zpp / 2, 0.1f, CollisionLayer::ALL_TANKS, this);
+        SphereCollisionQuery prevQuery(x - xpp / 2, y, z - zpp / 2, rules.collisionRadius, CollisionLayer::ALL_TANKS, this);
         Events::GetBus().Publish(prevQuery);
         
         if (!prevQuery.results.empty()) {
@@ -220,8 +223,8 @@ void Bullet::NextFrame()
                     // Found a valid target (not the firing tank)
                     Events::GetBus().Post(BulletCollisionEvent(this, tank, x - xpp / 2, y, z - zpp / 2));
                     return;
-                } else if (tank && tank->identity == ownerIdentity && dT > 0.5f) {
-                    // Allow collision with firing tank only after 0.5 seconds (for healing/self-damage)
+                } else if (tank && tank->identity == ownerIdentity && dT > rules.selfHitDelaySeconds) {
+                    // Allow self-collision only after the configured grace period.
                     Events::GetBus().Post(BulletCollisionEvent(this, tank, x - xpp / 2, y, z - zpp / 2));
                     return;
                 }
@@ -251,6 +254,7 @@ void Bullet::NextFrame()
 
 void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
 {
+    const auto& rules = GetGameplayDefinitions().projectile;
     x -= xpp;
     z -= zpp;
     if (numbounces < maxbounces)
@@ -297,11 +301,11 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
         {
             if (type1 == TankType::TYPE_YELLOW && type2 == TankType::TYPE_YELLOW)
             {
-                power *= 2.0;
+                power *= rules.yellowFirstBouncePowerMultiplier;
             }
             else
             {
-                power *= 1.5;
+                power *= rules.firstBouncePowerMultiplier;
             }
         }
 
@@ -309,10 +313,10 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
         {
             if (type2 == TankType::TYPE_RED)
             {
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < rules.yellowRedChildCount; i++)
                 {
 
-                    Bullet temp;
+                    Bullet temp(gameplayDefinitions);
 
                     temp.ownerIdentity = ownerIdentity;
 
@@ -321,7 +325,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     temp.z = z;
 
                     temp.rx = rx;
-                    temp.ry = i * (360 / 20);
+                    temp.ry = i * (360.0f / rules.yellowRedChildCount);
                     temp.rz = rz;
 
                     temp.power = power;
@@ -342,10 +346,10 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             }
             else if (type2 == TankType::TYPE_BLUE)
             {
-                for (int i = 0; i < 2; i++)
+                for (int i = 0; i < rules.yellowBlueChildCount; i++)
                 {
 
-                    Bullet temp;
+                    Bullet temp(gameplayDefinitions);
 
                     temp.ownerIdentity = ownerIdentity;
 
@@ -353,16 +357,16 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                     temp.ry = ry;
                     temp.rz = rz;
 
-                    temp.x = x + (.2 + i * .2 + numbounces * .2) * static_cast<float>(cos((ry + 90) * DTR));
+                    temp.x = x + (rules.yellowBlueChildSpacing + i * rules.yellowBlueChildSpacing + numbounces * rules.yellowBlueChildSpacing) * static_cast<float>(cos((ry + 90) * DTR));
                     temp.y = y;
-                    temp.z = z + (.2 + i * .2 + numbounces * .2) * static_cast<float>(sin((ry + 90) * DTR));
+                    temp.z = z + (rules.yellowBlueChildSpacing + i * rules.yellowBlueChildSpacing + numbounces * rules.yellowBlueChildSpacing) * static_cast<float>(sin((ry + 90) * DTR));
 
                     temp.power = power;
 
                     temp.primaryColor = primaryColor;
                     temp.secondaryColor = secondaryColor;
 
-                    temp.maxbounces = 4;
+                    temp.maxbounces = rules.childBounces;
 
                     temp.type1 = type1;
                     temp.type2 = type2;
@@ -376,7 +380,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             else if (type2 == TankType::TYPE_YELLOW || type2 == TankType::TYPE_GREY)
             {
 
-                Bullet temp;
+                Bullet temp(gameplayDefinitions);
 
                 temp.ownerIdentity = ownerIdentity;
 
@@ -396,7 +400,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 // Preserve the original default-constructed grey child types.
                 temp.type1 = TankType::TYPE_GREY;
                 temp.type2 = TankType::TYPE_GREY;
-                temp.maxbounces = 4;
+                temp.maxbounces = rules.childBounces;
                 temp.alive = true;
 
                 gameWorld->CreateBullet(temp);
@@ -404,7 +408,7 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
             else if (type2 == TankType::TYPE_PURPLE)
             {
 
-                Bullet temp;
+                Bullet temp(gameplayDefinitions);
 
                 temp.ownerIdentity = ownerIdentity;
 
@@ -416,14 +420,14 @@ void Bullet::HandleLevelCollision(float xpp, float zpp, float ory)
                 temp.ry = ry;
                 temp.rz = rz;
 
-                temp.power = power * 2;
+                temp.power = power * rules.purpleChildPowerMultiplier;
 
-                temp.dty = 10.0f;
+                temp.dty = rules.purpleChildTurnSpeed;
 
                 temp.primaryColor = primaryColor;
                 temp.secondaryColor = secondaryColor;
 
-                temp.maxbounces = 16;
+                temp.maxbounces = rules.purpleChildBounces;
 
                 temp.type1 = type1;
                 temp.type2 = type2;

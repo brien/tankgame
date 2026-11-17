@@ -26,8 +26,8 @@ public:
     Player(Player&&) = default;
     Player& operator=(Player&&) = default;
 
-    // Start high enough for the falling entrance to reveal the map.
-    static constexpr float SPAWN_HEIGHT = 24.0f;
+    const Gameplay::PlayerRules& GetRules() const;
+    float GetSpawnHeight() const { return GetRules().spawnHeight; }
 
     // === CORE PLAYER PROPERTIES ===
     int GetPlayerIndex() const { return playerIndex; }
@@ -124,6 +124,7 @@ public:
 
 private:
     // Player identification
+    int difficulty = 2; // Stored even before the first tank is created.
     int playerIndex;           // 0 or 1 for player 1/2
     GameWorld* gameWorld;      // Reference to game world for tank creation/management
 
@@ -147,13 +148,6 @@ private:
 
     // Input handling
     std::unique_ptr<InputHandler> inputHandler;
-
-    // Constants for gameplay balance
-    static constexpr float COMBO_DECAY_RATE = 1.0f;
-    static constexpr float SPECIAL_CHARGE_MAX = 100.0f;
-    static constexpr float RESPAWN_DELAY = 2.0f;
-    static constexpr float VERSUS_RESPAWN_DELAY = 3.0f;
-    static constexpr float PLAYER_RESPAWN_DELAY = 0.5f;
 
     // Helper methods
     void RememberTankTypes();

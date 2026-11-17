@@ -37,7 +37,7 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
         if (tank.turbo && tank.energy > 0)
         {
             tank.Move(true);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     
@@ -56,7 +56,7 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
         if (tank.turbo && tank.energy > 0)
         {
             tank.Move(false);
-            tank.energy -= tank.jumpCost * GlobalTimer::dT;
+            tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
 

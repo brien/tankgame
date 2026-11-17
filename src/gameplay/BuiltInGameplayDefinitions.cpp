@@ -5,6 +5,76 @@ GameplayDefinitions BuildBuiltInDefinitions()
 {
     GameplayDefinitions definitions;
 
+    definitions.tank.maxHealth = 100;
+    definitions.tank.healthRegenPerSecond = 10;
+    definitions.tank.moveSpeed = 5;
+    definitions.tank.rotationDegreesPerSecond = 150;
+    definitions.tank.collisionRadius = .2f;
+    definitions.tank.jumpEnergyPerSecond = 250;
+    definitions.tank.jumpLaunchSpeed = 4;
+    definitions.tank.jumpThrust = 18;
+    definitions.tank.gravity = 16;
+    definitions.tank.maxRiseSpeed = 10;
+    definitions.tank.maxFallSpeed = 15;
+    definitions.tank.turboEnergyPerSecond = 250;
+    definitions.tank.turretInputScale = 10;
+    definitions.tank.turretMaxStepDegrees = 2.5f;
+    definitions.tank.maxForwardInput = 1.25f;
+
+    definitions.projectile.speed = 33;
+    definitions.projectile.lifetimeSeconds = 100;
+    definitions.projectile.collisionRadius = .1f;
+    definitions.projectile.registrationRadius = .3f;
+    definitions.projectile.selfHitDelaySeconds = .5f;
+    definitions.projectile.purplePrimaryTurnScale = 320;
+    definitions.projectile.purpleSecondaryTurnScale = 160;
+    definitions.projectile.purpleSecondaryPowerScale = .5f;
+    definitions.projectile.purpleSecondaryChargeDivisor = 2;
+    definitions.projectile.purpleMinPower = 100;
+    definitions.projectile.purpleMaxPower = 1000;
+    definitions.projectile.purpleSpecialTurnAcceleration = 1000;
+    definitions.projectile.firstBouncePowerMultiplier = 1.5f;
+    definitions.projectile.yellowFirstBouncePowerMultiplier = 2;
+    definitions.projectile.yellowRedChildCount = 20;
+    definitions.projectile.yellowBlueChildCount = 2;
+    definitions.projectile.yellowBlueChildSpacing = .2f;
+    definitions.projectile.childBounces = 4;
+    definitions.projectile.purpleChildBounces = 16;
+    definitions.projectile.purpleChildPowerMultiplier = 2;
+    definitions.projectile.purpleChildTurnSpeed = 10;
+
+    definitions.player.spawnHeight = 24;
+    definitions.player.respawnDelaySeconds = .5f;
+    definitions.player.versusRespawnDelaySeconds = 1.5f;
+    definitions.player.comboDecayPerSecond = 1;
+    definitions.player.comboChargeFraction = .1f;
+    definitions.player.specialChargeMax = 100;
+    definitions.player.matchingPickupEnergyFraction = 1;
+    definitions.player.otherPickupEnergyFraction = .5f;
+    definitions.player.pickupScore = 100;
+
+    definitions.combat.healthReturnDivisor = 2;
+    definitions.combat.energyReturnDivisor = 8;
+    definitions.combat.friendlyResourceThresholdMultiplier = 2;
+    definitions.combat.blueSpecialHitPowerBonus = 100;
+    definitions.combat.hitComboDivisor = 10;
+    definitions.combat.streakThreshold = 9;
+    definitions.combat.streakComboDivisor = 2;
+    definitions.combat.distanceThreshold = 20;
+    definitions.combat.distanceComboDivisor = 10;
+    definitions.combat.bounceBonusMaxAgeSeconds = 10;
+    definitions.combat.bounceBonusBase = 1;
+    definitions.combat.bounceAgeDivisor = 2;
+    definitions.combat.killBonus = 10;
+    definitions.combat.killComboDivisor = 10;
+
+    definitions.enemy.openingLevelWeakenedIndex = 4;
+    definitions.enemy.openingLevelAttackScale = 1.0f / 3.0f;
+
+    definitions.difficulties[0] = {3, 2, 1.5f, 1.5f};
+    definitions.difficulties[1] = {1.5f, 1.5f, 1.5f, 1.5f};
+    definitions.difficulties[2] = {1, 1, 1, 1};
+
     const float defaultFireRate = 0.5f;
     const float defaultAttack = 200.0f;
     const float defaultMaxEnergy = 100.0f;
