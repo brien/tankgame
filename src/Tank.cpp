@@ -19,7 +19,6 @@
 #include "LevelHandler.h"
 #include "TankHandler.h"
 #include "PlayerManager.h"
-#include "TankTypeManager.h"
 #include "InputHandler.h"
 #include "TankCollisionHelper.h"
 #include "InputHandlerFactory.h"
@@ -40,7 +39,7 @@ void Tank::CreateDeathExplosionFX()
     // Get colors dynamically from tank types
     Color primaryColor = GetPrimaryColor();
     Color secondaryColor = GetSecondaryColor();
-    
+
     // Central explosion with velocity
     CreateFX(FxType::TYPE_DEATH, x, y, z + .5, 0, .05, 0, 0, ry, 0, primaryColor.r, primaryColor.g, primaryColor.b, 1);
 
@@ -77,30 +76,17 @@ const Gameplay::GameplayDefinitions& Tank::Definitions() const
 
 void Tank::ApplyStats(const Gameplay::ResolvedTankConfig& config, bool refill)
 {
-    maxHealth = config.tank.maxHealth;
-    healthRegen = config.tank.healthRegenPerSecond;
-    movRate = config.tank.moveSpeed;
-    rotRate = config.tank.rotationDegreesPerSecond;
-    jumpCost = config.tank.jumpEnergyPerSecond;
-    jumpRate = config.tank.jumpThrust;
-    fallRate = config.tank.gravity;
-    collisionRadius = config.tank.collisionRadius;
-    fireRate = config.weapon.fireIntervalSeconds;
-    attack = config.weapon.attack;
-    maxEnergy = config.weapon.maxEnergy;
-    energyRegen = config.weapon.energyRegen;
-    moveCost = config.weapon.moveCost;
-    fireCost = config.weapon.fireCost;
-    specialChargeCost = config.weapon.specialChargeCost;
-    bounces = config.weapon.bounces;
-    health = refill ? maxHealth : std::min(health, maxHealth);
-    energy = refill ? maxEnergy : std::min(energy, maxEnergy);
+    effectiveStats = config;
+    // Preserve the historical integer projectile-input power (including encounter scaling).
+    effectiveStats.weapon.attack = static_cast<int>(config.weapon.attack);
+    health = refill ? effectiveStats.tank.maxHealth : std::min(health, effectiveStats.tank.maxHealth);
+    energy = refill ? effectiveStats.weapon.maxEnergy : std::min(energy, effectiveStats.weapon.maxEnergy);
     // Rebuild the same collision footprint for constructors and reconfiguration.
     std::fill(std::begin(collisionPoints), std::end(collisionPoints), 0.0f);
     const float corners[4][2] = {{1,1}, {-1,-1}, {-1,1}, {1,-1}};
     for (int i = 0; i < 4; ++i) {
-        collisionPoints[i * 3] = corners[i][0] * collisionRadius;
-        collisionPoints[i * 3 + 2] = corners[i][1] * collisionRadius;
+        collisionPoints[i * 3] = corners[i][0] * effectiveStats.tank.collisionRadius;
+        collisionPoints[i * 3 + 2] = corners[i][1] * effectiveStats.tank.collisionRadius;
     }
 }
 
@@ -131,7 +117,6 @@ Color Tank::GetSecondaryColor() const
     return Color(config.r, config.g, config.b, 1);
 }
 
-// SetTankColors method removed - colors are now handled dynamically via TankTypeManager
 
 void Tank::SetInputMode(InputMode mode)
 {
@@ -175,34 +160,34 @@ void Tank::Fire(float dTpressed)
 {
     // Safety: Dead tanks cannot fire
     if (!alive) return;
-    
+
     // Safety: Validate position is not NaN before creating bullets
     if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
         Logger::Get().Write("WARNING: Tank %d has NaN position, cannot fire\n", identity.GetLegacyId());
         return;
     }
-    
+
     // Safety: Validate rotation values are not NaN
     if (std::isnan(ry) || std::isnan(rty) || std::isnan(rx) || std::isnan(rtx) || std::isnan(rz) || std::isnan(rtz)) {
         Logger::Get().Write("WARNING: Tank %d has NaN rotation (rx=%.2f/%.2f, ry=%.2f/%.2f, rz=%.2f/%.2f), cannot fire\n",
             identity.GetLegacyId(), rx, rtx, ry, rty, rz, rtz);
         return;
     }
-    
-    if (energy >= fireCost && fireTimer > fireRate)
+
+    if (energy >= effectiveStats.weapon.fireCost && fireTimer > effectiveStats.weapon.fireIntervalSeconds)
     {
         TANKGAME_LOG_DEBUG("Tank::Fire - id=%d, creating bullet at (%.2f, %.2f, %.2f)\n", identity.GetLegacyId(), x, y, z);
-        
+
         // Get player tank from PlayerManager for audio positioning
         auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
         Tank* player0 = playerTanks[0];
-        
+
         // Calculate audio positioning if player tank exists and is alive
         if (player0 && player0->alive) {
             float dx = x - player0->x;
             float dz = z - player0->z;
             float ryp;
-            
+
             // Safety: Check for division by zero
             if (std::abs(dx) < 0.001f) {
                 // Vertically aligned - angle is 90 or -90 degrees
@@ -229,20 +214,20 @@ void Tank::Fire(float dTpressed)
 
         App::GetSingleton().soundTask->PlayChannel(2);
 
-        float bulletMovRate = 33.0f;
+        const float bulletMovRate = Definitions().projectile.speed;
 
         Color primaryColor = GetPrimaryColor();
         Color secondaryColor = GetSecondaryColor();
-        gameWorld->CreateBullet(identity, attack, type1, type2, bounces,
+        gameWorld->CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, effectiveStats.weapon.bounces,
                     dTpressed, primaryColor, secondaryColor,
                     x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                    y + .25,
+                    y + Definitions().special.muzzleHeight,
                     z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                     rtx + rx, rty + ry, rtz + rz);
 
         fireTimer = 0;
 
-        energy -= fireCost;
+        energy -= effectiveStats.weapon.fireCost;
     }
 }
 
@@ -250,25 +235,25 @@ void Tank::Special(float dTpressed)
 {
     // Safety: Dead tanks cannot use special attacks
     if (!alive) return;
-    
+
     // Safety: Validate position is not NaN
     if (std::isnan(x) || std::isnan(y) || std::isnan(z)) {
         Logger::Get().Write("WARNING: Tank %d has NaN position, cannot use special\n", identity.GetLegacyId());
         return;
     }
-    
+
     // Safety: Validate rotation values are not NaN
     if (std::isnan(ry) || std::isnan(rty) || std::isnan(rx) || std::isnan(rtx) || std::isnan(rz) || std::isnan(rtz)) {
         Logger::Get().Write("WARNING: Tank %d has NaN rotation (ry=%.2f, rty=%.2f), cannot use special\n", identity.GetLegacyId(), ry, rty);
         return;
     }
-    
+
     // Safety: Special() is only for player tanks
     if (identity.IsEnemy()) {
         Logger::Get().Write("WARNING: Tank::Special called for non-player tank (id=%d)\n", identity.GetLegacyId());
         return;
     }
-    
+
     // Safety: Validate array index for TankHandler::special (size 2)
     // Get player from PlayerManager
     Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerByTankId(identity.GetLegacyId());
@@ -277,17 +262,17 @@ void Tank::Special(float dTpressed)
         return;
     }
 
-    if (player->CanUseSpecial(specialChargeCost) && fireTimer > fireRate)
+    if (player->CanUseSpecial(effectiveStats.weapon.specialChargeCost) && fireTimer > effectiveStats.weapon.fireIntervalSeconds)
     {
         // Get player tank from PlayerManager for audio positioning
         auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
         Tank* player0 = playerTanks[0];
         if (!player0 || !player0->alive) return; // No valid player tank available
-        
+
         float dx = x - player0->x;
         float dz = z - player0->z;
         float ryp;
-        
+
         // Safety: Check for division by zero
         if (std::abs(dx) < 0.001f) {
             ryp = (dz > 0.0f ? 90.0f : -90.0f);
@@ -309,49 +294,35 @@ void Tank::Special(float dTpressed)
 
         App::GetSingleton().soundTask->PlayChannel(2);
 
-        float bulletMovRate = 33.0f;
+        const float bulletMovRate = Definitions().projectile.speed;
 
         if (type1 == TankType::TYPE_RED)
         {
             // Get colors for this tank
             Color primaryColor = GetPrimaryColor();
             Color secondaryColor = GetSecondaryColor();
-            
-            for (int i = 0; i < 10; i++)
+
+            for (int i = 0; i < Definitions().special.redArcCount; i++)
             {
-                CreateBullet(identity, attack, type1, type2, 0,
+                CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, Definitions().special.redArcBounces,
                             dTpressed,
                             Color(1.0, 0.0, 0.0), // Red for TYPE_RED bullets
                             Color(0.5, 0.5, 0.5), // Grey secondary
                             x,
-                            y + .25,
+                            y + Definitions().special.muzzleHeight,
                             z,
-                            rtx + rx, rty + ry + i * (270 / 10) + 52, rtz + rz, true);
+                            rtx + rx, rty + ry + i * Definitions().special.redArcStepDegrees + Definitions().special.redArcStartDegrees, rtz + rz, true);
             }
 
-            CreateBullet(identity, attack, type1, type2, bounces,
-                        dTpressed,
-                        primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                        y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                        rtx + rx, rty + ry, rtz + rz, true);
-            
-            CreateBullet(identity, attack, type1, type2, bounces,
-                        dTpressed,
-                        primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                        y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                        rtx + rx, rty + ry - 10, rtz + rz, true);
-
-            CreateBullet(identity, attack, type1, type2, bounces,
-                         dTpressed,
-                         primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                         y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                         rtx + rx, rty + ry + 20, rtz + rz, true);
+            for (float angle : Definitions().special.redForwardAnglesDegrees) {
+                CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, effectiveStats.weapon.bounces,
+                            dTpressed,
+                            primaryColor, secondaryColor,
+                            x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
+                            y + Definitions().special.muzzleHeight,
+                            z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
+                            rtx + rx, rty + ry + angle, rtz + rz, true);
+            }
         }
         if (type1 == TankType::TYPE_BLUE)
         {
@@ -360,21 +331,21 @@ void Tank::Special(float dTpressed)
 
             if (type2 != TankType::TYPE_RED)
             {
-                CreateBullet(identity, attack, type1, type2, bounces,
+                CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, effectiveStats.weapon.bounces,
                             dTpressed,
                             primaryColor, secondaryColor,
                             x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                            y + .50,
+                            y + Definitions().special.blueCenterHeight,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz, true);
             }
 
-            CreateBullet(identity, attack, type1, type2, bounces,
+            CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, effectiveStats.weapon.bounces,
                         dTpressed,
                         primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR) + .2 * std::cos((rty + ry + 90) * DTR),
-                        y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR) + .2 * std::sin((rty + ry + 90) * DTR),
+                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR) + Definitions().special.blueSideOffset * std::cos((rty + ry + 90) * DTR),
+                        y + Definitions().special.muzzleHeight,
+                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR) + Definitions().special.blueSideOffset * std::sin((rty + ry + 90) * DTR),
                         rtx + rx, rty + ry, rtz + rz, true);
         }
 
@@ -382,24 +353,24 @@ void Tank::Special(float dTpressed)
         {
             Color primaryColor = GetPrimaryColor();
             Color secondaryColor = GetSecondaryColor();
-            
+
             if (type2 != TankType::TYPE_YELLOW)
             {
-                CreateBullet(identity, attack, type1, type2, 4,
+                CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, Definitions().special.yellowBounces,
                             dTpressed,
                             primaryColor, secondaryColor,
                             x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                            y + .25,
+                            y + Definitions().special.muzzleHeight,
                             z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                             rtx + rx, rty + ry, rtz + rz, true);
             }
 
             // Note: This was creating the same bullet twice - likely a bug. Keeping for compatibility.
-            CreateBullet(identity, attack, type1, type2, 4,
+            CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, Definitions().special.yellowBounces,
                         dTpressed,
                         primaryColor, secondaryColor,
                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                        y + .25,
+                        y + Definitions().special.muzzleHeight,
                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
                         rtx + rx, rty + ry, rtz + rz, true);
         }
@@ -408,43 +379,21 @@ void Tank::Special(float dTpressed)
         {
             Color primaryColor = GetPrimaryColor();
             Color secondaryColor = GetSecondaryColor();
-            
-            CreateBullet(identity, attack, type1, type2, bounces,
-                        dTpressed,
-                        primaryColor, secondaryColor,
-                        x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                        y + .25,
-                        z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                        rtx + rx, rty + ry, rtz + rz, true);
 
-            CreateBullet(identity, attack, type1, type2, bounces,
-                         dTpressed,
-                         primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                         y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                         rtx + rx, rty + ry - 90, rtz + rz, true);
-
-            CreateBullet(identity, attack, type1, type2, bounces,
-                         dTpressed,
-                         primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                         y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                         rtx + rx, rty + ry + 180, rtz + rz, true);
-
-            CreateBullet(identity, attack, type1, type2, bounces,
-                         dTpressed,
-                         primaryColor, secondaryColor,
-                         x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
-                         y + .25,
-                         z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
-                         rtx + rx, rty + ry + 90, rtz + rz, true);
+            for (float angle : Definitions().special.purpleAnglesDegrees) {
+                CreateBullet(identity, effectiveStats.weapon.attack, type1, type2, effectiveStats.weapon.bounces,
+                            dTpressed,
+                            primaryColor, secondaryColor,
+                            x + (GlobalTimer::dT * bulletMovRate) * std::cos((rty + ry) * DTR),
+                            y + Definitions().special.muzzleHeight,
+                            z + (GlobalTimer::dT * bulletMovRate) * std::sin((rty + ry) * DTR),
+                            rtx + rx, rty + ry + angle, rtz + rz, true);
+            }
         }
 
         fireTimer = 0;
 
-        player->UseSpecialCharge(specialChargeCost);
+        player->UseSpecialCharge(effectiveStats.weapon.specialChargeCost);
     }
 }
 
@@ -453,7 +402,7 @@ bool Tank::PointCollision(float cx, float cy, float cz) const
     bool result = false;
     if ((cy - y) < 0.3f && (y - cy) < 0)
     {
-        if (sqrt((cx - x) * (cx - x) + (cz - z) * (cz - z)) < collisionRadius * 2)
+        if (sqrt((cx - x) * (cx - x) + (cz - z) * (cz - z)) < effectiveStats.tank.collisionRadius * 2)
         {
             result = true;
         }
@@ -464,10 +413,10 @@ bool Tank::PointCollision(float cx, float cy, float cz) const
 void Tank::Fall()
 {
 
-    vy -= (fallRate * GlobalTimer::dT);
+    vy -= (effectiveStats.tank.gravity * GlobalTimer::dT);
 
     float dy = vy * GlobalTimer::dT;
-    
+
     // Debug logging for player tanks (only log occasionally)
     static int fallLogCounter = 0;
     if (identity.IsPlayer() && fallLogCounter++ % 60 == 0 && !isGrounded) {
@@ -510,9 +459,9 @@ void Tank::Fall()
 
         if (!isGrounded)
         {
-            if (energy < 2 * maxEnergy / 3)
+            if (energy < effectiveStats.weapon.maxEnergy * Definitions().landing.rewardThresholdFraction)
             {
-                energy += maxEnergy / 3;
+                energy += effectiveStats.weapon.maxEnergy * Definitions().landing.rewardEnergyFraction;
             }
             if (identity.IsPlayer())
             {
@@ -547,9 +496,9 @@ void Tank::Fall()
         }
         if (!isGrounded)
         {
-            if (energy < 2 * maxEnergy / 3)
+            if (energy < effectiveStats.weapon.maxEnergy * Definitions().landing.rewardThresholdFraction)
             {
-                energy += maxEnergy / 3;
+                energy += effectiveStats.weapon.maxEnergy * Definitions().landing.rewardEnergyFraction;
             }
         }
         isJumping = false;
@@ -571,7 +520,6 @@ Tank::Tank(std::shared_ptr<const Gameplay::GameplayDefinitions> definitions)
     rtx = rty = rtz = 0.0f;
     rrl = 0.0f;
     rr = 0.0f;
-    // Color fields removed - now handled dynamically via TankTypeManager
 
     jid = 0;
     inputMode = InputMode::MODE_KEYBOARD_MOUSE;
@@ -579,8 +527,8 @@ Tank::Tank(std::shared_ptr<const Gameplay::GameplayDefinitions> definitions)
     hitNum = 0;
     hitAlpha = 0.0f;
 
-    type1 = TankType::TYPE_RED;
-    type2 = TankType::TYPE_BLUE;
+    type1 = Definitions().player.startingPrimaryType;
+    type2 = Definitions().player.startingSecondaryType;
     bonus = 0;
     bonusTime = 0.0f;
     deadtime = 0.0f;
@@ -611,42 +559,25 @@ void Tank::CreateBullet(const TankIdentity& ownerIdentity, float attack, TankTyp
                        float x, float y, float z, float rx, float ry, float rz, bool isSpecial)
 {
     gameWorld->CreateBullet(ownerIdentity, attack, type1, type2, bounces, dTpressed,
-                           primaryColor, secondaryColor, 
+                           primaryColor, secondaryColor,
                            x, y, z, rx, ry, rz, isSpecial);
 }
 
 Tank::Tank(Tank&& other) noexcept
     : isPlayer(other.isPlayer),
       health(other.health),
-      maxHealth(other.maxHealth),
-      healthRegen(other.healthRegen),
       energy(other.energy),
-      maxEnergy(other.maxEnergy),
-      energyRegen(other.energyRegen),
-      fireCost(other.fireCost),
-      jumpCost(other.jumpCost),
-      moveCost(other.moveCost),
-      specialChargeCost(other.specialChargeCost),
       fireTimer(other.fireTimer),
-      fireRate(other.fireRate),
-      bounces(other.bounces),
-      attack(other.attack),
       alive(other.alive),
       identity(other.identity),
       x(other.x), y(other.y), z(other.z),
       vx(other.vx), vy(other.vy), vz(other.vz),
-      collisionRadius(other.collisionRadius),
       control(other.control),
       inputMode(other.inputMode),
       jid(other.jid),
       inputHandler(std::move(other.inputHandler)),
       rx(other.rx), ry(other.ry), rz(other.rz), rr(other.rr), rrl(other.rrl),
       rtx(other.rtx), rty(other.rty), rtz(other.rtz),
-      rotRate(other.rotRate), movRate(other.movRate), jumpRate(other.jumpRate),
-      fallRate(other.fallRate),
-      type1(other.type1),
-      type2(other.type2),
-      // Color fields removed - now handled dynamically via TankTypeManager
       dist(other.dist),
       isJumping(other.isJumping),
       isGrounded(other.isGrounded),
@@ -657,6 +588,9 @@ Tank::Tank(Tank&& other) noexcept
       deadtime(other.deadtime),
       hitAlpha(other.hitAlpha),
       hitNum(other.hitNum),
+      type1(other.type1),
+      type2(other.type2),
+      effectiveStats(other.effectiveStats),
       gameWorld(other.gameWorld),
       gameplayDefinitions(std::move(other.gameplayDefinitions)),
       statContext(other.statContext)
@@ -670,40 +604,31 @@ Tank::Tank(Tank&& other) noexcept
 Tank& Tank::operator=(Tank&& other) noexcept
 {
     if (this != &other) {
+        effectiveStats = other.effectiveStats;
         gameWorld = other.gameWorld;
         gameplayDefinitions = std::move(other.gameplayDefinitions);
         statContext = other.statContext;
         isPlayer = other.isPlayer;
         health = other.health;
-        maxHealth = other.maxHealth;
-        healthRegen = other.healthRegen;
+
         energy = other.energy;
-        maxEnergy = other.maxEnergy;
-        energyRegen = other.energyRegen;
-        fireCost = other.fireCost;
-        jumpCost = other.jumpCost;
-        moveCost = other.moveCost;
-        specialChargeCost = other.specialChargeCost;
+
         fireTimer = other.fireTimer;
-        fireRate = other.fireRate;
-        bounces = other.bounces;
-        attack = other.attack;
+
         alive = other.alive;
         identity = other.identity;
         x = other.x; y = other.y; z = other.z;
         vx = other.vx; vy = other.vy; vz = other.vz;
-        collisionRadius = other.collisionRadius;
+
         control = other.control;
         inputMode = other.inputMode;
         jid = other.jid;
         inputHandler = std::move(other.inputHandler);
         rx = other.rx; ry = other.ry; rz = other.rz; rr = other.rr; rrl = other.rrl;
         rtx = other.rtx; rty = other.rty; rtz = other.rtz;
-        rotRate = other.rotRate; movRate = other.movRate; jumpRate = other.jumpRate;
-        fallRate = other.fallRate;
+
         type1 = other.type1;
         type2 = other.type2;
-        // Color fields removed - now handled dynamically via TankTypeManager
         dist = other.dist;
         isJumping = other.isJumping;
         isGrounded = other.isGrounded;
@@ -714,7 +639,7 @@ Tank& Tank::operator=(Tank&& other) noexcept
         deadtime = other.deadtime;
         hitAlpha = other.hitAlpha;
         hitNum = other.hitNum;
-        
+
         // Copy collision points array
         for (int i = 0; i < 21; ++i) {
             collisionPoints[i] = other.collisionPoints[i];
@@ -770,18 +695,18 @@ void Tank::RotBody(float rate)
         rate = -1;
     }
 
-    ry += rate * rotRate * GlobalTimer::dT;
+    ry += rate * effectiveStats.tank.rotationDegreesPerSecond * GlobalTimer::dT;
 }
 
 void Tank::RotBody(bool forb)
 {
     if (forb)
     {
-        ry += rotRate * GlobalTimer::dT;
+        ry += effectiveStats.tank.rotationDegreesPerSecond * GlobalTimer::dT;
     }
     else
     {
-        ry -= rotRate * GlobalTimer::dT;
+        ry -= effectiveStats.tank.rotationDegreesPerSecond * GlobalTimer::dT;
     }
 }
 
@@ -814,26 +739,26 @@ void Tank::Jump()
         if (jumpTime == 0.0f) {
             vy = Definitions().tank.jumpLaunchSpeed;
             isJumping = true;
-            
+
             if (identity.IsPlayer()) {
                 App::GetSingleton().soundTask->PlayChannel(4);
                 TANKGAME_LOG_DEBUG("Tank %d JUMP START: vy=%.3f energy=%.1f y=%.3f\n",
                                   identity.GetLegacyId(), vy, energy, y);
             }
         }
-        
+
         // Use the remaining energy for a partial final frame of thrust.
-        const float availableThrustTime = jumpCost > 0.0f
-            ? energy / jumpCost
+        const float availableThrustTime = effectiveStats.tank.jumpEnergyPerSecond > 0.0f
+            ? energy / effectiveStats.tank.jumpEnergyPerSecond
             : GlobalTimer::dT;
         const float thrustTime = std::min(GlobalTimer::dT, availableThrustTime);
         jumpTime += GlobalTimer::dT;
         // Explicitly exhaust a partial final frame: multiplying the rounded
-        // energy / jumpCost back by jumpCost can leave a positive remainder.
-        energy = jumpCost > 0.0f && availableThrustTime <= GlobalTimer::dT
+        // energy / cost back by cost can leave a positive remainder.
+        energy = effectiveStats.tank.jumpEnergyPerSecond > 0.0f && availableThrustTime <= GlobalTimer::dT
             ? 0.0f
-            : std::max(0.0f, energy - jumpCost * thrustTime);
-        vy += jumpRate * thrustTime;
+            : std::max(0.0f, energy - effectiveStats.tank.jumpEnergyPerSecond * thrustTime);
+        vy += effectiveStats.tank.jumpThrust * thrustTime;
 
         // Check for float collision with upward offset during jump
         if (TankCollisionHelper::CheckFourPointFloatCollision(*this, 0.2f))
@@ -882,21 +807,21 @@ void Tank::NextFrame()
     }
 
     // === REFACTORED: Update health and energy systems ===
-    
+
     // Clamp health to valid range
-    if (health > maxHealth && !App::GetSingleton().gameTask->IsDebugMode())
+    if (health > effectiveStats.tank.maxHealth && !App::GetSingleton().gameTask->IsDebugMode())
     {
-        health = maxHealth;
-    }
-    
-    // Clamp energy to valid range
-    if (energy > maxEnergy && !App::GetSingleton().gameTask->IsDebugMode())
-    {
-        energy = maxEnergy;
+        health = effectiveStats.tank.maxHealth;
     }
 
-    // Smoke effect when health is low (was energy < maxEnergy / 2)
-    if (health < maxHealth / 2)
+    // Clamp energy to valid range
+    if (energy > effectiveStats.weapon.maxEnergy && !App::GetSingleton().gameTask->IsDebugMode())
+    {
+        energy = effectiveStats.weapon.maxEnergy;
+    }
+
+    // Smoke effect when health is low
+    if (health < effectiveStats.tank.maxHealth / 2)
     {
         CreateFX(FxType::TYPE_SMOKE, x, y + .1, z, 0, .01, 0, 0, ry + rty, 90, .2, .2, .2, 1);
     }
@@ -923,20 +848,20 @@ void Tank::NextFrame()
     {
         fireTimer += GlobalTimer::dT;
         Fall();
-        
+
         // Health regeneration (slow, for survival)
-        if (health < maxHealth && alive) {
-            health += healthRegen * GlobalTimer::dT;
-            if (health > maxHealth) {
-                health = maxHealth;
+        if (health < effectiveStats.tank.maxHealth && alive) {
+            health += effectiveStats.tank.healthRegenPerSecond * GlobalTimer::dT;
+            if (health > effectiveStats.tank.maxHealth) {
+                health = effectiveStats.tank.maxHealth;
             }
         }
-        
+
         // Energy regeneration (faster, for actions)
-        if (energy < maxEnergy) {
-            energy += energyRegen * GlobalTimer::dT;
-            if (energy > maxEnergy) {
-                energy = maxEnergy;
+        if (energy < effectiveStats.weapon.maxEnergy) {
+            energy += effectiveStats.weapon.energyRegen * GlobalTimer::dT;
+            if (energy > effectiveStats.weapon.maxEnergy) {
+                energy = effectiveStats.weapon.maxEnergy;
             }
         }
     }
@@ -958,8 +883,8 @@ bool Tank::Move(float rate)
 
     bool moved = true;
 
-    vx = rate * (GlobalTimer::dT * movRate) * std::cos(ry * DTR);
-    vz = rate * (GlobalTimer::dT * movRate) * std::sin(ry * DTR);
+    vx = rate * (GlobalTimer::dT * effectiveStats.tank.moveSpeed) * std::cos(ry * DTR);
+    vz = rate * (GlobalTimer::dT * effectiveStats.tank.moveSpeed) * std::sin(ry * DTR);
 
     x += vx;
     z += vz;
@@ -1048,7 +973,7 @@ bool Tank::Move(float rate)
         moved = false;
     }
 
-    energy -= rate * moveCost * GlobalTimer::dT;
+    energy -= rate * effectiveStats.weapon.moveCost * GlobalTimer::dT;
 
     if (x >= 128 || x <= 0 || z >= 128 || z <= 0)
     {
@@ -1064,8 +989,8 @@ bool Tank::Move(bool forb)
     Color primaryColor = GetPrimaryColor();
     bool moved;
 
-    vx = (GlobalTimer::dT * movRate) * std::cos(ry * DTR);
-    vz = (GlobalTimer::dT * movRate) * std::sin(ry * DTR);
+    vx = (GlobalTimer::dT * effectiveStats.tank.moveSpeed) * std::cos(ry * DTR);
+    vz = (GlobalTimer::dT * effectiveStats.tank.moveSpeed) * std::sin(ry * DTR);
 
     if (forb)
     {
@@ -1194,7 +1119,7 @@ bool Tank::Move(bool forb)
         z = 64;
     }
 
-    energy -= moveCost * GlobalTimer::dT;
+    energy -= effectiveStats.weapon.moveCost * GlobalTimer::dT;
 
     return moved;
 }
@@ -1202,7 +1127,7 @@ bool Tank::Move(bool forb)
 void Tank::HandleInput()
 {
     static int inputLogCounter = 0;
-    
+
     // Use the appropriate input handler based on current input mode
     if (inputHandler)
     {
@@ -1211,7 +1136,7 @@ void Tank::HandleInput()
         }
         inputHandler->HandleInput(*this);
     }
-    
+
     inputLogCounter++;
 
     // Common debug controls that apply to all input modes
@@ -1219,16 +1144,16 @@ void Tank::HandleInput()
     {
         Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayer(0);
         if (player) player->AddSpecialCharge(100);
-        health += maxHealth * 20;
-        energy += maxEnergy * 20;
+        health += effectiveStats.tank.maxHealth * 20;
+        energy += effectiveStats.weapon.maxEnergy * 20;
     }
 
     if (InputTask::KeyDown(SDL_SCANCODE_HOME) && App::GetSingleton().gameTask->IsDebugMode())
     {
         Player* player = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayer(0);
         if (player) player->SetSpecialCharge(10);
-        health = maxHealth;
-        energy = maxEnergy;
+        health = effectiveStats.tank.maxHealth;
+        energy = effectiveStats.weapon.maxEnergy;
     }
 
     // Allow switching to keyboard/mouse mode from other input modes
@@ -1248,7 +1173,7 @@ void Tank::AI()
     auto playerTanks = App::GetSingleton().gameTask->GetPlayerManager()->GetPlayerTanks();
     Tank* player0 = playerTanks[0];
     Tank* player1 = playerTanks[1];
-    
+
     if (!player0 || !player0->alive) return; // No valid player tank to target
 
     float dist = sqrt((x - player0->x) * (x - player0->x) + (z - player0->z) * (z - player0->z));
@@ -1270,19 +1195,19 @@ void Tank::AI()
     if (!player1 || !player1->alive)
         p2target = false;
 
-    if (dist > (15 + 3 * (LevelHandler::GetSingleton().levelNumber - 48)))
+    if (dist > (Definitions().enemyBehavior.activationDistance + Definitions().enemyBehavior.activationDistancePerLevel * (LevelHandler::GetSingleton().levelNumber - 48)))
     {
         state = EnemyState::STATE_WANDER;
     }
     else
     {
-        if (energy > (maxEnergy / 2) && !App::GetSingleton().gameTask->IsVersusMode())
+        if (energy > (effectiveStats.weapon.maxEnergy * Definitions().enemyBehavior.huntEnergyFraction) && !App::GetSingleton().gameTask->IsVersusMode())
         {
             state = EnemyState::STATE_HUNT;
         }
         else
         {
-            if ((LevelHandler::GetSingleton().levelNumber - 48) < 2)
+            if ((LevelHandler::GetSingleton().levelNumber - 48) < Definitions().enemyBehavior.fearUntilLevelOffset)
             {
                 state = EnemyState::STATE_FEAR;
             }
@@ -1293,7 +1218,7 @@ void Tank::AI()
         }
     }
 
-    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber - 47) && !App::GetSingleton().gameTask->IsVersusMode()))
+    if (TankHandler::GetSingleton().GetAllEnemyTanks().size() == 1 || (TankHandler::GetSingleton().numAttackingTanks < (LevelHandler::GetSingleton().levelNumber - 48 + static_cast<double>(Definitions().enemyBehavior.attackerCountBase)) && !App::GetSingleton().gameTask->IsVersusMode()))
     {
         state = EnemyState::STATE_HUNT;
         TankHandler::GetSingleton().numAttackingTanks++;
@@ -1327,25 +1252,25 @@ void Tank::AI()
 
 void Tank::Wander()
 {
-    float angle = 20;
-    float frames = 15;
-    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry - angle) * DTR);
-    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry - angle) * DTR);
+    float angle = Definitions().enemyBehavior.wanderProbeAngleDegrees;
+    float frames = Definitions().enemyBehavior.wanderProbeFrames;
+    float xpp = x + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::cos((ry - angle) * DTR);
+    float zpp = z + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::sin((ry - angle) * DTR);
 
-    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry + angle) * DTR);
-    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry + angle) * DTR);
+    float xpp2 = x + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::cos((ry + angle) * DTR);
+    float zpp2 = z + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::sin((ry + angle) * DTR);
 
     Move(true);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp) < (y + vy + 3) && energy > (maxEnergy / 4) && LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z) > (int)(y - 7))
+        if (LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)xpp, (unsigned int)zpp) < (y + vy + Definitions().enemyBehavior.wanderJumpHeight) && energy > (effectiveStats.weapon.maxEnergy * Definitions().enemyBehavior.jumpEnergyFraction) && LevelHandler::GetSingleton().GetTerrainHeight((unsigned int)x, (unsigned int)z) > (int)(y - Definitions().enemyBehavior.wanderMaxDrop))
         {
             Jump();
         }
         else
         {
-            ry += 90;
+            ry += Definitions().enemyBehavior.wanderTurnDegrees;
         }
     }
 }
@@ -1363,7 +1288,7 @@ void Tank::Fear()
     float dx = x - player0->x;
     float dz = z - player0->z;
     float ryp;
-    
+
     // Safety: Check for division by zero
     if (std::abs(dx) < 0.001f) {
         ryp = (dz > 0.0f ? 90.0f : -90.0f);
@@ -1379,13 +1304,13 @@ void Tank::Fear()
 
     ryp -= 180;
 
-    if (ryp < (ry - 5))
+    if (ryp < (ry - Definitions().enemyBehavior.aimToleranceDegrees))
     {
         RotBody(false);
     }
     else
     {
-        if (ryp > (ry + 5))
+        if (ryp > (ry + Definitions().enemyBehavior.aimToleranceDegrees))
         {
             RotBody(true);
         }
@@ -1406,7 +1331,7 @@ void Tank::Fear()
         }
 
         rty = rtyp;
-        
+
         // Validate result
         if (std::isnan(rty)) {
             Logger::Get().Write("ERROR: Tank %d Fear calculated NaN rty! dx=%.2f, dz=%.2f, ratio=%.4f, rtyp=%.2f\n",
@@ -1415,29 +1340,29 @@ void Tank::Fear()
         }
     }
 
-    float angle = 30;
-    float frames = 20;
-    float xpp = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry - angle) * DTR);
-    float zpp = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry - angle) * DTR);
+    float angle = Definitions().enemyBehavior.fearProbeAngleDegrees;
+    float frames = Definitions().enemyBehavior.fearProbeFrames;
+    float xpp = x + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::cos((ry - angle) * DTR);
+    float zpp = z + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::sin((ry - angle) * DTR);
 
-    float xpp2 = x + (GlobalTimer::dT * frames * movRate) * std::cos((ry + angle) * DTR);
-    float zpp2 = z + (GlobalTimer::dT * frames * movRate) * std::sin((ry + angle) * DTR);
+    float xpp2 = x + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::cos((ry + angle) * DTR);
+    float zpp2 = z + (GlobalTimer::dT * frames * effectiveStats.tank.moveSpeed) * std::sin((ry + angle) * DTR);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp) || LevelHandler::GetSingleton().PointCollision(xpp2, y, zpp2))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + 3) && energy > (maxEnergy / 4))
+        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + Definitions().enemyBehavior.fearJumpHeight) && energy > (effectiveStats.weapon.maxEnergy * Definitions().enemyBehavior.jumpEnergyFraction))
         {
             Jump();
         }
         else
         {
-            ry += 30;
+            ry += Definitions().enemyBehavior.avoidanceTurnDegrees;
         }
     }
 
     if (!Move(true))
     {
-        ry += 30;
+        ry += Definitions().enemyBehavior.avoidanceTurnDegrees;
     }
 }
 
@@ -1460,20 +1385,20 @@ void Tank::Hunt(Tank &player)
         ryp += 180;
     }
 
-    if (ryp < (ry - 5))
+    if (ryp < (ry - Definitions().enemyBehavior.aimToleranceDegrees))
     {
         RotBody(false);
     }
     else
     {
-        if (ryp > (ry + 5))
+        if (ryp > (ry + Definitions().enemyBehavior.aimToleranceDegrees))
             RotBody(true);
     }
 
     // Safety: Check for division by zero
     float dx = x - player.x;
     float dz = z - player.z;
-    
+
     if (std::abs(dx) < 0.001f) {
         // Tanks are vertically aligned - point directly up or down
         float rtyp = (dz > 0.0f ? 90.0f : -90.0f) - ry;
@@ -1488,7 +1413,7 @@ void Tank::Hunt(Tank &player)
         }
 
         rty = rtyp;
-        
+
         // Validate result
         if (std::isnan(rty)) {
             Logger::Get().Write("ERROR: Tank %d Hunt calculated NaN rty! dx=%.2f, dz=%.2f, ratio=%.4f, rtyp=%.2f\n",
@@ -1497,37 +1422,37 @@ void Tank::Hunt(Tank &player)
         }
     }
 
-    xpp = x + (GlobalTimer::dT * 10 * movRate) * std::cos(ry * DTR);
-    zpp = z + (GlobalTimer::dT * 10 * movRate) * std::sin(ry * DTR);
+    xpp = x + (GlobalTimer::dT * Definitions().enemyBehavior.huntProbeFrames * effectiveStats.tank.moveSpeed) * std::cos(ry * DTR);
+    zpp = z + (GlobalTimer::dT * Definitions().enemyBehavior.huntProbeFrames * effectiveStats.tank.moveSpeed) * std::sin(ry * DTR);
 
     if (LevelHandler::GetSingleton().PointCollision(xpp, y, zpp))
     {
-        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + 5) && energy > (maxEnergy / 4))
+        if (LevelHandler::GetSingleton().GetTerrainHeight((int)xpp, (int)zpp) < (y + Definitions().enemyBehavior.huntJumpHeight) && energy > (effectiveStats.weapon.maxEnergy * Definitions().enemyBehavior.jumpEnergyFraction))
         {
             Jump();
         }
         else
         {
-            if (ryp < (ry - 5))
+            if (ryp < (ry - Definitions().enemyBehavior.aimToleranceDegrees))
             {
-                ry -= 30;
+                ry -= Definitions().enemyBehavior.avoidanceTurnDegrees;
             }
             else
             {
-                if (ryp > (ry + 5))
-                    ry += 30;
+                if (ryp > (ry + Definitions().enemyBehavior.aimToleranceDegrees))
+                    ry += Definitions().enemyBehavior.avoidanceTurnDegrees;
             }
         }
     }
-    if (dist > 10)
+    if (dist > Definitions().enemyBehavior.huntStopDistance)
     {
         Move(true);
     }
     else
     {
-        if (energy >= (maxEnergy / 2) && (int)player.y == (int)y)
+        if (energy >= (effectiveStats.weapon.maxEnergy * Definitions().enemyBehavior.fireEnergyFraction) && (int)player.y == (int)y)
         {
-            Fire(1);
+            Fire(Definitions().enemyBehavior.shotCharge);
         }
     }
 }

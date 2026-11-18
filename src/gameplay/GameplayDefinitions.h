@@ -3,6 +3,7 @@
 #include "TankType.h"
 #include <map>
 #include <array>
+#include <vector>
 
 namespace Gameplay {
 
@@ -85,6 +86,8 @@ struct ProjectileRules {
 };
 
 struct PlayerRules {
+    TankType startingPrimaryType = TankType::TYPE_GREY;
+    TankType startingSecondaryType = TankType::TYPE_GREY;
     float spawnHeight = 0;
     float respawnDelaySeconds = 0;
     float versusRespawnDelaySeconds = 0;
@@ -113,9 +116,81 @@ struct CombatRules {
     float killComboDivisor = 0;
 };
 
+struct InputRules {
+    float mouseTurretScale = 0;
+    float keyboardTurretRate = 0;
+    float keyboardTurboTurretRate = 0;
+    int browserPadActivationDeadzone = 0;
+};
+
+struct JoystickRules {
+    int forwardDeadzone = 0;
+    int reverseDeadzone = 0;
+    int bodyDeadzone = 0;
+    int turretDeadzone = 0;
+    int alternateTurretDeadzone = 0;
+    float forwardDivisor = 0;
+    float bodyDivisor = 0;
+    float turretDivisor = 0;
+    float chargeDivisor = 0;
+    float specialChargeDivisor = 0;
+    int fireAxisThreshold = 0;
+    int jumpAxisThreshold = 0;
+};
+
+struct SpecialRules {
+    float muzzleHeight = 0;
+    float blueCenterHeight = 0;
+    float blueSideOffset = 0;
+    int redArcCount = 0;
+    float redArcStepDegrees = 0;
+    float redArcStartDegrees = 0;
+    int redArcBounces = 0;
+    int yellowBounces = 0;
+    std::vector<float> redForwardAnglesDegrees;
+    std::vector<float> purpleAnglesDegrees;
+};
+
+struct LandingRules {
+    float rewardEnergyFraction = 0;
+    float rewardThresholdFraction = 0;
+};
+
+struct EnemyBehaviorRules {
+    float activationDistance = 0;
+    float activationDistancePerLevel = 0;
+    float huntEnergyFraction = 0;
+    int fearUntilLevelOffset = 0;
+    int attackerCountBase = 0;
+    float wanderProbeAngleDegrees = 0;
+    float wanderProbeFrames = 0;
+    float wanderJumpHeight = 0;
+    float wanderMaxDrop = 0;
+    float wanderTurnDegrees = 0;
+    float jumpEnergyFraction = 0;
+    float aimToleranceDegrees = 0;
+    float fearProbeAngleDegrees = 0;
+    float fearProbeFrames = 0;
+    float fearJumpHeight = 0;
+    float avoidanceTurnDegrees = 0;
+    float huntProbeFrames = 0;
+    float huntJumpHeight = 0;
+    float huntStopDistance = 0;
+    float fireEnergyFraction = 0;
+    float shotCharge = 0;
+    float spawnRotationStepDegrees = 0;
+    float overflowSpawnOffset = 0;
+};
+
 struct EnemyRules {
     int openingLevelWeakenedIndex = 0;
     float openingLevelAttackScale = 0;
+    std::vector<std::pair<TankType, TankType>> openingTypes;
+    std::vector<std::pair<TankType, TankType>> regularTypes;
+    std::vector<std::pair<TankType, TankType>> advancedTypes;
+    std::vector<int> advancedLevelOffsets;
+    TankType openingWeakenedPrimary = TankType::TYPE_BLUE;
+    TankType openingWeakenedSecondary = TankType::TYPE_GREY;
 };
 
 struct DifficultyModifiers {
@@ -142,6 +217,12 @@ struct GameplayDefinitions {
     PlayerRules player;
     CombatRules combat;
     EnemyRules enemy;
+    InputRules input;
+    JoystickRules joystick;
+    SpecialRules special;
+    LandingRules landing;
+    EnemyBehaviorRules enemyBehavior;
+    JoystickRules gameCube;
     std::array<DifficultyModifiers, 3> difficulties;
     std::map<TankType, TankTypeConfig> types;
     std::map<std::pair<TankType, TankType>, TankTypeOverride> combinations;

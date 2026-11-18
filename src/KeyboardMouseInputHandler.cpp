@@ -11,12 +11,13 @@
 
 void KeyboardMouseInputHandler::HandleInput(Tank& tank)
 {
+    const auto& rules = tank.GetGameplayDefinitions().input;
 #ifdef __EMSCRIPTEN__
     // Browser pads can appear only after their first button gesture. Keep the
     // keyboard handler available and use the standard pad while it is active.
     bool padActive = false;
     for (int axis = 0; axis < 4; ++axis)
-        padActive |= std::abs(InputTask::GetAxis(tank.jid, axis)) > 5000;
+        padActive |= std::abs(InputTask::GetAxis(tank.jid, axis)) > rules.browserPadActivationDeadzone;
     for (int button = 0; button < 16; ++button)
         padActive |= InputTask::GetButton(tank.jid, button) != 0;
     if (padActive)
@@ -26,9 +27,9 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         return;
     }
 #endif
-    tank.RotTurret(InputTask::dX * 2);
+    tank.RotTurret(InputTask::dX * rules.mouseTurretScale);
 
-    if ((tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(1))
+    if ((tank.GetPrimaryType() == TankType::TYPE_PURPLE || tank.GetSecondaryType() == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(1))
     {
         tank.Fire(InputTask::dX * GlobalTimer::dT);
     }
@@ -37,7 +38,7 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
         tank.Fire(1);
     }
 
-    if ((tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(3))
+    if ((tank.GetPrimaryType() == TankType::TYPE_PURPLE || tank.GetSecondaryType() == TankType::TYPE_PURPLE) && InputTask::MouseStillDown(3))
     {
         tank.Special(InputTask::dX * GlobalTimer::dT);
     }
@@ -103,19 +104,19 @@ void KeyboardMouseInputHandler::HandleInput(Tank& tank)
     
     if (InputTask::KeyStillDown(SDL_SCANCODE_LEFT))
     {
-        tank.RotTurret(-200.0f * GlobalTimer::dT);
+        tank.RotTurret(-rules.keyboardTurretRate * GlobalTimer::dT);
         if (tank.turbo)
         {
-            tank.RotTurret(-300.0f * GlobalTimer::dT);
+            tank.RotTurret(-rules.keyboardTurboTurretRate * GlobalTimer::dT);
             tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
     if (InputTask::KeyStillDown(SDL_SCANCODE_RIGHT))
     {
-        tank.RotTurret(200.0f * GlobalTimer::dT);
+        tank.RotTurret(rules.keyboardTurretRate * GlobalTimer::dT);
         if (tank.turbo)
         {
-            tank.RotTurret(300.0f * GlobalTimer::dT);
+            tank.RotTurret(rules.keyboardTurboTurretRate * GlobalTimer::dT);
             tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }

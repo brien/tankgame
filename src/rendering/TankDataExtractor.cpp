@@ -12,11 +12,11 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     
     // Extract health and energy (was: health and charge)
     data.health = tank.health;      // Now correctly maps to health
-    data.maxHealth = tank.maxHealth;
+    data.maxHealth = tank.GetStats().tank.maxHealth;
     data.charge = tank.energy;      // Charge field now represents energy for actions
-    data.maxCharge = tank.maxEnergy;
-    data.fireCost = tank.fireCost;
-    data.specialChargeCost = tank.specialChargeCost;
+    data.maxCharge = tank.GetStats().weapon.maxEnergy;
+    data.fireCost = tank.GetStats().weapon.fireCost;
+    data.specialChargeCost = tank.GetStats().weapon.specialChargeCost;
     
     // Extract colors
     // Get colors dynamically from tank types
@@ -29,8 +29,8 @@ TankRenderData TankDataExtractor::ExtractRenderData(const Tank& tank) {
     data.isPlayer = tank.identity.IsPlayer();
     
     // Extract tank types
-    data.type1 = tank.type1;
-    data.type2 = tank.type2;
+    data.type1 = tank.GetPrimaryType();
+    data.type2 = tank.GetSecondaryType();
     
     // Extract movement state
     data.grounded = tank.isGrounded;

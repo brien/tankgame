@@ -131,8 +131,8 @@ private:
     // Tank control
     Tank* controlledTank = nullptr;  // Pointer to controlled tank in GameWorld EntityManager
 
-    TankType savedType1 = TankType::TYPE_RED;
-    TankType savedType2 = TankType::TYPE_BLUE;
+    TankType savedType1;
+    TankType savedType2;
 
     // Player statistics
     int score = 0;

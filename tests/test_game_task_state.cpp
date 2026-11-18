@@ -376,8 +376,8 @@ TEST_F(GameTaskStateTest, LevelChangesAndDeathsPreserveEachPlayersTypes) {
         const TankType secondary[] = {TankType::TYPE_YELLOW, TankType::TYPE_RED};
         for (int p = 0; p < manager->GetNumPlayers(); ++p) {
             auto* tank = manager->GetPlayer(p)->GetControlledTank();
-            EXPECT_EQ(tank->type1, TankType::TYPE_RED);
-            EXPECT_EQ(tank->type2, TankType::TYPE_BLUE);
+            EXPECT_EQ(tank->GetPrimaryType(), TankType::TYPE_RED);
+            EXPECT_EQ(tank->GetSecondaryType(), TankType::TYPE_BLUE);
             EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
             tank->SetType(primary[p], secondary[p]);
         }
@@ -394,16 +394,16 @@ TEST_F(GameTaskStateTest, LevelChangesAndDeathsPreserveEachPlayersTypes) {
             for (int p = 0; p < manager->GetNumPlayers(); ++p) {
                 auto* tank = manager->GetPlayer(p)->GetControlledTank();
                 ASSERT_NE(tank, nullptr);
-                EXPECT_EQ(tank->type1, primary[p]);
-                EXPECT_EQ(tank->type2, secondary[p]);
-                const auto config = TankTypeManager::GetConfig(primary[p], secondary[p]);
-                EXPECT_FLOAT_EQ(tank->attack, config.attack);
-                EXPECT_FLOAT_EQ(tank->fireRate, config.fireIntervalSeconds);
+                EXPECT_EQ(tank->GetPrimaryType(), primary[p]);
+                EXPECT_EQ(tank->GetSecondaryType(), secondary[p]);
+                const auto config = Gameplay::ResolveTankType(Gameplay::BuiltInDefinitions(), primary[p], secondary[p]);
+                EXPECT_FLOAT_EQ(tank->GetStats().weapon.attack, config.attack);
+                EXPECT_FLOAT_EQ(tank->GetStats().weapon.fireIntervalSeconds, config.fireIntervalSeconds);
                 const auto resolved = Gameplay::ResolveTank(Gameplay::BuiltInDefinitions(),
                     primary[p], secondary[p], {false, manager->GetDifficulty(), 1});
-                EXPECT_FLOAT_EQ(tank->maxHealth, resolved.tank.maxHealth);
-                EXPECT_FLOAT_EQ(tank->maxEnergy, resolved.weapon.maxEnergy);
-                EXPECT_FLOAT_EQ(tank->energyRegen, resolved.weapon.energyRegen);
+                EXPECT_FLOAT_EQ(tank->GetStats().tank.maxHealth, resolved.tank.maxHealth);
+                EXPECT_FLOAT_EQ(tank->GetStats().weapon.maxEnergy, resolved.weapon.maxEnergy);
+                EXPECT_FLOAT_EQ(tank->GetStats().weapon.energyRegen, resolved.weapon.energyRegen);
                 EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
                 EXPECT_FALSE(tank->isGrounded);
                 tank->Fall();
@@ -426,8 +426,8 @@ TEST_F(GameTaskStateTest, DirectRespawnPreservesTypesBeforeAndAfterDestructionNo
         tank = player->GetControlledTank();
         ASSERT_NE(tank, nullptr);
         EXPECT_TRUE(tank->alive);
-        EXPECT_EQ(tank->type1, TankType::TYPE_BLUE);
-        EXPECT_EQ(tank->type2, TankType::TYPE_PURPLE);
+        EXPECT_EQ(tank->GetPrimaryType(), TankType::TYPE_BLUE);
+        EXPECT_EQ(tank->GetSecondaryType(), TankType::TYPE_PURPLE);
         EXPECT_FLOAT_EQ(tank->y, Gameplay::BuiltInDefinitions().player.spawnHeight);
     }
 }

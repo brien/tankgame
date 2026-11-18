@@ -54,7 +54,7 @@ TEST_F(BulletSpecialTest, FreshPlayerAndRespawnCanKillEnemyWithoutPickups) {
             SCOPED_TRACE(spawn);
             Tank* tank = player->CreatePlayerTank(30, 2, 30);
             ASSERT_NE(tank, nullptr);
-            tank->fireTimer = tank->fireRate + 1;
+            tank->fireTimer = tank->GetStats().weapon.fireIntervalSeconds + 1;
             const size_t before = world.GetBullets().size();
             tank->Fire(1);
             ASSERT_EQ(world.GetBullets().size(), before + 1);
@@ -92,13 +92,13 @@ TEST_F(BulletSpecialTest, FiringPatternsChargeAndCooldown) {
                 SCOPED_TRACE(static_cast<int>(secondary));
                 tank.SetType(primary, secondary);
                 tank.energy = 1000;
-                tank.fireTimer = tank.fireRate + 1;
+                tank.fireTimer = tank.GetStats().weapon.fireIntervalSeconds + 1;
                 size_t start = world.GetBullets().size();
                 tank.Fire(1);
                 ASSERT_EQ(world.GetBullets().size(), start + 1);
                 EXPECT_FALSE(world.GetBullets().back()->GetIsSpecial());
-                EXPECT_FLOAT_EQ(tank.energy, 1000 - tank.fireCost);
-                tank.fireTimer = tank.fireRate + 1;
+                EXPECT_FLOAT_EQ(tank.energy, 1000 - tank.GetStats().weapon.fireCost);
+                tank.fireTimer = tank.GetStats().weapon.fireIntervalSeconds + 1;
                 player->SetSpecialCharge(100);
                 start = world.GetBullets().size();
                 tank.Special(1);
@@ -110,12 +110,12 @@ TEST_F(BulletSpecialTest, FiringPatternsChargeAndCooldown) {
                     EXPECT_TRUE(world.GetBullets()[i]->GetIsSpecial());
                     EXPECT_EQ(world.GetBullets()[i]->GetOwnerIdentity(), TankIdentity::Player(p));
                 }
-                EXPECT_FLOAT_EQ(player->GetSpecialCharge(), 100 - tank.specialChargeCost);
+                EXPECT_FLOAT_EQ(player->GetSpecialCharge(), 100 - tank.GetStats().weapon.specialChargeCost);
                 EXPECT_FLOAT_EQ(tank.fireTimer, 0);
                 tank.Special(1);
                 tank.Fire(1);
                 EXPECT_EQ(world.GetBullets().size(), start + count);
-                tank.fireTimer = tank.fireRate + 1;
+                tank.fireTimer = tank.GetStats().weapon.fireIntervalSeconds + 1;
                 player->SetSpecialCharge(0);
                 tank.Special(1);
                 EXPECT_EQ(world.GetBullets().size(), start + count);
@@ -130,7 +130,7 @@ TEST_F(BulletSpecialTest, ConfiguredNormalCostDoesNotChangeSpecialChargeCost) {
     Tank* tank = player->CreatePlayerTank(30, 2, 30);
     ASSERT_NE(tank, nullptr);
     tank->SetType(TankType::TYPE_BLUE, TankType::TYPE_BLUE);
-    ASSERT_FLOAT_EQ(tank->fireCost, 100);
+    ASSERT_FLOAT_EQ(tank->GetStats().weapon.fireCost, 100);
     tank->fireTimer = 1;
     tank->energy = 99;
     const auto before = world.GetBullets().size();

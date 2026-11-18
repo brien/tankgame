@@ -105,7 +105,7 @@ void PlayerTankRenderer::DrawTargetingUI(const Tank& player, float drift)
 
     RenderTargetingIndicator(player);
     
-    if (player.fireTimer > player.fireRate && player.fireCost < player.energy)
+    if (player.fireTimer > player.GetStats().weapon.fireIntervalSeconds && player.GetStats().weapon.fireCost < player.energy)
     {
         RenderReadyIndicator(player, drift);
     }
@@ -229,7 +229,7 @@ void PlayerTankRenderer::RenderEffectTurret(const Tank& player,
     Color secondaryColor = player.GetSecondaryColor();
     glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
 
-    if (special[playerIndex] >= player.specialChargeCost)
+    if (special[playerIndex] >= player.GetStats().weapon.specialChargeCost)
     {
         App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
     }

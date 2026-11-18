@@ -3,7 +3,7 @@
 
 #include "rendering/EnemyTankRendererImpl.h"
 #include "rendering/TankRendererFactory.h"
-#include "TankTypeManager.h"
+#include "gameplay/GameplayDefinitions.h"
 
 namespace {
 void ExpectPoint(const Matrix4& model, float x, float y, float z,
@@ -22,8 +22,8 @@ TEST(EnemyRendererTest, AllTypePairsUseLegacyEnemyGeometryAndExtractedColors) {
             TankRenderData tank;
             tank.type1 = primary;
             tank.type2 = secondary;
-            tank.primaryColor = TankTypeManager::GetTankTypeColor(primary);
-            tank.secondaryColor = TankTypeManager::GetTankTypeColor(secondary);
+            tank.primaryColor = Color(Gameplay::BuiltInDefinitions().types.at(primary).r, Gameplay::BuiltInDefinitions().types.at(primary).g, Gameplay::BuiltInDefinitions().types.at(primary).b);
+            tank.secondaryColor = Color(Gameplay::BuiltInDefinitions().types.at(secondary).r, Gameplay::BuiltInDefinitions().types.at(secondary).g, Gameplay::BuiltInDefinitions().types.at(secondary).b);
             const auto draws = EnemyTankRendererImpl::BuildDraws(tank);
             EXPECT_EQ(draws[0].geometry, GeometryResource::EnemyBody);
             EXPECT_EQ(draws[1].geometry, GeometryResource::EnemyBarrel);

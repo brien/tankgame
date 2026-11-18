@@ -11,7 +11,6 @@
 #endif
 
 #include "TankHandler.h"
-#include "TankTypeManager.h"
 #include "LevelHandler.h"
 #include "GlobalTimer.h"
 #include "math.h"
@@ -31,7 +30,6 @@ TankHandler::TankHandler()
 
 void TankHandler::Init()
 {
-    TankTypeManager::Initialize();
     
     // Initialize enemy tanks only
     // Player tanks are managed by PlayerManager
@@ -49,11 +47,11 @@ void TankHandler::InitializeEnemyTanks()
         // Delegate to GameWorld - create enemy tank there
         Tank* newTank = gameWorld->CreateTank();
         if (newTank) {
-            newTank->Init();
             newTank->isPlayer = false; // Ensure it's marked as enemy tank
             newTank->identity = TankIdentity::Enemy(i);
-            SetEnemyPosition(*newTank, i);
             SetEnemyType(*newTank, i);
+            newTank->Init();
+            SetEnemyPosition(*newTank, i);
         }
     }
 }
@@ -61,10 +59,9 @@ void TankHandler::InitializeEnemyTanks()
 Tank TankHandler::CreateEnemyTank(int index)
 {
     Tank tank(gameWorld ? gameWorld->GetGameplayDefinitions() : nullptr);
-    tank.Init();
-    
-    SetEnemyPosition(tank, index);
     SetEnemyType(tank, index);
+    tank.Init();
+    SetEnemyPosition(tank, index);
     
     
     // Set GameWorld reference
@@ -82,12 +79,12 @@ void TankHandler::SetEnemyPosition(Tank& tank, int index)
     }
     else
     {
-        tank.x = LevelHandler::GetSingleton().enemy[index % MAX_ENEMY_SPAWN_POSITIONS][0] + index % 2;
-        tank.z = LevelHandler::GetSingleton().enemy[index % MAX_ENEMY_SPAWN_POSITIONS][1] + index % 2;
+        tank.x = LevelHandler::GetSingleton().enemy[index % MAX_ENEMY_SPAWN_POSITIONS][0] + (index % 2) * tank.GetGameplayDefinitions().enemyBehavior.overflowSpawnOffset;
+        tank.z = LevelHandler::GetSingleton().enemy[index % MAX_ENEMY_SPAWN_POSITIONS][1] + (index % 2) * tank.GetGameplayDefinitions().enemyBehavior.overflowSpawnOffset;
     }
     
     tank.y = LevelHandler::GetSingleton().GetTerrainHeight((int)tank.x, (int)tank.z);
-    tank.ry = index * ROTATION_STEP_DEGREES;
+    tank.ry = index * tank.GetGameplayDefinitions().enemyBehavior.spawnRotationStepDegrees;
     tank.identity = TankIdentity::Enemy(index);
 }
 
@@ -98,27 +95,14 @@ void TankHandler::SetEnemyType(Tank& tank, int index)
     tank.ConfigureStats({true, 2, levelOffset == 0 && index == rules.openingLevelWeakenedIndex
         ? rules.openingLevelAttackScale : 1.0f});
     
-    if (levelOffset == 0)
-    {
-        tank.SetType(static_cast<TankType>(1 + index % 3), TankType::TYPE_GREY);
-        if (tank.type1 == TankType::TYPE_BLUE)
-            tank.SetType(TankType::TYPE_YELLOW, TankType::TYPE_GREY);
-        if (tank.identity.GetEnemyIndex() == rules.openingLevelWeakenedIndex)
-        {
-            tank.SetType(TankType::TYPE_BLUE, TankType::TYPE_GREY);
-        }
-    }
+    const bool advanced = std::find(rules.advancedLevelOffsets.begin(), rules.advancedLevelOffsets.end(), levelOffset)
+        != rules.advancedLevelOffsets.end();
+    const auto& cycle = levelOffset == 0 ? rules.openingTypes : advanced ? rules.advancedTypes : rules.regularTypes;
+    const auto types = cycle.at(static_cast<size_t>(index) % cycle.size());
+    if (levelOffset == 0 && index == rules.openingLevelWeakenedIndex)
+        tank.SetType(rules.openingWeakenedPrimary, rules.openingWeakenedSecondary);
     else
-    {
-        if (levelOffset == 2 || levelOffset == 5 || levelOffset == 12)
-        {
-            tank.SetType(static_cast<TankType>(index % 4 + 1), static_cast<TankType>(index % 3 + 1));
-        }
-        else
-        {
-            tank.SetType(static_cast<TankType>(1 + index % 3), static_cast<TankType>(index % 3));
-        }
-    }
+        tank.SetType(types.first, types.second);
 }
 
 // Removed: All player-related update methods

@@ -2,7 +2,8 @@
 
 #include "Entity.h"
 #include "igtl_qmesh.h"
-#include "TankTypeManager.h"
+#include "gameplay/GameplayDefinitions.h"
+#include "Color.h"
 #include "TankIdentity.h"
 
 #include <vector>
@@ -60,27 +61,12 @@ public:
 
     bool isPlayer;
 
-    // === REFACTORED: Clear two-concept system ===
-    // 1. HEALTH - Tank's structural integrity (survival)
-    float health;           // Was: energy (but actually represented health)
-    float maxHealth;        // Was: maxEnergy
-    float healthRegen;      // Health regeneration rate (slow)
-    
-    // 2. ENERGY - Used for actions (firing, jumping, special abilities)
-    float energy;           // Was: charge (now clearly for actions)
-    float maxEnergy;        // Was: maxCharge
-    float energyRegen;      // Was: chargeRegen (energy regeneration rate)
-    
-    // Action costs (how much energy each action consumes)
-    float fireCost;         // Energy cost to fire
-    float jumpCost;         // Energy cost to jump
-    float moveCost;         // Energy cost for movement (if applicable)
-    float specialChargeCost; // Cost from the player special-charge meter
-
+    // Mutable resources/cooldown are independent of resolved tuning.
+    float health;
+    float energy;
     float fireTimer;
-    float fireRate;
-    int bounces;
-    int attack;
+    const Gameplay::ResolvedTankConfig& GetStats() const { return effectiveStats; }
+    const Gameplay::GameplayDefinitions& GetGameplayDefinitions() const { return Definitions(); }
 
     bool alive;
 
@@ -113,7 +99,6 @@ public:
     void SetPosition(float _x, float _y, float _z);
 
     float collisionPoints[21] = {};
-    float collisionRadius;
 
     int control;
     InputMode inputMode;
@@ -122,8 +107,6 @@ public:
 
     float rx, ry, rz, rr, rrl;
     float rtx, rty, rtz;
-    float rotRate, movRate, jumpRate;
-    float fallRate;
     void Fall();
     void Jump();
     void HandleInput();
@@ -146,8 +129,8 @@ public:
     void SetType(TankType t1, TankType t2);
     void SetInputMode(InputMode mode);
 
-    TankType type1;
-    TankType type2;
+    TankType GetPrimaryType() const { return type1; }
+    TankType GetSecondaryType() const { return type2; }
 
     // Dynamic color methods - replace hardcoded r,g,b fields
     Color GetPrimaryColor() const;
@@ -191,15 +174,6 @@ private:
                      float x, float y, float z, float rx, float ry, float rz, bool isSpecial = false);
 
 public:
-    // === COMPATIBILITY LAYER (temporary) ===
-    // These provide backward compatibility during migration
-    // Old "energy" field was actually health
-    [[deprecated("Use health instead")]] float& GetOldEnergyRef() { return health; }
-    [[deprecated("Use maxHealth instead")]] float& GetOldMaxEnergyRef() { return maxHealth; }
-    // Old "charge" field is now energy  
-    [[deprecated("Use energy instead")]] float& GetOldChargeRef() { return energy; }
-    [[deprecated("Use maxEnergy instead")]] float& GetOldMaxChargeRef() { return maxEnergy; }
-
     int bonus;
     float bonusTime;
     float deadtime;
@@ -207,6 +181,9 @@ public:
     int hitNum;
 
 private:
+    TankType type1;
+    TankType type2;
+    Gameplay::ResolvedTankConfig effectiveStats;
     GameWorld* gameWorld = nullptr;
     std::shared_ptr<const Gameplay::GameplayDefinitions> gameplayDefinitions;
     Gameplay::TankContext statContext;

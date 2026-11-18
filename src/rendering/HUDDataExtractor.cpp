@@ -20,16 +20,16 @@ HUDRenderData HUDDataExtractor::ExtractPlayerHUD(const Tank& player, int playerI
     // === REFACTORED: Clear health vs energy distinction ===
     // Health data (survival)
     hudData.health = player.health;           // Now properly using health field
-    hudData.maxHealth = player.maxHealth;     // Now properly using maxHealth field
+    hudData.maxHealth = player.GetStats().tank.maxHealth;     // Now properly using maxHealth field
     
     // Energy data (actions)
     hudData.energy = player.energy;           // Now properly using energy field (was charge)
-    hudData.maxEnergy = player.maxEnergy;     // Now properly using maxEnergy field (was maxCharge)
-    hudData.fireCost = player.fireCost;
-    hudData.specialChargeCost = player.specialChargeCost;
+    hudData.maxEnergy = player.GetStats().weapon.maxEnergy;     // Now properly using maxEnergy field (was maxCharge)
+    hudData.fireCost = player.GetStats().weapon.fireCost;
+    hudData.specialChargeCost = player.GetStats().weapon.specialChargeCost;
     
     // Calculate firing ability (energy-based)
-    hudData.canFire = (player.energy >= player.fireCost);
+    hudData.canFire = (player.energy >= player.GetStats().weapon.fireCost);
     
     // Extract combo and special data
     ExtractComboAndSpecialData(player, playerId, hudData);

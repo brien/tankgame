@@ -8,11 +8,12 @@
 void GenericJoystickInputHandler::HandleInput(Tank& tank)
 {
     if (!InputTask::HasJoystick(tank.jid)) return;
+    const auto& rules = tank.GetGameplayDefinitions().joystick;
     // Fire controls
-    if ((tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE) && 
+    if ((tank.GetPrimaryType() == TankType::TYPE_PURPLE || tank.GetSecondaryType() == TankType::TYPE_PURPLE) &&
         (InputTask::GetButton(tank.jid, 0) || InputTask::GetButton(tank.jid, 3) || InputTask::GetButton(tank.jid, 7)))
     {
-        tank.Fire((float)InputTask::GetAxis(tank.jid, 3) / (float)3200);
+        tank.Fire((float)InputTask::GetAxis(tank.jid, 3) / rules.chargeDivisor);
     }
     else if (InputTask::GetButton(tank.jid, 3) || InputTask::GetButton(tank.jid, 0) || InputTask::GetButton(tank.jid, 7))
     {
@@ -20,10 +21,10 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     }
 
     // Special controls
-    if ((tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE) && 
+    if ((tank.GetPrimaryType() == TankType::TYPE_PURPLE || tank.GetSecondaryType() == TankType::TYPE_PURPLE) &&
         (InputTask::GetButton(tank.jid, 5) || InputTask::GetButton(tank.jid, 11)))
     {
-        tank.Special((float)InputTask::GetAxis(tank.jid, 3) / (float)3200);
+        tank.Special((float)InputTask::GetAxis(tank.jid, 3) / rules.specialChargeDivisor);
     }
     else if (InputTask::GetButton(tank.jid, 5) || InputTask::GetButton(tank.jid, 11))
     {
@@ -31,26 +32,26 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     }
 
     // Movement controls
-    if (InputTask::GetAxis(tank.jid, 1) < -5000)
+    if (InputTask::GetAxis(tank.jid, 1) < -rules.forwardDeadzone)
     {
-        tank.Move(-1.0f * (float)InputTask::GetAxis(tank.jid, 1) / (float)20000);
+        tank.Move(-1.0f * (float)InputTask::GetAxis(tank.jid, 1) / rules.forwardDivisor);
         if (tank.turbo && tank.energy > 0)
         {
             tank.Move(true);
             tank.energy -= tank.GetTurboEnergyPerSecond() * GlobalTimer::dT;
         }
     }
-    
-    if (InputTask::GetAxis(tank.jid, 0) < -8000)
+
+    if (InputTask::GetAxis(tank.jid, 0) < -rules.bodyDeadzone)
     {
-        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / (float)32000);
+        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / rules.bodyDivisor);
     }
-    if (InputTask::GetAxis(tank.jid, 0) > 8000)
+    if (InputTask::GetAxis(tank.jid, 0) > rules.bodyDeadzone)
     {
-        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / (float)32000);
+        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / rules.bodyDivisor);
     }
-    
-    if (InputTask::GetAxis(tank.jid, 1) > 8000)
+
+    if (InputTask::GetAxis(tank.jid, 1) > rules.reverseDeadzone)
     {
         tank.Move(false);
         if (tank.turbo && tank.energy > 0)
@@ -69,7 +70,7 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
             tank.Jump();
         }
     }
-    
+
     // Turret rotation - different for JOYSTICK_GENERIC vs EXTREME_3D/OTHER
 #ifdef __EMSCRIPTEN__
     if (true) // Standard browser mapping: right stick X is axis 2.
@@ -77,27 +78,27 @@ void GenericJoystickInputHandler::HandleInput(Tank& tank)
     if (tank.inputMode == InputMode::MODE_JOYSTICK_GENERIC)
 #endif
     {
-        if (InputTask::GetAxis(tank.jid, 2) < -6000)
+        if (InputTask::GetAxis(tank.jid, 2) < -rules.turretDeadzone)
         {
-            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / (float)3200);
+            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / rules.turretDivisor);
         }
-        if (InputTask::GetAxis(tank.jid, 2) > 6000)
+        if (InputTask::GetAxis(tank.jid, 2) > rules.turretDeadzone)
         {
-            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / (float)3200);
+            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / rules.turretDivisor);
         }
     }
     else // EXTREME_3D or OTHER
     {
-        if (InputTask::GetAxis(tank.jid, 3) < -5000)
+        if (InputTask::GetAxis(tank.jid, 3) < -rules.alternateTurretDeadzone)
         {
-            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 3) / (float)3200);
+            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 3) / rules.turretDivisor);
         }
-        if (InputTask::GetAxis(tank.jid, 3) > 5000)
+        if (InputTask::GetAxis(tank.jid, 3) > rules.alternateTurretDeadzone)
         {
-            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 3) / (float)3200);
+            tank.RotTurret((float)InputTask::GetAxis(tank.jid, 3) / rules.turretDivisor);
         }
     }
-    
+
     // Turbo controls
     if (tank.energy > 0 && (InputTask::GetButton(tank.jid, 4) || InputTask::GetButton(tank.jid, 10)))
     {

@@ -21,7 +21,7 @@ void Nonnegative(float value, const std::string& field) {
 void ValidateConfig(const TankTypeConfig& config, const std::string& path) {
     Nonnegative(config.fireIntervalSeconds, path + ".fireIntervalSeconds");
     Nonnegative(config.attack, path + ".attack");
-    // Tank still exposes an integer attack field during the compatibility migration.
+    // Preserve the historical integer projectile-input power conversion.
     Require(static_cast<double>(config.attack) <= std::numeric_limits<int>::max(), path + ".attack");
     Require(std::isfinite(config.maxEnergy) && config.maxEnergy > 0, path + ".maxEnergy");
     Nonnegative(config.energyRegen, path + ".energyRegen");
@@ -53,6 +53,81 @@ TankTypeConfig ResolveTankType(const GameplayDefinitions& definitions,
 }
 
 void ValidateDefinitions(const GameplayDefinitions& definitions) {
+    Nonnegative(definitions.input.mouseTurretScale, "input.mouseTurretScale");
+    Nonnegative(definitions.input.keyboardTurretRate, "input.keyboardTurretRate");
+    Nonnegative(definitions.input.keyboardTurboTurretRate, "input.keyboardTurboTurretRate");
+    Require(definitions.input.browserPadActivationDeadzone >= 0 && definitions.input.browserPadActivationDeadzone <= 32767, "input.browserPadActivationDeadzone");
+    Require(definitions.joystick.forwardDeadzone >= 0 && definitions.joystick.forwardDeadzone <= 32767, "joystick.forwardDeadzone");
+    Require(definitions.joystick.reverseDeadzone >= 0 && definitions.joystick.reverseDeadzone <= 32767, "joystick.reverseDeadzone");
+    Require(definitions.joystick.bodyDeadzone >= 0 && definitions.joystick.bodyDeadzone <= 32767, "joystick.bodyDeadzone");
+    Require(definitions.joystick.turretDeadzone >= 0 && definitions.joystick.turretDeadzone <= 32767, "joystick.turretDeadzone");
+    Require(definitions.joystick.alternateTurretDeadzone >= 0 && definitions.joystick.alternateTurretDeadzone <= 32767, "joystick.alternateTurretDeadzone");
+    Require(std::isfinite(definitions.joystick.forwardDivisor) && definitions.joystick.forwardDivisor > 0, "joystick.forwardDivisor");
+    Require(std::isfinite(definitions.joystick.bodyDivisor) && definitions.joystick.bodyDivisor > 0, "joystick.bodyDivisor");
+    Require(std::isfinite(definitions.joystick.turretDivisor) && definitions.joystick.turretDivisor > 0, "joystick.turretDivisor");
+    Require(std::isfinite(definitions.joystick.chargeDivisor) && definitions.joystick.chargeDivisor > 0, "joystick.chargeDivisor");
+    Require(std::isfinite(definitions.joystick.specialChargeDivisor) && definitions.joystick.specialChargeDivisor > 0, "joystick.specialChargeDivisor");
+    Require(definitions.joystick.fireAxisThreshold >= -32768 && definitions.joystick.fireAxisThreshold <= 32767, "joystick.fireAxisThreshold");
+    Require(definitions.joystick.jumpAxisThreshold >= -32768 && definitions.joystick.jumpAxisThreshold <= 32767, "joystick.jumpAxisThreshold");
+    Require(definitions.gameCube.forwardDeadzone >= 0 && definitions.gameCube.forwardDeadzone <= 32767, "gameCube.forwardDeadzone");
+    Require(definitions.gameCube.reverseDeadzone >= 0 && definitions.gameCube.reverseDeadzone <= 32767, "gameCube.reverseDeadzone");
+    Require(definitions.gameCube.bodyDeadzone >= 0 && definitions.gameCube.bodyDeadzone <= 32767, "gameCube.bodyDeadzone");
+    Require(definitions.gameCube.turretDeadzone >= 0 && definitions.gameCube.turretDeadzone <= 32767, "gameCube.turretDeadzone");
+    Require(definitions.gameCube.alternateTurretDeadzone >= 0 && definitions.gameCube.alternateTurretDeadzone <= 32767, "gameCube.alternateTurretDeadzone");
+    Require(std::isfinite(definitions.gameCube.forwardDivisor) && definitions.gameCube.forwardDivisor > 0, "gameCube.forwardDivisor");
+    Require(std::isfinite(definitions.gameCube.bodyDivisor) && definitions.gameCube.bodyDivisor > 0, "gameCube.bodyDivisor");
+    Require(std::isfinite(definitions.gameCube.turretDivisor) && definitions.gameCube.turretDivisor > 0, "gameCube.turretDivisor");
+    Require(std::isfinite(definitions.gameCube.chargeDivisor) && definitions.gameCube.chargeDivisor > 0, "gameCube.chargeDivisor");
+    Require(std::isfinite(definitions.gameCube.specialChargeDivisor) && definitions.gameCube.specialChargeDivisor > 0, "gameCube.specialChargeDivisor");
+    Require(definitions.gameCube.fireAxisThreshold >= -32768 && definitions.gameCube.fireAxisThreshold <= 32767, "gameCube.fireAxisThreshold");
+    Require(definitions.gameCube.jumpAxisThreshold >= -32768 && definitions.gameCube.jumpAxisThreshold <= 32767, "gameCube.jumpAxisThreshold");
+    Nonnegative(definitions.special.muzzleHeight, "special.muzzleHeight");
+    Nonnegative(definitions.special.blueCenterHeight, "special.blueCenterHeight");
+    Nonnegative(definitions.special.blueSideOffset, "special.blueSideOffset");
+    Require(definitions.special.redArcCount > 0 && definitions.special.redArcCount <= 1024, "special.redArcCount");
+    Nonnegative(definitions.special.redArcStepDegrees, "special.redArcStepDegrees");
+    Nonnegative(definitions.special.redArcStartDegrees, "special.redArcStartDegrees");
+    Require(definitions.special.redArcBounces >= 0, "special.redArcBounces");
+    Require(definitions.special.yellowBounces >= 0, "special.yellowBounces");
+    Require(std::isfinite(definitions.landing.rewardEnergyFraction) && definitions.landing.rewardEnergyFraction >= 0 && definitions.landing.rewardEnergyFraction <= 1, "landing.rewardEnergyFraction");
+    Require(std::isfinite(definitions.landing.rewardThresholdFraction) && definitions.landing.rewardThresholdFraction >= 0 && definitions.landing.rewardThresholdFraction <= 1, "landing.rewardThresholdFraction");
+    Nonnegative(definitions.enemyBehavior.activationDistance, "enemyBehavior.activationDistance");
+    Nonnegative(definitions.enemyBehavior.activationDistancePerLevel, "enemyBehavior.activationDistancePerLevel");
+    Require(std::isfinite(definitions.enemyBehavior.huntEnergyFraction) && definitions.enemyBehavior.huntEnergyFraction >= 0 && definitions.enemyBehavior.huntEnergyFraction <= 1, "enemyBehavior.huntEnergyFraction");
+    Require(definitions.enemyBehavior.fearUntilLevelOffset >= 0, "enemyBehavior.fearUntilLevelOffset");
+    Require(definitions.enemyBehavior.attackerCountBase >= 0, "enemyBehavior.attackerCountBase");
+    Nonnegative(definitions.enemyBehavior.wanderProbeAngleDegrees, "enemyBehavior.wanderProbeAngleDegrees");
+    Nonnegative(definitions.enemyBehavior.wanderProbeFrames, "enemyBehavior.wanderProbeFrames");
+    Nonnegative(definitions.enemyBehavior.wanderJumpHeight, "enemyBehavior.wanderJumpHeight");
+    Nonnegative(definitions.enemyBehavior.wanderMaxDrop, "enemyBehavior.wanderMaxDrop");
+    Nonnegative(definitions.enemyBehavior.wanderTurnDegrees, "enemyBehavior.wanderTurnDegrees");
+    Require(std::isfinite(definitions.enemyBehavior.jumpEnergyFraction) && definitions.enemyBehavior.jumpEnergyFraction >= 0 && definitions.enemyBehavior.jumpEnergyFraction <= 1, "enemyBehavior.jumpEnergyFraction");
+    Nonnegative(definitions.enemyBehavior.aimToleranceDegrees, "enemyBehavior.aimToleranceDegrees");
+    Nonnegative(definitions.enemyBehavior.fearProbeAngleDegrees, "enemyBehavior.fearProbeAngleDegrees");
+    Nonnegative(definitions.enemyBehavior.fearProbeFrames, "enemyBehavior.fearProbeFrames");
+    Nonnegative(definitions.enemyBehavior.fearJumpHeight, "enemyBehavior.fearJumpHeight");
+    Nonnegative(definitions.enemyBehavior.avoidanceTurnDegrees, "enemyBehavior.avoidanceTurnDegrees");
+    Nonnegative(definitions.enemyBehavior.huntProbeFrames, "enemyBehavior.huntProbeFrames");
+    Nonnegative(definitions.enemyBehavior.huntJumpHeight, "enemyBehavior.huntJumpHeight");
+    Nonnegative(definitions.enemyBehavior.huntStopDistance, "enemyBehavior.huntStopDistance");
+    Require(std::isfinite(definitions.enemyBehavior.fireEnergyFraction) && definitions.enemyBehavior.fireEnergyFraction >= 0 && definitions.enemyBehavior.fireEnergyFraction <= 1, "enemyBehavior.fireEnergyFraction");
+    Nonnegative(definitions.enemyBehavior.shotCharge, "enemyBehavior.shotCharge");
+    Nonnegative(definitions.enemyBehavior.spawnRotationStepDegrees, "enemyBehavior.spawnRotationStepDegrees");
+    Nonnegative(definitions.enemyBehavior.overflowSpawnOffset, "enemyBehavior.overflowSpawnOffset");
+    for (const auto* angles : {&definitions.special.redForwardAnglesDegrees, &definitions.special.purpleAnglesDegrees}) {
+        Require(!angles->empty() && angles->size() <= 1024, "special angle count");
+        for (float angle : *angles) Require(std::isfinite(angle), "special angle degrees");
+    }
+    Require(std::isfinite(definitions.special.redArcCount * definitions.special.redArcStepDegrees +
+                          definitions.special.redArcStartDegrees), "special red arc span");
+    for (const auto* types : {&definitions.enemy.openingTypes, &definitions.enemy.regularTypes, &definitions.enemy.advancedTypes}) {
+        Require(!types->empty() && types->size() <= 1024, "enemy type cycle size");
+        for (const auto& pair : *types) Require(ValidType(pair.first) && ValidType(pair.second), "enemy type cycle reference");
+    }
+    Require(ValidType(definitions.enemy.openingWeakenedPrimary) && ValidType(definitions.enemy.openingWeakenedSecondary),
+            "enemy opening weakened types");
+    for (int offset : definitions.enemy.advancedLevelOffsets) Require(offset >= 0, "enemy advancedLevelOffsets");
+
     Require(std::isfinite(definitions.projectile.registrationRadius) && definitions.projectile.registrationRadius > 0,
             "projectile.registrationRadius");
     Require(definitions.enemy.openingLevelWeakenedIndex >= 0, "enemy.openingLevelWeakenedIndex");
@@ -81,6 +156,7 @@ void ValidateDefinitions(const GameplayDefinitions& definitions) {
     Require(definitions.projectile.purpleChildBounces >= 0, "projectile.purpleChildBounces");
     Nonnegative(definitions.projectile.purpleChildPowerMultiplier, "projectile.purpleChildPowerMultiplier");
     Nonnegative(definitions.projectile.purpleChildTurnSpeed, "projectile.purpleChildTurnSpeed");
+    Require(ValidType(definitions.player.startingPrimaryType) && ValidType(definitions.player.startingSecondaryType), "player starting types");
     Nonnegative(definitions.player.spawnHeight, "player.spawnHeight");
     Nonnegative(definitions.player.respawnDelaySeconds, "player.respawnDelaySeconds");
     Nonnegative(definitions.player.versusRespawnDelaySeconds, "player.versusRespawnDelaySeconds");

@@ -2,7 +2,6 @@
 #include <algorithm>
 #include "App.h"
 #include "LevelHandler.h"
-#include "TankTypeManager.h"
 
 class TankJumpTest : public ::testing::TestWithParam<int> {
 protected:
@@ -19,7 +18,6 @@ protected:
         LevelHandler::Create();
         LevelHandler::GetSingleton().Load(nullptr);
         LevelHandler::GetSingleton().Flatten(3);
-        TankTypeManager::Initialize();
         GlobalTimer::dT = 1.0f / GetParam();
     }
 
@@ -42,9 +40,10 @@ protected:
 TEST_P(TankJumpTest, FullEnergyLandsOnTwoBlockLedge) {
     for (bool regenerate : {false, true}) {
         SCOPED_TRACE(regenerate);
-        Tank tank;
+        auto definitions = Gameplay::BuildBuiltInDefinitions();
+        if (!regenerate) definitions.types.at(TankType::TYPE_RED).energyRegen = 0;
+        Tank tank(std::make_shared<const Gameplay::GameplayDefinitions>(definitions));
         Prepare(tank, 100.0f);
-        if (!regenerate) tank.energyRegen = 0;
         auto& level = LevelHandler::GetSingleton();
         for (int x = 32; x < 40; ++x)
             for (int z = 29; z < 33; ++z)
@@ -91,7 +90,7 @@ TEST_P(TankJumpTest, LastEnergyProvidesProportionalThrustWithoutGoingNegative) {
     tank.vy = 1.0f;
     tank.Jump();
     EXPECT_FLOAT_EQ(tank.energy, 0.0f);
-    EXPECT_NEAR(tank.vy, 1.0f + tank.jumpRate * 0.5f / tank.jumpCost, 0.00001f);
+    EXPECT_NEAR(tank.vy, 1.0f + tank.GetStats().tank.jumpThrust * 0.5f / tank.GetStats().tank.jumpEnergyPerSecond, 0.00001f);
     const float velocity = tank.vy;
     tank.Jump();
     EXPECT_FLOAT_EQ(tank.vy, velocity);
@@ -102,11 +101,11 @@ TEST_P(TankJumpTest, RegeneratedEnergyIsFullyConsumedByNextJump) {
     Prepare(tank, 0.0f);
     tank.NextFrame();
     ASSERT_GT(tank.energy, 0.0f);
-    ASSERT_LT(tank.energy, tank.jumpCost * GlobalTimer::dT);
+    ASSERT_LT(tank.energy, tank.GetStats().tank.jumpEnergyPerSecond * GlobalTimer::dT);
 
     tank.jumpTime = 0.1f;
     tank.vy = 1.0f;
-    const float expectedVelocity = tank.vy + tank.jumpRate * (tank.energy / tank.jumpCost);
+    const float expectedVelocity = tank.vy + tank.GetStats().tank.jumpThrust * (tank.energy / tank.GetStats().tank.jumpEnergyPerSecond);
     tank.Jump();
     EXPECT_EQ(tank.energy, 0.0f);
     EXPECT_NEAR(tank.vy, expectedVelocity, 0.00001f);

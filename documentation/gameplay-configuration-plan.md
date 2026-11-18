@@ -1,5 +1,9 @@
 # Gameplay configuration consolidation plan
 
+Implementation completed on 2026-11-18. See [progress and validation](gameplay-configuration-progress.md)
+and the [final configuration contract](gameplay-configuration-contract.md).
+The original plan is retained below as the scope and acceptance record.
+
 ## Objective
 
 Give gameplay tuning values one authoritative definition and a predictable application lifecycle. Keep the definitions compiled into C++ for this work. A later change should be able to replace the built-in definition provider with a file loader without rewriting tank, player, projectile, or combat behavior.

@@ -8,12 +8,13 @@
 void GameCubeInputHandler::HandleInput(Tank& tank)
 {
     if (!InputTask::HasJoystick(tank.jid)) return;
+    const auto& rules = tank.GetGameplayDefinitions().gameCube;
     // Fire controls
-    if (InputTask::GetButton(tank.jid, 0) || InputTask::GetButton(tank.jid, 7) || InputTask::GetAxis(tank.jid, 3) > -5000)
+    if (InputTask::GetButton(tank.jid, 0) || InputTask::GetButton(tank.jid, 7) || InputTask::GetAxis(tank.jid, 3) > rules.fireAxisThreshold)
     {
-        if (tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE)
+        if (tank.GetPrimaryType() == TankType::TYPE_PURPLE || tank.GetSecondaryType() == TankType::TYPE_PURPLE)
         {
-            tank.Fire((float)InputTask::GetAxis(tank.jid, 2) / (float)6400);
+            tank.Fire((float)InputTask::GetAxis(tank.jid, 2) / rules.chargeDivisor);
         }
         else
         {
@@ -24,9 +25,9 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
     // Special controls
     if (InputTask::GetButton(tank.jid, 5) || InputTask::GetButton(tank.jid, 6))
     {
-        if (tank.type1 == TankType::TYPE_PURPLE || tank.type2 == TankType::TYPE_PURPLE)
+        if (tank.GetPrimaryType() == TankType::TYPE_PURPLE || tank.GetSecondaryType() == TankType::TYPE_PURPLE)
         {
-            tank.Special((float)InputTask::GetAxis(tank.jid, 2) / (float)6000);
+            tank.Special((float)InputTask::GetAxis(tank.jid, 2) / rules.specialChargeDivisor);
         }
         else
         {
@@ -35,9 +36,9 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
     }
 
     // Movement controls
-    if (InputTask::GetAxis(tank.jid, 1) < -4000)
+    if (InputTask::GetAxis(tank.jid, 1) < -rules.forwardDeadzone)
     {
-        tank.Move(-1.0f * (float)InputTask::GetAxis(tank.jid, 1) / (float)18000);
+        tank.Move(-1.0f * (float)InputTask::GetAxis(tank.jid, 1) / rules.forwardDivisor);
         if (tank.turbo)
         {
             tank.Move(true);
@@ -45,16 +46,16 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
         }
     }
     
-    if (InputTask::GetAxis(tank.jid, 0) < -8000)
+    if (InputTask::GetAxis(tank.jid, 0) < -rules.bodyDeadzone)
     {
-        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / (float)28000);
+        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / rules.bodyDivisor);
     }
-    if (InputTask::GetAxis(tank.jid, 0) > 8000)
+    if (InputTask::GetAxis(tank.jid, 0) > rules.bodyDeadzone)
     {
-        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / (float)28000);
+        tank.RotBody((float)InputTask::GetAxis(tank.jid, 0) / rules.bodyDivisor);
     }
     
-    if (InputTask::GetAxis(tank.jid, 1) > 8000)
+    if (InputTask::GetAxis(tank.jid, 1) > rules.reverseDeadzone)
     {
         tank.Move(false);
         if (tank.turbo)
@@ -75,17 +76,17 @@ void GameCubeInputHandler::HandleInput(Tank& tank)
     }
 
     // Turret rotation
-    if (InputTask::GetAxis(tank.jid, 2) < -6000)
+    if (InputTask::GetAxis(tank.jid, 2) < -rules.turretDeadzone)
     {
-        tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / (float)2500);
+        tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / rules.turretDivisor);
     }
-    if (InputTask::GetAxis(tank.jid, 2) > 6000)
+    if (InputTask::GetAxis(tank.jid, 2) > rules.turretDeadzone)
     {
-        tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / (float)2500);
+        tank.RotTurret((float)InputTask::GetAxis(tank.jid, 2) / rules.turretDivisor);
     }
 
     // Additional jump control via axis 4
-    if (InputTask::GetAxis(tank.jid, 4) > 5000)
+    if (InputTask::GetAxis(tank.jid, 4) > rules.jumpAxisThreshold)
     {
         tank.Jump();
         if (tank.turbo)

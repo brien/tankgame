@@ -7,7 +7,14 @@
 // Protect Tank->TankRenderData field mapping used by rendering after refactors.
 
 TEST(TankDataExtractorRegression, ExtractRenderData_MapsCoreFields) {
-    Tank tank;
+    auto definitions = Gameplay::BuildBuiltInDefinitions();
+    definitions.tank.maxHealth = 120;
+    definitions.types.at(TankType::TYPE_RED).maxEnergy = 80;
+    auto& combo = definitions.combinations[{TankType::TYPE_RED, TankType::TYPE_BLUE}];
+    combo.fireCost = 9.5f;
+    combo.specialChargeCost = 3;
+    Gameplay::ValidateDefinitions(definitions);
+    Tank tank(std::make_shared<const Gameplay::GameplayDefinitions>(definitions));
 
     // Spatial state
     tank.x = 10.5f;
@@ -23,11 +30,7 @@ TEST(TankDataExtractorRegression, ExtractRenderData_MapsCoreFields) {
 
     // Survival/action resources
     tank.health = 87.0f;
-    tank.maxHealth = 120.0f;
     tank.energy = 42.0f;
-    tank.maxEnergy = 80.0f;
-    tank.fireCost = 9.5f;
-    tank.specialChargeCost = 3.0f;
 
     // Identity and status
     tank.alive = true;
@@ -58,11 +61,11 @@ TEST(TankDataExtractorRegression, ExtractRenderData_MapsCoreFields) {
     EXPECT_FLOAT_EQ(data.targetRotation, tank.rrl);
 
     EXPECT_FLOAT_EQ(data.health, tank.health);
-    EXPECT_FLOAT_EQ(data.maxHealth, tank.maxHealth);
+    EXPECT_FLOAT_EQ(data.maxHealth, tank.GetStats().tank.maxHealth);
     EXPECT_FLOAT_EQ(data.charge, tank.energy);
-    EXPECT_FLOAT_EQ(data.maxCharge, tank.maxEnergy);
-    EXPECT_FLOAT_EQ(data.fireCost, tank.fireCost);
-    EXPECT_FLOAT_EQ(data.specialChargeCost, tank.specialChargeCost);
+    EXPECT_FLOAT_EQ(data.maxCharge, tank.GetStats().weapon.maxEnergy);
+    EXPECT_FLOAT_EQ(data.fireCost, tank.GetStats().weapon.fireCost);
+    EXPECT_FLOAT_EQ(data.specialChargeCost, tank.GetStats().weapon.specialChargeCost);
 
     EXPECT_TRUE(data.alive);
     EXPECT_TRUE(data.isPlayer);

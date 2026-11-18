@@ -17,9 +17,6 @@ public:
     static constexpr int MAX_PLAYERS = 2;
     static constexpr int MAX_ENEMY_SPAWN_POSITIONS = 16;
     
-    // Controller detection constants
-    static constexpr int ROTATION_STEP_DEGREES = 45;
-    
     // Player positioning constants
     static constexpr int VERSUS_ENEMY_POSITION_1 = 8;
     static constexpr int VERSUS_ENEMY_POSITION_2 = 9;

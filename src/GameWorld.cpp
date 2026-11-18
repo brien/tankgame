@@ -110,7 +110,7 @@ Tank* GameWorld::CreateTank() {
         
         CollisionLayer layer = tank->isPlayer ? CollisionLayer::PLAYER_TANKS : CollisionLayer::ENEMY_TANKS;
         // Use collisionRadius * 2 to match original collision detection
-        collisionSystem.RegisterEntity(tank, CollisionShape3D(CollisionShape3D::CUSTOM, tank->collisionRadius * 2), layer);
+        collisionSystem.RegisterEntity(tank, CollisionShape3D(CollisionShape3D::CUSTOM, tank->GetStats().tank.collisionRadius * 2), layer);
     }
     
     return tank;
@@ -143,7 +143,7 @@ void GameWorld::ReregisterTankCollision(Tank* tank) {
     
     // Re-register with correct collision layer based on isPlayer flag
     CollisionLayer layer = tank->isPlayer ? CollisionLayer::PLAYER_TANKS : CollisionLayer::ENEMY_TANKS;
-    collisionSystem.RegisterEntity(tank, CollisionShape3D(CollisionShape3D::CUSTOM, tank->collisionRadius * 2), layer);
+    collisionSystem.RegisterEntity(tank, CollisionShape3D(CollisionShape3D::CUSTOM, tank->GetStats().tank.collisionRadius * 2), layer);
     
     Logger::Get().Write("Tank collision layer updated to %s\n", 
                        tank->isPlayer ? "PLAYER_TANKS" : "ENEMY_TANKS");

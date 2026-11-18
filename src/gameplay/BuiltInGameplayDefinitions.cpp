@@ -5,6 +5,74 @@ GameplayDefinitions BuildBuiltInDefinitions()
 {
     GameplayDefinitions definitions;
 
+    definitions.input.mouseTurretScale = 2;
+    definitions.input.keyboardTurretRate = 200;
+    definitions.input.keyboardTurboTurretRate = 300;
+    definitions.input.browserPadActivationDeadzone = 5000;
+    definitions.joystick.forwardDeadzone = 5000;
+    definitions.joystick.reverseDeadzone = 8000;
+    definitions.joystick.bodyDeadzone = 8000;
+    definitions.joystick.turretDeadzone = 6000;
+    definitions.joystick.alternateTurretDeadzone = 5000;
+    definitions.joystick.forwardDivisor = 20000;
+    definitions.joystick.bodyDivisor = 32000;
+    definitions.joystick.turretDivisor = 3200;
+    definitions.joystick.chargeDivisor = 3200;
+    definitions.joystick.specialChargeDivisor = 3200;
+    definitions.joystick.fireAxisThreshold = -5000;
+    definitions.joystick.jumpAxisThreshold = 5000;
+    definitions.special.muzzleHeight = .25f;
+    definitions.special.blueCenterHeight = .5f;
+    definitions.special.blueSideOffset = .2f;
+    definitions.special.redArcCount = 10;
+    definitions.special.redArcStepDegrees = 27;
+    definitions.special.redArcStartDegrees = 52;
+    definitions.special.redArcBounces = 0;
+    definitions.special.yellowBounces = 4;
+    definitions.landing.rewardEnergyFraction = 1.0f / 3.0f;
+    definitions.landing.rewardThresholdFraction = 2.0f / 3.0f;
+    definitions.enemyBehavior.activationDistance = 15;
+    definitions.enemyBehavior.activationDistancePerLevel = 3;
+    definitions.enemyBehavior.huntEnergyFraction = .5f;
+    definitions.enemyBehavior.fearUntilLevelOffset = 2;
+    definitions.enemyBehavior.attackerCountBase = 1;
+    definitions.enemyBehavior.wanderProbeAngleDegrees = 20;
+    definitions.enemyBehavior.wanderProbeFrames = 15;
+    definitions.enemyBehavior.wanderJumpHeight = 3;
+    definitions.enemyBehavior.wanderMaxDrop = 7;
+    definitions.enemyBehavior.wanderTurnDegrees = 90;
+    definitions.enemyBehavior.jumpEnergyFraction = .25f;
+    definitions.enemyBehavior.aimToleranceDegrees = 5;
+    definitions.enemyBehavior.fearProbeAngleDegrees = 30;
+    definitions.enemyBehavior.fearProbeFrames = 20;
+    definitions.enemyBehavior.fearJumpHeight = 3;
+    definitions.enemyBehavior.avoidanceTurnDegrees = 30;
+    definitions.enemyBehavior.huntProbeFrames = 10;
+    definitions.enemyBehavior.huntJumpHeight = 5;
+    definitions.enemyBehavior.huntStopDistance = 10;
+    definitions.enemyBehavior.fireEnergyFraction = .5f;
+    definitions.enemyBehavior.shotCharge = 1;
+    definitions.enemyBehavior.spawnRotationStepDegrees = 45;
+    definitions.enemyBehavior.overflowSpawnOffset = 1;
+    definitions.gameCube = definitions.joystick;
+    definitions.gameCube.forwardDeadzone = 4000;
+    definitions.gameCube.forwardDivisor = 18000;
+    definitions.gameCube.bodyDivisor = 28000;
+    definitions.gameCube.turretDivisor = 2500;
+    definitions.gameCube.chargeDivisor = 6400;
+    definitions.gameCube.specialChargeDivisor = 6000;
+    definitions.special.redForwardAnglesDegrees = {0, -10, 20};
+    definitions.special.purpleAnglesDegrees = {0, -90, 180, 90};
+    definitions.enemy.openingTypes = {
+        {TankType::TYPE_RED, TankType::TYPE_GREY},
+        {TankType::TYPE_YELLOW, TankType::TYPE_GREY},
+        {TankType::TYPE_YELLOW, TankType::TYPE_GREY}};
+    for (int index = 0; index < 3; ++index)
+        definitions.enemy.regularTypes.push_back({static_cast<TankType>(1 + index % 3), static_cast<TankType>(index % 3)});
+    for (int index = 0; index < 12; ++index)
+        definitions.enemy.advancedTypes.push_back({static_cast<TankType>(1 + index % 4), static_cast<TankType>(1 + index % 3)});
+    definitions.enemy.advancedLevelOffsets = {2, 5, 12};
+
     definitions.tank.maxHealth = 100;
     definitions.tank.healthRegenPerSecond = 10;
     definitions.tank.moveSpeed = 5;
@@ -43,6 +111,8 @@ GameplayDefinitions BuildBuiltInDefinitions()
     definitions.projectile.purpleChildPowerMultiplier = 2;
     definitions.projectile.purpleChildTurnSpeed = 10;
 
+    definitions.player.startingPrimaryType = TankType::TYPE_RED;
+    definitions.player.startingSecondaryType = TankType::TYPE_BLUE;
     definitions.player.spawnHeight = 24;
     definitions.player.respawnDelaySeconds = .5f;
     definitions.player.versusRespawnDelaySeconds = 1.5f;
@@ -208,7 +278,7 @@ GameplayDefinitions BuildBuiltInDefinitions()
 
 const GameplayDefinitions& BuiltInDefinitions()
 {
-    // Transitional provider for the legacy static TankTypeManager API.
+    // Built-in fallback for standalone entities and fixtures.
     // Construct once on first use; no mutable maps or translation-unit initializer.
     static const GameplayDefinitions definitions = BuildBuiltInDefinitions();
     return definitions;

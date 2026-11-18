@@ -93,7 +93,7 @@ CombatSystem::CollisionOutcome CombatSystem::HandleBulletTankCollision(Bullet* b
     if (tank->identity == bullet->GetOwnerIdentity()) {
         // Self-collision (friendly fire or ricochet)
         if (bullet->GetDT() > bullet->GetGameplayDefinitions().projectile.selfHitDelaySeconds) {
-            if (tank->health < tank->maxHealth * rules.friendlyResourceThresholdMultiplier) {
+            if (tank->health < tank->GetStats().tank.maxHealth * rules.friendlyResourceThresholdMultiplier) {
                 tank->health += bullet->GetPower() / rules.healthReturnDivisor;
             }
         }
@@ -130,9 +130,9 @@ void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
         // Self-collision
         if (bullet->GetDT() > bullet->GetGameplayDefinitions().projectile.selfHitDelaySeconds) {
             App::GetSingleton().soundTask->PlayChannel(3);
-            if (player->health < player->maxHealth) {
+            if (player->health < player->GetStats().tank.maxHealth) {
                 player->health += bullet->GetPower() / rules.healthReturnDivisor;
-            } else if (player->energy < player->maxEnergy) {
+            } else if (player->energy < player->GetStats().weapon.maxEnergy) {
                 player->energy += bullet->GetPower() / rules.energyReturnDivisor;
             }
         }
@@ -142,9 +142,9 @@ void CombatSystem::HandleBulletPlayerCollision(Bullet* bullet, Tank* player) {
     if (bullet->GetOwnerIdentity().IsPlayer() && !App::GetSingleton().gameTask->IsVersusMode()) {
         // Friendly fire in non-versus mode (healing)
         App::GetSingleton().soundTask->PlayChannel(3);
-        if (player->health < player->maxHealth * rules.friendlyResourceThresholdMultiplier) {
+        if (player->health < player->GetStats().tank.maxHealth * rules.friendlyResourceThresholdMultiplier) {
             player->health += bullet->GetPower() / rules.healthReturnDivisor;
-        } else if (player->energy < player->maxEnergy * rules.friendlyResourceThresholdMultiplier) {
+        } else if (player->energy < player->GetStats().weapon.maxEnergy * rules.friendlyResourceThresholdMultiplier) {
             player->energy += bullet->GetPower() / rules.energyReturnDivisor;
         }
     } else {

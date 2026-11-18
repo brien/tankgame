@@ -20,7 +20,8 @@ const Gameplay::PlayerRules& Player::GetRules() const
 }
 
 Player::Player(int playerIndex, GameWorld *world)
-    : playerIndex(playerIndex), gameWorld(world)
+    : playerIndex(playerIndex), gameWorld(world),
+      savedType1(GetRules().startingPrimaryType), savedType2(GetRules().startingSecondaryType)
 {
     Logger::Get().Write("Created Player %d\n", playerIndex);
 }
@@ -50,8 +51,8 @@ void Player::RememberTankTypes()
 {
     if (controlledTank)
     {
-        savedType1 = controlledTank->type1;
-        savedType2 = controlledTank->type2;
+        savedType1 = controlledTank->GetPrimaryType();
+        savedType2 = controlledTank->GetSecondaryType();
     }
 }
 
@@ -100,8 +101,8 @@ Tank *Player::CreatePlayerTank(float x, float y, float z)
         // Take control
         TakeControlOf(tank);
         // Only a new spawn refills resources; taking control or retuning does not.
-        tank->health = tank->maxHealth;
-        tank->energy = tank->maxEnergy;
+        tank->health = tank->GetStats().tank.maxHealth;
+        tank->energy = tank->GetStats().weapon.maxEnergy;
         Logger::Get().Write("Player %d: TakeControlOf completed - identity set to %s\n",
                             playerIndex, tank->identity.IsPlayer() ? "PLAYER" : "ENEMY");
     }
@@ -295,25 +296,25 @@ void Player::ApplyItemEffect(const Item *item)
     if (!controlledTank || !item)
         return;
 
-    const bool matchingType = item->type == controlledTank->type1;
-    controlledTank->SetType(item->type, controlledTank->type1);
+    const bool matchingType = item->type == controlledTank->GetPrimaryType();
+    controlledTank->SetType(item->type, controlledTank->GetPrimaryType());
 
     // Restore energy based on item type match
     if (matchingType)
     {
         // Full energy for matching type
-        controlledTank->energy += controlledTank->maxEnergy * GetRules().matchingPickupEnergyFraction;
+        controlledTank->energy += controlledTank->GetStats().weapon.maxEnergy * GetRules().matchingPickupEnergyFraction;
     }
     else
     {
         // Half energy for non-matching type
-        controlledTank->energy += controlledTank->maxEnergy * GetRules().otherPickupEnergyFraction;
+        controlledTank->energy += controlledTank->GetStats().weapon.maxEnergy * GetRules().otherPickupEnergyFraction;
     }
 
     // Cap energy at maximum
-    if (controlledTank->energy > controlledTank->maxEnergy)
+    if (controlledTank->energy > controlledTank->GetStats().weapon.maxEnergy)
     {
-        controlledTank->energy = controlledTank->maxEnergy;
+        controlledTank->energy = controlledTank->GetStats().weapon.maxEnergy;
     }
 
     // Add score for item collection

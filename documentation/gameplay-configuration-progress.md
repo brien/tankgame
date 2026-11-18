@@ -5,7 +5,10 @@ resolution, plus the associated weapon-cost corrections from the implementation
 plan. The second increment adds shared defaults and lifecycle resolution; the third
 extracts movement, projectile, combat, and player rules. The fourth isolates and
 validates level metadata.
-The broader configuration migration remains in progress.
+The final increment completes read-only effective stats, remaining numeric rule
+extraction and the loader-ready contract. See the final closeout below and
+[configuration contract](gameplay-configuration-contract.md); earlier increment
+notes describe their state at the time.
 
 ## First increment: configuration contract
 
@@ -265,11 +268,55 @@ legacy float rounding, descriptive difficulty, and the shipped sidecars/maps.
 - Automated browser runtime smoke and GL-enabled tests were not run for this
   increment.
 
-## Remaining work
+## Fifth increment: complete configuration boundary — 2026-11-18
 
-- Complete migration from public writable effective stats to read-only accessors.
-- Extract remaining input sensitivity/deadzones, special firing-pattern layouts
-  in `Tank::Special()`, landing energy rewards, and AI/encounter selection rules.
-  The numeric opening-level attack modifier is now in session definitions.
-- Complete the full lifecycle behavior matrix and final loader-ready contract.
-  No gameplay JSON loader is added.
+Tanks now hold one private effective configuration exposed by `GetStats()` as a
+const reference. Health, energy, cooldown and motion remain separate mutable
+state. All gameplay, HUD and rendering consumers use the read-only configuration.
+Types are private and changed together through the resolver. The old writable
+reference methods and `TankTypeManager` facade are removed. Test fixtures supply
+alternate definitions instead of overwriting live tuning.
+
+The remaining numeric tuning now lives in session definitions:
+
+- Mouse/keyboard sensitivity, joystick and GameCube deadzones/divisors, browser
+  controller activation threshold and device trigger thresholds.
+- Special shot counts, headings, muzzle offsets and bounce budgets. Existing
+  type-specific branches, colors and overlapping yellow shots remain unchanged.
+- Landing energy threshold/reward fractions, player starting types, enemy type
+  cycles and advanced-level selection, AI numeric thresholds/probes/steering and
+  enemy spawn orientation/overflow spacing.
+
+Two alternate-provider inconsistencies were corrected without changing shipped
+balance: normal/special muzzle advance now follows configured projectile speed,
+and enemy creation resolves its encounter stats before refilling resources.
+Historical integer attack truncation is explicit and retained.
+
+New regressions cover read-only access, atomic rejection, invalid rule values,
+special layouts and in-flight projectile stability, landing rewards, enemy
+cycles and capacity refill, configurable initial types and AI thresholds,
+keyboard/mouse/turbo input, virtual joystick profiles, and all 75 ordered-pair /
+difficulty combinations through retuning and respawn. Existing level-transition,
+pickup, jump and multiplayer tests remain part of the full suite.
+
+The [final contract](gameplay-configuration-contract.md) records field units,
+resolution precedence, lifecycle semantics, validation limits, the future loader
+boundary, and an explicit inventory of structural, presentation and debug
+constants that remain in C++. Gameplay JSON loading and live reload remain
+separate future features; there is no remaining implementation item in this
+compiled-configuration workstream.
+
+## Final validation
+
+- Native Release configure/build succeeded.
+- Full graphics-enabled CTest: **233/233 passed**, zero skips and zero failures.
+- Emscripten Release configure/build succeeded using the installed SDK cache.
+  The existing empty-character-token warning in `src/main.cpp:183` remains.
+- Browser lifecycle: **31/31 checks passed**; multiplayer: **24/24 checks passed**
+  across eight sessions and fifteen multiplayer reloads. Drivers were updated
+  for the current play → pause → menu → shutdown flow; production code was not
+  changed for the historical harness's obsolete two-Escape expectation.
+- `git diff --check` passed. [Retained logs, captures and reproduction](gameplay-configuration-2026-11-18/README.md).
+- Manual testing completed, as reported by the user on 2026-11-18. Platforms,
+  renderer modes and scenarios were not specified; no broader platform or physical
+  controller qualification is inferred.
