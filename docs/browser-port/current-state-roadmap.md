@@ -113,6 +113,17 @@ activation. All shipped levels and required assets are preloaded, and settings
 remain read-only. See the [release implementation and hosting guide](../../documentation/browser-release-2026-10-28/README.md)
 for packaging and the existing automated evidence.
 
+## Compatibility retirement follow-up — 2026-11-18
+
+The retirement workstream has started with a [core-profile state cleanup and
+remaining dependency inventory](compatibility-retirement.md). A new regression
+reproduced fixed-function GL errors in shared modern state setup; those calls now
+run only in compatibility mode. Native graphics tests pass 234/234, explicit
+compatibility startup tests pass 3/3, and the browser build passes. The fallback
+remains available; Windows/macOS modern-default qualification and broader visual
+approval are still open. This is the first retirement-preparation slice, not
+completion of compatibility removal.
+
 ## Historical implementation and planning record
 
 Everything below records earlier milestones and planning snapshots. Statements

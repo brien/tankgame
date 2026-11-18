@@ -62,6 +62,7 @@ Xvfb wrapper itself remains unverified. Both new modern-effect tests passed.
 ## Remaining retirement gates
 
 Windows/macOS modern-default runtime, physical firing input, broader level/UI
-visual coverage and owner visual approval remain open. The known co-op-to-single-
-player session defect is deferred. The new regression contracts supplement those
-gates; compatibility removal remains a separate implementation decision.
+visual coverage and owner visual approval remain open. The co-op-to-single-player
+session defect was fixed on 2026-11-12 and the November 18 browser smoke checks
+passed. The [retirement follow-up](compatibility-retirement.md) adds shared-state
+core-profile regression coverage; compatibility removal remains gated separately.

@@ -11,6 +11,8 @@
 #include "App.h"
 #include "rendering/GLFunctions.h"
 #include "rendering/GpuTexture.h"
+#include "rendering/RendererMode.h"
+#include "rendering/PlayerTankRendererImpl.h"
 
 // Opt in on a machine with a display and OpenGL:
 // TANKGAME_TEST_GL=1 ./tankgame_tests --gtest_filter=VideoStartupTest.*
@@ -178,4 +180,37 @@ TEST_F(CoreRendererTest, DrawsVisiblePixelsAfterVertexArrayBindingChanges)
     }
     EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
 }
+TEST_F(CoreRendererTest, ModernSharedRenderStateAvoidsFixedFunctionCalls)
+{
+    if (!RendererMode::IsModern())
+        GTEST_SKIP() << "Modern state contract requires the modern renderer";
+    BaseRenderer base;
+    PlayerTankRendererImpl player;
+    ViewportManager viewports;
+    CameraManager cameras;
+    ResourceManager resources;
+    RenderingPipeline pipeline(viewports, cameras, resources);
+    ASSERT_TRUE(base.Initialize());
+    ASSERT_TRUE(player.Initialize());
+    ASSERT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+    for (IRenderer* renderer : {static_cast<IRenderer*>(&base),
+                               static_cast<IRenderer*>(&player),
+                               static_cast<IRenderer*>(&pipeline)}) {
+        // DEBUG CheckGLError consumes errors into the logger; cover that path too.
+        testing::internal::CaptureStdout();
+        renderer->SetupRenderState();
+        const GLenum setupError = glGetError();
+        renderer->CleanupRenderState();
+        const GLenum cleanupError = glGetError();
+        const auto output = testing::internal::GetCapturedStdout();
+        EXPECT_EQ(setupError, static_cast<GLenum>(GL_NO_ERROR));
+        EXPECT_EQ(cleanupError, static_cast<GLenum>(GL_NO_ERROR));
+        EXPECT_EQ(output.find("OpenGL Error"), std::string::npos) << output;
+        EXPECT_TRUE(glIsEnabled(GL_DEPTH_TEST));
+        EXPECT_TRUE(glIsEnabled(GL_CULL_FACE));
+    }
+    player.Cleanup();
+    base.Cleanup();
+}
+
 #endif

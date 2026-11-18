@@ -103,7 +103,7 @@ void RenderingPipeline::SetupRenderState()
     // Smooth shading and attribute stacks only exist on desktop compatibility
     // OpenGL. Browser shaders and explicit state replace them.
 #ifndef __EMSCRIPTEN__
-    glShadeModel(GL_SMOOTH);
+    if (!RendererMode::IsModern()) glShadeModel(GL_SMOOTH);
 #endif
 
     // Set clear color (dark blue/black for space-like background)
@@ -446,6 +446,7 @@ void RenderingPipeline::UpdateRenderStats(const SceneData &scene)
 
 void RenderingPipeline::PushRenderState()
 {
+    if (RendererMode::IsModern()) return;
 #ifndef __EMSCRIPTEN__
     // Save current OpenGL state
     glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -455,6 +456,7 @@ void RenderingPipeline::PushRenderState()
 
 void RenderingPipeline::PopRenderState()
 {
+    if (RendererMode::IsModern()) return;
 #ifndef __EMSCRIPTEN__
     // Restore previous OpenGL state
     glPopMatrix();

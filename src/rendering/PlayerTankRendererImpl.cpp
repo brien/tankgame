@@ -81,14 +81,14 @@ void PlayerTankRendererImpl::RenderTargetingUI(const TankRenderData& tank, bool 
 void PlayerTankRendererImpl::SetupPlayerTankRenderState() {
     // Standard player tank rendering state
 #ifndef __EMSCRIPTEN__
-    glEnable(GL_LIGHTING);
+    if (!RendererMode::IsModern()) glEnable(GL_LIGHTING);
 #endif
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
     glDisable(GL_BLEND);
 #ifndef __EMSCRIPTEN__
-    glDisable(GL_TEXTURE_2D);
+    if (!RendererMode::IsModern()) glDisable(GL_TEXTURE_2D);
 #endif
     glFrontFace(GL_CW);
 }

@@ -73,7 +73,7 @@ void BaseRenderer::Setup3DRenderState()
     // Smooth shading is fixed-function desktop state; browser shaders define
     // interpolation explicitly.
 #ifndef __EMSCRIPTEN__
-    glShadeModel(GL_SMOOTH);
+    if (!RendererMode::IsModern()) glShadeModel(GL_SMOOTH);
 #endif
     
     // Disable blending by default (can be enabled per-object)
