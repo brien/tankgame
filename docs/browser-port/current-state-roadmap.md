@@ -128,7 +128,9 @@ durations were not supplied. The [modern-path source audit](modern-renderer-audi
 startup and player rendering reached fixed-function calls, browser statistics had
 a stale zero override, and full-startup/frame core coverage was missing. The
 follow-up fixes those calls and statistics and adds a representative core-frame
-regression. Staged compatibility removal is next; removal is not yet complete.
+regression. The first deletion slice removes dormant helpers, the unused Tank-based player
+API and duplicate GraphicsTask renderer instances. Unified TankRenderer/factory
+retirement is next; compatibility removal is not yet complete.
 
 ## Historical implementation and planning record
 

@@ -1,7 +1,5 @@
 #include "PlayerTankRenderer.h"
-#include "../Tank.h"
 #include "../App.h"
-#include "../GlobalTimer.h"
 #include "RenderContext.h"
 #include "RendererMode.h"
 
@@ -28,96 +26,6 @@ Matrix4 PlayerTurretModel(const TankRenderData& tank)
 }
 
 #ifndef __EMSCRIPTEN__
-void PlayerTankRenderer::DrawPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players,
-                                        const std::array<float, TankHandler::MAX_PLAYERS>& special,
-                                        int numPlayers,
-                                        bool hasEnemyTargets)
-{
-    static float drift = 0;
-    drift += GlobalTimer::dT;
-    if (drift > DRIFT_RESET_THRESHOLD)
-        drift = 0;
-
-    for (int k = 0; k < numPlayers; ++k)
-    {
-        if (players[k].alive)
-        {
-            DrawPlayerTank(players[k], drift);
-            DrawPlayerEffects(players[k], special, k, drift);
-        }
-
-        if (hasEnemyTargets)
-        {
-            DrawTargetingUI(players[k], drift);
-        }
-    }
-}
-
-void PlayerTankRenderer::DrawPlayerTank(const Tank& player, float drift)
-{
-    SetupPlayerTankRenderState();
-    
-    glPushMatrix();
-    RenderTankBody(player);
-    RenderTankTurret(player);
-    glPopMatrix();
-    
-    RestoreRenderState();
-}
-
-void PlayerTankRenderer::DrawPlayerEffects(const Tank& player, 
-                                          const std::array<float, 2>& special,
-                                          int playerIndex, 
-                                          float drift)
-{
-    SetupPlayerEffectsRenderState();
-    
-    // Awesome effects are performed using the texture matrix stack
-    glMatrixMode(GL_TEXTURE);
-    glPushMatrix();
-    glTranslatef(TEXTURE_DRIFT_SPEED * drift, 0, 0);
-    glMatrixMode(GL_MODELVIEW);
-
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[17]);
-    Color primaryColor = player.GetPrimaryColor();
-    glColor3f(primaryColor.r, primaryColor.g, primaryColor.b);
-
-    glPushMatrix();
-    RenderEffectBody(player);
-    RenderEffectTurret(player, special, playerIndex);
-    glPopMatrix();
-
-    glMatrixMode(GL_TEXTURE);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-
-    glDepthMask(GL_TRUE);
-    glPopMatrix();
-}
-
-void PlayerTankRenderer::DrawTargetingUI(const Tank& player, float drift)
-{
-    SetupTargetingUIRenderState();
-    
-    glPushMatrix();
-    glTranslatef(player.x, player.y + TARGETING_HEIGHT_OFFSET, player.z);
-    glRotatef(-player.rrl, 0, 1, 0);
-
-    RenderTargetingIndicator(player);
-    
-    if (player.fireTimer > player.GetStats().weapon.fireIntervalSeconds && player.GetStats().weapon.fireCost < player.energy)
-    {
-        RenderReadyIndicator(player, drift);
-    }
-
-    RestoreRenderState();
-    glRotatef(player.rrl, 0, 1, 0);
-    glTranslatef(-player.x, -player.y + TARGETING_HEIGHT_OFFSET, -player.z);
-    glPopMatrix();
-}
-
-// Private helper methods
-
 void PlayerTankRenderer::SetupPlayerTankRenderState()
 {
     if (RendererMode::IsModern()) {
@@ -180,88 +88,6 @@ void PlayerTankRenderer::RestoreRenderState()
     glEnable(GL_LIGHTING);
 }
 
-void PlayerTankRenderer::RenderTankBody(const Tank& player)
-{
-    glPushMatrix();
-    glTranslatef(player.x, player.y + TANK_HEIGHT_OFFSET, player.z);
-    glRotatef(player.rx, 1, 0, 0);
-    glRotatef(-player.ry - 90, 0, 1, 0);
-    glRotatef(player.rz, 0, 0, 1);
-
-    glFrontFace(GL_CCW);
-    Color secondaryColor = player.GetSecondaryColor();
-    glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
-    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody).Call(0);
-}
-
-void PlayerTankRenderer::RenderTankTurret(const Tank& player)
-{
-    // Draw turret (continuing from body transformation)
-    glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
-    glRotatef(player.rtx, 1, 0, 0);
-    glRotatef(-player.rty + 180, 0, 1, 0);
-    glRotatef(player.rtz, 0, 0, 1);
-
-    Color primaryColor = player.GetPrimaryColor();
-    glColor3f(primaryColor.r, primaryColor.g, primaryColor.b);
-    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
-
-    glFrontFace(GL_CW);
-    glPopMatrix();
-}
-
-void PlayerTankRenderer::RenderEffectBody(const Tank& player)
-{
-    glDisable(GL_LIGHTING);
-    glTranslatef(player.x, player.y + TANK_HEIGHT_OFFSET, player.z);
-    glRotatef(player.rx, 1, 0, 0);
-    glRotatef(-player.ry - 90, 0, 1, 0);
-    glRotatef(player.rz, 0, 0, 1);
-
-    glFrontFace(GL_CCW);
-    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankBody).Call(0);
-}
-
-void PlayerTankRenderer::RenderEffectTurret(const Tank& player, 
-                                           const std::array<float, 2>& special,
-                                           int playerIndex)
-{
-    // Draw effect turret
-    glTranslatef(0, TURRET_HEIGHT_OFFSET, 0);
-    glRotatef(player.rtx, 1, 0, 0);
-    glRotatef(-player.rty + 180, 0, 1, 0);
-    glRotatef(player.rtz, 0, 0, 1);
-
-    Color secondaryColor = player.GetSecondaryColor();
-    glColor3f(secondaryColor.r, secondaryColor.g, secondaryColor.b);
-
-    if (special[playerIndex] >= player.GetStats().weapon.specialChargeCost)
-    {
-        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::TankTurret).Call(0);
-    }
-
-    glFrontFace(GL_CW);
-}
-
-void PlayerTankRenderer::RenderTargetingIndicator(const Tank& player)
-{
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[20]);
-    glColor4f(1.0f, player.dist / DISTANCE_COLOR_FACTOR, 0.1f, 1.0);
-    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
-}
-
-void PlayerTankRenderer::RenderReadyIndicator(const Tank& player, float drift)
-{
-    glTranslatef(0, +TARGETING_EFFECT_OFFSET, 0);
-    glRotatef(ROTATION_EFFECT_SPEED * drift, 0, 1, 0);
-
-    glBindTexture(GL_TEXTURE_2D, App::GetSingleton().graphicsTask->Resources().GetTextureHandler().GetTextureArray()[17]);
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-    glScalef(EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR, EFFECT_SCALE_FACTOR);
-    App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
-    glScalef(EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE, EFFECT_SCALE_RESTORE);
-}
 #endif
 
 #ifdef __EMSCRIPTEN__

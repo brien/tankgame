@@ -129,3 +129,31 @@ Final follow-up validation: native build passed; graphics-enabled CTest
 Emscripten incremental build passed; `git diff --check` passed. Browser runtime
 was not rerun for this patch, so the browser statistics correction is verified
 by source review/build rather than a new browser runtime assertion.
+
+
+## Dormant renderer cleanup — feature branch follow-up
+
+Removed the five duplicate GraphicsTask renderer members and their startup/stop
+calls. RenderingPipeline is now the sole owner of the active pass renderers;
+resource cleanup still happens before context destruction. Repository reference
+searches found no external consumers of the removed members.
+
+Removed unused BaseRenderer lighting/matrix helpers and its unused 2D/blending
+helper chain; TerrainRenderer's nonvirtual, uncalled Setup3DRenderState;
+PlayerTankRendererImpl's uncalled state helpers, empty geometry methods and
+unused constants; and the old Tank-based PlayerTankRenderer entry points and
+private overloads. The active TankRenderData API and its shared setup helpers
+remain, including those used by the compatibility renderer.
+
+This completes the dormant-helper/duplicate-owner part of step 2. The unified
+TankRenderer, factory alternative and browser substitute still serve the
+compatibility selection contract and are the next retirement slice, together
+with the necessary selection/orchestration changes. Modern geometry resources,
+shader/context policy and render ordering are unchanged by this cleanup.
+
+
+Cleanup validation: native and Emscripten builds passed; graphics-enabled native
+CTest **235/235 passed**, including the full core startup/frame/recreation test;
+explicit compatibility VideoStartupTest **3/3 passed**; `git diff --check` passed.
+No new tests were needed for deleting uncalled code. Browser runtime and
+macOS/Windows builds were not rerun for this cleanup.

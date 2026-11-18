@@ -25,15 +25,6 @@
 #include "Camera.h"
 #include "rendering/ViewportManager.h"
 #include "rendering/CameraManager.h"
-#include "rendering/TerrainRenderer.h"
-#include "rendering/BulletRenderer.h"
-#include "rendering/EffectRenderer.h"
-#include "rendering/ItemRenderer.h"
-#include "rendering/TankRenderer.h"
-#include "rendering/BulletDataExtractor.h"
-#include "rendering/EffectDataExtractor.h"
-#include "rendering/ItemDataExtractor.h"
-#include "rendering/TankDataExtractor.h"
 #include "VideoTask.h"
 #include "rendering/ResourceManager.h"
 #include "rendering/SceneDataBuilder.h"
@@ -56,13 +47,6 @@ public:
     std::unique_ptr<ResourceManager> resourceManager;      // Centralized resource management
     std::unique_ptr<SceneDataBuilder> sceneDataBuilder;    // Scene data extraction and building
     std::unique_ptr<RenderingPipeline> renderingPipeline;  // Centralized rendering orchestration
-    
-    // Legacy specialized renderers (will be managed by RenderingPipeline)
-    TerrainRenderer terrainRenderer;  // Handles all terrain rendering
-    BulletRenderer bulletRenderer; // Handles all bullet rendering
-    EffectRenderer effectRenderer;    // Handles all visual effect rendering
-    ItemRenderer itemRenderer;       // Handles all item/power-up rendering
-    TankRenderer tankRenderer;     // Handles all tank rendering
     
     void DrawSky();
     

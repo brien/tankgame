@@ -30,10 +30,6 @@ public:
     // Modern additive water pass; compatibility retains its reference ordering.
     void RenderWater(const TerrainRenderData& terrain);
 
-protected:
-    // Override render state setup to disable lighting for terrain
-    void Setup3DRenderState();
-
 private:
     ResourceManager* resources;
     void RenderModernTerrain(const TerrainRenderData& terrain);

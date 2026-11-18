@@ -67,34 +67,6 @@ protected:
      */
     void Setup3DRenderState();
     
-    /**
-     * Common OpenGL setup for 2D rendering (UI, HUD)
-     * Disables depth testing, enables blending for transparency
-     */
-    void Setup2DRenderState();
-    
-    /**
-     * Helper to enable/disable OpenGL lighting
-     * @param enable true to enable lighting, false to disable
-     */
-    void SetLighting(bool enable);
-    
-    /**
-     * Helper to set up alpha blending for transparency effects
-     * @param enable true to enable blending, false to disable
-     */
-    void SetBlending(bool enable);
-    
-    /**
-     * Helper to save current OpenGL matrix
-     */
-    void PushMatrix();
-    
-    /**
-     * Helper to restore previously saved OpenGL matrix
-     */
-    void PopMatrix();
-    
 private:
     // Store previous OpenGL state for restoration
     struct RenderState {

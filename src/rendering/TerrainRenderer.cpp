@@ -34,25 +34,6 @@ bool TerrainRenderer::Initialize()
     return true;
 }
 
-void TerrainRenderer::Setup3DRenderState()
-{
-#ifndef __EMSCRIPTEN__
-    // Call base class setup first
-    BaseRenderer::Setup3DRenderState();
-    
-    // Color material is now handled at the pipeline level in SetupLighting()
-    // so we don't need to set it here
-    
-    // Ensure lighting is enabled (should already be enabled by RenderingPipeline)
-    glEnable(GL_LIGHTING);
-    
-    // Set texture environment to modulate texture with material color
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    
-    CheckGLError("TerrainRenderer::Setup3DRenderState");
-#endif
-}
-
 void TerrainRenderer::Cleanup()
 {
     displayListInitialized = false;

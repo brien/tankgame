@@ -98,37 +98,6 @@ bool GraphicsTask::Start()
         return false;
     }
 
-    // Initialize individual renderers (required for proper functioning)
-    if (!terrainRenderer.Initialize())
-    {
-        Logger::Get().Write("ERROR: Failed to initialize TerrainRenderer\n");
-        return false;
-    }
-
-    if (!bulletRenderer.Initialize())
-    {
-        Logger::Get().Write("ERROR: Failed to initialize BulletRenderer\n");
-        return false;
-    }
-
-    if (!effectRenderer.Initialize())
-    {
-        Logger::Get().Write("ERROR: Failed to initialize EffectRenderer\n");
-        return false;
-    }
-
-    if (!itemRenderer.Initialize())
-    {
-        Logger::Get().Write("ERROR: Failed to initialize ItemRenderer\n");
-        return false;
-    }
-
-    if (!tankRenderer.Initialize())
-    {
-        Logger::Get().Write("ERROR: Failed to initialize TankRenderer\n");
-        return false;
-    }
-
     // Initialize new centralized rendering pipeline
     InitializeNewRenderingPipeline();
 
@@ -141,13 +110,6 @@ void GraphicsTask::Stop()
 {
     // Phase 4: Cleanup new rendering pipeline first
     CleanupNewRenderingPipeline();
-
-    // Cleanup legacy renderers
-    terrainRenderer.Cleanup();
-    bulletRenderer.Cleanup();
-    effectRenderer.Cleanup();
-    itemRenderer.Cleanup();
-    tankRenderer.Cleanup();
 
     Logger::Get().Write("GraphicsTask: Stopped \n");
 }

@@ -82,64 +82,6 @@ void BaseRenderer::Setup3DRenderState()
     CheckGLError("BaseRenderer::Setup3DRenderState");
 }
 
-void BaseRenderer::Setup2DRenderState()
-{
-    // Disable depth testing for UI rendering
-    glDisable(GL_DEPTH_TEST);
-    
-    // Enable blending for transparency
-    SetBlending(true);
-    
-    // Disable face culling for 2D quads
-    glDisable(GL_CULL_FACE);
-    
-    CheckGLError("BaseRenderer::Setup2DRenderState");
-}
-
-void BaseRenderer::SetLighting(bool enable)
-{
-#ifdef __EMSCRIPTEN__
-    (void)enable;
-#else
-    if (enable) {
-        glEnable(GL_LIGHTING);
-        glEnable(GL_NORMALIZE); // Normalize normals after scaling
-    } else {
-        glDisable(GL_LIGHTING);
-    }
-#endif
-    
-    CheckGLError("BaseRenderer::SetLighting");
-}
-
-void BaseRenderer::SetBlending(bool enable)
-{
-    if (enable) {
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    } else {
-        glDisable(GL_BLEND);
-    }
-    
-    CheckGLError("BaseRenderer::SetBlending");
-}
-
-void BaseRenderer::PushMatrix()
-{
-#ifndef __EMSCRIPTEN__
-    glPushMatrix();
-#endif
-    CheckGLError("BaseRenderer::PushMatrix");
-}
-
-void BaseRenderer::PopMatrix()
-{
-#ifndef __EMSCRIPTEN__
-    glPopMatrix();
-#endif
-    CheckGLError("BaseRenderer::PopMatrix");
-}
-
 void BaseRenderer::StoreRenderState()
 {
     // Migrated draws set their own state; fixed-function matrix/light queries

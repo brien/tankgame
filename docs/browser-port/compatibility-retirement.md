@@ -95,3 +95,10 @@ compatibility startup tests pass; native/browser builds pass. The new core test
 reproduced startup and player-draw errors before their fixes. See the
 [audit findings and implementation record](modern-renderer-audit.md) for scope
 and remaining coverage limits.
+
+
+The feature-branch cleanup now removes duplicate GraphicsTask renderer instances
+and unused state/Tank-based player APIs. RenderingPipeline owns all active pass
+renderers. The next slice is the unified TankRenderer/factory/browser-substitute
+removal with its selection/orchestration changes; compatibility still works in
+this cleanup slice. See the audit's dormant-renderer cleanup record.
