@@ -59,10 +59,20 @@ used the available Linux display; Xvfb is not installed locally, so the hosted
 Xvfb wrapper itself remains unverified. Both new modern-effect tests passed.
 `git diff --check` passes. Windows/macOS and browser runtime were not rerun.
 
-## Remaining retirement gates
+## Current retirement status
 
-Windows/macOS modern-default runtime, physical firing input, broader level/UI
-visual coverage and owner visual approval remain open. The co-op-to-single-player
-session defect was fixed on 2026-11-12 and the November 18 browser smoke checks
-passed. The [retirement follow-up](compatibility-retirement.md) adds shared-state
-core-profile regression coverage; compatibility removal remains gated separately.
+The owner reports successful runtime and visual testing on Linux (SteamOS),
+macOS, Windows 11 and the browser. The requested platform/runtime and visual
+approval gates are closed for those tested builds; exact versions, controller
+combinations and exhaustive scenario coverage were not supplied.
+
+The co-op-to-single-player session defect was fixed on 2026-11-12 and the
+November 18 browser smoke checks passed. The [retirement follow-up](compatibility-retirement.md)
+adds shared-state core-profile regression coverage and records the acceptance.
+The [modern-path audit](modern-renderer-audit.md) records a reachable native
+startup error and missing full-startup/frame core coverage despite an initial
+234/234 regression pass. The follow-up regression reproduced startup and player
+draw errors; fixes guard those calls and correct browser statistics. The new
+core test exercises real startup, representative world/UI frames, 1 → 2 → 1
+views, empty-scene counters and resource recreation. Compatibility remains
+available pending staged removal.

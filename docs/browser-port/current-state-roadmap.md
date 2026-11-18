@@ -120,9 +120,15 @@ remaining dependency inventory](compatibility-retirement.md). A new regression
 reproduced fixed-function GL errors in shared modern state setup; those calls now
 run only in compatibility mode. Native graphics tests pass 234/234, explicit
 compatibility startup tests pass 3/3, and the browser build passes. The fallback
-remains available; Windows/macOS modern-default qualification and broader visual
-approval are still open. This is the first retirement-preparation slice, not
-completion of compatibility removal.
+remains available. The owner subsequently confirmed successful manual runtime
+and visual testing on Linux (SteamOS), macOS, Windows 11 and the browser. This
+closes the requested platform/runtime and visual-approval gates for the tested
+builds. Exact versions, renderer overrides, controller combinations and session
+durations were not supplied. The [modern-path source audit](modern-renderer-audit.md) is complete: native
+startup and player rendering reached fixed-function calls, browser statistics had
+a stale zero override, and full-startup/frame core coverage was missing. The
+follow-up fixes those calls and statistics and adds a representative core-frame
+regression. Staged compatibility removal is next; removal is not yet complete.
 
 ## Historical implementation and planning record
 

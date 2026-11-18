@@ -120,6 +120,12 @@ void PlayerTankRenderer::DrawTargetingUI(const Tank& player, float drift)
 
 void PlayerTankRenderer::SetupPlayerTankRenderState()
 {
+    if (RendererMode::IsModern()) {
+        glEnable(GL_DEPTH_TEST);
+        glDepthMask(GL_TRUE);
+        glDepthFunc(GL_LESS);
+        return;
+    }
     glDisable(GL_TEXTURE_2D);
     glEnable(GL_LIGHTING);
     glEnable(GL_COLOR_MATERIAL);
@@ -297,12 +303,12 @@ void PlayerTankRenderer::RenderPlayerTank(const TankRenderData& tank, float drif
 {
     SetupPlayerTankRenderState();
 #ifndef __EMSCRIPTEN__
-    glPushMatrix();
+    if (!RendererMode::IsModern()) glPushMatrix();
 #endif
     RenderTankBody(tank);
     RenderTankTurret(tank);
 #ifndef __EMSCRIPTEN__
-    glPopMatrix();
+    if (!RendererMode::IsModern()) glPopMatrix();
 #endif
     
     RestoreRenderState();

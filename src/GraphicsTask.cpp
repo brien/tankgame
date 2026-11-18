@@ -66,26 +66,27 @@ bool GraphicsTask::Start()
     glCullFace(GL_BACK);
     glFrontFace(GL_CW);
 
-    // Desktop retains its fixed-function lighting/material setup. WebGL uses
-    // explicit shader state and intentionally has no fixed-function analogue.
+    // Only the compatibility renderer uses fixed-function lighting/materials.
 #ifndef __EMSCRIPTEN__
-    GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
-    GLfloat LightPosition[] = {0.0f, 1.0f, 0.0f, 0.0f};
-    glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
-    glPushMatrix();
-    glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
-    glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
-    glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
-    glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHTING);
-    glPopMatrix();
+    if (!RendererMode::IsModern()) {
+        GLfloat LightDiffuse[] = {1.0f, 1.0f, 1.0f, 1.0f};
+        GLfloat LightPosition[] = {0.0f, 1.0f, 0.0f, 0.0f};
+        glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, 1);
+        glPushMatrix();
+        glLightfv(GL_LIGHT0, GL_POSITION, LightPosition);
+        glLightfv(GL_LIGHT0, GL_DIFFUSE, LightDiffuse);
+        glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 0.1f);
+        glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.05f);
+        glEnable(GL_LIGHT0);
+        glEnable(GL_LIGHTING);
+        glPopMatrix();
 
-    // Enable material and texture features
-    glEnable(GL_NORMALIZE);
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    glEnable(GL_TEXTURE_2D);
+        // Enable material and texture features
+        glEnable(GL_NORMALIZE);
+        glEnable(GL_COLOR_MATERIAL);
+        glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+        glEnable(GL_TEXTURE_2D);
+    }
 #endif
 
     // The GL context is current before the authoritative catalogue performs

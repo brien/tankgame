@@ -434,12 +434,8 @@ void RenderingPipeline::RenderItems(const std::vector<ItemRenderData> &items)
 
 void RenderingPipeline::UpdateRenderStats(const SceneData &scene)
 {
-#ifdef __EMSCRIPTEN__
-    renderStats.effectsRendered = 0;
-#else
     renderStats.tanksRendered = static_cast<int>(scene.tanks.size());
     renderStats.effectsRendered = static_cast<int>(scene.effects.size());
-#endif
     renderStats.bulletsRendered = static_cast<int>(scene.bullets.size());
     renderStats.itemsRendered = static_cast<int>(scene.items.size());
 }

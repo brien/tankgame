@@ -56,18 +56,42 @@ No claim is made that every fixed-function call has been removed or guarded by
 this first slice. The inventory identifies the next audit/removal surfaces; the
 new regression covers the three shared state APIs, not every render pass.
 
-## Gates still open
+## Manual qualification accepted
 
-- Windows/macOS modern-default runtime evidence with platform and renderer
-  identified. Existing hosted jobs build and run CPU tests there; they do not
-  enable graphics tests. Linux graphics CI uses Xvfb/software GL.
-- Broader level/UI/effect visual approval and physical firing/controller input.
-  The user's completed gameplay manual testing is recorded, but its unspecified
-  platform/scenario scope does not by itself close these renderer-specific gates.
-- A complete modern-path reachability audit and staged deletion verification.
-  Keep the fallback while qualification is incomplete.
+The owner reports that Linux (SteamOS), macOS, Windows 11 and the browser have
+been manually tested, work correctly and look correct. This closes the requested
+cross-platform runtime and owner visual-approval gates for the tested current
+builds. Modern is the desktop default and the only macOS/browser backend.
+
+This is owner-reported acceptance. Exact builds, browser versions, renderer
+variable overrides, controller models, individual scenarios and session durations
+were not supplied; an exhaustive device/scenario matrix is not inferred.
+Existing Windows/macOS hosted CI still supplies build/CPU-test coverage rather
+than graphics qualification. Linux graphics CI uses Xvfb/software GL.
+
+## Remaining implementation work
+
+- The [modern-path source audit](modern-renderer-audit.md) is complete. It found
+  reachable fixed-function startup calls, stale browser effect statistics and a
+  full-startup/frame core-test gap. The follow-up fixes startup and player-draw
+  legacy calls, corrects the statistics and adds representative core-frame coverage.
+  Continue with the staged deletion sequence in the audit.
+- Verify each deletion against the modern regression contracts and native/browser
+  builds; update renderer selection tests and documentation to the final policy.
+- Retain the fallback until that implementation and verification are complete.
+  The platform/runtime and owner visual-approval gates no longer block this work.
+
+Physical-controller combinations and extended soak remain coverage limits, not
+new approval requirements for the accepted retirement scope.
 
 The previously documented co-op → single-player viewport defect was fixed on
 November 12; it is not an outstanding blocker. Extended multiplayer soak remains
 a separate coverage gap. The original November 7 retirement notes are historical
 and should not be interpreted as undoing that fix or the newer browser evidence.
+
+
+Audit follow-up validation: **235/235** native graphics tests and **3/3** explicit
+compatibility startup tests pass; native/browser builds pass. The new core test
+reproduced startup and player-draw errors before their fixes. See the
+[audit findings and implementation record](modern-renderer-audit.md) for scope
+and remaining coverage limits.

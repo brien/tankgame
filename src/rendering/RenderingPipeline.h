@@ -74,6 +74,8 @@ public:
      * Useful for performance monitoring and debugging.
      */
     struct RenderStats {
+        // Object counts describe the last rendered scene, not GPU submissions
+        // or a sum over player views. They include objects skipped by a pass.
         int tanksRendered;
         int bulletsRendered;
         int effectsRendered;

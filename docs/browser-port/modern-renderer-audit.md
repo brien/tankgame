@@ -1,0 +1,131 @@
+# Modern renderer audit — 2026-11-18
+
+Audited source: `6e600b7`, with the subsequent owner acceptance recorded in the
+working documentation. The source audit was followed by the targeted fixes and
+dynamic regression described below. This is not a new visual qualification or
+a compatibility-removal patch. Findings below describe the audited baseline.
+
+## Findings requiring work
+
+1. **High priority: native startup still reaches fixed-function GL.**
+   `GraphicsTask::Start()` in `src/GraphicsTask.cpp`, immediately after the shared
+   depth/culling setup, guards lighting/material initialization only with
+   `#ifndef __EMSCRIPTEN__`. Modern desktop startup therefore executes
+   `glLightModeli`, `glPushMatrix`, `glLightfv`, `glLightf`, `glPopMatrix`,
+   `glColorMaterial` and legacy lighting/normalization/texture enables.
+   These operations are invalid in the macOS 3.2 core context. Linux/Windows
+   request a 2.1 compatibility context even for modern rendering, masking this
+   dependency. The follow-up regression reproduced startup error 1282 twice
+   before the fix. Visual acceptance does not establish an
+   error-free GL stream. Guard this block by backend, then remove it with the
+   fallback. Add a real core-context GraphicsTask startup/stop regression that
+   checks both GL errors and DEBUG logger output, since logging can consume errors.
+
+2. **Medium priority: browser effect statistics are overwritten with zero.**
+   `RenderingPipeline::RenderEffects()` records submitted effects, but
+   `UpdateRenderStats()` subsequently overwrites `effectsRendered` with zero
+   under `__EMSCRIPTEN__`. Effects now render on the browser. Remove this stale
+   deferred-renderer branch and specify consistent object-count semantics across
+   platforms and viewports. This affects reported statistics, not effect pixels;
+   it does not invalidate owner visual acceptance. Draw/triangle submission
+   counters are separate and should remain authoritative for GPU submissions.
+
+3. **Coverage gap: core tests do not exercise application startup or a full frame.**
+   `CoreRendererTest` covers mesh/VAO submission and three shared state APIs.
+   `VideoStartupTest` starts VideoTask, not GraphicsTask. Effect pixel/depth tests
+   use the platform's selected context (2.1 on Linux). Add core coverage for
+   startup, representative world/UI passes, single/split views and resource
+   teardown before claiming the whole modern path is core-qualified. Existing
+   CPU contracts and manual qualification remain useful, but do not fill this gap.
+
+## Reachability and retained dependencies
+
+| Surface | Audit result | Retirement action |
+| --- | --- | --- |
+| GraphicsTask startup | Reachable legacy block identified above; also initializes duplicate legacy renderer members | Fix startup first; remove duplicate members after verifying their references |
+| Pipeline camera/lighting/state | Modern matrices and RenderContext lighting selected before compatibility GL/GLU branches; shared stack operations now return in modern mode | Keep modern render order and state, delete compatibility branches |
+| Terrain and water | Terrain returns through RenderModernTerrain; water has a modern-only pass after opaque objects | Preserve terrain cache, winding, depth bias and water depth-write contract |
+| Player/enemy/bullet/item/effect draws | Modern geometry is selected, but the full-frame regression exposed legacy player setup and matrix push/pop surrounding that geometry | Retain geometry/material/transform contracts and transparent ordering |
+| HUD/menu/targeting/debug | Modern geometry/font routes bypass fixed-function alternatives | Preserve viewport/scissor restoration, text and split-screen isolation |
+| Sky | GraphicsTask::DrawSky is empty | No hidden legacy sky draw to migrate |
+| DisplayList | Modern SetGeometry owns GpuGeometry; RenderContext::Draw obtains ModernGeometry from this facade | Replace/rename the facade while preserving GPU ownership; do not delete the class wholesale |
+| ResourceManager | Shared textures, meshes, glyphs and terrain batches feed the modern renderer | Keep catalogue and caches; remove only legacy generation/accessors |
+| TextureHandler/GpuTexture | Shared uploads already use portable GL texture operations; raw compatibility handles remain | Remove raw-handle consumers first; preserve shared texture lifetime |
+| Unified TankRenderer | Selected for compatibility; browser supplies a no-op substitute to satisfy symbols | Remove factory enum/constructor paths and GraphicsTask's duplicate member before deleting implementation/substitute |
+| Build boundary | Native GLU linkage lives in src/tests CMakeLists; platform headers still include GLU | Delete calls/includes before removing linkage; validate both native and browser source lists |
+
+Unused helpers are distinct from reachable failures. Searches of `src/` found
+only declarations/definitions for BaseRenderer's SetLighting/PushMatrix/PopMatrix,
+PlayerTankRendererImpl's effects/targeting setup helpers, and the old
+PlayerTankRenderer::DrawPlayerTanks entry point. TerrainRenderer's separate
+Setup3DRenderState has no call sites and hides a nonvirtual base method. These
+contain unsafe legacy calls, but were not identified as active modern paths.
+Remove them rather than preserving misleading APIs. Do not confuse the old
+Tank-based player overloads with the active TankRenderData-based rendering API.
+
+GraphicsTask::Stop destroys the pipeline, cleans and resets the resource manager
+before VideoTask's higher-priority stop destroys the context. ResourceManager's
+Cleanup alone retains TextureHandler-owned textures until destruction; the
+normal Stop path resets the owner. Preserve that ordering during retirement and
+exercise it in the startup/stop test. This observation is not a demonstrated leak.
+
+## Implementation sequence
+
+1. Reproduce and fix the startup core-context error; retain the regression.
+   Correct stale browser statistics and add representative full-frame core
+   coverage, including teardown/recreation while the context is alive.
+2. Remove dormant helpers and duplicate GraphicsTask renderers. Remove the
+   unified TankRenderer/factory alternative and browser substitute together.
+3. Delete compatibility world/UI/orchestration branches, preserving modern
+   passes and their state contracts. Validate native GL regressions and browser
+   build after each coherent slice.
+4. Replace the DisplayList facade with an explicitly named GPU geometry resource;
+   delete display-list APIs, raw compatibility accessors and GLU includes/linkage.
+5. Finalize modern-only selection and fresh-process tests. Retiring the renderer
+   need not raise Linux/Windows context requirements: retain 2.1/GLSL120 policy
+   unless separately changed. Update stale context comments and retirement docs.
+
+## Validation and limits
+
+The existing graphics-enabled native CTest suite was rerun during this audit:
+**234/234 passed**, using `TANKGAME_TEST_GL=1`, `LIBGL_ALWAYS_SOFTWARE=1` and
+`SDL_AUDIODRIVER=dummy`. This result demonstrates the coverage gap above rather
+than disproving the startup finding. That initial run preceded the fixes below. No new visual captures were made.
+
+The owner-reported Linux (SteamOS), macOS, Windows 11 and browser acceptance
+remains recorded in [compatibility-retirement.md](compatibility-retirement.md).
+Compatibility removal is still pending; the source audit is complete for the
+surfaces listed here. The representative core regression below expands dynamic coverage; it is not
+a proof of every possible runtime path or every driver.
+
+
+## Implemented follow-up
+
+- Guarded native GraphicsTask lighting/material initialization by compatibility
+  mode. Modern startup no longer calls removed fixed-function APIs.
+- The representative frame regression then exposed GL_INVALID_ENUM (1280) in
+  player rendering. Its TankRenderData entry point still called native legacy
+  state setup and unconditionally pushed/popped the matrix stack. Modern setup
+  now establishes depth state and returns; matrix operations are compatibility-only.
+- Removed the browser-only zero-effect override. Object counts consistently
+  describe the last rendered scene (including objects skipped by an individual
+  pass); submission counters remain the all-view frame totals.
+- Added `CoreRendererTest.ModernGraphicsStartupFramesAndRecreationAvoidFixedFunctionCalls`.
+  It starts the real GraphicsTask in a 3.2 core context, submits terrain/water,
+  player/enemy tanks, a bullet, item, smoke, debug lines, HUD and menu/text through
+  the pipeline, transitions 1 → 2 → 1 views, clears scene objects and verifies
+  counts reset, then stops and recreates the resources. It checks GL errors,
+  logger errors and nonzero submissions. It does not assert pixel equivalence
+  or all effect/tank/menu variants; existing visual acceptance and specific
+  effect pixel/depth contracts remain separate evidence.
+
+The next retirement slice is removal of dormant helpers and duplicate
+GraphicsTask renderers, followed by the unified compatibility renderer/factory
+alternative. The fallback remains available in this patch.
+
+
+Final follow-up validation: native build passed; graphics-enabled CTest
+**235/235 passed**; explicit compatibility `VideoStartupTest.*` **3/3 passed**;
+Emscripten incremental build passed; `git diff --check` passed. Browser runtime
+was not rerun for this patch, so the browser statistics correction is verified
+by source review/build rather than a new browser runtime assertion.
