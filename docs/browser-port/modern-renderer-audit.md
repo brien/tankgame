@@ -1,11 +1,16 @@
-# Modern renderer audit — 2026-11-18
+# Modern renderer audit — closed 2026-11-19
+
+**Current status:** all five retirement steps are implemented on the feature
+branch. The findings and staged next-step statements below are historical;
+the final closeout records the platform-only policy API and final validation.
+
 
 Audited source: `6e600b7`, with the subsequent owner acceptance recorded in the
 working documentation. The source audit was followed by the targeted fixes and
 dynamic regression described below. This is not a new visual qualification or
 a compatibility-removal patch. Findings below describe the audited baseline.
 
-## Findings requiring work
+## Baseline findings (resolved)
 
 1. **High priority: native startup still reaches fixed-function GL.**
    `GraphicsTask::Start()` in `src/GraphicsTask.cpp`, immediately after the shared
@@ -69,7 +74,7 @@ Cleanup alone retains TextureHandler-owned textures until destruction; the
 normal Stop path resets the owner. Preserve that ordering during retirement and
 exercise it in the startup/stop test. This observation is not a demonstrated leak.
 
-## Implementation sequence
+## Original implementation sequence (completed)
 
 1. Reproduce and fix the startup core-context error; retain the regression.
    Correct stale browser statistics and add representative full-frame core
@@ -265,3 +270,33 @@ ELF NEEDED entries contain OpenGL/GLX but no GLU. Source searches found no remai
 immediate-mode/display-list API calls in src. `git diff --check` passed. CI package
 changes were reviewed locally but hosted CI, macOS/Windows execution and browser
 runtime were not rerun for this slice.
+
+
+## Final policy/API closeout — 2026-11-19
+
+Removed RendererMode, its impossible-mode skips and the backend boolean from
+ChooseContextRequest/ChooseShaderDialect. ContextRequest no longer contains an
+always-true supported flag, and VideoTask no longer has an unreachable macOS
+compatibility rejection. Selection is exclusively platform-based; real context
+creation failures still follow SDL/loader error handling. ModernRenderer retains
+its actual-core-profile shader override for the Linux core regression.
+
+Tests now assert the major/minor/profile and shader dialect for Linux, Windows,
+macOS and Web. Fresh-process tests run these production-policy contracts under
+unset, modern, compatibility, empty and unknown environment settings. They test
+the real platform APIs rather than a constant renderer-mode facade.
+
+All five implementation steps are complete. No further renderer migration is
+queued. New defects, broader device coverage, performance work or other features
+should be scoped separately. Historical fixtures retain revision-specific APIs;
+they are not current build targets. No deployment or new macOS/Windows runtime
+qualification is implied by this implementation closeout.
+
+
+Final closeout validation: native configure/build and graphics-enabled CTest
+**238/238 passed**; Emscripten configure/build passed; the existing browser
+lifecycle flow **31/31 checks passed** against the rebuilt final runtime. Evidence,
+including script/report/screenshots and coverage limits, is retained in the
+[final validation record](../../documentation/renderer-retirement-2026-11-19/README.md).
+`git diff --check` passed. Temporary test processes were stopped. No new
+macOS/Windows execution or deployment is claimed.

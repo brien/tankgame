@@ -3,7 +3,6 @@
 #include "App.h"
 #include "rendering/EffectRenderer.h"
 #include "rendering/RenderContext.h"
-#include "rendering/RendererMode.h"
 
 #include <algorithm>
 #include <cstdlib>
@@ -30,8 +29,6 @@ protected:
         const char* enabled = std::getenv("TANKGAME_TEST_GL");
         if (!enabled || std::strcmp(enabled, "1") != 0)
             GTEST_SKIP() << "Set TANKGAME_TEST_GL=1 to test a real graphics context";
-        if (!RendererMode::IsModern())
-            GTEST_SKIP() << "This regression contract exercises modern rendering";
         app.soundTask = &sound;
         started = video.Start();
         ASSERT_TRUE(started);

@@ -1,19 +1,35 @@
-# Compatibility renderer retirement — started 2026-11-18
+# Compatibility renderer retirement — completed 2026-11-19
 
-The gameplay configuration workstream is complete at `cfa9583`. This is the next
-renderer workstream: qualify the modern path, then remove the legacy fallback
-once its coverage and visual-approval gates are satisfied. At workstream start Linux/Windows supported `TANKGAME_RENDERER=compatibility`;
-the current feature-branch status below supersedes that selection policy.
+Gameplay configuration was completed at `cfa9583`; the subsequent modern-renderer
+retirement workstream is now implemented on the feature branch.
 
-## Current feature-branch status
+## Final implementation status
 
-Modern is now the only selectable backend. The unified TankRenderer, factory
-and browser substitute are removed. All TANKGAME_RENDERER values use modern,
-including old compatibility overrides; context requirements are unchanged.
-The fallback is no longer available. Legacy world/UI/orchestration drawing branches are now deleted. The remaining
-DisplayList/resource facade and GLU dependencies are now removed. GeometryAsset
-provides shared GPU geometry; final policy/API and documentation closeout remain. Earlier slice reports below describe
-their state at the time; see the audit for the current implementation record.
+- Modern is the only renderer. `TANKGAME_RENDERER` is ignored, including old
+  `compatibility` overrides. RendererMode and backend-selection parameters are gone.
+- RenderingPipeline owns player/enemy passes directly; the unified renderer,
+  factory, browser substitute and legacy world/UI/state paths are removed.
+- GeometryAsset owns shared GPU geometry. DisplayList, compatibility resource
+  aliases/raw texture handles and GLU headers/linkage are removed.
+- Context/shader policy depends only on platform: Linux/Windows OpenGL 2.1 and
+  GLSL120; macOS OpenGL 3.2 core and GLSL150; browser WebGL 1/GLES2 and GLSLES100.
+  Linux/Windows compatibility contexts are an API baseline, not a legacy backend.
+
+No renderer-retirement implementation step remains. The [audit and validation
+record](modern-renderer-audit.md) documents the fixes, ownership contracts and
+verification. Owner-reported Linux (SteamOS), macOS, Windows 11 and browser
+acceptance predates the final deletion slices; it is not represented as a fresh
+cross-platform run of the final branch. Extended soak, physical-controller
+combinations and additional browser/device coverage remain separate limits.
+
+Final local validation: **238/238** native graphics tests, native/browser builds
+and **31/31** browser lifecycle checks pass. See the [retained evidence](../../documentation/renderer-retirement-2026-11-19/README.md).
+
+## Historical implementation checkpoints
+
+Everything below records intermediate states. References to a retained fallback,
+pending audit or next deletion slice describe that checkpoint and are superseded
+by the final implementation status above.
 
 ## First implementation slice: shared state in a core context
 
@@ -79,7 +95,7 @@ were not supplied; an exhaustive device/scenario matrix is not inferred.
 Existing Windows/macOS hosted CI still supplies build/CPU-test coverage rather
 than graphics qualification. Linux graphics CI uses Xvfb/software GL.
 
-## Remaining implementation work
+## Historical remaining work after the first slice
 
 - The [modern-path source audit](modern-renderer-audit.md) is complete. It found
   reachable fixed-function startup calls, stale browser effect statistics and a

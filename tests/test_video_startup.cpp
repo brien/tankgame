@@ -11,7 +11,6 @@
 #include "App.h"
 #include "rendering/GLFunctions.h"
 #include "rendering/GpuTexture.h"
-#include "rendering/RendererMode.h"
 #include "rendering/PlayerTankRendererImpl.h"
 #include "rendering/HUDData.h"
 
@@ -182,8 +181,6 @@ TEST_F(CoreRendererTest, DrawsVisiblePixelsAfterVertexArrayBindingChanges)
 }
 TEST_F(CoreRendererTest, ModernSharedRenderStateAvoidsFixedFunctionCalls)
 {
-    if (!RendererMode::IsModern())
-        GTEST_SKIP() << "Modern state contract requires the modern renderer";
     BaseRenderer base;
     PlayerTankRendererImpl player;
     ViewportManager viewports;
@@ -257,8 +254,6 @@ TEST_F(CoreRendererTest, GeometryAssetAliasesShareReplacementAndSurviveOwnerRese
 
 TEST_F(CoreRendererTest, ModernGraphicsStartupFramesAndRecreationAvoidFixedFunctionCalls)
 {
-    if (!RendererMode::IsModern())
-        GTEST_SKIP() << "Modern startup contract requires the modern renderer";
     App app{};
     TankHandler tanks;
     LevelHandler levels;

@@ -1,6 +1,6 @@
 # Browser-port architecture reconciliation and current roadmap
 
-**Status date:** 2026-11-07
+**Status date:** 2026-11-19
 
 **Authority:** the closeout below is the current plan. Dated implementation reports
 and the original reconciliation that follow are historical evidence; their open
@@ -30,7 +30,7 @@ is inferred from the report.
 | R2 — renderer/resource contract and desktop portability | Implemented | General desktop runtime success reported by owner; per-renderer matrix is not claimed. |
 | R3 — shared opaque world | Implemented | Terrain, entities, materials and lighting delivered; exhaustive visual parity deferred. |
 | R4 — effects and view handling | Implemented | Water, effects, overlays, debug lines, split-screen rendering and resize delivered; multiplayer robustness remains separate. |
-| R5 — UI/text and native cutover decision | UI/text implemented | Modern is the only selectable backend; remaining unreachable legacy branches await cleanup. |
+| R5 — UI/text and native cutover decision | UI/text implemented | Modern-only migration complete; legacy drawing/resource APIs and GLU removed. |
 | R6 — browser lifecycle and release | Implemented and deployment confirmed | Close current delivery; defer broader qualification rather than claiming it passed. |
 
 ## Remaining-item dispositions
@@ -45,7 +45,7 @@ For this closeout, retain the working implementation and make these scope choice
   retain OpenGL 2.1/GLSL120; macOS retains 3.2 core/GLSL150; browser retains WebGL 1.
   World/UI/orchestration fixed-function branches are removed. GeometryAsset
   replaces DisplayList, compatibility resource APIs are gone, and GLU is no longer
-  linked or required. Final policy/API and documentation closeout remain. See [the audit](modern-renderer-audit.md).
+  linked or required. Platform-only context/shader APIs and documentation closeout are complete. See [the audit](modern-renderer-audit.md).
 - **Broader qualification: deferred.** Existing Chromium automation and the owner's
   manual report support delivery in tested environments. Firefox, Safari, mobile,
   physical gamepad/audio-device combinations, exhaustive recovery scenarios and
@@ -72,7 +72,37 @@ For this closeout, retain the working implementation and make these scope choice
 
 No further browser feature implementation is required for the current delivery
 scope. Reopen the relevant item for a reproduced defect, new support target or
-planned renderer retirement. Deferred checks are coverage gaps, not passing tests.
+a newly scoped renderer improvement. Deferred checks are coverage gaps, not passing tests.
+
+## Implemented platform decisions
+
+The earlier decision list is historical. Current code uses WebGL/GLES2 with GLSL
+ES 1.00, desktop OpenGL 2.1/GLSL 1.20 on Linux/Windows, and OpenGL 3.2 core/GLSL
+1.50 on macOS. Shader variants share generated source; `TANKGAME_RENDERER`
+is ignored and context/shader selection depends only on platform. Browser audio uses SDL_mixer OGG/WAV with explicit user
+activation. All shipped levels and required assets are preloaded, and settings
+remain read-only. See the [release implementation and hosting guide](../../documentation/browser-release-2026-10-28/README.md)
+for packaging and the existing automated evidence.
+
+## Compatibility retirement closeout — 2026-11-19
+
+All five retirement steps are implemented on the feature branch. The modern
+renderer is the only backend; its world/UI passes, GeometryAsset resources and
+platform-only context/shader APIs replace the old selection, drawing and resource
+paths. GLU is no longer required. No renderer-retirement implementation work
+remains. See [the audit and final validation](modern-renderer-audit.md).
+
+The owner's Linux (SteamOS), macOS, Windows 11 and browser acceptance was reported
+before the final deletion slices. Exact builds, versions, controller combinations
+and durations were not supplied. Final local checks do not imply a new runtime
+qualification on every platform or a deployed release.
+
+## Historical implementation and planning record
+
+Everything below records earlier milestones and planning snapshots. Statements
+such as “not started”, “deployment pending”, “runtime deferred” and lists of human
+decisions describe their original dates. Use the closeout above for current scope
+and status, including the retained qualification and multiplayer gaps.
 
 ## Default-switch validation (2026-11-07)
 
@@ -103,46 +133,6 @@ and split-screen isolation from the historical fixture. Linux CI enables graphic
 tests under Xvfb/software OpenGL. No compatibility renderer is needed to evaluate
 these contracts, and no new visual owner approval is implied. Platform qualification
 and compatibility removal remain open.
-
-## Implemented platform decisions
-
-The earlier decision list is historical. Current code uses WebGL/GLES2 with GLSL
-ES 1.00, desktop OpenGL 2.1/GLSL 1.20 on Linux/Windows, and OpenGL 3.2 core/GLSL
-1.50 on macOS. Shader variants share generated source; desktop renderer selection
-uses `TANKGAME_RENDERER`. Browser audio uses SDL_mixer OGG/WAV with explicit user
-activation. All shipped levels and required assets are preloaded, and settings
-remain read-only. See the [release implementation and hosting guide](../../documentation/browser-release-2026-10-28/README.md)
-for packaging and the existing automated evidence.
-
-## Compatibility retirement follow-up — 2026-11-18
-
-The retirement workstream has started with a [core-profile state cleanup and
-remaining dependency inventory](compatibility-retirement.md). A new regression
-reproduced fixed-function GL errors in shared modern state setup; those calls now
-run only in compatibility mode. Native graphics tests pass 234/234, explicit
-compatibility startup tests pass 3/3, and the browser build passes. The fallback
-remains available. The owner subsequently confirmed successful manual runtime
-and visual testing on Linux (SteamOS), macOS, Windows 11 and the browser. This
-closes the requested platform/runtime and visual-approval gates for the tested
-builds. Exact versions, renderer overrides, controller combinations and session
-durations were not supplied. The [modern-path source audit](modern-renderer-audit.md) is complete: native
-startup and player rendering reached fixed-function calls, browser statistics had
-a stale zero override, and full-startup/frame core coverage was missing. The
-follow-up fixes those calls and statistics and adds a representative core-frame
-regression. The first deletion slice removes dormant helpers, the unused Tank-based player
-API and duplicate GraphicsTask renderer instances. Unified TankRenderer/factory
-retirement is now implemented: the pipeline owns player/enemy renderers directly,
-and legacy environment overrides use modern. World/UI/orchestration legacy draw
-branches are now removed, including previously reachable GraphicsTask::Update
-state calls. GeometryAsset now replaces DisplayList; compatibility resource APIs and GLU
-dependencies are removed. Final policy/API and documentation closeout are next.
-
-## Historical implementation and planning record
-
-Everything below records earlier milestones and planning snapshots. Statements
-such as “not started”, “deployment pending”, “runtime deferred” and lists of human
-decisions describe their original dates. Use the closeout above for current scope
-and status, including the retained qualification and multiplayer gaps.
 
 ## Manual QA terrain precision fix (2026-11-05)
 

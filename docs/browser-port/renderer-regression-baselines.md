@@ -59,39 +59,25 @@ used the available Linux display; Xvfb is not installed locally, so the hosted
 Xvfb wrapper itself remains unverified. Both new modern-effect tests passed.
 `git diff --check` passes. Windows/macOS and browser runtime were not rerun.
 
-## Current retirement status
+## Current retirement status — 2026-11-19
 
-The owner reports successful runtime and visual testing on Linux (SteamOS),
-macOS, Windows 11 and the browser. The requested platform/runtime and visual
-approval gates are closed for those tested builds; exact versions, controller
-combinations and exhaustive scenario coverage were not supplied.
+Renderer retirement is implemented. Modern is the sole backend; old environment
+overrides are ignored. The unified renderer, fallback drawing branches,
+DisplayList/resource compatibility APIs and GLU dependency are removed. Platform
+context/shader requirements are unchanged and are tested without backend flags.
 
-The co-op-to-single-player session defect was fixed on 2026-11-12 and the
-November 18 browser smoke checks passed. The [retirement follow-up](compatibility-retirement.md)
-adds shared-state core-profile regression coverage and records the acceptance.
-The [modern-path audit](modern-renderer-audit.md) records a reachable native
-startup error and missing full-startup/frame core coverage despite an initial
-234/234 regression pass. The follow-up regression reproduced startup and player
-draw errors; fixes guard those calls and correct browser statistics. The new
-core test exercises real startup, representative world/UI frames, 1 → 2 → 1
-views, empty-scene counters and resource recreation. Compatibility remains
-available pending staged removal.
+The core regression covers real GraphicsTask startup, GameTask title-scene update,
+representative world/UI passes, 1 → 2 → 1 views, empty-scene counters and resource
+recreation. GeometryAsset tests cover shared replacement, failed replacement,
+owner reset and rendering through a surviving alias. Existing effect pixel/depth
+contracts remain in the suite.
 
-
-Current feature-branch selection: the unified renderer/factory/browser substitute
-are removed. Modern is the only backend, including under the old `compatibility`
-environment override. RendererMode tests now enforce that policy; earlier
-compatibility runs above are historical evidence. Remaining fixed-function
-source and GLU dependencies await the next deletion slices.
+Owner acceptance covers Linux (SteamOS), macOS, Windows 11 and browser builds
+reported earlier. It is not a fresh runtime run of every final-branch platform.
+See the [audit closeout](modern-renderer-audit.md) for final validation and limits.
+Earlier test counts and fallback comparisons above are historical checkpoints.
 
 
-November 19: the core startup/frame regression now starts GameTask and exercises
-GraphicsTask::Update on its real title scene before representative pipeline
-frames. This covers the native update-state calls removed with the legacy drawing
-branches. Remaining compatibility code is confined to resource/build cleanup.
-
-
-Resource retirement follow-up: GeometryAsset ownership is covered by CPU-only
-empty-state checks and a core-context alias/replacement/reset/pixel regression.
-Game and test targets link directly to OpenGL without GLU. Historical capture
-fixtures retain the APIs of their recorded source revisions.
+Final local validation: **238/238** native graphics-enabled tests and **31/31**
+browser lifecycle checks passed; native/browser builds passed. See the
+[retained final evidence](../../documentation/renderer-retirement-2026-11-19/README.md).

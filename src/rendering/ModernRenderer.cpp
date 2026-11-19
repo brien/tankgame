@@ -50,7 +50,7 @@ public:
         platform = GraphicsPlatform::Windows;
 #endif
         const ShaderDialect dialect = GLFunctions::IsCoreProfile()
-            ? ShaderDialect::GLSL150Core : ChooseShaderDialect(platform, true);
+            ? ShaderDialect::GLSL150Core : ChooseShaderDialect(platform);
         const std::string vertexSource = BuildVertexShader(dialect);
         const std::string fragmentSource = BuildFragmentShader(dialect);
         const GLuint vertex = CompileShader(GL_VERTEX_SHADER, vertexSource.c_str());

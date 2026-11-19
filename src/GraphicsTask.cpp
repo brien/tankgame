@@ -13,7 +13,6 @@
 #include "rendering/SceneDataBuilder.h"
 #include "rendering/RenderingPipeline.h"
 #include "rendering/RenderContext.h"
-#include "rendering/RendererMode.h"
 #include <stdexcept>
 
 #include "App.h"
@@ -56,7 +55,7 @@ bool GraphicsTask::Start()
     InitializeNewRenderingPipeline();
 
     Logger::Get().Write("GraphicsTask::Started\n");
-    Logger::Get().Write("Renderer mode: %s\n", RendererMode::Name());
+    Logger::Get().Write("Renderer: modern\n");
     return renderingPipeline != nullptr;
 }
 

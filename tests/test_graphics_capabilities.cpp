@@ -2,23 +2,33 @@
 
 #include "rendering/GraphicsCapabilities.h"
 
-TEST(GraphicsCapabilities, KeepsLegacyOffCoreProfiles)
+TEST(GraphicsCapabilities, PreservesDesktopHardwareBaseline)
 {
-    const ContextRequest linuxLegacy = ChooseContextRequest(GraphicsPlatform::Linux, false);
-    const ContextRequest windowsLegacy = ChooseContextRequest(GraphicsPlatform::Windows, false);
-    EXPECT_TRUE(linuxLegacy.supported);
-    EXPECT_EQ(linuxLegacy.profile, GraphicsProfile::Compatibility21);
-    EXPECT_EQ(windowsLegacy.profile, GraphicsProfile::Compatibility21);
+    for (const auto platform : {GraphicsPlatform::Linux, GraphicsPlatform::Windows}) {
+        const auto context = ChooseContextRequest(platform);
+        EXPECT_EQ(context.major, 2);
+        EXPECT_EQ(context.minor, 1);
+        EXPECT_EQ(context.profile, GraphicsProfile::Compatibility21);
+        EXPECT_EQ(ChooseShaderDialect(platform), ShaderDialect::GLSL120);
+    }
 }
 
-TEST(GraphicsCapabilities, SelectsMacCoreOnlyForModernRenderer)
+TEST(GraphicsCapabilities, UsesMacCoreProfile)
 {
-    const ContextRequest modern = ChooseContextRequest(GraphicsPlatform::MacOS, true);
-    EXPECT_TRUE(modern.supported);
-    EXPECT_EQ(modern.major, 3);
-    EXPECT_EQ(modern.minor, 2);
-    EXPECT_EQ(modern.profile, GraphicsProfile::Core32);
-    EXPECT_FALSE(ChooseContextRequest(GraphicsPlatform::MacOS, false).supported);
+    const auto context = ChooseContextRequest(GraphicsPlatform::MacOS);
+    EXPECT_EQ(context.major, 3);
+    EXPECT_EQ(context.minor, 2);
+    EXPECT_EQ(context.profile, GraphicsProfile::Core32);
+    EXPECT_EQ(ChooseShaderDialect(GraphicsPlatform::MacOS), ShaderDialect::GLSL150Core);
+}
+
+TEST(GraphicsCapabilities, UsesWebGLES2Profile)
+{
+    const auto context = ChooseContextRequest(GraphicsPlatform::Web);
+    EXPECT_EQ(context.major, 2);
+    EXPECT_EQ(context.minor, 0);
+    EXPECT_EQ(context.profile, GraphicsProfile::ES2);
+    EXPECT_EQ(ChooseShaderDialect(GraphicsPlatform::Web), ShaderDialect::GLSLES100);
 }
 
 TEST(GraphicsCapabilities, BuildsEachShaderDialect)
