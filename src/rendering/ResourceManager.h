@@ -1,7 +1,7 @@
 #pragma once
 
 #include "IRenderer.h"
-#include "../DisplayList.h"
+#include "GeometryAsset.h"
 #include "../TextureHandler.h"
 #include "../igtl_qmesh.h"
 #include "ModernRenderer.h"
@@ -19,7 +19,7 @@ enum class GeometryResource {
 enum class MaterialResource { RingOverlay, StarOverlay };
 
 struct TerrainDrawBatch {
-    DisplayList geometry{0};
+    GeometryAsset geometry;
     BasicMaterial material;
     bool counterClockwise = false;
     bool empty = true;
@@ -31,7 +31,7 @@ using TerrainDrawBatches = std::array<TerrainDrawBatch, static_cast<std::size_t>
  * 
  * This class manages the lifecycle and access to all rendering resources
  * that were previously scattered throughout GraphicsTask, including:
- * - Display lists for geometry rendering
+ * - GPU geometry for geometry rendering
  * - Texture management through TextureHandler  
  * - Mesh data for complex geometry
  * 
@@ -52,50 +52,25 @@ public:
     void SetupRenderState() override;
     void CleanupRenderState() override;
     
-    // Typed modern/compatibility catalogue access. A lookup always returns the
+    // Typed catalogue access. A lookup always returns the
     // same catalogue-owned object for the lifetime of this manager.
-    DisplayList& GetGeometry(GeometryResource resource);
-    const DisplayList& GetGeometry(GeometryResource resource) const;
+    GeometryAsset& GetGeometry(GeometryResource resource);
+    const GeometryAsset& GetGeometry(GeometryResource resource) const;
     const BasicMaterial& GetMaterial(MaterialResource resource) const;
     const ModernRenderer* GetModernRenderer() const { return modernRenderer.get(); }
     const TerrainDrawBatches& PrepareTerrain(const TerrainRenderData& terrain);
 
     const FontAtlas& GetFontAtlas() const { return fontAtlas; }
-    const DisplayList& GetFontGlyph(unsigned char c) const { return fontGlyphs[FontAtlas::GlyphIndex(c)]; }
+    const GeometryAsset& GetFontGlyph(unsigned char c) const { return fontGlyphs[FontAtlas::GlyphIndex(c)]; }
     const std::shared_ptr<const GpuTexture>& GetFontTexture() const { return fontTexture; }
 
-    // Compatibility aliases retained while non-migrated renderers are removed.
-    const DisplayList& GetCubeList1() const { return cubeList1; }
-    const DisplayList& GetCubeList2() const { return cubeList2; }
-    const DisplayList& GetBulletList() const { return bulletList; }
-    const DisplayList& GetBodyList() const { return bodyList; }
-    const DisplayList& GetTurretList() const { return turretList; }
-    const DisplayList& GetCannonList() const { return cannonList; }
-    const DisplayList& GetItemList() const { return itemList; }
-    const DisplayList& GetSquareList() const { return squareList; }
-    const DisplayList& GetSquareList2() const { return squareList2; }
-    
-    // Extended display lists for different tank types
-    const DisplayList& GetBodyListEx() const { return bodyListEx; }
-    const DisplayList& GetTurretListEx() const { return turretListEx; }
-    const DisplayList& GetCannonListEx() const { return cannonListEx; }
-    const DisplayList& GetBodyListEx2() const { return bodyListEx2; }
-    const DisplayList& GetTurretListEx2() const { return turretListEx2; }
-    const DisplayList& GetCannonListEx2() const { return cannonListEx2; }
-    
     // Texture management (delegate to existing TextureHandler)
     TextureHandler& GetTextureHandler() { return textureHandler; }
     const TextureHandler& GetTextureHandler() const { return textureHandler; }
     
-    // Mesh data access
-    const igtl_QGLMesh& GetBodyMesh() const { return bodyMesh; }
-    const igtl_QGLMesh& GetTurretMesh() const { return turretMesh; }
-    const igtl_QGLMesh& GetCannonMesh() const { return cannonMesh; }
-    const igtl_QGLMesh& GetItemMesh() const { return itemMesh; }
-    
     // Resource state queries
     bool IsInitialized() const { return isInitialized; }
-    bool AreDisplayListsReady() const { return displayListsBuilt; }
+    bool IsGeometryReady() const { return geometryReady; }
     bool AreTexturesLoaded() const { return texturesLoaded; }
     bool AreMeshesLoaded() const { return meshesLoaded; }
     
@@ -103,35 +78,34 @@ private:
     // Created before geometry upload and explicitly destroyed after all VBOs.
     std::unique_ptr<ModernRenderer> modernRenderer;
     FontAtlas fontAtlas;
-    std::array<DisplayList, FontAtlas::Count> fontGlyphs;
+    std::array<GeometryAsset, FontAtlas::Count> fontGlyphs;
     std::shared_ptr<const GpuTexture> fontTexture;
     TerrainGeometry terrainGeometry;
     TerrainDrawBatches terrainDraws;
-    // Display lists (moved from GraphicsTask)
-    DisplayList cubeList1{1};
-    DisplayList cubeList2{1};
-    DisplayList bulletList{1};
-    DisplayList bodyList{1};
-    DisplayList turretList{1};
-    DisplayList cannonList{1};
-    DisplayList itemList{1};
-    DisplayList squareList{1};
-    DisplayList squareList2{1};
+    // GPU geometry (moved from GraphicsTask)
+    GeometryAsset terrainCube;
+    GeometryAsset bulletGeometry;
+    GeometryAsset bodyGeometry;
+    GeometryAsset turretGeometry;
+    GeometryAsset cannonGeometry;
+    GeometryAsset itemGeometry;
+    GeometryAsset horizontalQuad;
+    GeometryAsset horizontalOutline;
     
-    // Extended display lists for different tank types
-    DisplayList bodyListEx{1};
-    DisplayList turretListEx{1};
-    DisplayList cannonListEx{1};
-    DisplayList bodyListEx2{1};
-    DisplayList turretListEx2{1};
-    DisplayList cannonListEx2{1};
+    // Extended geometry resources for different tank types
+    GeometryAsset bodyExtruded;
+    GeometryAsset turretExtruded;
+    GeometryAsset cannonExtruded;
+    GeometryAsset bodyEdges;
+    GeometryAsset turretEdges;
+    GeometryAsset cannonEdges;
     
-    DisplayList uiQuad{1};
-    DisplayList uiOutline{1};
-    DisplayList debugLine{1};
-    DisplayList enemyBody{1};
-    DisplayList enemyBarrel{1};
-    DisplayList enemyTurret{1};
+    GeometryAsset uiQuad;
+    GeometryAsset uiOutline;
+    GeometryAsset debugLine;
+    GeometryAsset enemyBody;
+    GeometryAsset enemyBarrel;
+    GeometryAsset enemyTurret;
 
     // Resource managers
     TextureHandler textureHandler;
@@ -146,27 +120,27 @@ private:
     
     // Initialization state tracking
     bool isInitialized;
-    bool displayListsBuilt;
+    bool geometryReady;
     bool texturesLoaded;
     bool meshesLoaded;
     
     // Private initialization methods
-    bool InitializeDisplayLists();
+    bool InitializeGeometry();
     bool InitializeTextures();
     bool InitializeMeshes();
     
-    // Display list building methods (moved from GraphicsTask)
-    void BuildCubeLists();
-    void BuildBulletList();
-    void BuildTankDisplayLists();
-    void BuildItemList();
-    void BuildSquareLists();
+    // Geometry building methods (moved from GraphicsTask)
+    void BuildCubeGeometry();
+    void BuildBulletGeometry();
+    void BuildTankGeometry();
+    void BuildItemGeometry();
+    void BuildQuadGeometry();
     
     // Mesh processing methods (moved from GraphicsTask)
     void PrepareMesh(igtl_QGLMesh& mesh, const char* fileName);
     
     // Cleanup methods
-    void CleanupDisplayLists();
+    void CleanupGeometry();
     void CleanupTextures();
     void CleanupMeshes();
 };

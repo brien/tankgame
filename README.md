@@ -14,7 +14,7 @@ Install these prerequisites:
 - CMake 3.14 or newer and a C++14 compiler.
 - Git, for dependencies downloaded during configuration.
 - SDL2, SDL2_mixer, and SDL2_ttf development libraries.
-- OpenGL development libraries, plus GLU on Linux.
+- OpenGL development libraries (GLU is not required).
 
 From the repository root, configure and build:
 

@@ -36,7 +36,7 @@ public:
      * 
      * @param viewport ViewportManager for handling split-screen layout
      * @param camera CameraManager for camera positioning and behavior
-     * @param resources ResourceManager for accessing display lists, textures, etc.
+     * @param resources ResourceManager for accessing geometry buffers, textures, etc.
      */
     RenderingPipeline(ViewportManager& viewport, CameraManager& camera, 
                      ResourceManager& resources);

@@ -26,6 +26,13 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/runtime)
 find_package(SDL2 REQUIRED)
 find_package(OpenGL REQUIRED)
 
+# Link the GL API directly. FindOpenGL's aggregate OPENGL_LIBRARIES can also
+# include GLU when installed, even though the renderer no longer uses it.
+add_library(tankgame_opengl INTERFACE)
+if(NOT EMSCRIPTEN)
+    target_link_libraries(tankgame_opengl INTERFACE OpenGL::GL)
+endif()
+
 # SDL2_mixer is a normal installed library on desktop platforms. Emscripten
 # supplies it as a port, which must be enabled while compiling (for its
 # headers) and linking. Only Ogg support is needed beyond SDL_mixer's WAV

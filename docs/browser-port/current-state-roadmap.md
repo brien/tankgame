@@ -43,8 +43,9 @@ For this closeout, retain the working implementation and make these scope choice
   `compatibility` override, now use modern rendering on every platform. The
   unified tank renderer, factory and browser substitute are removed. Linux/Windows
   retain OpenGL 2.1/GLSL120; macOS retains 3.2 core/GLSL150; browser retains WebGL 1.
-  World/UI/orchestration fixed-function branches are removed. The DisplayList
-  facade and GLU dependencies remain queued for cleanup. See [the audit](modern-renderer-audit.md).
+  World/UI/orchestration fixed-function branches are removed. GeometryAsset
+  replaces DisplayList, compatibility resource APIs are gone, and GLU is no longer
+  linked or required. Final policy/API and documentation closeout remain. See [the audit](modern-renderer-audit.md).
 - **Broader qualification: deferred.** Existing Chromium automation and the owner's
   manual report support delivery in tested environments. Firefox, Safari, mobile,
   physical gamepad/audio-device combinations, exhaustive recovery scenarios and
@@ -133,7 +134,8 @@ API and duplicate GraphicsTask renderer instances. Unified TankRenderer/factory
 retirement is now implemented: the pipeline owns player/enemy renderers directly,
 and legacy environment overrides use modern. World/UI/orchestration legacy draw
 branches are now removed, including previously reachable GraphicsTask::Update
-state calls. Resource/build dependency cleanup is next.
+state calls. GeometryAsset now replaces DisplayList; compatibility resource APIs and GLU
+dependencies are removed. Final policy/API and documentation closeout are next.
 
 ## Historical implementation and planning record
 

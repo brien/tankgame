@@ -22,7 +22,7 @@ public:
     
     /**
      * Initialize the tank renderer.
-     * Sets up any required OpenGL resources, display lists, textures, etc.
+     * Sets up any required OpenGL resources, geometry buffers, textures, etc.
      * 
      * @return true if initialization successful, false otherwise
      */

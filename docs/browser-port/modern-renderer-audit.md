@@ -222,3 +222,46 @@ graphics-enabled native CTest **235/235 passed**, including the expanded core
 startup/title-update/frame/recreation regression; `git diff --check` passed.
 No new browser runtime, macOS/Windows runtime or pixel-comparison captures were
 made for this slice. Existing effect pixel/depth checks passed in the native suite.
+
+
+## GPU resource and GLU cleanup — 2026-11-19
+
+Replaced DisplayList with rendering/GeometryAsset. The new API owns shared GPU
+geometry without display-list IDs, fixed-function drawing, an unused CPU geometry
+copy or backend selection. Default construction makes no GL calls. Copied entries
+share replacement uploads; resetting a catalogue entry leaves existing copies
+valid until their last owner releases them while the GL context is current.
+SetGeometry prepares the replacement before changing shared storage, preserving
+the existing upload on failure. Catalogue cleanup/recreation and glyph/terrain
+cache ownership retain their prior ordering.
+
+Removed compatibility list aliases, unconsumed mesh getters, raw texture-handle
+accessors and the unused small cube upload. Catalogue member/build/status names
+now describe geometry. ResourceManager no longer branches on the backend.
+Historical fixtures under documentation retain the APIs of their recorded
+revisions; they are reference artifacts, not current build targets.
+
+Removed GLU headers and explicit links from game/tests and helper build scripts,
+and removed the Linux CI GLU development-package dependency. CMake now links
+OpenGL::GL through a shared interface target: merely deleting explicit GLU links
+was insufficient because FindOpenGL's aggregate OPENGL_LIBRARIES still included
+GLU when installed. Emscripten supplies its GL implementation without native
+OpenGL linkage. Context/shader requirements remain unchanged.
+
+Added a CPU-only empty-resource contract and a core-context ownership regression
+covering copy-before-upload, replacement through an alias, invalid replacement
+preserving existing geometry, owner reset, and visible pixels from the surviving
+alias. Existing startup/title-update/frame/recreation coverage also exercises the
+catalogue's new resource type.
+
+Step 4 is complete. Remaining closeout work is the obsolete backend-selection
+parameters/context-policy API and final documentation consistency review; the
+constant-modern policy already prevents legacy overrides from changing backends.
+
+
+Resource-slice validation: native configure/build and Emscripten build passed;
+graphics-enabled CTest **237/237 passed**. Native game/test link commands and
+ELF NEEDED entries contain OpenGL/GLX but no GLU. Source searches found no remaining
+immediate-mode/display-list API calls in src. `git diff --check` passed. CI package
+changes were reviewed locally but hosted CI, macOS/Windows execution and browser
+runtime were not rerun for this slice.

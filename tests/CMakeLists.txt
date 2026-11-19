@@ -80,16 +80,9 @@ target_link_libraries(tankgame_tests
     ${TEST_SDL2_LIBRARIES}
     tankgame_sdl2_mixer
     tankgame_sdl2_ttf
-    ${OPENGL_LIBRARIES}
+    tankgame_opengl
     ${CMAKE_DL_LIBS}
 )
-
-# Add GLU on native Linux/Unix desktops. Emscripten also reports UNIX, but
-# WebAssembly targets must not discover or link the host desktop GLU library.
-if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
-    find_library(GLU_LIBRARY GLU REQUIRED)
-    target_link_libraries(tankgame_tests ${GLU_LIBRARY})
-endif()
 
 # Discover tests for CTest
 include(GoogleTest)

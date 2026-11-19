@@ -29,7 +29,7 @@ public:
     /**
      * Clean up renderer resources and OpenGL state
      * Called during application shutdown or when renderer is destroyed
-     * Should release all OpenGL resources (textures, buffers, display lists, etc.)
+     * Should release all OpenGL resources (textures and buffers, etc.)
      */
     virtual void Cleanup() = 0;
     

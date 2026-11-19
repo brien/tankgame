@@ -11,7 +11,7 @@ case $OS in
         ;;
     Linux)
         EXECUTABLE_NAME="tankgame-linux"
-        OPENGL_FLAGS="-lGL -lGLU"
+        OPENGL_FLAGS="-lGL"
         SILENCE_FLAGS=""
         echo "Building for Linux..."
         ;;

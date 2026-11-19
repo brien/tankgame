@@ -89,3 +89,9 @@ November 19: the core startup/frame regression now starts GameTask and exercises
 GraphicsTask::Update on its real title scene before representative pipeline
 frames. This covers the native update-state calls removed with the legacy drawing
 branches. Remaining compatibility code is confined to resource/build cleanup.
+
+
+Resource retirement follow-up: GeometryAsset ownership is covered by CPU-only
+empty-state checks and a core-context alias/replacement/reset/pixel regression.
+Game and test targets link directly to OpenGL without GLU. Historical capture
+fixtures retain the APIs of their recorded source revisions.

@@ -213,6 +213,48 @@ TEST_F(CoreRendererTest, ModernSharedRenderStateAvoidsFixedFunctionCalls)
     base.Cleanup();
 }
 
+TEST_F(CoreRendererTest, GeometryAssetAliasesShareReplacementAndSurviveOwnerReset)
+{
+    Geometry triangle;
+    triangle.topology = PrimitiveTopology::TRIANGLES;
+    triangle.vertices = {{-1, -1, 0}, {1, -1, 0}, {0, 1, 0}};
+    GeometryAsset asset;
+    GeometryAsset alias = asset;
+    asset.SetGeometry(triangle);
+    EXPECT_EQ(&asset.GetGpuGeometry(), &alias.GetGpuGeometry());
+    EXPECT_EQ(alias.GetGpuGeometry().VertexCount(), 3u);
+    triangle.vertices = {{-1, -1, 0}, {1, -1, 0}, {0, 1, 0},
+                         {-1, -1, 0}, {1, -1, 0}, {0, 1, 0}};
+    alias.SetGeometry(triangle);
+    EXPECT_EQ(&asset.GetGpuGeometry(), &alias.GetGpuGeometry());
+    EXPECT_EQ(asset.GetGpuGeometry().VertexCount(), 6u);
+    Geometry invalid = triangle;
+    invalid.vertices.pop_back();
+    EXPECT_THROW(asset.SetGeometry(invalid), std::invalid_argument);
+    EXPECT_EQ(alias.GetGpuGeometry().VertexCount(), 6u);
+
+    asset = GeometryAsset{};
+    EXPECT_THROW(asset.GetGpuGeometry(), std::logic_error);
+    // The remaining owner must still submit valid pixels after catalogue reset.
+    ModernRenderer renderer;
+    Matrix4 identity;
+    BasicMaterial material;
+    material.green = material.blue = 0;
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glViewport(0, 0, 64, 64);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    renderer.Draw(alias.GetGpuGeometry(), identity.Data(), material, identity.Data(), false);
+    unsigned char pixel[4] = {};
+    glReadPixels(32, 32, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+    EXPECT_GT(pixel[0], 240);
+    EXPECT_LT(pixel[1], 10);
+    EXPECT_LT(pixel[2], 10);
+    alias = GeometryAsset{};
+    EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+}
+
 TEST_F(CoreRendererTest, ModernGraphicsStartupFramesAndRecreationAvoidFixedFunctionCalls)
 {
     if (!RendererMode::IsModern())

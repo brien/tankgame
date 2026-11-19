@@ -11,7 +11,6 @@ public:
     GpuTexture(const GpuTexture&) = delete;
     GpuTexture& operator=(const GpuTexture&) = delete;
     void Bind(unsigned int unit = 0) const;
-    unsigned int CompatibilityHandle() const;
 
 private:
     class Implementation;

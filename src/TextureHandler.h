@@ -16,21 +16,18 @@ enum TextureNames
     TEXTURE_MULTISHOT, TEXTURE_SCORE, TEXTURE_ENEMY, TEXTURE_NAMES_COUNT
 };
 
-// Transitional catalogue: modern code receives owned resources; the raw array
-// remains only for compatibility renderers until their migration.
+// Typed catalogue of shared texture and decoded image resources.
 class TextureHandler
 {
 public:
-    TextureHandler();
+    TextureHandler() = default;
     ~TextureHandler() = default;
     void LoadTextures();
     std::shared_ptr<const GpuTexture> GetTexture(TextureNames name) const;
     std::shared_ptr<const ImageData> GetImage(TextureNames name) const;
-    unsigned int* GetTextureArray() { return compatibilityHandles.data(); }
 
 private:
     std::array<std::shared_ptr<GpuTexture>, TEXTURE_NAMES_COUNT> textures;
     std::array<std::shared_ptr<const ImageData>, TEXTURE_NAMES_COUNT> images;
-    std::array<unsigned int, 32> compatibilityHandles;
     void LoadTexture(const char* fileName, TextureNames id, bool wrap);
 };

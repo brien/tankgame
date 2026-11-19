@@ -11,7 +11,8 @@ Modern is now the only selectable backend. The unified TankRenderer, factory
 and browser substitute are removed. All TANKGAME_RENDERER values use modern,
 including old compatibility overrides; context requirements are unchanged.
 The fallback is no longer available. Legacy world/UI/orchestration drawing branches are now deleted. The remaining
-DisplayList/resource facade and GLU dependencies still await cleanup. Earlier slice reports below describe
+DisplayList/resource facade and GLU dependencies are now removed. GeometryAsset
+provides shared GPU geometry; final policy/API and documentation closeout remain. Earlier slice reports below describe
 their state at the time; see the audit for the current implementation record.
 
 ## First implementation slice: shared state in a core context

@@ -3,7 +3,7 @@
 #include "Matrix4.h"
 #include "BasicMaterial.h"
 
-class DisplayList;
+class GeometryAsset;
 class ModernRenderer;
 
 class RenderContext
@@ -15,9 +15,9 @@ public:
     void SetView(const Matrix4& value) { view = value; }
     void SetLighting(bool value) { lighting = value; }
     Matrix4 Mvp(const Matrix4& model) const { return projection * view * model; }
-    void Draw(const DisplayList& resource, const Matrix4& model,
+    void Draw(const GeometryAsset& resource, const Matrix4& model,
               float red, float green, float blue, float alpha = 1.0f, bool lit = true) const;
-    void Draw(const DisplayList& resource, const Matrix4& model,
+    void Draw(const GeometryAsset& resource, const Matrix4& model,
               const BasicMaterial& material) const;
 
 private:

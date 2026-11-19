@@ -44,7 +44,7 @@ bool GraphicsTask::Start()
     glFrontFace(GL_CW);
 
     // The GL context is current before the authoritative catalogue performs
-    // any texture, buffer, shader, or compatibility display-list upload.
+    // any texture, buffer or shader upload.
     resourceManager = std::make_unique<ResourceManager>();
     if (!resourceManager->Initialize())
     {

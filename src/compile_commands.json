@@ -32,10 +32,10 @@
       "-std=c++20",
       "-o",
       "tankgame",
-      "DisplayList.cpp"
+      "rendering/GeometryAsset.cpp"
     ],
     "directory": "/home/deck/Dropbox/work/Programming/tankgame/src",
-    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/DisplayList.cpp",
+    "file": "/home/deck/Dropbox/work/Programming/tankgame/src/rendering/GeometryAsset.cpp",
     "output": "/home/deck/Dropbox/work/Programming/tankgame/src/tankgame"
   },
   {

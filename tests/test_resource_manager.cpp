@@ -2,12 +2,20 @@
 
 #include "rendering/ResourceManager.h"
 
+TEST(GeometryAssetTest, EmptyCopiesFailExplicitlyWithoutAGraphicsContext)
+{
+    GeometryAsset asset;
+    GeometryAsset copy = asset;
+    EXPECT_THROW(asset.GetGpuGeometry(), std::logic_error);
+    EXPECT_THROW(copy.GetGpuGeometry(), std::logic_error);
+}
+
 TEST(RendererResourceCatalogueTest, RepeatedGeometryLookupReturnsSameResource)
 {
     ResourceManager resources;
 
-    DisplayList& first = resources.GetGeometry(GeometryResource::TankBody);
-    DisplayList& second = resources.GetGeometry(GeometryResource::TankBody);
+    GeometryAsset& first = resources.GetGeometry(GeometryResource::TankBody);
+    GeometryAsset& second = resources.GetGeometry(GeometryResource::TankBody);
 
     EXPECT_EQ(&first, &second);
     EXPECT_NE(&first, &resources.GetGeometry(GeometryResource::TankTurret));
