@@ -42,19 +42,8 @@ bool RenderingPipeline::Initialize()
     success &= hudRenderer.Initialize();
     success &= menuRenderer.Initialize();
 
-    // Modern player and enemy passes share the catalogue and submission backend.
-    if (RendererMode::IsModern()) success &= enemyTankRenderer.Initialize();
-    tankRenderer = RendererMode::IsModern()
-        ? TankRendererFactory::CreateRenderer(TankRendererFactory::RendererType::PLAYER_TANK)
-        : TankRendererFactory::CreateUnifiedRenderer();
-    if (tankRenderer)
-    {
-        success &= tankRenderer->Initialize();
-    }
-    else
-    {
-        success = false;
-    }
+    success &= enemyTankRenderer.Initialize();
+    success &= playerTankRenderer.Initialize();
     Logger::Get().Write("RenderingPipeline Initialized Successfully: %d\n", static_cast<int>(success));
     return success;
 }
@@ -62,14 +51,8 @@ bool RenderingPipeline::Initialize()
 void RenderingPipeline::Cleanup()
 {
     renderStats = {};
-    // Cleanup all specialized renderers
-    if (tankRenderer)
-    {
-        tankRenderer->Cleanup();
-        tankRenderer.reset();
-    }
-
-    if (RendererMode::IsModern()) enemyTankRenderer.Cleanup();
+    playerTankRenderer.Cleanup();
+    enemyTankRenderer.Cleanup();
 
     // Cleanup UI renderers
     hudRenderer.Cleanup();
@@ -343,10 +326,8 @@ void RenderingPipeline::RenderTransparentObjects(const SceneData &scene)
     RenderEffects(scene.effects);
     // All depth-writing objects (including effect outlines) must precede the
     // additive player overlays. They test world depth without modifying it.
-    if (RendererMode::IsModern() && tankRenderer) {
-        for (const auto& tank : scene.tanks) {
-            if (tank.alive && tank.isPlayer) tankRenderer->RenderOverlays(tank);
-        }
+    for (const auto& tank : scene.tanks) {
+        if (tank.alive && tank.isPlayer) playerTankRenderer.RenderOverlays(tank);
     }
 }
 
@@ -360,22 +341,21 @@ void RenderingPipeline::RenderUIElements(const SceneData &scene, int playerIndex
 
 void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
 {
-    if (RendererMode::IsModern()) {
-    if (tanks.empty() || !tankRenderer)
+    if (tanks.empty())
     {
         return;
     }
 
     int tanksRendered = 0;
     // Submit player meshes here; overlays follow the complete opaque world.
-    tankRenderer->SetupRenderState();
+    playerTankRenderer.SetupRenderState();
     for (const TankRenderData& tank : tanks) {
         if (tank.alive && tank.isPlayer) {
-            tankRenderer->RenderOpaque(tank);
+            playerTankRenderer.RenderOpaque(tank);
             ++tanksRendered;
         }
     }
-    tankRenderer->CleanupRenderState();
+    playerTankRenderer.CleanupRenderState();
     enemyTankRenderer.SetupRenderState();
     for (const TankRenderData& tank : tanks) {
         if (tank.alive && !tank.isPlayer) {
@@ -385,17 +365,6 @@ void RenderingPipeline::RenderTanks(const std::vector<TankRenderData> &tanks)
     }
     enemyTankRenderer.CleanupRenderState();
     renderStats.tanksRendered = tanksRendered;
-    return;
-    }
-#ifndef __EMSCRIPTEN__
-    if (tanks.empty() || !tankRenderer)
-    {
-        return;
-    }
-
-    tankRenderer->RenderMultiple(tanks);
-    renderStats.tanksRendered = static_cast<int>(tanks.size());
-#endif
 }
 
 void RenderingPipeline::RenderBullets(const std::vector<BulletRenderData> &bullets)

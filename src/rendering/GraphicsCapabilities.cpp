@@ -7,8 +7,8 @@ ContextRequest ChooseContextRequest(GraphicsPlatform platform, bool modern)
         if (!modern) return {0, 0, GraphicsProfile::Core32, false};
         return {3, 2, GraphicsProfile::Core32, true};
     }
-    // Linux and Windows retain a 2.1 compatibility context in both modes. It
-    // is the only way the modern slice can coexist with not-yet-migrated code.
+    // Keep the Linux/Windows OpenGL 2.1 hardware baseline. A compatibility
+    // context does not select the retired fixed-function renderer.
     return {2, 1, GraphicsProfile::Compatibility21, true};
 }
 

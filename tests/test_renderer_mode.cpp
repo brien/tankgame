@@ -3,8 +3,8 @@
 #include <cstring>
 #include <iostream>
 
-// CTest launches a fresh process for each environment so selection exercises
-// the production process-wide cache without changing environment mid-process.
+// CTest launches a fresh process for each environment to verify that old
+// overrides cannot reactivate the retired compatibility backend.
 int main(int argc, char** argv)
 {
     if (argc != 2) return 2;

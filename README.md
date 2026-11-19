@@ -51,11 +51,10 @@ On Windows, the current CMake target is also named `tankgame-linux`, producing
 build with `cmake --build build --config Release`, then run
 `.\Release\tankgame-linux.exe` from the `runtime` directory.
 
-Modern rendering is the default on all platforms. On Linux and Windows, set
-`TANKGAME_RENDERER=compatibility` to use the retained legacy renderer; macOS does
-not support that fallback. `TANKGAME_RENDERER=modern` explicitly selects modern
-rendering; unset, empty or unrecognized values also select modern. The browser
-always uses modern rendering regardless of the setting.
+Modern rendering is the only supported backend on all platforms. The legacy
+renderer has been retired; `TANKGAME_RENDERER` overrides (including
+`compatibility`) are ignored. Linux/Windows retain OpenGL 2.1/GLSL 1.20,
+macOS uses OpenGL 3.2 core/GLSL 1.50, and the browser uses WebGL 1.
 
 ## Browser build and hosting
 

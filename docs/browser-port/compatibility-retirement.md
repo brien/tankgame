@@ -2,8 +2,17 @@
 
 The gameplay configuration workstream is complete at `cfa9583`. This is the next
 renderer workstream: qualify the modern path, then remove the legacy fallback
-once its coverage and visual-approval gates are satisfied. Linux/Windows still
-support `TANKGAME_RENDERER=compatibility`; macOS/browser remain modern-only.
+once its coverage and visual-approval gates are satisfied. At workstream start Linux/Windows supported `TANKGAME_RENDERER=compatibility`;
+the current feature-branch status below supersedes that selection policy.
+
+## Current feature-branch status
+
+Modern is now the only selectable backend. The unified TankRenderer, factory
+and browser substitute are removed. All TANKGAME_RENDERER values use modern,
+including old compatibility overrides; context requirements are unchanged.
+The fallback is no longer available. Remaining legacy draw/resource branches
+and GLU dependencies still await deletion. Earlier slice reports below describe
+their state at the time; see the audit for the current implementation record.
 
 ## First implementation slice: shared state in a core context
 

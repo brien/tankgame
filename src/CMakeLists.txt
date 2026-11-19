@@ -5,20 +5,10 @@ file(GLOB_RECURSE SOURCES
 
 # Remove example files that shouldn't be compiled
 list(FILTER SOURCES EXCLUDE REGEX ".*_example\\.cpp$")
-list(FILTER SOURCES EXCLUDE REGEX "/rendering/BrowserDeferredRenderers\\.cpp$")
 
 set(GAME_SOURCES ${SOURCES})
 list(FILTER GAME_SOURCES EXCLUDE REGEX "/main\\.cpp$")
 set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
-
-# Only the legacy unified tank renderer still needs a browser substitute.
-# HUD orchestration and all modern visual passes compile from shared sources.
-if(EMSCRIPTEN)
-    list(FILTER SOURCES EXCLUDE REGEX "/rendering/TankRenderer\\.cpp$")
-    list(APPEND SOURCES
-        "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
-    )
-endif()
 
 # Set executable name based on platform
 if(APPLE)

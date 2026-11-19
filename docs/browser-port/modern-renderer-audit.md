@@ -157,3 +157,34 @@ CTest **235/235 passed**, including the full core startup/frame/recreation test;
 explicit compatibility VideoStartupTest **3/3 passed**; `git diff --check` passed.
 No new tests were needed for deleting uncalled code. Browser runtime and
 macOS/Windows builds were not rerun for this cleanup.
+
+
+## Unified renderer retirement — feature branch follow-up
+
+RenderingPipeline now owns PlayerTankRendererImpl and EnemyTankRendererImpl
+as concrete members and always uses the established opaque-player, opaque-enemy,
+then transparent-overlay ordering. Removed the unified TankRenderer, its factory,
+the browser no-op substitute, and the obsolete factory example. Both native and
+browser CMake source lists now use the same remaining renderer implementation.
+The enemy input-rejection test now exercises the concrete renderer directly.
+
+RendererMode temporarily remains as a constant-modern facade while remaining
+legacy branches are removed. Every environment value, including `compatibility`,
+uses modern rendering; this preserves startup for old launch configurations
+without exposing an incomplete fallback. Fresh-process selection tests enforce
+this policy. Context and shader baselines are unchanged; OpenGL compatibility
+*context* support on Linux/Windows is distinct from the retired renderer.
+
+This completes step 2 and advances the selection policy from step 5 because
+removing the unified renderer makes the old fallback incomplete. Next: remove
+unreachable world/UI/orchestration branches, then replace the DisplayList GPU
+resource facade and remove obsolete GLU/resource APIs. Do not delete that facade
+wholesale: modern geometry still depends on it.
+
+
+Retirement-slice validation: native configure/build and Emscripten build passed;
+graphics-enabled native CTest **235/235 passed**, including all five fresh-process
+selection cases. With `TANKGAME_RENDERER=compatibility`, VideoStartupTest and the
+full core startup/frame/recreation regression **4/4 passed without skips**, proving
+the old override reaches the modern backend. `git diff --check` passed. No new
+browser runtime or macOS/Windows execution is claimed for this slice.

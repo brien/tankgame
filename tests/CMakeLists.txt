@@ -118,8 +118,8 @@ if(NOT EMSCRIPTEN)
         --unset=TANKGAME_RENDERER $<TARGET_FILE:renderer_mode_tests> modern)
     add_test(NAME RendererMode.ExplicitModern COMMAND ${CMAKE_COMMAND} -E env
         TANKGAME_RENDERER=modern $<TARGET_FILE:renderer_mode_tests> modern)
-    add_test(NAME RendererMode.ExplicitCompatibility COMMAND ${CMAKE_COMMAND} -E env
-        TANKGAME_RENDERER=compatibility $<TARGET_FILE:renderer_mode_tests> compatibility)
+    add_test(NAME RendererMode.LegacyOverrideUsesModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=compatibility $<TARGET_FILE:renderer_mode_tests> modern)
     add_test(NAME RendererMode.EmptyUsesModern COMMAND ${CMAKE_COMMAND} -E env
         TANKGAME_RENDERER= $<TARGET_FILE:renderer_mode_tests> modern)
     add_test(NAME RendererMode.UnknownUsesModern COMMAND ${CMAKE_COMMAND} -E env

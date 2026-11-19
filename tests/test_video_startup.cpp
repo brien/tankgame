@@ -17,8 +17,7 @@
 
 // Opt in on a machine with a display and OpenGL:
 // TANKGAME_TEST_GL=1 ./tankgame_tests --gtest_filter=VideoStartupTest.*
-// Run the default modern mode and, on Linux/Windows, a separate process with
-// TANKGAME_RENDERER=compatibility.
+// Old TANKGAME_RENDERER overrides also use the modern backend.
 class VideoStartupTest : public ::testing::Test
 {
 protected:

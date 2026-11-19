@@ -30,7 +30,7 @@ is inferred from the report.
 | R2 — renderer/resource contract and desktop portability | Implemented | General desktop runtime success reported by owner; per-renderer matrix is not claimed. |
 | R3 — shared opaque world | Implemented | Terrain, entities, materials and lighting delivered; exhaustive visual parity deferred. |
 | R4 — effects and view handling | Implemented | Water, effects, overlays, debug lines, split-screen rendering and resize delivered; multiplayer robustness remains separate. |
-| R5 — UI/text and native cutover decision | UI/text implemented | Modern is now the desktop default; retain explicit Linux/Windows compatibility fallback. |
+| R5 — UI/text and native cutover decision | UI/text implemented | Modern is the only selectable backend; remaining unreachable legacy branches await cleanup. |
 | R6 — browser lifecycle and release | Implemented and deployment confirmed | Close current delivery; defer broader qualification rather than claiming it passed. |
 
 ## Remaining-item dispositions
@@ -38,13 +38,13 @@ is inferred from the report.
 The owner authorized proceeding with remaining work or skipping it as necessary.
 For this closeout, retain the working implementation and make these scope choices:
 
-- **Compatibility retirement: staged (2026-11-07).** The owner authorized step 1:
-  modern is now the desktop default. `TANKGAME_RENDERER=compatibility` retains
-  the Linux/Windows fallback; macOS rejects compatibility as before. Explicit
-  `modern`, unset, empty and unrecognized values select modern. Browser always
-  uses modern rendering. Context profiles and rendering algorithms are unchanged.
-  Compatibility removal remains deferred pending renderer coverage and visual
-  approval; this default change does not claim new cross-platform visual testing.
+- **Compatibility retirement: backend retired on the feature branch.** Modern
+  is the only selectable backend. `TANKGAME_RENDERER` values, including the old
+  `compatibility` override, now use modern rendering on every platform. The
+  unified tank renderer, factory and browser substitute are removed. Linux/Windows
+  retain OpenGL 2.1/GLSL120; macOS retains 3.2 core/GLSL150; browser retains WebGL 1.
+  Remaining fixed-function branches, DisplayList facade and GLU dependencies are
+  queued for staged deletion. See [the audit](modern-renderer-audit.md).
 - **Broader qualification: deferred.** Existing Chromium automation and the owner's
   manual report support delivery in tested environments. Firefox, Safari, mobile,
   physical gamepad/audio-device combinations, exhaustive recovery scenarios and
@@ -130,7 +130,9 @@ a stale zero override, and full-startup/frame core coverage was missing. The
 follow-up fixes those calls and statistics and adds a representative core-frame
 regression. The first deletion slice removes dormant helpers, the unused Tank-based player
 API and duplicate GraphicsTask renderer instances. Unified TankRenderer/factory
-retirement is next; compatibility removal is not yet complete.
+retirement is now implemented: the pipeline owns player/enemy renderers directly,
+and legacy environment overrides use modern. Removal of unreachable draw
+branches and legacy resource/build dependencies is next.
 
 ## Historical implementation and planning record
 

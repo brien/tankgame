@@ -76,3 +76,10 @@ draw errors; fixes guard those calls and correct browser statistics. The new
 core test exercises real startup, representative world/UI frames, 1 → 2 → 1
 views, empty-scene counters and resource recreation. Compatibility remains
 available pending staged removal.
+
+
+Current feature-branch selection: the unified renderer/factory/browser substitute
+are removed. Modern is the only backend, including under the old `compatibility`
+environment override. RendererMode tests now enforce that policy; earlier
+compatibility runs above are historical evidence. Remaining fixed-function
+source and GLU dependencies await the next deletion slices.

@@ -9,9 +9,8 @@
 #include "BulletRenderer.h"
 #include "EffectRenderer.h"
 #include "ItemRenderer.h"
-#include "ITankRenderer.h"
+#include "PlayerTankRendererImpl.h"
 #include "EnemyTankRendererImpl.h"
-#include "TankRendererFactory.h"
 #include "HUDRenderer.h"
 #include "MenuRenderer.h"
 #include <memory>
@@ -108,7 +107,7 @@ private:
     BulletRenderer bulletRenderer;
     EffectRenderer effectRenderer;
     ItemRenderer itemRenderer;
-    std::unique_ptr<ITankRenderer> tankRenderer;
+    PlayerTankRendererImpl playerTankRenderer;
     EnemyTankRendererImpl enemyTankRenderer;
     
     // UI renderers

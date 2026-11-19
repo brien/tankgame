@@ -153,7 +153,7 @@ namespace Phase4Example {
         
         // 3. New tank types:
         // - Create new ITankRenderer implementation
-        // - Add to TankRendererFactory
+        // - Add the renderer to RenderingPipeline
         // - No changes needed to pipeline
         
         // 4. New post-processing effects:
