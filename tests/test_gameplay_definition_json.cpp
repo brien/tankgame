@@ -10,6 +10,7 @@
 #include "Tank.h"
 #include <nlohmann/json.hpp>
 #include <fstream>
+#include <iterator>
 #include <cstdio>
 #include <limits>
 #include <chrono>
@@ -339,8 +340,20 @@ TEST(GameplayDefinitionLoader, ExportLoadAndFailuresDoNotReplaceExistingFiles) {
     EXPECT_THROW(LoadDefinitionFile(file.path), std::runtime_error);
     ExportBuiltInDefinitionFile(file.path);
     Equal(BuildBuiltInDefinitions(), LoadDefinitionFile(file.path));
+    {
+        std::ifstream input(file.path, std::ios::binary);
+        const std::string bytes((std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
+        EXPECT_EQ(bytes, SerializeDefinitionJson(BuildBuiltInDefinitions()));
+    }
     EXPECT_THROW(ExportBuiltInDefinitionFile(file.path), std::runtime_error);
     Equal(BuildBuiltInDefinitions(), LoadDefinitionFile(file.path));
+    file.Write("Keep this authored configuration");
+    EXPECT_THROW(ExportBuiltInDefinitionFile(file.path), std::runtime_error);
+    {
+        std::ifstream input(file.path, std::ios::binary);
+        const std::string bytes((std::istreambuf_iterator<char>(input)), std::istreambuf_iterator<char>());
+        EXPECT_EQ(bytes, "Keep this authored configuration");
+    }
     file.Write("{}");
     try { LoadDefinitionFile(file.path); FAIL(); }
     catch (const std::exception& e) { EXPECT_NE(std::string(e.what()).find(file.path), std::string::npos); }

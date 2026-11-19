@@ -5,6 +5,11 @@
 #include <cstring>
 #include <fstream>
 #include <stdexcept>
+#ifdef _WIN32
+#include <fcntl.h>
+#include <io.h>
+#include <sys/stat.h>
+#endif
 
 namespace Gameplay {
 DefinitionOptions ParseDefinitionOptions(int argc, char* argv[]) {
@@ -50,7 +55,21 @@ GameplayDefinitions LoadDefinitionFile(const std::string& path) {
 void ExportBuiltInDefinitionFile(const std::string& path) {
     const std::string text = SerializeDefinitionJson(BuildBuiltInDefinitions());
     // Exclusive creation prevents accidental replacement of an authored file.
-    FILE* output = std::fopen(path.c_str(), "wx");
+#ifdef _WIN32
+    // MinGW's MSVCRT does not support fopen's 'x' mode. Create exclusively
+    // through the descriptor API, then transfer ownership to a binary stream.
+    const int descriptor = _open(path.c_str(), _O_WRONLY | _O_CREAT | _O_EXCL | _O_BINARY,
+                                 _S_IREAD | _S_IWRITE);
+    FILE* output = descriptor < 0 ? nullptr : _fdopen(descriptor, "wb");
+    if (!output && descriptor >= 0) {
+        const int error = errno;
+        _close(descriptor);
+        std::remove(path.c_str());
+        errno = error;
+    }
+#else
+    FILE* output = std::fopen(path.c_str(), "wbx");
+#endif
     if (!output) throw std::runtime_error(path + ": cannot create export: " + std::strerror(errno));
     const bool written = std::fwrite(text.data(), 1, text.size(), output) == text.size();
     const bool closed = std::fclose(output) == 0;
