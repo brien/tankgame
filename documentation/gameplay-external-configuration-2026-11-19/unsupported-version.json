@@ -1,0 +1,16 @@
+{
+  "checks": [
+    {
+      "label": "visible startup failure",
+      "value": true
+    },
+    {
+      "label": "no frame loop",
+      "value": true
+    },
+    {
+      "label": "diagnostic identifies configuration",
+      "value": true
+    }
+  ]
+}

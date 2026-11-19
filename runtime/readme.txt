@@ -1,4 +1,18 @@
 Tank! Game  readme.txt
+Current gameplay configuration:
+  gameplay.json contains editable tank, weapon, movement and other gameplay rules.
+  From this directory, validate and launch it with:
+    ./tankgame-linux --validate-gameplay-config gameplay.json
+    ./tankgame-linux
+  Use tankgame-mac on macOS or the Windows executable on Windows.
+  gameplay.json loads automatically. Use --gameplay-config other.json to select
+  another file. Loading failures are logged and use built-in defaults. Restart
+  after edits.
+  settings.txt controls display/difficulty/sound; levels/*.json controls level
+  metadata and enemy counts. See ../README.md for current build/run instructions.
+
+Historical readme follows:
+
 for Windows98/2000/XP(OpenGL required)
 Second Iteration
 (C) Brien Smith-Martinez

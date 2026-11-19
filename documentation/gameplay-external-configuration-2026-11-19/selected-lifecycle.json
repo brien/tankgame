@@ -1,0 +1,128 @@
+{
+  "checks": [
+    {
+      "label": "startup",
+      "value": true
+    },
+    {
+      "label": "all levels packaged",
+      "value": true
+    },
+    {
+      "label": "audio assets packaged",
+      "value": true
+    },
+    {
+      "label": "sound requires activation",
+      "value": true
+    },
+    {
+      "label": "audio rejection retry",
+      "value": true
+    },
+    {
+      "label": "audio active",
+      "value": true
+    },
+    {
+      "label": "OGG produces audio samples",
+      "value": true
+    },
+    {
+      "label": "context paused 0",
+      "value": true
+    },
+    {
+      "label": "no lost-context frames 0",
+      "value": true
+    },
+    {
+      "label": "context recovered 0",
+      "value": true
+    },
+    {
+      "label": "rendering resumed 0",
+      "value": true
+    },
+    {
+      "label": "context paused 1",
+      "value": true
+    },
+    {
+      "label": "no lost-context frames 1",
+      "value": true
+    },
+    {
+      "label": "context recovered 1",
+      "value": true
+    },
+    {
+      "label": "rendering resumed 1",
+      "value": true
+    },
+    {
+      "label": "hotplug gamepad fires",
+      "value": true
+    },
+    {
+      "label": "disconnect keeps rendering healthy",
+      "value": true
+    },
+    {
+      "label": "reconnected held button suppressed",
+      "value": true
+    },
+    {
+      "label": "fresh gamepad press after reconnect fires",
+      "value": true
+    },
+    {
+      "label": "next level loaded",
+      "value": true
+    },
+    {
+      "label": "responsive resize",
+      "value": true
+    },
+    {
+      "label": "DPI resize",
+      "value": true
+    },
+    {
+      "label": "fullscreen",
+      "value": true
+    },
+    {
+      "label": "blur suspends audio",
+      "value": true
+    },
+    {
+      "label": "focus resumes audio",
+      "value": true
+    },
+    {
+      "label": "steady play has no buffer uploads or GL errors",
+      "value": true
+    },
+    {
+      "label": "shutdown",
+      "value": true
+    },
+    {
+      "label": "audio closed",
+      "value": true
+    },
+    {
+      "label": "download failure offers retry",
+      "value": true
+    },
+    {
+      "label": "download retry starts game",
+      "value": true
+    },
+    {
+      "label": "failed graphics recovery offers retry and stops tasks",
+      "value": true
+    }
+  ]
+}

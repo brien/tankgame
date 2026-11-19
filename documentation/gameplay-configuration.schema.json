@@ -1,0 +1,1265 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tankgame gameplay definitions, version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schemaVersion": {
+      "type": "integer",
+      "const": 1
+    },
+    "definitions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "tank": {
+          "$ref": "#/$defs/TankDefaults"
+        },
+        "projectile": {
+          "$ref": "#/$defs/ProjectileRules"
+        },
+        "player": {
+          "$ref": "#/$defs/PlayerRules"
+        },
+        "combat": {
+          "$ref": "#/$defs/CombatRules"
+        },
+        "enemy": {
+          "$ref": "#/$defs/EnemyRules"
+        },
+        "input": {
+          "$ref": "#/$defs/InputRules"
+        },
+        "joystick": {
+          "$ref": "#/$defs/JoystickRules"
+        },
+        "special": {
+          "$ref": "#/$defs/SpecialRules"
+        },
+        "landing": {
+          "$ref": "#/$defs/LandingRules"
+        },
+        "enemyBehavior": {
+          "$ref": "#/$defs/EnemyBehaviorRules"
+        },
+        "gameCube": {
+          "$ref": "#/$defs/JoystickRules"
+        },
+        "types": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "grey": {
+              "$ref": "#/$defs/TankTypeConfig"
+            },
+            "red": {
+              "$ref": "#/$defs/TankTypeConfig"
+            },
+            "blue": {
+              "$ref": "#/$defs/TankTypeConfig"
+            },
+            "yellow": {
+              "$ref": "#/$defs/TankTypeConfig"
+            },
+            "purple": {
+              "$ref": "#/$defs/TankTypeConfig"
+            }
+          },
+          "required": [
+            "grey",
+            "red",
+            "blue",
+            "yellow",
+            "purple"
+          ]
+        },
+        "difficulties": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "easy": {
+              "$ref": "#/$defs/DifficultyModifiers"
+            },
+            "normal": {
+              "$ref": "#/$defs/DifficultyModifiers"
+            },
+            "hard": {
+              "$ref": "#/$defs/DifficultyModifiers"
+            }
+          },
+          "required": [
+            "easy",
+            "normal",
+            "hard"
+          ]
+        },
+        "combinations": {
+          "type": "array",
+          "maxItems": 25,
+          "items": {
+            "$ref": "#/$defs/combination"
+          }
+        }
+      },
+      "required": [
+        "tank",
+        "projectile",
+        "player",
+        "combat",
+        "enemy",
+        "input",
+        "joystick",
+        "special",
+        "landing",
+        "enemyBehavior",
+        "gameCube",
+        "types",
+        "difficulties",
+        "combinations"
+      ]
+    }
+  },
+  "required": [
+    "schemaVersion",
+    "definitions"
+  ],
+  "$defs": {
+    "tankType": {
+      "type": "string",
+      "enum": [
+        "grey",
+        "red",
+        "blue",
+        "yellow",
+        "purple"
+      ]
+    },
+    "typePair": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/tankType"
+        },
+        "secondary": {
+          "$ref": "#/$defs/tankType"
+        }
+      },
+      "required": [
+        "primary",
+        "secondary"
+      ]
+    },
+    "TankDefaults": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "maxHealth": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Health units"
+        },
+        "healthRegenPerSecond": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Health units per second"
+        },
+        "moveSpeed": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second"
+        },
+        "rotationDegreesPerSecond": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees per second"
+        },
+        "collisionRadius": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "World units"
+        },
+        "jumpEnergyPerSecond": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Energy units per second"
+        },
+        "jumpLaunchSpeed": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second"
+        },
+        "jumpThrust": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second squared"
+        },
+        "gravity": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second squared"
+        },
+        "maxRiseSpeed": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second"
+        },
+        "maxFallSpeed": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second"
+        },
+        "turboEnergyPerSecond": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Energy units per second"
+        },
+        "turretInputScale": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "turretMaxStepDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees per input call"
+        },
+        "maxForwardInput": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless forward-input cap"
+        }
+      },
+      "required": [
+        "maxHealth",
+        "healthRegenPerSecond",
+        "moveSpeed",
+        "rotationDegreesPerSecond",
+        "collisionRadius",
+        "jumpEnergyPerSecond",
+        "jumpLaunchSpeed",
+        "jumpThrust",
+        "gravity",
+        "maxRiseSpeed",
+        "maxFallSpeed",
+        "turboEnergyPerSecond",
+        "turretInputScale",
+        "turretMaxStepDegrees",
+        "maxForwardInput"
+      ]
+    },
+    "ProjectileRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "speed": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per second"
+        },
+        "lifetimeSeconds": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Seconds"
+        },
+        "collisionRadius": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "World units"
+        },
+        "registrationRadius": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "World units"
+        },
+        "selfHitDelaySeconds": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Seconds"
+        },
+        "purplePrimaryTurnScale": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees per second per second of shot charge"
+        },
+        "purpleSecondaryTurnScale": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees per second per second of shot charge"
+        },
+        "purpleSecondaryPowerScale": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "purpleSecondaryChargeDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Charge duration divisor in seconds"
+        },
+        "purpleMinPower": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Projectile input power"
+        },
+        "purpleMaxPower": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Projectile input power"
+        },
+        "purpleSpecialTurnAcceleration": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees per second squared"
+        },
+        "firstBouncePowerMultiplier": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "yellowFirstBouncePowerMultiplier": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "yellowRedChildCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1024,
+          "description": "Integral count or level offset"
+        },
+        "yellowBlueChildCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1024,
+          "description": "Integral count or level offset"
+        },
+        "yellowBlueChildSpacing": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "childBounces": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "purpleChildBounces": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "purpleChildPowerMultiplier": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "purpleChildTurnSpeed": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees per second"
+        }
+      },
+      "required": [
+        "speed",
+        "lifetimeSeconds",
+        "collisionRadius",
+        "registrationRadius",
+        "selfHitDelaySeconds",
+        "purplePrimaryTurnScale",
+        "purpleSecondaryTurnScale",
+        "purpleSecondaryPowerScale",
+        "purpleSecondaryChargeDivisor",
+        "purpleMinPower",
+        "purpleMaxPower",
+        "purpleSpecialTurnAcceleration",
+        "firstBouncePowerMultiplier",
+        "yellowFirstBouncePowerMultiplier",
+        "yellowRedChildCount",
+        "yellowBlueChildCount",
+        "yellowBlueChildSpacing",
+        "childBounces",
+        "purpleChildBounces",
+        "purpleChildPowerMultiplier",
+        "purpleChildTurnSpeed"
+      ]
+    },
+    "PlayerRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "startingPrimaryType": {
+          "$ref": "#/$defs/tankType",
+          "description": "Stable tank type name or ordered type pairs"
+        },
+        "startingSecondaryType": {
+          "$ref": "#/$defs/tankType",
+          "description": "Stable tank type name or ordered type pairs"
+        },
+        "spawnHeight": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "respawnDelaySeconds": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Seconds"
+        },
+        "versusRespawnDelaySeconds": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Seconds"
+        },
+        "comboDecayPerSecond": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Combo units per second"
+        },
+        "comboChargeFraction": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "specialChargeMax": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Special charge units"
+        },
+        "matchingPickupEnergyFraction": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "otherPickupEnergyFraction": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "pickupScore": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Score points"
+        }
+      },
+      "required": [
+        "startingPrimaryType",
+        "startingSecondaryType",
+        "spawnHeight",
+        "respawnDelaySeconds",
+        "versusRespawnDelaySeconds",
+        "comboDecayPerSecond",
+        "comboChargeFraction",
+        "specialChargeMax",
+        "matchingPickupEnergyFraction",
+        "otherPickupEnergyFraction",
+        "pickupScore"
+      ]
+    },
+    "CombatRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "healthReturnDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Damage-to-health divisor"
+        },
+        "energyReturnDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Damage-to-energy divisor"
+        },
+        "friendlyResourceThresholdMultiplier": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "blueSpecialHitPowerBonus": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Projectile input power"
+        },
+        "hitComboDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Hit-count divisor for combo contribution"
+        },
+        "streakThreshold": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "streakComboDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Streak-count divisor for combo contribution"
+        },
+        "distanceThreshold": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "distanceComboDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "World units per combo unit"
+        },
+        "bounceBonusMaxAgeSeconds": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Seconds"
+        },
+        "bounceBonusBase": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Combo units"
+        },
+        "bounceAgeDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Seconds per combo unit"
+        },
+        "killBonus": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Combo units before diminishing returns"
+        },
+        "killComboDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Combo units in diminishing-return divisor"
+        }
+      },
+      "required": [
+        "healthReturnDivisor",
+        "energyReturnDivisor",
+        "friendlyResourceThresholdMultiplier",
+        "blueSpecialHitPowerBonus",
+        "hitComboDivisor",
+        "streakThreshold",
+        "streakComboDivisor",
+        "distanceThreshold",
+        "distanceComboDivisor",
+        "bounceBonusMaxAgeSeconds",
+        "bounceBonusBase",
+        "bounceAgeDivisor",
+        "killBonus",
+        "killComboDivisor"
+      ]
+    },
+    "EnemyRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "openingLevelWeakenedIndex": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "openingLevelAttackScale": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "openingTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/typePair"
+          },
+          "maxItems": 1024,
+          "minItems": 1,
+          "description": "Stable tank type name or ordered type pairs"
+        },
+        "regularTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/typePair"
+          },
+          "maxItems": 1024,
+          "minItems": 1,
+          "description": "Stable tank type name or ordered type pairs"
+        },
+        "advancedTypes": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/typePair"
+          },
+          "maxItems": 1024,
+          "minItems": 1,
+          "description": "Stable tank type name or ordered type pairs"
+        },
+        "advancedLevelOffsets": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 2147483647
+          },
+          "maxItems": 1024,
+          "minItems": 0,
+          "description": "Integral count or level offset"
+        },
+        "openingWeakenedPrimary": {
+          "$ref": "#/$defs/tankType",
+          "description": "Stable tank type name or ordered type pairs"
+        },
+        "openingWeakenedSecondary": {
+          "$ref": "#/$defs/tankType",
+          "description": "Stable tank type name or ordered type pairs"
+        }
+      },
+      "required": [
+        "openingLevelWeakenedIndex",
+        "openingLevelAttackScale",
+        "openingTypes",
+        "regularTypes",
+        "advancedTypes",
+        "advancedLevelOffsets",
+        "openingWeakenedPrimary",
+        "openingWeakenedSecondary"
+      ]
+    },
+    "InputRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mouseTurretScale": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Turret input per mouse delta unit"
+        },
+        "keyboardTurretRate": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Turret input units per second"
+        },
+        "keyboardTurboTurretRate": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Turret input units per second"
+        },
+        "browserPadActivationDeadzone": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        }
+      },
+      "required": [
+        "mouseTurretScale",
+        "keyboardTurretRate",
+        "keyboardTurboTurretRate",
+        "browserPadActivationDeadzone"
+      ]
+    },
+    "JoystickRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "forwardDeadzone": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        },
+        "reverseDeadzone": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        },
+        "bodyDeadzone": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        },
+        "turretDeadzone": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        },
+        "alternateTurretDeadzone": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        },
+        "forwardDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Raw SDL axis normalization divisor"
+        },
+        "bodyDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Raw SDL axis normalization divisor"
+        },
+        "turretDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Raw SDL axis normalization divisor"
+        },
+        "chargeDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Raw SDL axis normalization divisor"
+        },
+        "specialChargeDivisor": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Raw SDL axis normalization divisor"
+        },
+        "fireAxisThreshold": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        },
+        "jumpAxisThreshold": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32767,
+          "description": "Raw SDL axis units"
+        }
+      },
+      "required": [
+        "forwardDeadzone",
+        "reverseDeadzone",
+        "bodyDeadzone",
+        "turretDeadzone",
+        "alternateTurretDeadzone",
+        "forwardDivisor",
+        "bodyDivisor",
+        "turretDivisor",
+        "chargeDivisor",
+        "specialChargeDivisor",
+        "fireAxisThreshold",
+        "jumpAxisThreshold"
+      ]
+    },
+    "SpecialRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "muzzleHeight": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "blueCenterHeight": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "blueSideOffset": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "redArcCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1024,
+          "description": "Integral count or level offset"
+        },
+        "redArcStepDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "redArcStartDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "redArcBounces": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "yellowBounces": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "redForwardAnglesDegrees": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -3.4028234663852886e+38,
+            "maximum": 3.4028234663852886e+38
+          },
+          "maxItems": 1024,
+          "minItems": 1,
+          "description": "Degrees"
+        },
+        "purpleAnglesDegrees": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "minimum": -3.4028234663852886e+38,
+            "maximum": 3.4028234663852886e+38
+          },
+          "maxItems": 1024,
+          "minItems": 1,
+          "description": "Degrees"
+        }
+      },
+      "required": [
+        "muzzleHeight",
+        "blueCenterHeight",
+        "blueSideOffset",
+        "redArcCount",
+        "redArcStepDegrees",
+        "redArcStartDegrees",
+        "redArcBounces",
+        "yellowBounces",
+        "redForwardAnglesDegrees",
+        "purpleAnglesDegrees"
+      ]
+    },
+    "LandingRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "rewardEnergyFraction": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "rewardThresholdFraction": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        }
+      },
+      "required": [
+        "rewardEnergyFraction",
+        "rewardThresholdFraction"
+      ]
+    },
+    "EnemyBehaviorRules": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "activationDistance": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "activationDistancePerLevel": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units per level"
+        },
+        "huntEnergyFraction": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "fearUntilLevelOffset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "attackerCountBase": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "wanderProbeAngleDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "wanderProbeFrames": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Frame delta multiples"
+        },
+        "wanderJumpHeight": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "wanderMaxDrop": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "wanderTurnDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "jumpEnergyFraction": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "aimToleranceDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "fearProbeAngleDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "fearProbeFrames": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Frame delta multiples"
+        },
+        "fearJumpHeight": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "avoidanceTurnDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "huntProbeFrames": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Frame delta multiples"
+        },
+        "huntJumpHeight": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "huntStopDistance": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        },
+        "fireEnergyFraction": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "shotCharge": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Charge duration in seconds"
+        },
+        "spawnRotationStepDegrees": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Degrees"
+        },
+        "overflowSpawnOffset": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "World units"
+        }
+      },
+      "required": [
+        "activationDistance",
+        "activationDistancePerLevel",
+        "huntEnergyFraction",
+        "fearUntilLevelOffset",
+        "attackerCountBase",
+        "wanderProbeAngleDegrees",
+        "wanderProbeFrames",
+        "wanderJumpHeight",
+        "wanderMaxDrop",
+        "wanderTurnDegrees",
+        "jumpEnergyFraction",
+        "aimToleranceDegrees",
+        "fearProbeAngleDegrees",
+        "fearProbeFrames",
+        "fearJumpHeight",
+        "avoidanceTurnDegrees",
+        "huntProbeFrames",
+        "huntJumpHeight",
+        "huntStopDistance",
+        "fireEnergyFraction",
+        "shotCharge",
+        "spawnRotationStepDegrees",
+        "overflowSpawnOffset"
+      ]
+    },
+    "TankTypeConfig": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "fireIntervalSeconds": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Seconds"
+        },
+        "attack": {
+          "type": "number",
+          "maximum": 2147483647,
+          "minimum": 0,
+          "description": "Projectile input power"
+        },
+        "maxEnergy": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Energy units"
+        },
+        "energyRegen": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Energy units per second"
+        },
+        "moveCost": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Energy units per second at unit movement input"
+        },
+        "fireCost": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Energy units"
+        },
+        "specialChargeCost": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Special charge units"
+        },
+        "bounces": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647,
+          "description": "Integral count or level offset"
+        },
+        "r": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "RGB channel [0,1]"
+        },
+        "g": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "RGB channel [0,1]"
+        },
+        "b": {
+          "type": "number",
+          "maximum": 1,
+          "minimum": 0,
+          "description": "RGB channel [0,1]"
+        }
+      },
+      "required": [
+        "fireIntervalSeconds",
+        "attack",
+        "maxEnergy",
+        "energyRegen",
+        "moveCost",
+        "fireCost",
+        "specialChargeCost",
+        "bounces",
+        "r",
+        "g",
+        "b"
+      ]
+    },
+    "DifficultyModifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "health": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "healthRegen": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "energy": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "exclusiveMinimum": 0,
+          "description": "Dimensionless multiplier or fraction"
+        },
+        "energyRegen": {
+          "type": "number",
+          "maximum": 3.4028234663852886e+38,
+          "minimum": 0,
+          "description": "Dimensionless energy regeneration multiplier"
+        }
+      },
+      "required": [
+        "health",
+        "healthRegen",
+        "energy",
+        "energyRegen"
+      ]
+    },
+    "combination": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "primary": {
+          "$ref": "#/$defs/tankType"
+        },
+        "secondary": {
+          "$ref": "#/$defs/tankType"
+        },
+        "overrides": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "fireIntervalSeconds": {
+              "type": "number",
+              "maximum": 3.4028234663852886e+38,
+              "minimum": 0,
+              "description": "Seconds"
+            },
+            "attack": {
+              "type": "number",
+              "maximum": 2147483647,
+              "minimum": 0,
+              "description": "Projectile input power"
+            },
+            "fireCost": {
+              "type": "number",
+              "maximum": 3.4028234663852886e+38,
+              "minimum": 0,
+              "description": "Energy units"
+            },
+            "specialChargeCost": {
+              "type": "number",
+              "maximum": 3.4028234663852886e+38,
+              "minimum": 0,
+              "description": "Special charge units"
+            },
+            "bounces": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 2147483647,
+              "description": "Integral count or level offset"
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "primary",
+        "secondary",
+        "overrides"
+      ]
+    }
+  }
+}

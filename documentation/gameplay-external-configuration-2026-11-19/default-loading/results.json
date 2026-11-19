@@ -1,0 +1,104 @@
+{
+  "checks": [
+    {
+      "label": "default: provider diagnostic",
+      "value": true
+    },
+    {
+      "label": "default: first frame",
+      "value": true
+    },
+    {
+      "label": "default: fallback policy",
+      "value": true
+    },
+    {
+      "label": "default: no retry error",
+      "value": true
+    },
+    {
+      "label": "default: gameplay starts",
+      "value": true
+    },
+    {
+      "label": "missing: provider diagnostic",
+      "value": true
+    },
+    {
+      "label": "missing: first frame",
+      "value": true
+    },
+    {
+      "label": "missing: fallback policy",
+      "value": true
+    },
+    {
+      "label": "missing: no retry error",
+      "value": true
+    },
+    {
+      "label": "missing: gameplay starts",
+      "value": true
+    },
+    {
+      "label": "invalid: provider diagnostic",
+      "value": true
+    },
+    {
+      "label": "invalid: first frame",
+      "value": true
+    },
+    {
+      "label": "invalid: fallback policy",
+      "value": true
+    },
+    {
+      "label": "invalid: no retry error",
+      "value": true
+    },
+    {
+      "label": "invalid: gameplay starts",
+      "value": true
+    },
+    {
+      "label": "alternative: provider diagnostic",
+      "value": true
+    },
+    {
+      "label": "alternative: first frame",
+      "value": true
+    },
+    {
+      "label": "alternative: fallback policy",
+      "value": true
+    },
+    {
+      "label": "alternative: no retry error",
+      "value": true
+    },
+    {
+      "label": "alternative: gameplay starts",
+      "value": true
+    },
+    {
+      "label": "invalid-alternative: provider diagnostic",
+      "value": true
+    },
+    {
+      "label": "invalid-alternative: first frame",
+      "value": true
+    },
+    {
+      "label": "invalid-alternative: fallback policy",
+      "value": true
+    },
+    {
+      "label": "invalid-alternative: no retry error",
+      "value": true
+    },
+    {
+      "label": "invalid-alternative: gameplay starts",
+      "value": true
+    }
+  ]
+}

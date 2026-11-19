@@ -35,5 +35,5 @@ public:
     bool Initialize(int argc, char *argv[]);
     bool Tick();
     void Shutdown();
-    void Run(int argc, char *argv[]);
+    bool Run(int argc, char *argv[]);
 };

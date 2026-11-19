@@ -56,6 +56,39 @@ renderer has been retired; `TANKGAME_RENDERER` overrides (including
 `compatibility`) are ignored. Linux/Windows retain OpenGL 2.1/GLSL 1.20,
 macOS uses OpenGL 3.2 core/GLSL 1.50, and the browser uses WebGL 1.
 
+## Configuration files
+
+Editable configuration files are in `runtime`:
+
+- [`gameplay.json`](runtime/gameplay.json): tank and weapon stats, movement,
+  projectiles, difficulty modifiers, pickups, and other gameplay tuning. This
+  starting snapshot matches the built-in defaults; edit it or make your own copy.
+- [`settings.txt`](runtime/settings.txt): display size, fullscreen, difficulty,
+  and sound settings.
+- [`levels/*.json`](runtime/levels): level names, colors, and enemy counts,
+  alongside the level maps.
+
+The game loads `gameplay.json` automatically from the working directory. You can
+validate edits before launching (Linux example, from the repository root):
+
+```sh
+cd runtime
+./tankgame-linux --validate-gameplay-config gameplay.json
+./tankgame-linux
+```
+
+Use the platform executable listed above on macOS or Windows. To select another
+file, run `--gameplay-config my-gameplay.json`. If the selected file is missing or
+cannot be loaded, the game logs the reason and uses built-in defaults. Restart
+to apply edits. To export a fresh snapshot, use
+`--export-gameplay-config new-gameplay.json` with a new filename.
+
+Browser builds package `runtime/gameplay.json` by default. To package another
+file, add `-DTANKGAME_GAMEPLAY_CONFIG=/absolute/path/to/gameplay.json`
+to the CMake configure command below, then rebuild and redeploy after edits.
+See the [configuration guide](documentation/gameplay-configuration-format.md)
+for field details.
+
 ## Browser build and hosting
 
 With Emscripten 3.1.64 activated (the version pinned in browser CI):

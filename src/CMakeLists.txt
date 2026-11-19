@@ -20,7 +20,24 @@ endif()
 # Create the executable
 add_executable(${EXECUTABLE_NAME} ${SOURCES})
 
+set(TANKGAME_GAMEPLAY_CONFIG "" CACHE FILEPATH "Gameplay JSON snapshot packaged into the browser build")
 if(EMSCRIPTEN)
+    if(TANKGAME_GAMEPLAY_CONFIG)
+        get_filename_component(GAMEPLAY_CONFIG_SOURCE "${TANKGAME_GAMEPLAY_CONFIG}" ABSOLUTE BASE_DIR "${CMAKE_SOURCE_DIR}")
+        if(NOT EXISTS "${GAMEPLAY_CONFIG_SOURCE}")
+            message(FATAL_ERROR "Gameplay configuration does not exist: ${GAMEPLAY_CONFIG_SOURCE}")
+        endif()
+    else()
+        set(GAMEPLAY_CONFIG_SOURCE "${CMAKE_SOURCE_DIR}/runtime/gameplay.json")
+    endif()
+    # Match native startup: the normal file is gameplay.json. A deployment can
+    # replace its contents; missing default assets use runtime fallback.
+    if(EXISTS "${GAMEPLAY_CONFIG_SOURCE}")
+        set(GAMEPLAY_CONFIG_ASSET "${CMAKE_CURRENT_BINARY_DIR}/browser-assets/gameplay.json")
+        configure_file("${GAMEPLAY_CONFIG_SOURCE}" "${GAMEPLAY_CONFIG_ASSET}" COPYONLY)
+        target_link_options(${EXECUTABLE_NAME} PRIVATE "--preload-file=${GAMEPLAY_CONFIG_ASSET}@/gameplay.json")
+        set_property(TARGET ${EXECUTABLE_NAME} APPEND PROPERTY LINK_DEPENDS "${GAMEPLAY_CONFIG_ASSET}")
+    endif()
     # An .html executable suffix asks Emscripten to emit its standard canvas
     # shell together with the JavaScript, WebAssembly, and preload data files.
     set_target_properties(${EXECUTABLE_NAME} PROPERTIES SUFFIX ".html")

@@ -1,0 +1,7 @@
+-- Using the multi-header code from /home/deck/Dropbox/work/Programming/tankgame/build-browser/_deps/nlohmann_json-src/include/
+CMake Error at src/CMakeLists.txt:28 (message):
+  Gameplay configuration does not exist:
+  /tmp/tankgame-external-config/missing-source.json
+
+
+-- Configuring incomplete, errors occurred!
