@@ -34,15 +34,12 @@ private:
     void RenderStandardBullet(const BulletRenderData& bullet);
     
     // Utility functions
-    void SetupBulletRendering();
-    void CleanupBulletRendering();
     void RenderBulletGeometry(const BulletRenderData& bullet, float yOffset, float zOffset, float rotationX, float scaleZ);
     void SetupBlendMode();
     void RestoreBlendMode();
     
     // Cached state to avoid redundant OpenGL calls
     bool blendEnabled;
-    bool texturesEnabled;
 };
 
 #endif // NEWBULLETRENDERER_H

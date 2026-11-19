@@ -3,19 +3,8 @@
 #include "HUDLayout.h"
 #include "../App.h"
 #include "RenderContext.h"
-#include "RendererMode.h"
 
-#ifdef _WIN32
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#include <OpenGL/glu.h>
-#else
-#include <GL/gl.h>
-#include <GL/glu.h>
-#endif
+#include "PlatformGL.h"
 
 #include <algorithm>
 #include <chrono>
@@ -66,9 +55,6 @@ void RenderingPipeline::Cleanup()
 
 void RenderingPipeline::SetupRenderState()
 {
-    // Setup global rendering state for the pipeline
-    PushRenderState();
-
     // Enable depth testing for 3D rendering
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LESS);
@@ -83,20 +69,13 @@ void RenderingPipeline::SetupRenderState()
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Smooth shading and attribute stacks only exist on desktop compatibility
-    // OpenGL. Browser shaders and explicit state replace them.
-#ifndef __EMSCRIPTEN__
-    if (!RendererMode::IsModern()) glShadeModel(GL_SMOOTH);
-#endif
-
     // Set clear color (dark blue/black for space-like background)
     glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
 }
 
 void RenderingPipeline::CleanupRenderState()
 {
-    // Restore previous OpenGL state
-    PopRenderState();
+    // Individual passes manage their explicit state.
 }
 
 void RenderingPipeline::RenderScene(const SceneData &scene, int playerIndex)
@@ -160,40 +139,16 @@ void RenderingPipeline::RenderGlobalUI(const SceneData& scene)
     glDisable(GL_SCISSOR_TEST);
     glViewport(0, 0, width, height);
     const Matrix4 projection = Matrix4::Perspective(45.0f, static_cast<float>(width) / height, .1f, 1000.0f);
-    if (RendererMode::IsModern()) {
-        const RenderContext saved = RenderContext::Current();
-        RenderContext::Current().SetProjection(projection);
-        menuRenderer.RenderMenu(scene.uiData->menu);
-        // Display the preceding complete frame so the counts include global
-        // diagnostics themselves without mutating the immutable scene snapshot.
-        auto debug = scene.uiData->debug;
-        debug.renderCallCount = renderStats.submissions.drawCalls;
-        debug.triangleCount = renderStats.submissions.triangles;
-        hudRenderer.RenderDebugInfo(debug);
-        RenderContext::Current() = saved;
-    }
-#ifndef __EMSCRIPTEN__
-    else {
-        // Compatibility UI uses matrix stacks and mutates fixed-function state.
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        GLint matrixMode;
-        glGetIntegerv(GL_MATRIX_MODE, &matrixMode);
-        glMatrixMode(GL_PROJECTION);
-        glPushMatrix();
-        glLoadIdentity();
-        gluPerspective(45.0, static_cast<double>(width) / height, .1, 1000.0);
-        glMatrixMode(GL_MODELVIEW);
-        glPushMatrix();
-        glLoadIdentity();
-        menuRenderer.RenderMenu(scene.uiData->menu);
-        hudRenderer.RenderDebugInfo(scene.uiData->debug);
-        glPopMatrix();
-        glMatrixMode(GL_PROJECTION);
-        glPopMatrix();
-        glMatrixMode(matrixMode);
-        glPopAttrib();
-    }
-#endif
+    const RenderContext saved = RenderContext::Current();
+    RenderContext::Current().SetProjection(projection);
+    menuRenderer.RenderMenu(scene.uiData->menu);
+    // Display the preceding complete frame so the counts include global
+    // diagnostics themselves without mutating the immutable scene snapshot.
+    auto debug = scene.uiData->debug;
+    debug.renderCallCount = renderStats.submissions.drawCalls;
+    debug.triangleCount = renderStats.submissions.triangles;
+    hudRenderer.RenderDebugInfo(debug);
+    RenderContext::Current() = saved;
     glViewport(viewport[0], viewport[1], viewport[2], viewport[3]);
     glScissor(scissor[0], scissor[1], scissor[2], scissor[3]);
     if (scissorEnabled) glEnable(GL_SCISSOR_TEST);
@@ -216,34 +171,12 @@ void RenderingPipeline::SetupSceneForPlayer(const SceneData &scene, int playerIn
         const CameraData &camData = scene.cameras[playerIndex];
 
         // Set up camera matrices
-        if (RendererMode::IsModern()) {
         const Viewport &viewport = viewportManager.GetViewport(playerIndex);
         RenderContext::Current().SetProjection(
             Matrix4::Perspective(45.0f, viewport.GetAspectRatio(), 0.1f, 1000.0f));
         RenderContext::Current().SetView(Matrix4::LookAt(
             camData.position.x, camData.position.y, camData.position.z,
             camData.focus.x, camData.focus.y, camData.focus.z, 0.0f, 1.0f, 0.0f));
-        }
-#ifndef __EMSCRIPTEN__
-        else {
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-
-        // Setup perspective projection
-        const Viewport &viewport = viewportManager.GetViewport(playerIndex);
-        float aspect = viewport.GetAspectRatio();
-        gluPerspective(45.0, aspect, 0.1, 1000.0);
-
-        // Setup view matrix
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluLookAt(
-            camData.position.x, camData.position.y, camData.position.z,
-            camData.focus.x, camData.focus.y, camData.focus.z,
-            0.0f, 1.0f, 0.0f // Standard up vector
-        );
-        }
-#endif
     }
 
     // Setup lighting for the scene
@@ -258,33 +191,7 @@ void RenderingPipeline::ClearBuffers()
 void RenderingPipeline::SetupLighting(const SceneData &scene)
 {
     (void)scene;
-    if (RendererMode::IsModern()) {
-        RenderContext::Current().SetLighting(true);
-        return;
-    }
-#ifndef __EMSCRIPTEN__
-    // Enable lighting
-    glEnable(GL_LIGHTING);
-    glEnable(GL_LIGHT0);
-
-    // Enable color material so renderers can set material colors with glColor3f
-    glEnable(GL_COLOR_MATERIAL);
-    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-
-    // Setup main directional light (sun)
-    GLfloat lightPos[] = {0.5f, 1.0f, 0.5f, 0.0f}; // Directional light
-    GLfloat lightAmbient[] = {0.2f, 0.2f, 0.2f, 1.0f};
-    GLfloat lightDiffuse[] = {0.8f, 0.8f, 0.8f, 1.0f};
-    GLfloat lightSpecular[] = {1.0f, 1.0f, 1.0f, 1.0f};
-
-    glLightfv(GL_LIGHT0, GL_POSITION, lightPos);
-    glLightfv(GL_LIGHT0, GL_AMBIENT, lightAmbient);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, lightDiffuse);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, lightSpecular);
-
-    // Keep lighting simple and consistent for all levels
-    // Let the terrain colors from JSON metadata be the primary color source
-#endif
+    RenderContext::Current().SetLighting(true);
 }
 
 void RenderingPipeline::RenderSkybox(const SceneData &scene)
@@ -407,26 +314,6 @@ void RenderingPipeline::UpdateRenderStats(const SceneData &scene)
     renderStats.effectsRendered = static_cast<int>(scene.effects.size());
     renderStats.bulletsRendered = static_cast<int>(scene.bullets.size());
     renderStats.itemsRendered = static_cast<int>(scene.items.size());
-}
-
-void RenderingPipeline::PushRenderState()
-{
-    if (RendererMode::IsModern()) return;
-#ifndef __EMSCRIPTEN__
-    // Save current OpenGL state
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glPushMatrix();
-#endif
-}
-
-void RenderingPipeline::PopRenderState()
-{
-    if (RendererMode::IsModern()) return;
-#ifndef __EMSCRIPTEN__
-    // Restore previous OpenGL state
-    glPopMatrix();
-    glPopAttrib();
-#endif
 }
 
 bool RenderingPipeline::ShouldRenderObject(const Vector3 &position, const Vector3 &cameraPos, float maxDistance)

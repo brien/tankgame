@@ -2,7 +2,6 @@
 
 #include "ResourceManager.h"
 #include "RenderContext.h"
-#include "RendererMode.h"
 #include "GLFunctions.h"
 #include "TextRenderer.h"
 
@@ -22,133 +21,13 @@ void MenuRenderer::RenderMenu(const MenuRenderData& menuData) {
         return;
     }
 
-    if (RendererMode::IsModern()) {
-        RenderModernMenu(menuData);
-        if (resources) {
-            GLint viewport[4];
-            glGetIntegerv(GL_VIEWPORT, viewport);
-            TextRenderer::Render(*resources, TextRenderer::MenuLines(menuData, viewport[2], viewport[3]));
-        }
-        return;
-    }
-#ifndef __EMSCRIPTEN__
-    const GLboolean cull = glIsEnabled(GL_CULL_FACE);
-    glDisable(GL_CULL_FACE);
-    SetupMenuRenderState();
-    SetupMenuProjection();
-
-    // Render menu background (optional)
-    RenderMenuBackground(menuData);
-
-    // Render all menu options
-    for (int i = 0; i < menuData.numOptions; ++i) {
-        RenderMenuOption(i, menuData);
-    }
-
-    RestoreGameProjection();
-    CleanupMenuRenderState();
-    if (cull) glEnable(GL_CULL_FACE);
-#endif
-}
-
-#ifndef __EMSCRIPTEN__
-void MenuRenderer::SetupMenuProjection() {
-    glLoadIdentity();
-    glDisable(GL_DEPTH_TEST);
-    // Treat 3D like 2D (matching original implementation)
-    glTranslated(0, 0, -1);
-}
-
-void MenuRenderer::RestoreGameProjection() {
-    glEnable(GL_DEPTH_TEST);
-}
-
-void MenuRenderer::SetupMenuRenderState() {
-    glPushMatrix();
-    glDisable(GL_LIGHTING);
-    glDisable(GL_TEXTURE_2D);
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_ONE, GL_ONE);
-}
-
-void MenuRenderer::CleanupMenuRenderState() {
-    glPopMatrix();
-    glEnable(GL_LIGHTING);
-    glDisable(GL_BLEND);
-}
-
-void MenuRenderer::RenderMenuBackground(const MenuRenderData& menuData) {
-    // Optional: Render a semi-transparent background
-    // For now, the original menu doesn't have a background, so this is empty
-}
-
-void MenuRenderer::RenderMenuOption(int optionIndex, const MenuRenderData& menuData) {
-    if (optionIndex < 0 || optionIndex >= menuData.numOptions) {
-        return;
-    }
-
-    bool isSelected = (optionIndex == menuData.selectedOption);
-
-    if (isSelected) {
-        RenderSelectedOption(optionIndex, menuData);
-    } else {
-        RenderNormalOption(optionIndex, menuData);
+    RenderModernMenu(menuData);
+    if (resources) {
+        GLint viewport[4];
+        glGetIntegerv(GL_VIEWPORT, viewport);
+        TextRenderer::Render(*resources, TextRenderer::MenuLines(menuData, viewport[2], viewport[3]));
     }
 }
-
-void MenuRenderer::RenderSelectedOption(int optionIndex, const MenuRenderData& menuData) {
-    float x, y, width, height;
-    GetOptionPosition(optionIndex, x, y, width, height);
-
-    // Render selection border (line loop) - matches original implementation
-    glBegin(GL_LINE_LOOP);
-    ApplyColor(Vector3(SELECTED_LINE_COLOR[0], SELECTED_LINE_COLOR[1], SELECTED_LINE_COLOR[2]));
-    glVertex3f(x, y, 0);
-    glVertex3f(x + width, y, 0);
-    glVertex3f(x + width, y - height, 0);
-    glVertex3f(x, y - height, 0);
-    glEnd();
-
-    // Render selection fill (semi-transparent quad)
-    glBegin(GL_QUADS);
-    ApplyColor(Vector3(SELECTED_FILL_COLOR[0], SELECTED_FILL_COLOR[1], SELECTED_FILL_COLOR[2]),
-               SELECTED_FILL_COLOR[3]);
-    glVertex3f(x, y, 0);
-    glVertex3f(x + width, y, 0);
-    glVertex3f(x + width, y - height, 0);
-    glVertex3f(x, y - height, 0);
-    glEnd();
-}
-
-void MenuRenderer::RenderNormalOption(int optionIndex, const MenuRenderData& menuData) {
-    // Normal options don't render anything in the original implementation
-    // They are just "invisible" until selected
-    // Could add subtle rendering here if desired
-}
-
-void MenuRenderer::ApplyColor(const Vector3& color, float alpha) {
-    glColor4f(color.x, color.y, color.z, alpha);
-}
-
-void MenuRenderer::RenderOptionQuad(float x, float y, float width, float height,
-                                   const Vector3& color, float alpha, bool filled) {
-    ApplyColor(color, alpha);
-
-    if (filled) {
-        glBegin(GL_QUADS);
-    } else {
-        glBegin(GL_LINE_LOOP);
-    }
-
-    glVertex3f(x, y, 0);
-    glVertex3f(x + width, y, 0);
-    glVertex3f(x + width, y - height, 0);
-    glVertex3f(x, y - height, 0);
-
-    glEnd();
-}
-
-#endif
 
 void MenuRenderer::GetOptionPosition(int optionIndex, float& x, float& y, float& width, float& height) {
     width = MENU_OPTION_WIDTH;
@@ -175,7 +54,6 @@ void MenuRenderer::GetOptionPosition(int optionIndex, float& x, float& y, float&
             break;
     }
 }
-
 
 void MenuRenderer::RenderModernMenu(const MenuRenderData& menuData) {
     if (!resources || menuData.selectedOption < 0 || menuData.selectedOption >= menuData.numOptions) return;

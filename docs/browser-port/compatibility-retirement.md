@@ -10,8 +10,8 @@ the current feature-branch status below supersedes that selection policy.
 Modern is now the only selectable backend. The unified TankRenderer, factory
 and browser substitute are removed. All TANKGAME_RENDERER values use modern,
 including old compatibility overrides; context requirements are unchanged.
-The fallback is no longer available. Remaining legacy draw/resource branches
-and GLU dependencies still await deletion. Earlier slice reports below describe
+The fallback is no longer available. Legacy world/UI/orchestration drawing branches are now deleted. The remaining
+DisplayList/resource facade and GLU dependencies still await cleanup. Earlier slice reports below describe
 their state at the time; see the audit for the current implementation record.
 
 ## First implementation slice: shared state in a core context
@@ -111,3 +111,9 @@ and unused state/Tank-based player APIs. RenderingPipeline owns all active pass
 renderers. The next slice is the unified TankRenderer/factory/browser-substitute
 removal with its selection/orchestration changes; compatibility still works in
 this cleanup slice. See the audit's dormant-renderer cleanup record.
+
+
+November 19 follow-up: shared modern drawing now replaces the former platform/
+backend branches across the world, UI and pipeline. GraphicsTask::Update no
+longer issues fixed-function state calls, and the core regression covers that
+real update path. The next slice is resource API/ownership and GLU cleanup.

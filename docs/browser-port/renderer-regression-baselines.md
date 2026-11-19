@@ -83,3 +83,9 @@ are removed. Modern is the only backend, including under the old `compatibility`
 environment override. RendererMode tests now enforce that policy; earlier
 compatibility runs above are historical evidence. Remaining fixed-function
 source and GLU dependencies await the next deletion slices.
+
+
+November 19: the core startup/frame regression now starts GameTask and exercises
+GraphicsTask::Update on its real title scene before representative pipeline
+frames. This covers the native update-state calls removed with the legacy drawing
+branches. Remaining compatibility code is confined to resource/build cleanup.

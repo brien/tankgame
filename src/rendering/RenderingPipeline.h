@@ -138,10 +138,6 @@ private:
     void OptimizeRenderOrder(std::vector<TankRenderData>& tanks, const Vector3& cameraPos);
     void UpdateRenderStats(const SceneData& scene);
     
-    // State management
-    void PushRenderState();
-    void PopRenderState();
-    
     // Performance optimization
     bool ShouldRenderObject(const Vector3& position, const Vector3& cameraPos, float maxDistance = 100.0f);
     void PerformFrustumCulling(const SceneData& scene, int playerIndex);

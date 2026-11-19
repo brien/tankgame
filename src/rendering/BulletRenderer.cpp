@@ -1,23 +1,14 @@
-#ifdef _WIN32
-#include <windows.h>
-#include <GL/gl.h>
-#elif __APPLE__
-#include <OpenGL/gl.h>
-#else
-#include <GL/gl.h>
-#endif
+#include "PlatformGL.h"
 
 #include "BulletRenderer.h"
 #include "RenderData.h"
 #include "../App.h"
 #include "../Logger.h"
 #include "RenderContext.h"
-#include "RendererMode.h"
 
 BulletRenderer::BulletRenderer() : 
     BaseRenderer(),
-    blendEnabled(false),
-    texturesEnabled(false)
+    blendEnabled(false)
 {
 }
 
@@ -27,7 +18,6 @@ bool BulletRenderer::Initialize() {
     }
     
     blendEnabled = false;
-    texturesEnabled = false;
     
     Logger::Get().Write("BulletRenderer initialized successfully\n");
     return true;
@@ -52,7 +42,6 @@ void BulletRenderer::RenderBullets(const std::vector<BulletRenderData>& bullets)
     SetupRenderState();
     
     try {
-        SetupBulletRendering();
         
         // Render all bullets
         for (const auto& bullet : bullets) {
@@ -63,7 +52,6 @@ void BulletRenderer::RenderBullets(const std::vector<BulletRenderData>& bullets)
             }
         }
         
-        CleanupBulletRendering();
         
     } catch (...) {
         Logger::Get().Write("ERROR: Exception occurred during bullet rendering\n");
@@ -92,7 +80,6 @@ void BulletRenderer::RenderStandardBullet(const BulletRenderData& bullet) {
 }
 
 void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float yOffset, float zOffset, float rotationX, float scaleZ) {
-    if (RendererMode::IsModern()) {
     Matrix4 model = Matrix4::Translation(bullet.position.x, bullet.position.y + yOffset,
                                           bullet.position.z) *
         Matrix4::Rotation(bullet.rotation.x, 1, 0, 0) *
@@ -113,78 +100,6 @@ void BulletRenderer::RenderBulletGeometry(const BulletRenderData& bullet, float 
             bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha, false);
     }
     RestoreBlendMode();
-    return;
-    }
-#ifndef __EMSCRIPTEN__
-    glPushMatrix();
-    
-    // Position the bullet
-    glTranslatef(bullet.position.x, bullet.position.y + yOffset, bullet.position.z);
-    
-    // Apply rotations
-    glRotatef(bullet.rotation.x, 1, 0, 0);
-    glRotatef(-bullet.rotation.y, 0, 1, 0);
-    glRotatef(bullet.rotation.z, 0, 0, 1);
-    
-    // Apply offset for multi-part bullets (blue type)
-    if (zOffset != 0.0f) {
-        glTranslatef(0, 0, zOffset);
-    }
-    
-    // Apply additional rotation for angled parts
-    if (rotationX != 0.0f) {
-        glRotatef(rotationX, 1, 0, 0);
-    }
-    
-    // Set primary color and render outline
-    glColor3f(bullet.primaryColor.r, bullet.primaryColor.g, bullet.primaryColor.b);
-    glScalef(1, 1, scaleZ);
-    
-    // Render the bullet outline using the square display list
-    if (App::GetSingleton().graphicsTask) {
-        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalOutline).Call(0);
-    }
-    
-    // Render the glowing effect with secondary color
-    SetupBlendMode();
-    
-    // Calculate alpha based on power (matching original logic)
-    float alpha = 0.1f;
-    if (bullet.type1 == TankType::TYPE_BLUE) {
-        alpha += bullet.power / 500.0f;
-    } else {
-        alpha += bullet.power / 1000.0f;
-    }
-    
-    glColor4f(bullet.secondaryColor.r, bullet.secondaryColor.g, bullet.secondaryColor.b, alpha);
-    
-    // Render the glowing inner part
-    if (App::GetSingleton().graphicsTask) {
-        App::GetSingleton().graphicsTask->Resources().GetGeometry(GeometryResource::HorizontalQuad).Call(0);
-    }
-    
-    RestoreBlendMode();
-    
-    glPopMatrix();
-#endif
-}
-
-void BulletRenderer::SetupBulletRendering() {
-    // Texture enable/disable is fixed-function desktop state. WebGL bullet
-    // shaders are untextured; GL_TEXTURE_2D is not a valid WebGL capability.
-    if (!RendererMode::IsModern()) {
-#ifndef __EMSCRIPTEN__
-        glDisable(GL_TEXTURE_2D);
-        // Emissive projectiles must not inherit the last mesh normal/light state.
-        glDisable(GL_LIGHTING);
-#endif
-    }
-    texturesEnabled = false;
-}
-
-void BulletRenderer::CleanupBulletRendering() {
-    // Restore any global state if needed
-    // The individual geometry rendering handles its own cleanup
 }
 
 void BulletRenderer::SetupBlendMode() {

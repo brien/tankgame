@@ -188,3 +188,37 @@ selection cases. With `TANKGAME_RENDERER=compatibility`, VideoStartupTest and th
 full core startup/frame/recreation regression **4/4 passed without skips**, proving
 the old override reaches the modern backend. `git diff --check` passed. No new
 browser runtime or macOS/Windows execution is claimed for this slice.
+
+
+## Shared modern drawing paths — 2026-11-19
+
+Removed compatibility branches from terrain/water, player/enemy tanks, bullets,
+items, effects, HUD, menu, debug lines and RenderingPipeline camera/lighting/UI
+orchestration. Deleted their obsolete helper declarations, cached legacy state,
+fixed-function matrix/attribute management and duplicate platform implementations.
+The existing modern transforms, materials, pass order, winding, blending and
+viewport/scissor restoration remain the shared implementation.
+
+GraphicsTask startup and resize projection now use RenderContext directly.
+The deletion also found native fixed-function calls in GraphicsTask::Update
+that were still reachable even after backend selection retirement. Those matrix,
+normalization, smooth-shading and lighting calls are removed. The existing core
+regression now starts GameTask with the title scene and invokes GraphicsTask::Update
+before its representative single/split-screen frames and resource recreation.
+The fixture follows normal game-world initialization; merely constructing GameTask
+is insufficient for scene extraction. This test exercises the actual update entry
+point as well as the pipeline API.
+
+Source searches find remaining immediate-mode/display-list drawing calls only in
+DisplayList.cpp. ResourceManager/DisplayList still retain backend guards and the
+legacy geometry facade, and unused GLU headers/linkage remain for the next slice.
+This completes the world/UI/orchestration deletion (step 3); resource ownership,
+API naming and build dependency cleanup (step 4) remain. The constant-modern
+selection policy and context requirements are unchanged.
+
+
+Drawing-path deletion validation: native build and Emscripten build passed;
+graphics-enabled native CTest **235/235 passed**, including the expanded core
+startup/title-update/frame/recreation regression; `git diff --check` passed.
+No new browser runtime, macOS/Windows runtime or pixel-comparison captures were
+made for this slice. Existing effect pixel/depth checks passed in the native suite.

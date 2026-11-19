@@ -220,6 +220,14 @@ TEST_F(CoreRendererTest, ModernGraphicsStartupFramesAndRecreationAvoidFixedFunct
     App app{};
     TankHandler tanks;
     LevelHandler levels;
+    GameTask game;
+    // Borrow the fixture's core window; the fixture retains context ownership.
+    struct CoreVideo : VideoTask {
+        void Attach(SDL_Window* value) { window = value; }
+    } video;
+    video.Attach(window);
+    app.videoTask = &video;
+    app.gameTask = &game;
     GraphicsTask graphics;
     app.graphicsTask = &graphics;
     for (int iteration = 0; iteration < 2; ++iteration) {
@@ -227,6 +235,9 @@ TEST_F(CoreRendererTest, ModernGraphicsStartupFramesAndRecreationAvoidFixedFunct
         const bool started = graphics.Start();
         const GLenum startupError = glGetError();
         if (started) {
+            EXPECT_TRUE(game.Start()); // Attach the world and load the title scene.
+            graphics.Update();
+            EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
             SceneData scene;
             scene.terrain.sizeX = scene.terrain.sizeZ = 4;
             scene.terrain.heightMap[1][1] = -1; // Exercise water ribbons.
@@ -274,6 +285,7 @@ TEST_F(CoreRendererTest, ModernGraphicsStartupFramesAndRecreationAvoidFixedFunct
             graphics.renderingPipeline->RenderAllPlayerViews(scene);
             EXPECT_EQ(graphics.renderingPipeline->GetRenderStats().effectsRendered, 0);
             EXPECT_EQ(graphics.renderingPipeline->GetRenderStats().tanksRendered, 0);
+            game.Stop();
         }
         graphics.Stop();
         const GLenum shutdownError = glGetError();

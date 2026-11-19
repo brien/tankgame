@@ -1,6 +1,5 @@
 #include "PlayerTankRendererImpl.h"
 #include "PlayerTankRenderer.h" // For delegating to existing static methods
-#include "RendererMode.h"
 
 PlayerTankRendererImpl::PlayerTankRendererImpl() 
     : animationDrift(0.0f) {
@@ -47,15 +46,13 @@ void PlayerTankRendererImpl::RenderOverlays(const TankRenderData& data) {
     // Render additional player-specific elements
     RenderPlayerEffects(data);
     RenderTargetingUI(data, true); // TODO: Get actual enemy presence from game state
-    if (RendererMode::IsModern()) {
-        glDepthMask(GL_TRUE);
-        glDepthFunc(GL_LESS);
-        glDisable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glEnable(GL_CULL_FACE);
-        glCullFace(GL_BACK);
-        glFrontFace(GL_CW);
-    }
+    glDepthMask(GL_TRUE);
+    glDepthFunc(GL_LESS);
+    glDisable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
+    glFrontFace(GL_CW);
 }
 
 void PlayerTankRendererImpl::SetupRenderState() {
@@ -79,15 +76,9 @@ void PlayerTankRendererImpl::RenderTargetingUI(const TankRenderData& tank, bool 
 
 void PlayerTankRendererImpl::SetupPlayerTankRenderState() {
     // Standard player tank rendering state
-#ifndef __EMSCRIPTEN__
-    if (!RendererMode::IsModern()) glEnable(GL_LIGHTING);
-#endif
     glEnable(GL_DEPTH_TEST);
     glDepthMask(GL_TRUE);
     glDepthFunc(GL_LESS);
     glDisable(GL_BLEND);
-#ifndef __EMSCRIPTEN__
-    if (!RendererMode::IsModern()) glDisable(GL_TEXTURE_2D);
-#endif
     glFrontFace(GL_CW);
 }
