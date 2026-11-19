@@ -44,13 +44,13 @@ public:
     
     /**
      * Default render state setup - enables common OpenGL settings
-     * Sets up depth testing, face culling, and smooth shading
+     * Sets up depth testing, face culling, and blending
      */
     void SetupRenderState() override;
     
     /**
      * Default render state cleanup - restores OpenGL defaults
-     * Restores previous OpenGL state settings
+     * Passes establish and restore their own explicit state
      */
     void CleanupRenderState() override;
     
@@ -63,59 +63,10 @@ protected:
     
     /**
      * Common OpenGL setup for 3D rendering
-     * Enables depth testing, face culling, and sets up lighting
+     * Enables depth testing and face culling
      */
     void Setup3DRenderState();
     
-    /**
-     * Common OpenGL setup for 2D rendering (UI, HUD)
-     * Disables depth testing, enables blending for transparency
-     */
-    void Setup2DRenderState();
-    
-    /**
-     * Helper to enable/disable OpenGL lighting
-     * @param enable true to enable lighting, false to disable
-     */
-    void SetLighting(bool enable);
-    
-    /**
-     * Helper to set up alpha blending for transparency effects
-     * @param enable true to enable blending, false to disable
-     */
-    void SetBlending(bool enable);
-    
-    /**
-     * Helper to save current OpenGL matrix
-     */
-    void PushMatrix();
-    
-    /**
-     * Helper to restore previously saved OpenGL matrix
-     */
-    void PopMatrix();
-    
-private:
-    // Store previous OpenGL state for restoration
-    struct RenderState {
-        GLboolean depthTestEnabled;
-        GLboolean lightingEnabled;
-        GLboolean blendEnabled;
-        GLboolean cullFaceEnabled;
-        GLint matrixMode;
-    } previousState;
-    
-    bool stateStored = false;
-    
-    /**
-     * Store current OpenGL state for later restoration
-     */
-    void StoreRenderState();
-    
-    /**
-     * Restore previously stored OpenGL state
-     */
-    void RestoreRenderState();
 };
 
 #endif // BASERENDERER_H

@@ -1,18 +1,15 @@
 #include "GraphicsCapabilities.h"
 
-ContextRequest ChooseContextRequest(GraphicsPlatform platform, bool modern)
+ContextRequest ChooseContextRequest(GraphicsPlatform platform)
 {
-    if (platform == GraphicsPlatform::Web) return {2, 0, GraphicsProfile::ES2, modern};
-    if (platform == GraphicsPlatform::MacOS) {
-        if (!modern) return {0, 0, GraphicsProfile::Core32, false};
-        return {3, 2, GraphicsProfile::Core32, true};
-    }
-    // Linux and Windows retain a 2.1 compatibility context in both modes. It
-    // is the only way the modern slice can coexist with not-yet-migrated code.
-    return {2, 1, GraphicsProfile::Compatibility21, true};
+    if (platform == GraphicsPlatform::Web) return {2, 0, GraphicsProfile::ES2};
+    if (platform == GraphicsPlatform::MacOS) return {3, 2, GraphicsProfile::Core32};
+    // Preserve the Linux/Windows hardware baseline. A compatibility context
+    // supports the programmable renderer; it does not select a legacy backend.
+    return {2, 1, GraphicsProfile::Compatibility21};
 }
 
-ShaderDialect ChooseShaderDialect(GraphicsPlatform platform, bool)
+ShaderDialect ChooseShaderDialect(GraphicsPlatform platform)
 {
     if (platform == GraphicsPlatform::Web) return ShaderDialect::GLSLES100;
     if (platform == GraphicsPlatform::MacOS) return ShaderDialect::GLSL150Core;

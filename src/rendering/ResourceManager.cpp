@@ -1,11 +1,10 @@
 #include "ResourceManager.h"
 #include "RenderContext.h"
-#include "RendererMode.h"
 #include "GpuTexture.h"
 #include "../Logger.h"
 ResourceManager::ResourceManager() 
     : isInitialized(false)
-    , displayListsBuilt(false)
+    , geometryReady(false)
     , texturesLoaded(false)
     , meshesLoaded(false) {
 }
@@ -16,26 +15,22 @@ bool ResourceManager::Initialize() {
     }
     
     // Compile/link once per catalogue/context, before any modern draw resource.
-    if (RendererMode::IsModern()) {
-        modernRenderer.reset(new ModernRenderer);
-        RenderContext::Current().SetModernRenderer(modernRenderer.get());
-    }
+    modernRenderer.reset(new ModernRenderer);
+    RenderContext::Current().SetModernRenderer(modernRenderer.get());
 
     // Initialize all resource subsystems
     bool success = true;
     
     success &= InitializeTextures();
     success &= InitializeMeshes();
-    success &= InitializeDisplayLists();
-    if (RendererMode::IsModern()) {
-        try {
-            fontAtlas = FontAtlas::Load("./fonts/DroidSansMono.ttf");
-            fontTexture = std::make_shared<GpuTexture>(fontAtlas.image, TextureUploadOptions{false, false});
-            for (int i = 0; i < FontAtlas::Count; ++i) fontGlyphs[i].SetGeometry(fontAtlas.glyphs[i].geometry);
-        } catch (const std::exception& error) {
-            Logger::Get().Write("Font atlas initialization failed: %s\n", error.what());
-            success = false;
-        }
+    success &= InitializeGeometry();
+    try {
+        fontAtlas = FontAtlas::Load("./fonts/DroidSansMono.ttf");
+        fontTexture = std::make_shared<GpuTexture>(fontAtlas.image, TextureUploadOptions{false, false});
+        for (int i = 0; i < FontAtlas::Count; ++i) fontGlyphs[i].SetGeometry(fontAtlas.glyphs[i].geometry);
+    } catch (const std::exception& error) {
+        Logger::Get().Write("Font atlas initialization failed: %s\n", error.what());
+        success = false;
     }
     
     if (success) {
@@ -49,17 +44,17 @@ bool ResourceManager::Initialize() {
 }
 
 void ResourceManager::Cleanup() {
-    for (auto& glyph : fontGlyphs) glyph = DisplayList(0);
+    for (auto& glyph : fontGlyphs) glyph = GeometryAsset{};
     fontTexture.reset();
     fontAtlas = FontAtlas{};
-    CleanupDisplayLists();
+    CleanupGeometry();
     RenderContext::Current().SetModernRenderer(nullptr);
     modernRenderer.reset();
     CleanupTextures();
     CleanupMeshes();
     
     isInitialized = false;
-    displayListsBuilt = false;
+    geometryReady = false;
     texturesLoaded = false;
     meshesLoaded = false;
 }
@@ -98,7 +93,7 @@ bool ResourceManager::InitializeMeshes() {
     return meshesLoaded;
 }
 
-bool ResourceManager::InitializeDisplayLists() {
+bool ResourceManager::InitializeGeometry() {
     try {
         Geometry ui;
         ui.hasTextureCoordinates = true;
@@ -110,80 +105,77 @@ bool ResourceManager::InitializeDisplayLists() {
         line.topology = PrimitiveTopology::LINES;
         line.vertices = {{0, 0, 0}, {1, 1, 1}};
         debugLine.SetGeometry(line);
-        BuildCubeLists();
-        BuildSquareLists();
-        BuildBulletList();
-        BuildTankDisplayLists();
-        BuildItemList();
+        BuildCubeGeometry();
+        BuildQuadGeometry();
+        BuildBulletGeometry();
+        BuildTankGeometry();
+        BuildItemGeometry();
         
-        displayListsBuilt = true;
+        geometryReady = true;
     } catch (...) {
-        displayListsBuilt = false;
+        geometryReady = false;
     }
     
-    return displayListsBuilt;
+    return geometryReady;
 }
 
-void ResourceManager::BuildCubeLists() {
-    cubeList1 = DisplayList(1);
-    cubeList1.SetGeometry(SimpleGeometry::CreateCube());
-
-    cubeList2 = DisplayList(1);
-    cubeList2.SetGeometry(SimpleGeometry::CreateCube(0.05f));
+void ResourceManager::BuildCubeGeometry() {
+    terrainCube = GeometryAsset{};
+    terrainCube.SetGeometry(SimpleGeometry::CreateCube());
 }
 
-void ResourceManager::BuildBulletList() {
-    bulletList = DisplayList(1);
-    bulletList.SetGeometry(SimpleGeometry::CreateBullet());
+void ResourceManager::BuildBulletGeometry() {
+    bulletGeometry = GeometryAsset{};
+    bulletGeometry.SetGeometry(SimpleGeometry::CreateBullet());
 }
 
-void ResourceManager::BuildTankDisplayLists() {
+void ResourceManager::BuildTankGeometry() {
     // Enemy geometry is the compatibility renderer's fixed mesh for all types.
     enemyBody.SetGeometry(SimpleGeometry::CreateEnemyBody());
     enemyBarrel.SetGeometry(SimpleGeometry::CreateEnemyBarrel());
     enemyTurret.SetGeometry(SimpleGeometry::CreateEnemyTurret());
 
-    // Build tank body display lists using loaded meshes
+    // Build tank body geometry resources using loaded meshes
     if (meshesLoaded) {
-        // bodyListEx - enhanced body
-        bodyListEx.SetGeometry(bodyMesh.CreateTriangleExtrudedGeometry(.01f));
+        // bodyExtruded - enhanced body
+        bodyExtruded.SetGeometry(bodyMesh.CreateTriangleExtrudedGeometry(.01f));
         
-        // turretListEx - enhanced turret
-        turretListEx.SetGeometry(turretMesh.CreateTriangleExtrudedGeometry(.01f));
+        // turretExtruded - enhanced turret
+        turretExtruded.SetGeometry(turretMesh.CreateTriangleExtrudedGeometry(.01f));
         
-        // cannonListEx - enhanced cannon
-        cannonListEx.SetGeometry(cannonMesh.CreateTriangleExtrudedGeometry(.01f));
+        // cannonExtruded - enhanced cannon
+        cannonExtruded.SetGeometry(cannonMesh.CreateTriangleExtrudedGeometry(.01f));
         
-        // Standard body, turret, cannon lists (simplified versions)
-        bodyList.SetGeometry(bodyMesh.CreateTriangleGeometry());
+        // Standard body, turret, cannon geometry (simplified versions)
+        bodyGeometry.SetGeometry(bodyMesh.CreateTriangleGeometry());
         
-        turretList.SetGeometry(turretMesh.CreateTriangleGeometry());
+        turretGeometry.SetGeometry(turretMesh.CreateTriangleGeometry());
         
-        cannonList.SetGeometry(cannonMesh.CreateTriangleGeometry());
+        cannonGeometry.SetGeometry(cannonMesh.CreateTriangleGeometry());
         
-        // Extended variants (bodyListEx2, turretListEx2, cannonListEx2)
-        bodyListEx2.SetGeometry(bodyMesh.CreateEdgeExtrudedGeometry(.01f));
+        // Extended variants (bodyEdges, turretEdges, cannonEdges)
+        bodyEdges.SetGeometry(bodyMesh.CreateEdgeExtrudedGeometry(.01f));
         
-        turretListEx2.SetGeometry(turretMesh.CreateEdgeExtrudedGeometry(.01f));
+        turretEdges.SetGeometry(turretMesh.CreateEdgeExtrudedGeometry(.01f));
         
-        cannonListEx2.SetGeometry(cannonMesh.CreateEdgeExtrudedGeometry(.01f));
+        cannonEdges.SetGeometry(cannonMesh.CreateEdgeExtrudedGeometry(.01f));
     }
 }
 
-void ResourceManager::BuildItemList() {
+void ResourceManager::BuildItemGeometry() {
     if (meshesLoaded) {
-        itemList.SetGeometry(itemMesh.CreateTriangleExtrudedGeometry(.01f));
+        itemGeometry.SetGeometry(itemMesh.CreateTriangleExtrudedGeometry(.01f));
     } else {
-        itemList.SetGeometry(SimpleGeometry::CreateItemFallback());
+        itemGeometry.SetGeometry(SimpleGeometry::CreateItemFallback());
     }
 }
 
-void ResourceManager::BuildSquareLists() {
-    squareList = DisplayList(1);
-    squareList.SetGeometry(SimpleGeometry::CreateHorizontalSquare());
+void ResourceManager::BuildQuadGeometry() {
+    horizontalQuad = GeometryAsset{};
+    horizontalQuad.SetGeometry(SimpleGeometry::CreateHorizontalSquare());
 
-    squareList2 = DisplayList(1);
-    squareList2.SetGeometry(SimpleGeometry::CreateHorizontalSquare(
+    horizontalOutline = GeometryAsset{};
+    horizontalOutline.SetGeometry(SimpleGeometry::CreateHorizontalSquare(
         0.5f, PrimitiveTopology::LINE_LOOP));
 }
 
@@ -197,20 +189,20 @@ void ResourceManager::PrepareMesh(igtl_QGLMesh& mesh, const char* fileName) {
         throw std::runtime_error(std::string("cannot decode mesh: ") + fileName);
 }
 
-void ResourceManager::CleanupDisplayLists() {
+void ResourceManager::CleanupGeometry() {
     // Release VBOs before the shared program while the context is current.
-    // Keep empty facades usable by a subsequent Initialize (Close nulls them).
+    // Replace entries so subsequent initialization starts with empty resources.
     terrainDraws = TerrainDrawBatches{};
     terrainGeometry.Clear();
-    cubeList1 = DisplayList(1); cubeList2 = DisplayList(1); bulletList = DisplayList(1);
-    bodyList = DisplayList(1); turretList = DisplayList(1); cannonList = DisplayList(1); itemList = DisplayList(1);
-    squareList = DisplayList(1); squareList2 = DisplayList(1);
-    bodyListEx = DisplayList(1); turretListEx = DisplayList(1); cannonListEx = DisplayList(1);
-    bodyListEx2 = DisplayList(1); turretListEx2 = DisplayList(1); cannonListEx2 = DisplayList(1);
-    uiQuad = DisplayList(1); uiOutline = DisplayList(1);
-    debugLine = DisplayList(1);
-    enemyBody = DisplayList(1); enemyBarrel = DisplayList(1); enemyTurret = DisplayList(1);
-    displayListsBuilt = false;
+    terrainCube = GeometryAsset{}; bulletGeometry = GeometryAsset{};
+    bodyGeometry = GeometryAsset{}; turretGeometry = GeometryAsset{}; cannonGeometry = GeometryAsset{}; itemGeometry = GeometryAsset{};
+    horizontalQuad = GeometryAsset{}; horizontalOutline = GeometryAsset{};
+    bodyExtruded = GeometryAsset{}; turretExtruded = GeometryAsset{}; cannonExtruded = GeometryAsset{};
+    bodyEdges = GeometryAsset{}; turretEdges = GeometryAsset{}; cannonEdges = GeometryAsset{};
+    uiQuad = GeometryAsset{}; uiOutline = GeometryAsset{};
+    debugLine = GeometryAsset{};
+    enemyBody = GeometryAsset{}; enemyBarrel = GeometryAsset{}; enemyTurret = GeometryAsset{};
+    geometryReady = false;
 }
 
 void ResourceManager::CleanupTextures() {
@@ -224,7 +216,7 @@ void ResourceManager::CleanupMeshes() {
     meshesLoaded = false;
 }
 
-DisplayList& ResourceManager::GetGeometry(GeometryResource resource) {
+GeometryAsset& ResourceManager::GetGeometry(GeometryResource resource) {
     switch (resource) {
     case GeometryResource::UIQuad: return uiQuad;
     case GeometryResource::UIOutline: return uiOutline;
@@ -232,25 +224,25 @@ DisplayList& ResourceManager::GetGeometry(GeometryResource resource) {
     case GeometryResource::EnemyBody: return enemyBody;
     case GeometryResource::EnemyBarrel: return enemyBarrel;
     case GeometryResource::EnemyTurret: return enemyTurret;
-    case GeometryResource::TerrainCube: return cubeList1;
-    case GeometryResource::Bullet: return bulletList;
-    case GeometryResource::TankBody: return bodyList;
-    case GeometryResource::TankTurret: return turretList;
-    case GeometryResource::TankCannon: return cannonList;
-    case GeometryResource::Item: return itemList;
-    case GeometryResource::HorizontalQuad: return squareList;
-    case GeometryResource::HorizontalOutline: return squareList2;
-    case GeometryResource::TankBodyExtruded: return bodyListEx;
-    case GeometryResource::TankTurretExtruded: return turretListEx;
-    case GeometryResource::TankCannonExtruded: return cannonListEx;
-    case GeometryResource::TankBodyEdges: return bodyListEx2;
-    case GeometryResource::TankTurretEdges: return turretListEx2;
-    case GeometryResource::TankCannonEdges: return cannonListEx2;
+    case GeometryResource::TerrainCube: return terrainCube;
+    case GeometryResource::Bullet: return bulletGeometry;
+    case GeometryResource::TankBody: return bodyGeometry;
+    case GeometryResource::TankTurret: return turretGeometry;
+    case GeometryResource::TankCannon: return cannonGeometry;
+    case GeometryResource::Item: return itemGeometry;
+    case GeometryResource::HorizontalQuad: return horizontalQuad;
+    case GeometryResource::HorizontalOutline: return horizontalOutline;
+    case GeometryResource::TankBodyExtruded: return bodyExtruded;
+    case GeometryResource::TankTurretExtruded: return turretExtruded;
+    case GeometryResource::TankCannonExtruded: return cannonExtruded;
+    case GeometryResource::TankBodyEdges: return bodyEdges;
+    case GeometryResource::TankTurretEdges: return turretEdges;
+    case GeometryResource::TankCannonEdges: return cannonEdges;
     }
     throw std::out_of_range("unknown geometry resource");
 }
 
-const DisplayList& ResourceManager::GetGeometry(GeometryResource resource) const {
+const GeometryAsset& ResourceManager::GetGeometry(GeometryResource resource) const {
     return const_cast<ResourceManager*>(this)->GetGeometry(resource);
 }
 
@@ -263,7 +255,7 @@ const BasicMaterial& ResourceManager::GetMaterial(MaterialResource resource) con
 }
 
 const TerrainDrawBatches& ResourceManager::PrepareTerrain(const TerrainRenderData& terrain) {
-    if (!isInitialized || !RendererMode::IsModern())
+    if (!isInitialized)
         throw std::logic_error("terrain uploads require the initialized modern catalogue");
     if (!terrainGeometry.Update(terrain)) return terrainDraws;
     try {

@@ -7,7 +7,6 @@
 #include "App.h"
 #include "rendering/GLFunctions.h"
 #include "rendering/GraphicsCapabilities.h"
-#include "rendering/RendererMode.h"
 
 #include <SDL2/SDL.h>
 #include <iostream>
@@ -41,12 +40,7 @@ bool VideoTask::Start()
 #elif defined(_WIN32)
     platform = GraphicsPlatform::Windows;
 #endif
-    const ContextRequest context = ChooseContextRequest(platform, RendererMode::IsModern());
-    if (!context.supported)
-    {
-        Logger::Get().Write("VideoTask::Start: compatibility rendering is unsupported on macOS; use TANKGAME_RENDERER=modern.\n");
-        return false;
-    }
+    const ContextRequest context = ChooseContextRequest(platform);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, context.major);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, context.minor);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK,

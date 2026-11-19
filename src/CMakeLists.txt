@@ -5,20 +5,10 @@ file(GLOB_RECURSE SOURCES
 
 # Remove example files that shouldn't be compiled
 list(FILTER SOURCES EXCLUDE REGEX ".*_example\\.cpp$")
-list(FILTER SOURCES EXCLUDE REGEX "/rendering/BrowserDeferredRenderers\\.cpp$")
 
 set(GAME_SOURCES ${SOURCES})
 list(FILTER GAME_SOURCES EXCLUDE REGEX "/main\\.cpp$")
 set(GAME_SOURCES ${GAME_SOURCES} PARENT_SCOPE)
-
-# Only the legacy unified tank renderer still needs a browser substitute.
-# HUD orchestration and all modern visual passes compile from shared sources.
-if(EMSCRIPTEN)
-    list(FILTER SOURCES EXCLUDE REGEX "/rendering/TankRenderer\\.cpp$")
-    list(APPEND SOURCES
-        "${CMAKE_CURRENT_SOURCE_DIR}/rendering/BrowserDeferredRenderers.cpp"
-    )
-endif()
 
 # Set executable name based on platform
 if(APPLE)
@@ -111,13 +101,6 @@ target_link_libraries(${EXECUTABLE_NAME}
     ${SDL2_LIBRARIES}
     tankgame_sdl2_mixer
     tankgame_sdl2_ttf
-    ${OPENGL_LIBRARIES}
+    tankgame_opengl
     ${CMAKE_DL_LIBS}
 )
-
-# Add GLU on native Linux/Unix desktops. Emscripten also reports UNIX, but
-# WebAssembly targets must not discover or link the host desktop GLU library.
-if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
-    find_library(GLU_LIBRARY GLU REQUIRED)
-    target_link_libraries(${EXECUTABLE_NAME} ${GLU_LIBRARY})
-endif()

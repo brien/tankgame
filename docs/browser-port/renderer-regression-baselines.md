@@ -59,10 +59,25 @@ used the available Linux display; Xvfb is not installed locally, so the hosted
 Xvfb wrapper itself remains unverified. Both new modern-effect tests passed.
 `git diff --check` passes. Windows/macOS and browser runtime were not rerun.
 
-## Remaining retirement gates
+## Current retirement status — 2026-11-19
 
-Windows/macOS modern-default runtime, physical firing input, broader level/UI
-visual coverage and owner visual approval remain open. The co-op-to-single-player
-session defect was fixed on 2026-11-12 and the November 18 browser smoke checks
-passed. The [retirement follow-up](compatibility-retirement.md) adds shared-state
-core-profile regression coverage; compatibility removal remains gated separately.
+Renderer retirement is implemented. Modern is the sole backend; old environment
+overrides are ignored. The unified renderer, fallback drawing branches,
+DisplayList/resource compatibility APIs and GLU dependency are removed. Platform
+context/shader requirements are unchanged and are tested without backend flags.
+
+The core regression covers real GraphicsTask startup, GameTask title-scene update,
+representative world/UI passes, 1 → 2 → 1 views, empty-scene counters and resource
+recreation. GeometryAsset tests cover shared replacement, failed replacement,
+owner reset and rendering through a surviving alias. Existing effect pixel/depth
+contracts remain in the suite.
+
+Owner acceptance covers Linux (SteamOS), macOS, Windows 11 and browser builds
+reported earlier. It is not a fresh runtime run of every final-branch platform.
+See the [audit closeout](modern-renderer-audit.md) for final validation and limits.
+Earlier test counts and fallback comparisons above are historical checkpoints.
+
+
+Final local validation: **238/238** native graphics-enabled tests and **31/31**
+browser lifecycle checks passed; native/browser builds passed. See the
+[retained final evidence](../../documentation/renderer-retirement-2026-11-19/README.md).

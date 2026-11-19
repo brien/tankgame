@@ -11,10 +11,9 @@ struct ContextRequest
     int major;
     int minor;
     GraphicsProfile profile;
-    bool supported;
 };
 
-ContextRequest ChooseContextRequest(GraphicsPlatform platform, bool modernRenderer);
-ShaderDialect ChooseShaderDialect(GraphicsPlatform platform, bool modernRenderer);
+ContextRequest ChooseContextRequest(GraphicsPlatform platform);
+ShaderDialect ChooseShaderDialect(GraphicsPlatform platform);
 std::string BuildVertexShader(ShaderDialect dialect);
 std::string BuildFragmentShader(ShaderDialect dialect);

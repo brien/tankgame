@@ -1,0 +1,1122 @@
+{
+  "checks": [
+    {
+      "label": "startup",
+      "value": true
+    },
+    {
+      "label": "all levels packaged",
+      "value": true
+    },
+    {
+      "label": "audio assets packaged",
+      "value": true
+    },
+    {
+      "label": "sound requires activation",
+      "value": true
+    },
+    {
+      "label": "audio rejection retry",
+      "value": true
+    },
+    {
+      "label": "audio active",
+      "value": true
+    },
+    {
+      "label": "OGG produces audio samples",
+      "value": true
+    },
+    {
+      "label": "context paused 0",
+      "value": true
+    },
+    {
+      "label": "no lost-context frames 0",
+      "value": true
+    },
+    {
+      "label": "context recovered 0",
+      "value": true
+    },
+    {
+      "label": "rendering resumed 0",
+      "value": true
+    },
+    {
+      "label": "context paused 1",
+      "value": true
+    },
+    {
+      "label": "no lost-context frames 1",
+      "value": true
+    },
+    {
+      "label": "context recovered 1",
+      "value": true
+    },
+    {
+      "label": "rendering resumed 1",
+      "value": true
+    },
+    {
+      "label": "hotplug gamepad fires",
+      "value": true
+    },
+    {
+      "label": "disconnect keeps rendering healthy",
+      "value": true
+    },
+    {
+      "label": "reconnected held button suppressed",
+      "value": true
+    },
+    {
+      "label": "fresh gamepad press after reconnect fires",
+      "value": true
+    },
+    {
+      "label": "next level loaded",
+      "value": true
+    },
+    {
+      "label": "responsive resize",
+      "value": true
+    },
+    {
+      "label": "DPI resize",
+      "value": true
+    },
+    {
+      "label": "fullscreen",
+      "value": true
+    },
+    {
+      "label": "blur suspends audio",
+      "value": true
+    },
+    {
+      "label": "focus resumes audio",
+      "value": true
+    },
+    {
+      "label": "steady play has no buffer uploads or GL errors",
+      "value": true
+    },
+    {
+      "label": "shutdown",
+      "value": true
+    },
+    {
+      "label": "audio closed",
+      "value": true
+    },
+    {
+      "label": "download failure offers retry",
+      "value": true
+    },
+    {
+      "label": "download retry starts game",
+      "value": true
+    },
+    {
+      "label": "failed graphics recovery offers retry and stops tasks",
+      "value": true
+    }
+  ],
+  "console": [
+    {
+      "level": 2,
+      "message": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."
+    },
+    {
+      "level": 1,
+      "message": "We compiled against SDL version 2.28.4 ..."
+    },
+    {
+      "level": 1,
+      "message": "But we are linking against SDL version 2.28.4."
+    },
+    {
+      "level": 1,
+      "message": "VideoTask::Start: graphics context ready at 1100x656."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline initializing... "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Started"
+    },
+    {
+      "level": 1,
+      "message": "Renderer: modern"
+    },
+    {
+      "level": 2,
+      "message": "The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet)"
+    },
+    {
+      "level": 1,
+      "message": "SDL_mixer compiled 2.8.0, linked 2.8.0; audio 48000 Hz, 2 channels, format 0x8010."
+    },
+    {
+      "level": 1,
+      "message": "Loaded music 'sounds/TGTest3.ogg'."
+    },
+    {
+      "level": 1,
+      "message": "Audio driver: emscripten; available music decoders: 2."
+    },
+    {
+      "level": 1,
+      "message": "Available music decoder: WAVE"
+    },
+    {
+      "level": 1,
+      "message": "Available music decoder: OGG"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: ./levels/title@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: ./levels/title@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameWorld::Initialize() - Starting"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscribing to collision query events"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscriptions complete"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld initialized with collision and combat systems"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Setting GameWorld and recreating SceneDataBuilder"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume - Initializing systems..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Initializing PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialize called with GameWorld"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Creating initial player..."
+    },
+    {
+      "level": 1,
+      "message": "Created Player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Claiming existing tanks from TankHandler..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: No valid tank found for Player 0 in TankHandler"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up controllers and input with synced preferences..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Detected 0 joysticks"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping TankHandler input preference isInputJoy=0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Using keyboard/mouse input (from TankHandler)"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping numPlayers=1 from initialization"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume complete"
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=464, loaded=1, active=0, requestedPause=0, playing=0, paused=1, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=0.000 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "Initialization complete."
+    },
+    {
+      "level": 1,
+      "message": "Registering non-blocking Emscripten browser frame loop."
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "level": 1,
+      "message": "Browser first frame completed: WebGL clear/render/swap path executed."
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=644, loaded=1, active=1, requestedPause=0, playing=0, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=0.000 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "Music playback started (active=1, musicPaused=0)."
+    },
+    {
+      "level": 1,
+      "message": "Music play request: tick=649, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=0.000 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 0, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Music progress: tick=1651, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=1.049 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Setting up new game..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Cleared event queue"
+    },
+    {
+      "level": 1,
+      "message": "Created Player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: levels/level0@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: levels/level0@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Spawning player tanks via PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": ">>> CreatePlayerTank called for player 0 at (14.00, 24.00, 113.00)"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: GameWorld::CreateTank returned tank=0x501050"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: Tank::Init() completed"
+    },
+    {
+      "level": 1,
+      "message": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "level": 1,
+      "message": "Player 0 took control of tank"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Player tanks spawned"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Game setup complete"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(1.00,1.00,1.00) block(1.00,1.00,1.00)"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=2387, loaded=1, active=0, requestedPause=0, playing=1, paused=1, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=1.766 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline initializing... "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Started"
+    },
+    {
+      "level": 1,
+      "message": "Renderer: modern"
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=3065, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=1.766 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "Music progress: tick=3066, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=1.766 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Music progress: tick=4069, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=2.837 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=4205, loaded=1, active=0, requestedPause=0, playing=1, paused=1, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=2.977 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline initializing... "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Started"
+    },
+    {
+      "level": 1,
+      "message": "Renderer: modern"
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=4885, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=2.977 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 0, Items: 0, Effects: 68 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 3, Items: 0, Effects: 20 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 6, Items: 0, Effects: 25 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 6, Bullets: 6, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "========== LevelHandler::NextLevel(true) called =========="
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Clearing GameWorld..."
+    },
+    {
+      "level": 1,
+      "message": "Tank collision layer updated to ENEMY_TANKS"
+    },
+    {
+      "level": 1,
+      "message": "Player 0 released tank control"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: GameWorld cleared"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: levels/level1@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: levels/level1@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": ">>> CreatePlayerTank called for player 0 at (3.00, 24.00, 110.00)"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: GameWorld::CreateTank returned tank=0x2b5220"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: Tank::Init() completed"
+    },
+    {
+      "level": 1,
+      "message": "Tank collision layer updated to PLAYER_TANKS"
+    },
+    {
+      "level": 1,
+      "message": "Player 0 took control of tank"
+    },
+    {
+      "level": 1,
+      "message": "Player 0: TakeControlOf completed - identity set to PLAYER"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 1 (internal 49) - Setting colors: default(0.00,1.00,0.00) block(1.00,1.00,1.00)"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 4 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 36 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=12277, loaded=1, active=0, requestedPause=0, playing=1, paused=1, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=10.439 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=12544, loaded=1, active=1, requestedPause=0, playing=1, paused=0, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=10.439 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 7 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 1 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 47.6"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 30 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 37 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 62.5"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 0 | FPS: 66.7"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld entities - Tanks: 10, Bullets: 0, Items: 0, Effects: 1 | FPS: 58.8"
+    },
+    {
+      "level": 1,
+      "message": "Tank collision layer updated to ENEMY_TANKS"
+    },
+    {
+      "level": 1,
+      "message": "Player 0 released tank control"
+    },
+    {
+      "level": 1,
+      "message": "Created Player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: levels/title@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: levels/title@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    },
+    {
+      "level": 1,
+      "message": "Browser frame loop stopped."
+    },
+    {
+      "level": 2,
+      "message": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."
+    },
+    {
+      "level": 2,
+      "message": "%cElectron Security Warning (Insecure Content-Security-Policy) font-weight: bold; This renderer process has either no Content Security\n  Policy set or a policy with \"unsafe-eval\" enabled. This exposes users of\n  this app to unnecessary security risks.\n\nFor more information and help, consult\nhttps://electronjs.org/docs/tutorial/security.\nThis warning will not show up\nonce the app is packaged."
+    },
+    {
+      "level": 1,
+      "message": "We compiled against SDL version 2.28.4 ..."
+    },
+    {
+      "level": 1,
+      "message": "But we are linking against SDL version 2.28.4."
+    },
+    {
+      "level": 1,
+      "message": "VideoTask::Start: graphics context ready at 700x408."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Initializing new centralized rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline initializing... "
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "RenderingPipeline Initialized Successfully: 1"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline initialized successfully"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Started"
+    },
+    {
+      "level": 1,
+      "message": "Renderer: modern"
+    },
+    {
+      "level": 2,
+      "message": "The ScriptProcessorNode is deprecated. Use AudioWorkletNode instead. (https://bit.ly/audio-worklet)"
+    },
+    {
+      "level": 1,
+      "message": "SDL_mixer compiled 2.8.0, linked 2.8.0; audio 48000 Hz, 2 channels, format 0x8010."
+    },
+    {
+      "level": 1,
+      "message": "Loaded music 'sounds/TGTest3.ogg'."
+    },
+    {
+      "level": 1,
+      "message": "Audio driver: emscripten; available music decoders: 2."
+    },
+    {
+      "level": 1,
+      "message": "Available music decoder: WAVE"
+    },
+    {
+      "level": 1,
+      "message": "Available music decoder: OGG"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Successfully loaded metadata from: ./levels/title@@.json"
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: finished loading file: ./levels/title@@.txt  "
+    },
+    {
+      "level": 1,
+      "message": "GameWorld::Initialize() - Starting"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscribing to collision query events"
+    },
+    {
+      "level": 1,
+      "message": "CollisionSystem::Initialize() - Subscriptions complete"
+    },
+    {
+      "level": 1,
+      "message": "GameWorld initialized with collision and combat systems"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Setting GameWorld and recreating SceneDataBuilder"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume - Initializing systems..."
+    },
+    {
+      "level": 1,
+      "message": "GameTask: Initializing PlayerManager..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialize called with GameWorld"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Creating initial player..."
+    },
+    {
+      "level": 1,
+      "message": "Created Player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Claiming existing tanks from TankHandler..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager::ClaimExistingTanks() - deprecated, player tanks created directly"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: No valid tank found for Player 0 in TankHandler"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up controllers and input with synced preferences..."
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Detected 0 joysticks"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping TankHandler input preference isInputJoy=0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Using keyboard/mouse input (from TankHandler)"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Keeping numPlayers=1 from initialization"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Setting up input for player 0 isInputJoy=0 assignedJoystick=-1"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Player 0 using keyboard/mouse input mode"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Input handler created successfully for player 0"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager: Initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "PlayerManager initialized with 1 players"
+    },
+    {
+      "level": 1,
+      "message": "GameTask: OnResume complete"
+    },
+    {
+      "level": 1,
+      "message": "Music activity change: tick=158, loaded=1, active=0, requestedPause=0, playing=0, paused=1, volume=128/128."
+    },
+    {
+      "level": 1,
+      "message": "Music stream: position=0.000 s, duration=178.312 s, objectVolume=128/128 (negative times mean unavailable)."
+    },
+    {
+      "level": 1,
+      "message": "Initialization complete."
+    },
+    {
+      "level": 1,
+      "message": "Registering non-blocking Emscripten browser frame loop."
+    },
+    {
+      "level": 1,
+      "message": "LevelHandler: Level 0 (internal 48) - Setting colors: default(0.90,0.90,1.00) block(0.70,0.70,0.90)"
+    },
+    {
+      "level": 1,
+      "message": "Browser first frame completed: WebGL clear/render/swap path executed."
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "EffectRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "BulletRenderer cleaned up"
+    },
+    {
+      "level": 1,
+      "message": "TerrainRenderer cleaned up "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask::Starting"
+    },
+    {
+      "level": 1,
+      "message": "Graphics recovery failed: Unable to allocate modern renderer shader"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Cleaning up new rendering pipeline"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: New rendering pipeline cleanup complete"
+    },
+    {
+      "level": 1,
+      "message": "GraphicsTask: Stopped "
+    }
+  ]
+}

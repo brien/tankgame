@@ -30,58 +30,9 @@ public:
     // Modern additive water pass; compatibility retains its reference ordering.
     void RenderWater(const TerrainRenderData& terrain);
 
-protected:
-    // Override render state setup to disable lighting for terrain
-    void Setup3DRenderState();
-
 private:
     ResourceManager* resources;
     void RenderModernTerrain(const TerrainRenderData& terrain);
-    // Main rendering functions
-    void RenderFloatingElements(const TerrainRenderData &terrain);
-    void RenderTerrainSurface(const TerrainRenderData &terrain);
-    void RenderTerrainWalls(const TerrainRenderData &terrain);
-    void RenderBoundaryWalls(const TerrainRenderData &terrain);
-    void RenderWaterEffects(const TerrainRenderData &terrain);
-
-    // Utility functions
-    void SetupTerrainColors(const TerrainRenderData &terrain);
-    void BindSurfaceTexture(int levelNumber,int currentHeight);
-    void BindWallTexture(int levelNumber);
-    void RenderTerrainQuad(int x, int z, int height, int strips, bool isLast = false);
-    void RenderWallQuad(int ix, int iz, int lastY, int currentY, int direction);
-    void RenderBlendQuad(int ix, int iz, int height, int direction);
-    
-    // Color helper methods for metadata-based coloring
-    void SetPrimaryColor();
-    void SetSecondaryColor();
-    void SetBlockColor();
-
-    // Color palette for terrain rendering
-    static constexpr int COLOR_PALETTE_SIZE = 32;
-    float colorPalette[COLOR_PALETTE_SIZE][4];
-    
-    // Current terrain data for metadata-based coloring
-    const TerrainRenderData* currentTerrainData;
-
-    // Texture IDs for different terrain types
-    enum TerrainTextures
-    {
-        TEXTURE_BLACK = 11,
-        TEXTURE_WHITE = 10,
-        TEXTURE_CHECKER = 15,
-        TEXTURE_BLEND = 12
-    };
-
-    // Cached display list for cube rendering (floating elements)
-    bool displayListInitialized;
-
-    // Helper variables for wall rendering optimization
-    mutable int lastHeightX;
-    mutable int lastHeightZ;
-
-    // Initialize the color palette
-    void InitializeColorPalette();
 };
 
 #endif // TERRAINRENDERER_H

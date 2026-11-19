@@ -7,7 +7,7 @@
 #include "Matrix4.h"
 #include <array>
 
-// Shared modern enemy submission with a retained native compatibility path.
+// Shared shader-backed enemy submission.
 struct EnemyTankDraw {
     GeometryResource geometry;
     Matrix4 model;
@@ -34,20 +34,4 @@ public:
     
 private:
     ResourceManager* resources; // Non-owning; catalogue outlives the pipeline.
-#ifndef __EMSCRIPTEN__
-    // Internal rendering helpers (using hardcoded geometry from TankRenderer)
-    void RenderTankBody(const TankRenderData& tank);
-    void RenderTankBarrel(const TankRenderData& tank);
-    void RenderTankTurret(const TankRenderData& tank);
-    
-    // Hardcoded geometry methods (from original TankRenderer.cpp)
-    void DrawBody(float r, float g, float b, float energy, float maxEnergy);
-    void DrawBarrel(float r, float g, float b, float energy, float maxEnergy);
-    void DrawTurret();
-    
-    // Transform helpers
-    void SetupBodyTransform(const TankRenderData& tank);
-    void SetupBarrelTransform(const TankRenderData& tank);
-    void SetupTurretTransform();
-#endif
 };

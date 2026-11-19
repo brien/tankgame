@@ -80,16 +80,9 @@ target_link_libraries(tankgame_tests
     ${TEST_SDL2_LIBRARIES}
     tankgame_sdl2_mixer
     tankgame_sdl2_ttf
-    ${OPENGL_LIBRARIES}
+    tankgame_opengl
     ${CMAKE_DL_LIBS}
 )
-
-# Add GLU on native Linux/Unix desktops. Emscripten also reports UNIX, but
-# WebAssembly targets must not discover or link the host desktop GLU library.
-if(UNIX AND NOT APPLE AND NOT EMSCRIPTEN)
-    find_library(GLU_LIBRARY GLU REQUIRED)
-    target_link_libraries(tankgame_tests ${GLU_LIBRARY})
-endif()
 
 # Discover tests for CTest
 include(GoogleTest)
@@ -98,30 +91,17 @@ gtest_discover_tests(tankgame_tests
 
 target_compile_definitions(tankgame_tests PRIVATE TANKGAME_TEST_FONT="${CMAKE_SOURCE_DIR}/runtime/fonts/DroidSansMono.ttf")
 
-# Test process-wide renderer selection without requiring a graphics context.
+# Verify platform policy in fresh processes under historical launch settings.
+# TANKGAME_RENDERER no longer participates in context or shader selection.
 if(NOT EMSCRIPTEN)
-    add_executable(renderer_mode_tests
-        test_renderer_mode.cpp
-        ${CMAKE_SOURCE_DIR}/src/rendering/RendererMode.cpp)
-    set_target_properties(renderer_mode_tests PROPERTIES
-        RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
-    # Match the application/test include policy: src/math.h must not shadow
-    # the system <math.h> included transitively by libc++ headers on macOS.
-    if(CMAKE_CXX_COMPILER_ID MATCHES "^(AppleClang|Clang|GNU)$")
-        target_compile_options(renderer_mode_tests PRIVATE
-            "-iquote${CMAKE_SOURCE_DIR}/src")
-    else()
-        target_include_directories(renderer_mode_tests PRIVATE
-            ${CMAKE_SOURCE_DIR}/src)
-    endif()
-    add_test(NAME RendererMode.DefaultModern COMMAND ${CMAKE_COMMAND} -E env
-        --unset=TANKGAME_RENDERER $<TARGET_FILE:renderer_mode_tests> modern)
-    add_test(NAME RendererMode.ExplicitModern COMMAND ${CMAKE_COMMAND} -E env
-        TANKGAME_RENDERER=modern $<TARGET_FILE:renderer_mode_tests> modern)
-    add_test(NAME RendererMode.ExplicitCompatibility COMMAND ${CMAKE_COMMAND} -E env
-        TANKGAME_RENDERER=compatibility $<TARGET_FILE:renderer_mode_tests> compatibility)
-    add_test(NAME RendererMode.EmptyUsesModern COMMAND ${CMAKE_COMMAND} -E env
-        TANKGAME_RENDERER= $<TARGET_FILE:renderer_mode_tests> modern)
-    add_test(NAME RendererMode.UnknownUsesModern COMMAND ${CMAKE_COMMAND} -E env
-        TANKGAME_RENDERER=unknown $<TARGET_FILE:renderer_mode_tests> modern)
+    add_test(NAME GraphicsPolicy.Default COMMAND ${CMAKE_COMMAND} -E env
+        --unset=TANKGAME_RENDERER $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
+    add_test(NAME GraphicsPolicy.ExplicitModern COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=modern $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
+    add_test(NAME GraphicsPolicy.LegacyOverrideIgnored COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=compatibility $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
+    add_test(NAME GraphicsPolicy.EmptyOverride COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER= $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
+    add_test(NAME GraphicsPolicy.UnknownOverride COMMAND ${CMAKE_COMMAND} -E env
+        TANKGAME_RENDERER=unknown $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
 endif()

@@ -9,8 +9,6 @@
 #include <GL/gl.h>
 #endif
 
-#include <array>
-#include "../TankHandler.h"
 #include "RenderData.h"
 
 /**
@@ -23,18 +21,7 @@
 class PlayerTankRenderer 
 {
 public:
-    // Main rendering methods (legacy Tank interface)
-    static void DrawPlayerTanks(const std::array<Tank, TankHandler::MAX_PLAYERS>& players, 
-                               const std::array<float, TankHandler::MAX_PLAYERS>& special,
-                               int numPlayers, 
-                               bool hasEnemyTargets);
-    
-    static void DrawPlayerTank(const Tank& player, float drift);
-    static void DrawPlayerEffects(const Tank& player, const std::array<float, TankHandler::MAX_PLAYERS>& special, 
-                                 int playerIndex, float drift);
-    static void DrawTargetingUI(const Tank& player, float drift);
-
-    // New TankRenderData interface
+    // TankRenderData interface
     static void RenderPlayerTank(const TankRenderData& tank, float drift);
     static void RenderPlayerEffects(const TankRenderData& tank, float drift);
     static void RenderTargetingUI(const TankRenderData& tank, float drift, bool hasEnemyTargets);
@@ -57,14 +44,6 @@ private:
     static void SetupPlayerEffectsRenderState();
     static void SetupTargetingUIRenderState();
     static void RestoreRenderState();
-    
-    // Internal rendering helpers (legacy Tank interface)
-    static void RenderTankBody(const Tank& player);
-    static void RenderTankTurret(const Tank& player);
-    static void RenderEffectBody(const Tank& player);
-    static void RenderEffectTurret(const Tank& player, const std::array<float, TankHandler::MAX_PLAYERS>& special, int playerIndex);
-    static void RenderTargetingIndicator(const Tank& player);
-    static void RenderReadyIndicator(const Tank& player, float drift);
     
     // Internal rendering helpers (TankRenderData interface)
     static void RenderTankBody(const TankRenderData& tank);

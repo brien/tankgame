@@ -11,13 +11,12 @@
 #include "App.h"
 #include "rendering/GLFunctions.h"
 #include "rendering/GpuTexture.h"
-#include "rendering/RendererMode.h"
 #include "rendering/PlayerTankRendererImpl.h"
+#include "rendering/HUDData.h"
 
 // Opt in on a machine with a display and OpenGL:
 // TANKGAME_TEST_GL=1 ./tankgame_tests --gtest_filter=VideoStartupTest.*
-// Run the default modern mode and, on Linux/Windows, a separate process with
-// TANKGAME_RENDERER=compatibility.
+// Old TANKGAME_RENDERER overrides also use the modern backend.
 class VideoStartupTest : public ::testing::Test
 {
 protected:
@@ -182,8 +181,6 @@ TEST_F(CoreRendererTest, DrawsVisiblePixelsAfterVertexArrayBindingChanges)
 }
 TEST_F(CoreRendererTest, ModernSharedRenderStateAvoidsFixedFunctionCalls)
 {
-    if (!RendererMode::IsModern())
-        GTEST_SKIP() << "Modern state contract requires the modern renderer";
     BaseRenderer base;
     PlayerTankRendererImpl player;
     ViewportManager viewports;
@@ -211,6 +208,133 @@ TEST_F(CoreRendererTest, ModernSharedRenderStateAvoidsFixedFunctionCalls)
     }
     player.Cleanup();
     base.Cleanup();
+}
+
+TEST_F(CoreRendererTest, GeometryAssetAliasesShareReplacementAndSurviveOwnerReset)
+{
+    Geometry triangle;
+    triangle.topology = PrimitiveTopology::TRIANGLES;
+    triangle.vertices = {{-1, -1, 0}, {1, -1, 0}, {0, 1, 0}};
+    GeometryAsset asset;
+    GeometryAsset alias = asset;
+    asset.SetGeometry(triangle);
+    EXPECT_EQ(&asset.GetGpuGeometry(), &alias.GetGpuGeometry());
+    EXPECT_EQ(alias.GetGpuGeometry().VertexCount(), 3u);
+    triangle.vertices = {{-1, -1, 0}, {1, -1, 0}, {0, 1, 0},
+                         {-1, -1, 0}, {1, -1, 0}, {0, 1, 0}};
+    alias.SetGeometry(triangle);
+    EXPECT_EQ(&asset.GetGpuGeometry(), &alias.GetGpuGeometry());
+    EXPECT_EQ(asset.GetGpuGeometry().VertexCount(), 6u);
+    Geometry invalid = triangle;
+    invalid.vertices.pop_back();
+    EXPECT_THROW(asset.SetGeometry(invalid), std::invalid_argument);
+    EXPECT_EQ(alias.GetGpuGeometry().VertexCount(), 6u);
+
+    asset = GeometryAsset{};
+    EXPECT_THROW(asset.GetGpuGeometry(), std::logic_error);
+    // The remaining owner must still submit valid pixels after catalogue reset.
+    ModernRenderer renderer;
+    Matrix4 identity;
+    BasicMaterial material;
+    material.green = material.blue = 0;
+    glDisable(GL_CULL_FACE);
+    glDisable(GL_DEPTH_TEST);
+    glViewport(0, 0, 64, 64);
+    glClearColor(0, 0, 0, 1);
+    glClear(GL_COLOR_BUFFER_BIT);
+    renderer.Draw(alias.GetGpuGeometry(), identity.Data(), material, identity.Data(), false);
+    unsigned char pixel[4] = {};
+    glReadPixels(32, 32, 1, 1, GL_RGBA, GL_UNSIGNED_BYTE, pixel);
+    EXPECT_GT(pixel[0], 240);
+    EXPECT_LT(pixel[1], 10);
+    EXPECT_LT(pixel[2], 10);
+    alias = GeometryAsset{};
+    EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+}
+
+TEST_F(CoreRendererTest, ModernGraphicsStartupFramesAndRecreationAvoidFixedFunctionCalls)
+{
+    App app{};
+    TankHandler tanks;
+    LevelHandler levels;
+    GameTask game;
+    // Borrow the fixture's core window; the fixture retains context ownership.
+    struct CoreVideo : VideoTask {
+        void Attach(SDL_Window* value) { window = value; }
+    } video;
+    video.Attach(window);
+    app.videoTask = &video;
+    app.gameTask = &game;
+    GraphicsTask graphics;
+    app.graphicsTask = &graphics;
+    for (int iteration = 0; iteration < 2; ++iteration) {
+        testing::internal::CaptureStdout();
+        const bool started = graphics.Start();
+        const GLenum startupError = glGetError();
+        if (started) {
+            EXPECT_TRUE(game.Start()); // Attach the world and load the title scene.
+            graphics.Update();
+            EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+            SceneData scene;
+            scene.terrain.sizeX = scene.terrain.sizeZ = 4;
+            scene.terrain.heightMap[1][1] = -1; // Exercise water ribbons.
+            scene.terrain.heightMap[2][2] = 1;
+            scene.terrain.drawWalls = scene.terrain.drawTop = true;
+            scene.tanks.resize(2);
+            scene.tanks[0].isPlayer = true;
+            scene.tanks[0].playerId = -1;
+            scene.tanks[1].position = Vector3(2, 0, 2);
+            scene.bullets.emplace_back();
+            scene.items.emplace_back();
+            scene.effects.emplace_back();
+            scene.effects.back().type = FxType::TYPE_SMOKE;
+            scene.debugMode = true;
+            scene.debugLines.push_back({Vector3(0, 1, 0), Vector3(3, 1, 3), Vector3(1, 0, 0)});
+            scene.cameras.resize(2);
+            for (auto& camera : scene.cameras) {
+                camera.position = Vector3(5, 8, 10);
+                camera.focus = Vector3(1, 0, 1);
+            }
+            auto ui = std::make_shared<UIRenderData>();
+            ui->gameStarted = true;
+            ui->playerHUDs.resize(2);
+            ui->playerHUDs[1].playerId = 1;
+            ui->menu.isVisible = true;
+            ui->menu.numOptions = 1;
+            ui->menu.menuOptions = {"Resume"};
+            ui->menu.optionEnabled = {true};
+            ui->debug.showDebugInfo = true;
+            scene.uiData = ui;
+            for (int players : {1, 2, 1}) {
+                scene.numPlayers = ui->numPlayers = players;
+                graphics.renderingPipeline->ConfigureViewports(players, 64, 64);
+                graphics.renderingPipeline->RenderAllPlayerViews(scene);
+                const auto& stats = graphics.renderingPipeline->GetRenderStats();
+                EXPECT_EQ(stats.tanksRendered, 2);
+                EXPECT_EQ(stats.effectsRendered, 1);
+                EXPECT_EQ(stats.itemsRendered, 1);
+                EXPECT_EQ(stats.bulletsRendered, 1);
+                EXPECT_GT(stats.submissions.drawCalls, 0u);
+                EXPECT_GT(stats.submissions.triangles, 0u);
+                EXPECT_EQ(glGetError(), static_cast<GLenum>(GL_NO_ERROR));
+            }
+            scene.Clear();
+            graphics.renderingPipeline->RenderAllPlayerViews(scene);
+            EXPECT_EQ(graphics.renderingPipeline->GetRenderStats().effectsRendered, 0);
+            EXPECT_EQ(graphics.renderingPipeline->GetRenderStats().tanksRendered, 0);
+            game.Stop();
+        }
+        graphics.Stop();
+        const GLenum shutdownError = glGetError();
+        const auto output = testing::internal::GetCapturedStdout();
+        if (HasFailure()) ADD_FAILURE() << output;
+        EXPECT_TRUE(started) << output;
+        EXPECT_EQ(startupError, static_cast<GLenum>(GL_NO_ERROR));
+        EXPECT_EQ(shutdownError, static_cast<GLenum>(GL_NO_ERROR));
+        EXPECT_EQ(output.find("OpenGL Error"), std::string::npos) << output;
+        EXPECT_EQ(graphics.resourceManager, nullptr);
+        EXPECT_EQ(graphics.renderingPipeline, nullptr);
+    }
 }
 
 #endif

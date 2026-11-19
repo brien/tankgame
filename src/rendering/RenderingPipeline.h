@@ -9,9 +9,8 @@
 #include "BulletRenderer.h"
 #include "EffectRenderer.h"
 #include "ItemRenderer.h"
-#include "ITankRenderer.h"
+#include "PlayerTankRendererImpl.h"
 #include "EnemyTankRendererImpl.h"
-#include "TankRendererFactory.h"
 #include "HUDRenderer.h"
 #include "MenuRenderer.h"
 #include <memory>
@@ -37,7 +36,7 @@ public:
      * 
      * @param viewport ViewportManager for handling split-screen layout
      * @param camera CameraManager for camera positioning and behavior
-     * @param resources ResourceManager for accessing display lists, textures, etc.
+     * @param resources ResourceManager for accessing geometry buffers, textures, etc.
      */
     RenderingPipeline(ViewportManager& viewport, CameraManager& camera, 
                      ResourceManager& resources);
@@ -74,6 +73,8 @@ public:
      * Useful for performance monitoring and debugging.
      */
     struct RenderStats {
+        // Object counts describe the last rendered scene, not GPU submissions
+        // or a sum over player views. They include objects skipped by a pass.
         int tanksRendered;
         int bulletsRendered;
         int effectsRendered;
@@ -106,7 +107,7 @@ private:
     BulletRenderer bulletRenderer;
     EffectRenderer effectRenderer;
     ItemRenderer itemRenderer;
-    std::unique_ptr<ITankRenderer> tankRenderer;
+    PlayerTankRendererImpl playerTankRenderer;
     EnemyTankRendererImpl enemyTankRenderer;
     
     // UI renderers
@@ -136,10 +137,6 @@ private:
     void SetupLighting(const SceneData& scene);
     void OptimizeRenderOrder(std::vector<TankRenderData>& tanks, const Vector3& cameraPos);
     void UpdateRenderStats(const SceneData& scene);
-    
-    // State management
-    void PushRenderState();
-    void PopRenderState();
     
     // Performance optimization
     bool ShouldRenderObject(const Vector3& position, const Vector3& cameraPos, float maxDistance = 100.0f);

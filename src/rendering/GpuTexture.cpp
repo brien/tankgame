@@ -36,5 +36,3 @@ void GpuTexture::Bind(unsigned int unit) const
     GLFunctions::ActiveTexture(GL_TEXTURE0 + unit);
     glBindTexture(GL_TEXTURE_2D, implementation->handle);
 }
-
-unsigned int GpuTexture::CompatibilityHandle() const { return implementation->handle; }

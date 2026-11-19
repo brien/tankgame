@@ -1,5 +1,5 @@
 #include "RenderContext.h"
-#include "../DisplayList.h"
+#include "GeometryAsset.h"
 #include "ModernRenderer.h"
 
 #include <stdexcept>
@@ -10,7 +10,7 @@ RenderContext& RenderContext::Current()
     return context;
 }
 
-void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
+void RenderContext::Draw(const GeometryAsset& resource, const Matrix4& model,
                          float red, float green, float blue, float alpha, bool lit) const
 {
     BasicMaterial material;
@@ -22,11 +22,11 @@ void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
     Draw(resource, model, material);
 }
 
-void RenderContext::Draw(const DisplayList& resource, const Matrix4& model,
+void RenderContext::Draw(const GeometryAsset& resource, const Matrix4& model,
                          const BasicMaterial& material) const
 {
     const Matrix4 mvp = Mvp(model);
     if (!renderer) throw std::logic_error("RenderContext has no modern renderer");
-    renderer->Draw(resource.ModernGeometry(), mvp.Data(), material,
+    renderer->Draw(resource.GetGpuGeometry(), mvp.Data(), material,
                    model.NormalTransform().Data(), lighting);
 }

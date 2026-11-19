@@ -30,10 +30,5 @@ protected:
     void CleanupRenderState() override;
     
 private:
-    /**
-     * Sets the color based on the item type (tank type determines power-up color).
-     * @param itemType The type of item/power-up
-     */
-    void SetItemColor(TankType itemType);
     static Color GetItemColor(TankType itemType);
 };

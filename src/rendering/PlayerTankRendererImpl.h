@@ -40,28 +40,8 @@ private:
     // Animation state
     float animationDrift;
     
-    // Internal rendering helpers
-    void RenderTankBody(const TankRenderData& tank);
-    void RenderTankTurret(const TankRenderData& tank);
-    void RenderEffectBody(const TankRenderData& tank);
-    void RenderEffectTurret(const TankRenderData& tank);
-    void RenderTargetingIndicator(const TankRenderData& tank);
-    void RenderReadyIndicator(const TankRenderData& tank);
-    
     // Render state management
     void SetupPlayerTankRenderState();
-    void SetupPlayerEffectsRenderState();
-    void SetupTargetingUIRenderState();
     
-    // Constants (from PlayerTankRenderer)
-    static constexpr float TANK_HEIGHT_OFFSET = 0.05f;
-    static constexpr float TURRET_HEIGHT_OFFSET = 0.10f;
-    static constexpr float TARGETING_HEIGHT_OFFSET = 0.25f;
-    static constexpr float TARGETING_EFFECT_OFFSET = 0.018f;
-    static constexpr float DISTANCE_COLOR_FACTOR = 50.0f;
-    static constexpr float TEXTURE_DRIFT_SPEED = 100.0f;
     static constexpr float DRIFT_RESET_THRESHOLD = 1.0f;
-    static constexpr float ROTATION_EFFECT_SPEED = 100.0f;
-    static constexpr float EFFECT_SCALE_FACTOR = 0.2f;
-    static constexpr float EFFECT_SCALE_RESTORE = 5.0f;
 };

@@ -2,7 +2,6 @@
 #include <algorithm>
 
 #include "rendering/EnemyTankRendererImpl.h"
-#include "rendering/TankRendererFactory.h"
 #include "gameplay/GameplayDefinitions.h"
 
 namespace {
@@ -100,15 +99,14 @@ TEST(EnemyRendererTest, HealthMultiplierPreservesOverbrightColorsAndZeroHealthIs
     EXPECT_FLOAT_EQ(EnemyTankRendererImpl::BuildDraws(tank)[0].material.green, .3f);
 }
 
-TEST(EnemyRendererTest, FactorySelectsEnemyRendererAndRejectsDeadOrPlayerDataBeforeGL) {
-    auto renderer = TankRendererFactory::CreateRenderer(false);
-    ASSERT_NE(dynamic_cast<EnemyTankRendererImpl*>(renderer.get()), nullptr);
+TEST(EnemyRendererTest, RejectsDeadOrPlayerDataBeforeGL) {
+    EnemyTankRendererImpl renderer;
     TankRenderData tank;
     tank.alive = false;
-    EXPECT_NO_THROW(renderer->Render(tank));
+    EXPECT_NO_THROW(renderer.Render(tank));
     tank.alive = true;
     tank.isPlayer = true;
-    EXPECT_NO_THROW(renderer->Render(tank));
+    EXPECT_NO_THROW(renderer.Render(tank));
 }
 
 TEST(EnemyRendererTest, GeometryRetainsTriangleCountsBoundsAttributesAndWinding) {

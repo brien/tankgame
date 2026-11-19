@@ -35,24 +35,6 @@ public:
 private:
     ResourceManager* resources; // Non-owning catalogue, shared with the pipeline.
     void RenderModern(const std::vector<EffectRenderData>& effects);
-#ifndef __EMSCRIPTEN__
-    // Main rendering functions for different effect types
-    void RenderEffect(const EffectRenderData& effect);
-    void SetupEffectTexture(const EffectRenderData& effect);
-    void ApplyEffectScale(const EffectRenderData& effect);
-    void RenderEffectGeometry(const EffectRenderData& effect);
-    
-    // Utility functions
-    void SetupEffectRendering();
-    void CleanupEffectRendering();
-    void SetupBlendMode();
-    void RestoreBlendMode();
-    
-#endif
-    // Cached state to avoid redundant OpenGL calls
-    bool blendEnabled;
-    bool texturesEnabled;
-    unsigned int currentTexture;
 };
 
 #endif // EFFECTRENDERER_H

@@ -3,15 +3,12 @@
 #include "Logger.h"
 #include "rendering/ImageData.h"
 
-TextureHandler::TextureHandler() { compatibilityHandles.fill(0); }
-
 void TextureHandler::LoadTexture(const char* fileName, TextureNames id, bool wrap)
 {
     try {
         images[id] = std::make_shared<const ImageData>(DecodeTga(fileName));
         textures[id] = std::make_shared<GpuTexture>(*images[id],
                                                     TextureUploadOptions{wrap, true});
-        compatibilityHandles[id] = textures[id]->CompatibilityHandle();
     } catch (const std::exception& error) {
         Logger::Get().Write("TextureHandler: %s\n", error.what());
     }

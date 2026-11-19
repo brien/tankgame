@@ -112,7 +112,7 @@ namespace Phase4Example {
         // The new architecture provides several performance benefits:
         
         // 1. Centralized resource management
-        // - All display lists, textures, meshes in one place
+        // - All geometry buffers, textures, meshes in one place
         // - No duplicate resource loading
         // - Proper resource lifecycle management
         
@@ -153,7 +153,7 @@ namespace Phase4Example {
         
         // 3. New tank types:
         // - Create new ITankRenderer implementation
-        // - Add to TankRendererFactory
+        // - Add the renderer to RenderingPipeline
         // - No changes needed to pipeline
         
         // 4. New post-processing effects:
@@ -171,7 +171,7 @@ namespace Phase4Example {
  * Summary of Phase 4 Accomplishments:
  * 
  * ✅ Step 12: Created ResourceManager
- * - Centralized management of display lists, textures, meshes, fonts
+ * - Centralized management of geometry buffers, textures, meshes, fonts
  * - Proper resource lifecycle (initialization/cleanup)
  * - Single point of access for all rendering resources
  * - Moved resources out of GraphicsTask for better organization

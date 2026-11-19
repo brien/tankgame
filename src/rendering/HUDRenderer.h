@@ -17,7 +17,4 @@ public:
 
 private:
     ResourceManager& resources;
-#ifndef __EMSCRIPTEN__
-    void RenderTargetingLine(const HUDRenderData& data);
-#endif
 };

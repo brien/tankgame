@@ -1,7 +1,6 @@
 #include "DebugLineRenderer.h"
 #include "ResourceManager.h"
 #include "RenderContext.h"
-#include "RendererMode.h"
 #include "PlatformGL.h"
 
 Matrix4 DebugLineRenderer::BuildModel(const DebugLineData& line) {
@@ -42,33 +41,11 @@ void DebugLineRenderer::Render(ResourceManager& resources, const std::vector<Deb
     glDepthMask(GL_FALSE);
     glDisable(GL_BLEND);
     glLineWidth(1.0f);
-#ifndef __EMSCRIPTEN__
-    if (!RendererMode::IsModern()) {
-        glPushAttrib(GL_ENABLE_BIT | GL_CURRENT_BIT);
-        glDisable(GL_LIGHTING);
-        glDisable(GL_TEXTURE_2D);
-        glDisable(GL_LINE_STIPPLE);
-    }
-#endif
     for (const auto& line : lines) {
         const Matrix4 model = BuildModel(line);
-        if (RendererMode::IsModern()) {
-            RenderContext::Current().Draw(resources.GetGeometry(GeometryResource::DebugLine), model,
-                line.color.x, line.color.y, line.color.z, 1.0f, false);
-        }
-#ifndef __EMSCRIPTEN__
-        else {
-            glPushMatrix();
-            glMultMatrixf(model.Data());
-            glColor3f(line.color.x, line.color.y, line.color.z);
-            resources.GetGeometry(GeometryResource::DebugLine).Call(0);
-            glPopMatrix();
-        }
-#endif
+        RenderContext::Current().Draw(resources.GetGeometry(GeometryResource::DebugLine), model,
+            line.color.x, line.color.y, line.color.z, 1.0f, false);
     }
-#ifndef __EMSCRIPTEN__
-    if (!RendererMode::IsModern()) glPopAttrib();
-#endif
     glLineWidth(width);
     glDepthMask(depthWrite);
     glDepthFunc(depthFunc);
