@@ -1,0 +1,465 @@
+{
+  "definitions": {
+    "combat": {
+      "blueSpecialHitPowerBonus": 100.0,
+      "bounceAgeDivisor": 2.0,
+      "bounceBonusBase": 1.0,
+      "bounceBonusMaxAgeSeconds": 10.0,
+      "distanceComboDivisor": 10.0,
+      "distanceThreshold": 20.0,
+      "energyReturnDivisor": 8.0,
+      "friendlyResourceThresholdMultiplier": 2.0,
+      "healthReturnDivisor": 2.0,
+      "hitComboDivisor": 10.0,
+      "killBonus": 10.0,
+      "killComboDivisor": 10.0,
+      "streakComboDivisor": 2.0,
+      "streakThreshold": 9
+    },
+    "combinations": [
+      {
+        "overrides": {
+          "attack": 50.0,
+          "fireCost": 20.0,
+          "fireIntervalSeconds": 0.4000000059604645
+        },
+        "primary": "red",
+        "secondary": "grey"
+      },
+      {
+        "overrides": {
+          "attack": 200.0,
+          "fireCost": 20.0,
+          "fireIntervalSeconds": 0.10000000149011612
+        },
+        "primary": "red",
+        "secondary": "blue"
+      },
+      {
+        "overrides": {
+          "attack": 120.0,
+          "bounces": 2,
+          "fireCost": 12.5,
+          "fireIntervalSeconds": 0.07500000298023224
+        },
+        "primary": "red",
+        "secondary": "yellow"
+      },
+      {
+        "overrides": {
+          "attack": 100.0,
+          "fireCost": 66.66666412353516
+        },
+        "primary": "blue",
+        "secondary": "grey"
+      },
+      {
+        "overrides": {
+          "attack": 200.0,
+          "fireCost": 66.66666412353516
+        },
+        "primary": "blue",
+        "secondary": "red"
+      },
+      {
+        "overrides": {
+          "attack": 800.0,
+          "bounces": 1,
+          "fireCost": 66.66666412353516
+        },
+        "primary": "blue",
+        "secondary": "yellow"
+      },
+      {
+        "overrides": {
+          "attack": 500.0,
+          "bounces": 1,
+          "fireCost": 66.66666412353516
+        },
+        "primary": "blue",
+        "secondary": "purple"
+      },
+      {
+        "overrides": {
+          "attack": 150.0,
+          "bounces": 64,
+          "fireCost": 25.0,
+          "fireIntervalSeconds": 0.25
+        },
+        "primary": "yellow",
+        "secondary": "red"
+      },
+      {
+        "overrides": {
+          "attack": 400.0,
+          "bounces": 32,
+          "fireCost": 50.0,
+          "fireIntervalSeconds": 0.800000011920929
+        },
+        "primary": "yellow",
+        "secondary": "blue"
+      },
+      {
+        "overrides": {
+          "attack": 500.0,
+          "bounces": 64,
+          "fireCost": 50.0,
+          "fireIntervalSeconds": 0.800000011920929
+        },
+        "primary": "yellow",
+        "secondary": "purple"
+      },
+      {
+        "overrides": {
+          "attack": 150.0,
+          "fireCost": 25.0,
+          "fireIntervalSeconds": 0.25
+        },
+        "primary": "purple",
+        "secondary": "grey"
+      },
+      {
+        "overrides": {
+          "attack": 150.0,
+          "fireCost": 25.0,
+          "fireIntervalSeconds": 0.25
+        },
+        "primary": "purple",
+        "secondary": "red"
+      },
+      {
+        "overrides": {
+          "attack": 500.0,
+          "fireCost": 50.0,
+          "fireIntervalSeconds": 0.800000011920929
+        },
+        "primary": "purple",
+        "secondary": "blue"
+      },
+      {
+        "overrides": {
+          "attack": 500.0,
+          "bounces": 64,
+          "fireCost": 50.0,
+          "fireIntervalSeconds": 0.800000011920929
+        },
+        "primary": "purple",
+        "secondary": "yellow"
+      }
+    ],
+    "difficulties": {
+      "easy": {
+        "energy": 1.5,
+        "energyRegen": 1.5,
+        "health": 3.0,
+        "healthRegen": 2.0
+      },
+      "hard": {
+        "energy": 1.0,
+        "energyRegen": 1.0,
+        "health": 1.0,
+        "healthRegen": 1.0
+      },
+      "normal": {
+        "energy": 1.5,
+        "energyRegen": 1.5,
+        "health": 1.5,
+        "healthRegen": 1.5
+      }
+    },
+    "enemy": {
+      "advancedLevelOffsets": [
+        2,
+        5,
+        12
+      ],
+      "advancedTypes": [
+        {
+          "primary": "red",
+          "secondary": "red"
+        },
+        {
+          "primary": "blue",
+          "secondary": "blue"
+        },
+        {
+          "primary": "yellow",
+          "secondary": "yellow"
+        },
+        {
+          "primary": "purple",
+          "secondary": "red"
+        },
+        {
+          "primary": "red",
+          "secondary": "blue"
+        },
+        {
+          "primary": "blue",
+          "secondary": "yellow"
+        },
+        {
+          "primary": "yellow",
+          "secondary": "red"
+        },
+        {
+          "primary": "purple",
+          "secondary": "blue"
+        },
+        {
+          "primary": "red",
+          "secondary": "yellow"
+        },
+        {
+          "primary": "blue",
+          "secondary": "red"
+        },
+        {
+          "primary": "yellow",
+          "secondary": "blue"
+        },
+        {
+          "primary": "purple",
+          "secondary": "yellow"
+        }
+      ],
+      "openingLevelAttackScale": 0.3333333432674408,
+      "openingLevelWeakenedIndex": 4,
+      "openingTypes": [
+        {
+          "primary": "red",
+          "secondary": "grey"
+        },
+        {
+          "primary": "yellow",
+          "secondary": "grey"
+        },
+        {
+          "primary": "yellow",
+          "secondary": "grey"
+        }
+      ],
+      "openingWeakenedPrimary": "blue",
+      "openingWeakenedSecondary": "grey",
+      "regularTypes": [
+        {
+          "primary": "red",
+          "secondary": "grey"
+        },
+        {
+          "primary": "blue",
+          "secondary": "red"
+        },
+        {
+          "primary": "yellow",
+          "secondary": "blue"
+        }
+      ]
+    },
+    "enemyBehavior": {
+      "activationDistance": 15.0,
+      "activationDistancePerLevel": 3.0,
+      "aimToleranceDegrees": 5.0,
+      "attackerCountBase": 1,
+      "avoidanceTurnDegrees": 30.0,
+      "fearJumpHeight": 3.0,
+      "fearProbeAngleDegrees": 30.0,
+      "fearProbeFrames": 20.0,
+      "fearUntilLevelOffset": 2,
+      "fireEnergyFraction": 0.5,
+      "huntEnergyFraction": 0.5,
+      "huntJumpHeight": 5.0,
+      "huntProbeFrames": 10.0,
+      "huntStopDistance": 10.0,
+      "jumpEnergyFraction": 0.25,
+      "overflowSpawnOffset": 1.0,
+      "shotCharge": 1.0,
+      "spawnRotationStepDegrees": 45.0,
+      "wanderJumpHeight": 3.0,
+      "wanderMaxDrop": 7.0,
+      "wanderProbeAngleDegrees": 20.0,
+      "wanderProbeFrames": 15.0,
+      "wanderTurnDegrees": 90.0
+    },
+    "gameCube": {
+      "alternateTurretDeadzone": 5000,
+      "bodyDeadzone": 8000,
+      "bodyDivisor": 28000.0,
+      "chargeDivisor": 6400.0,
+      "fireAxisThreshold": -5000,
+      "forwardDeadzone": 4000,
+      "forwardDivisor": 18000.0,
+      "jumpAxisThreshold": 5000,
+      "reverseDeadzone": 8000,
+      "specialChargeDivisor": 6000.0,
+      "turretDeadzone": 6000,
+      "turretDivisor": 2500.0
+    },
+    "input": {
+      "browserPadActivationDeadzone": 5000,
+      "keyboardTurboTurretRate": 300.0,
+      "keyboardTurretRate": 200.0,
+      "mouseTurretScale": 2.0
+    },
+    "joystick": {
+      "alternateTurretDeadzone": 5000,
+      "bodyDeadzone": 8000,
+      "bodyDivisor": 32000.0,
+      "chargeDivisor": 3200.0,
+      "fireAxisThreshold": -5000,
+      "forwardDeadzone": 5000,
+      "forwardDivisor": 20000.0,
+      "jumpAxisThreshold": 5000,
+      "reverseDeadzone": 8000,
+      "specialChargeDivisor": 3200.0,
+      "turretDeadzone": 6000,
+      "turretDivisor": 3200.0
+    },
+    "landing": {
+      "rewardEnergyFraction": 0.3333333432674408,
+      "rewardThresholdFraction": 0.6666666865348816
+    },
+    "player": {
+      "comboChargeFraction": 0.10000000149011612,
+      "comboDecayPerSecond": 1.0,
+      "matchingPickupEnergyFraction": 1.0,
+      "otherPickupEnergyFraction": 0.5,
+      "pickupScore": 100,
+      "respawnDelaySeconds": 0.5,
+      "spawnHeight": 24.0,
+      "specialChargeMax": 100.0,
+      "startingPrimaryType": "red",
+      "startingSecondaryType": "blue",
+      "versusRespawnDelaySeconds": 1.5
+    },
+    "projectile": {
+      "childBounces": 4,
+      "collisionRadius": 0.10000000149011612,
+      "firstBouncePowerMultiplier": 1.5,
+      "lifetimeSeconds": 100.0,
+      "purpleChildBounces": 16,
+      "purpleChildPowerMultiplier": 2.0,
+      "purpleChildTurnSpeed": 10.0,
+      "purpleMaxPower": 1000.0,
+      "purpleMinPower": 100.0,
+      "purplePrimaryTurnScale": 320.0,
+      "purpleSecondaryChargeDivisor": 2.0,
+      "purpleSecondaryPowerScale": 0.5,
+      "purpleSecondaryTurnScale": 160.0,
+      "purpleSpecialTurnAcceleration": 1000.0,
+      "registrationRadius": 0.30000001192092896,
+      "selfHitDelaySeconds": 0.5,
+      "speed": 33.0,
+      "yellowBlueChildCount": 2,
+      "yellowBlueChildSpacing": 0.20000000298023224,
+      "yellowFirstBouncePowerMultiplier": 2.0,
+      "yellowRedChildCount": 20
+    },
+    "special": {
+      "blueCenterHeight": 0.5,
+      "blueSideOffset": 0.20000000298023224,
+      "muzzleHeight": 0.25,
+      "purpleAnglesDegrees": [
+        0.0,
+        -90.0,
+        180.0,
+        90.0
+      ],
+      "redArcBounces": 0,
+      "redArcCount": 10,
+      "redArcStartDegrees": 52.0,
+      "redArcStepDegrees": 27.0,
+      "redForwardAnglesDegrees": [
+        0.0,
+        -10.0,
+        20.0
+      ],
+      "yellowBounces": 4
+    },
+    "tank": {
+      "collisionRadius": 0.20000000298023224,
+      "gravity": 16.0,
+      "healthRegenPerSecond": 10.0,
+      "jumpEnergyPerSecond": 250.0,
+      "jumpLaunchSpeed": 4.0,
+      "jumpThrust": 18.0,
+      "maxFallSpeed": 15.0,
+      "maxForwardInput": 1.25,
+      "maxHealth": 100.0,
+      "maxRiseSpeed": 10.0,
+      "moveSpeed": 5.0,
+      "rotationDegreesPerSecond": 150.0,
+      "turboEnergyPerSecond": 250.0,
+      "turretInputScale": 10.0,
+      "turretMaxStepDegrees": 2.5
+    },
+    "types": {
+      "blue": {
+        "attack": 2200.0,
+        "b": 1.0,
+        "bounces": 0,
+        "energyRegen": 50.0,
+        "fireCost": 100.0,
+        "fireIntervalSeconds": 0.5,
+        "g": 0.0,
+        "maxEnergy": 100.0,
+        "moveCost": 0.0,
+        "r": 0.0,
+        "specialChargeCost": 2.0
+      },
+      "grey": {
+        "attack": 200.0,
+        "b": 0.5,
+        "bounces": 0,
+        "energyRegen": 50.0,
+        "fireCost": 50.0,
+        "fireIntervalSeconds": 0.5,
+        "g": 0.5,
+        "maxEnergy": 100.0,
+        "moveCost": 0.0,
+        "r": 0.5,
+        "specialChargeCost": 2.0
+      },
+      "purple": {
+        "attack": 300.0,
+        "b": 1.0,
+        "bounces": 64,
+        "energyRegen": 50.0,
+        "fireCost": 25.0,
+        "fireIntervalSeconds": 0.5,
+        "g": 0.0,
+        "maxEnergy": 100.0,
+        "moveCost": 0.0,
+        "r": 1.0,
+        "specialChargeCost": 2.0
+      },
+      "red": {
+        "attack": 100.0,
+        "b": 0.0,
+        "bounces": 0,
+        "energyRegen": 55.0,
+        "fireCost": 10.0,
+        "fireIntervalSeconds": 0.05000000074505806,
+        "g": 0.0,
+        "maxEnergy": 100.0,
+        "moveCost": 0.0,
+        "r": 1.0,
+        "specialChargeCost": 2.0
+      },
+      "yellow": {
+        "attack": 300.0,
+        "b": 0.0,
+        "bounces": 400,
+        "energyRegen": 50.0,
+        "fireCost": 25.0,
+        "fireIntervalSeconds": 0.5,
+        "g": 1.0,
+        "maxEnergy": 100.0,
+        "moveCost": 0.0,
+        "r": 1.0,
+        "specialChargeCost": 2.0
+      }
+    }
+  },
+  "schemaVersion": 1
+}

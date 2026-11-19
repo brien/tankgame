@@ -8,6 +8,7 @@ class GameTask : public ITask
 {
 public:
     GameTask();
+    explicit GameTask(Gameplay::GameplayDefinitions definitions);
     virtual ~GameTask();
 
     bool Start() override;
@@ -29,6 +30,7 @@ public:
 
 private:
     friend class GameTaskStateTest;
+    friend class GameplayDefinitionLoaderTest;
 
     enum class GameState { MENU, PLAYING, PAUSED, GAME_OVER };
     GameState currentState;

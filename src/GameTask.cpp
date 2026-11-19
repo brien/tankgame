@@ -41,7 +41,10 @@ void GameTask::SetUpGame()
     Logger::Get().Write("GameTask: Game setup complete\n");
 }
 
-GameTask::GameTask()
+GameTask::GameTask() : GameTask(Gameplay::BuildBuiltInDefinitions()) {}
+
+GameTask::GameTask(Gameplay::GameplayDefinitions definitions)
+    : gameWorld(std::move(definitions))
 {
     versus = false;
     gameOver = false;

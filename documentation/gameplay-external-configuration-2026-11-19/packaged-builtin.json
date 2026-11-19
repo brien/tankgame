@@ -1,0 +1,24 @@
+{
+  "checks": [
+    {
+      "label": "first frame",
+      "value": true
+    },
+    {
+      "label": "selected packaged file",
+      "value": true
+    },
+    {
+      "label": "packaged bytes match source",
+      "value": true
+    },
+    {
+      "label": "session started",
+      "value": true
+    },
+    {
+      "label": "WebGL valid",
+      "value": true
+    }
+  ]
+}

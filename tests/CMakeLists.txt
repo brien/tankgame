@@ -37,6 +37,7 @@ add_executable(tankgame_tests
     test_material_texture.cpp
     test_level_metadata.cpp
     test_gameplay_definitions.cpp
+    test_gameplay_definition_json.cpp
     test_tank_jump.cpp
     test_bullet_special.cpp
     test_main.cpp
@@ -104,4 +105,16 @@ if(NOT EMSCRIPTEN)
         TANKGAME_RENDERER= $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
     add_test(NAME GraphicsPolicy.UnknownOverride COMMAND ${CMAKE_COMMAND} -E env
         TANKGAME_RENDERER=unknown $<TARGET_FILE:tankgame_tests> --gtest_filter=GraphicsCapabilities.*)
+endif()
+
+if(NOT EMSCRIPTEN)
+    if(APPLE)
+        set(GAMEPLAY_CLI_TARGET tankgame-mac)
+    else()
+        set(GAMEPLAY_CLI_TARGET tankgame-linux)
+    endif()
+    add_test(NAME GameplayConfiguration.CommandLine
+        COMMAND ${CMAKE_COMMAND} -DGAME=$<TARGET_FILE:${GAMEPLAY_CLI_TARGET}>
+            -DTEST_DIR=${CMAKE_CURRENT_BINARY_DIR}
+            -P ${CMAKE_CURRENT_SOURCE_DIR}/test_gameplay_configuration_cli.cmake)
 endif()

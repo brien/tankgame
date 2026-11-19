@@ -15,9 +15,14 @@ when no definitions are supplied. Callers supplying shared definitions directly
 to standalone entities must validate them first and retain immutable ownership;
 normal game creation goes through the validating world boundary.
 
-A future loader needs only to build a complete `GameplayDefinitions`, validate
-it, and pass it to world construction. Parsing, external type names, schema
-versioning/migration, settings persistence and live reload are separate work.
+The external JSON loader builds a complete `GameplayDefinitions`, validates
+it, and passes it to world construction. See the
+[version 1 file format](gameplay-configuration-format.md) and
+[implementation progress](gameplay-external-configuration-progress.md). Settings
+persistence and live reload remain separate work. Startup loads `gameplay.json`
+from the working directory by default; `--gameplay-config` selects another file.
+Loading failures log the path/reason and use built-ins. Browser builds package
+`runtime/gameplay.json` by default at `/gameplay.json`.
 No JSON/parser types appear in entities, resolution or combat APIs. Existing
 level metadata JSON remains an independent, validated format.
 

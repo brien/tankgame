@@ -25,6 +25,7 @@
 #endif
 
 #include "App.h"
+#include "gameplay/GameplayDefinitionLoader.h"
 #include "Singleton.h"
 #include "InputTask.h"
 #include "GlobalTimer.h"
@@ -36,6 +37,17 @@ bool App::Initialize(int argc, char *argv[])
 {
     if (!Logger::Get().Init())
         return false;
+
+    Gameplay::GameplayDefinitions definitions;
+    try {
+        const auto options = Gameplay::ParseDefinitionOptions(argc, argv);
+        std::string diagnostic;
+        definitions = Gameplay::LoadStartupDefinitions(options, &diagnostic);
+        Logger::Get().Write("Gameplay configuration: %.900s\n", diagnostic.c_str());
+    } catch (const std::exception& e) {
+        Logger::Get().Write("FATAL: Gameplay configuration: %s\n", e.what());
+        return false;
+    }
 
     SDL_version compiled;
     SDL_version linked;
@@ -50,7 +62,7 @@ bool App::Initialize(int argc, char *argv[])
     videoTask = new VideoTask;
     graphicsTask = new GraphicsTask;
     soundTask = new SoundTask;
-    gameTask = new GameTask;
+    gameTask = new GameTask(std::move(definitions));
     globalTimer = new GlobalTimer;
     inputTask = new InputTask;
 
@@ -130,14 +142,15 @@ void App::Shutdown()
     delete TaskHandler::GetSingletonPtr();
 }
 
-void App::Run(int argc, char *argv[])
+bool App::Run(int argc, char *argv[])
 {
     if (!Initialize(argc, argv))
-        return;
+        return false;
 
     Logger::Get().Write("Entering native TaskHandler execute loop.\n");
     TaskHandler::GetSingleton().Execute();
     Shutdown();
+    return true;
 }
 
 #ifdef __EMSCRIPTEN__
@@ -456,6 +469,26 @@ void BrowserFrame(void *appPointer)
 
 int main(int argc, char *argv[])
 {
+    try {
+        const auto options = Gameplay::ParseDefinitionOptions(argc, argv);
+        if (options.command == Gameplay::DefinitionCommand::Help) {
+            std::cout << Gameplay::DefinitionCommandHelp();
+            return 0;
+        }
+        if (options.command == Gameplay::DefinitionCommand::Validate) {
+            Gameplay::LoadDefinitionFile(options.path);
+            std::cout << "Valid gameplay configuration: " << options.path << '\n';
+            return 0;
+        }
+        if (options.command == Gameplay::DefinitionCommand::Export) {
+            Gameplay::ExportBuiltInDefinitionFile(options.path);
+            std::cout << "Exported built-in gameplay configuration: " << options.path << '\n';
+            return 0;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "Gameplay configuration: " << e.what() << '\n';
+        return 1;
+    }
     new App();
 #ifdef __EMSCRIPTEN__
     if (!App::GetSingleton().Initialize(argc, argv))
@@ -468,8 +501,9 @@ int main(int argc, char *argv[])
     InstallBrowserActivity();
     emscripten_set_main_loop_arg(BrowserFrame, App::GetSingletonPtr(), 0, true);
 #else
-    App::GetSingleton().Run(argc, argv);
+    const bool success = App::GetSingleton().Run(argc, argv);
     delete App::GetSingletonPtr();
+    return success ? 0 : 1;
 #endif
 
     return 0;
