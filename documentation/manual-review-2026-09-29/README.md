@@ -8,14 +8,11 @@ Revision: `6fd947fd2ec8355c941db8b58f4d2f0816143e2b` (`Fix split-screen framebuf
 
 No production code was changed. This review records failures for follow-up; successful repeat runs do not invalidate the failures.
 
-**Planning update:** multiplayer robustness is **deferred / low priority** and
-outside the current browser-port critical path. These findings may reflect older
-multiplayer/session-state architecture; crash attribution remains unconfirmed.
-Continue renderer/resource convergence and revisit multiplayer later as its own
-subsystem. See the [current roadmap](../../docs/browser-port/current-state-roadmap.md#current-runtime-findings-and-multiplayer-priority-2026-09-29)
-and [known issues](../../docs/browser-port/risks.md#current-known-issues-2026-09-29).
-This prioritization does not change the failed observations or grant multiplayer
-sign-off.
+**Historical evidence:** these observations describe the revision above. Later
+multiplayer/session fixes and outstanding soak/controller qualification are
+recorded in the [current status](../../docs/browser-port/current-state-roadmap.md#remaining-item-dispositions).
+The later fixes do not invalidate these recorded failures or establish that every
+historical crash is resolved.
 
 ## Results
 

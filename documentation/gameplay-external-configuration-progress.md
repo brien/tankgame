@@ -1,7 +1,8 @@
 # External gameplay configuration implementation progress
 
-Implementation on `feature/external-gameplay-configuration`, following the
-[approved plan](gameplay-external-configuration-plan.md), 2026-11-19.
+Implementation on `feature/external-gameplay-configuration`, approved on
+2026-11-19. The original plan is available in Git history; the current
+[file format and authoring guide](gameplay-configuration-format.md) describe usage.
 
 ## Implemented
 

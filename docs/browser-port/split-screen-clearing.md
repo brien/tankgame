@@ -1,14 +1,11 @@
 # Split-screen framebuffer clearing
 
-**Current status (2026-09-29): fixed and visually verified.** The
+**Historical report (2026-09-29): fixed and visually verified.** The
 [manual review](../../documentation/manual-review-2026-09-29/README.md) confirms
 both views remain visible in fresh co-op/versus runs on browser, Linux default,
-and Linux modern. Longer multiplayer sequences can still crash in browser and
-Linux modern; switching back to single-player can retain split-screen state.
-Independent player-2 input remains unverified without a joystick. These are
-[deferred, low-priority multiplayer issues](risks.md#current-known-issues-2026-09-29)
-outside the browser-port critical path. The clear fix does not establish a clean
-multiplayer baseline; renderer convergence takes priority over a multiplayer rewrite.
+and Linux modern. The failures and compatibility paths described below refer to
+that revision. Subsequent multiplayer fixes and remaining qualification gaps are
+recorded in the [current status](current-state-roadmap.md#remaining-item-dispositions).
 
 ## Verified render sequence and root cause
 
