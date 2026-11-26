@@ -42,6 +42,7 @@ private:
     void HandleGameOverState();
 
     void SetUpGame();
+    void SetUpMenu();
     void TransitionToState(GameState newState);
 
     void Visible(bool visible);

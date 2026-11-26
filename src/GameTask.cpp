@@ -61,15 +61,25 @@ GameTask::~GameTask()
 {
 }
 
-bool GameTask::Start()
+void GameTask::SetUpMenu()
 {
+    auto& level = LevelHandler::GetSingleton();
+    level.Init(); // Also cancels deferred level changes.
+    if (!level.Load("levels/title@@.txt"))
+    {
+        Logger::Get().Write("LevelHandler failed to load title level.\n");
+    }
+
     for (int i = 0; i < 4; i++)
     {
         App::GetSingleton().graphicsTask->cams[i].SetPos(40.0, 60.0, 40.0);
         App::GetSingleton().graphicsTask->cams[i].SetFocus(30.0, 0.0, 40.0);
     }
+}
 
-    LevelHandler::GetSingleton().Load("./levels/title@@.txt");
+bool GameTask::Start()
+{
+    SetUpMenu();
 
     debug = false;
     
@@ -283,12 +293,7 @@ void GameTask::TransitionToState(GameState newState)
         gameOver = false;
         timer = 0;
 
-        auto& level = LevelHandler::GetSingleton();
-        level.Init(); // Also cancels deferred level changes.
-        if (!level.Load("levels/title@@.txt"))
-        {
-            Logger::Get().Write("LevelHandler failed to load title level.\n");
-        }
+        SetUpMenu();
     }
     currentState = newState;
 }

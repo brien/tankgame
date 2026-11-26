@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include <algorithm>
+#include <vector>
 
 #include "App.h"
 #include "LevelHandler.h"
@@ -18,6 +19,7 @@ protected:
         ASSERT_TRUE(input.Start());
         std::fill(InputTask::keys, InputTask::keys + InputTask::keyCount, 0);
         app.gameTask = &task;
+        app.graphicsTask = &graphics;
         app.soundTask = &sound;
         sound.disable = true;
         LevelHandler::Create();
@@ -93,11 +95,65 @@ protected:
     }
 
     App app;
+    GraphicsTask graphics;
     SoundTask sound;
     GameTask task;
     InputTask input;
     float savedDelta = 0;
 };
+
+TEST_F(GameTaskStateTest, ReturningToMenuRestoresInitialTitleScene) {
+    ASSERT_TRUE(task.Start());
+    const auto initialCameras = graphics.sceneDataBuilder->ExtractCameraData();
+    ASSERT_EQ(initialCameras.size(), 1u);
+    EXPECT_FLOAT_EQ(initialCameras[0].position.x, 40.0f);
+    EXPECT_FLOAT_EQ(initialCameras[0].position.y, 60.0f);
+    EXPECT_FLOAT_EQ(initialCameras[0].position.z, 40.0f);
+    EXPECT_FLOAT_EQ(initialCameras[0].focus.x, 30.0f);
+    EXPECT_FLOAT_EQ(initialCameras[0].focus.y, 0.0f);
+    EXPECT_FLOAT_EQ(initialCameras[0].focus.z, 40.0f);
+
+    auto& level = LevelHandler::GetSingleton();
+    std::vector<int> initialTerrain;
+    for (int x = 0; x < 128; ++x)
+        for (int z = 0; z < 128; ++z)
+            initialTerrain.push_back(level.GetTerrainHeight(x, z));
+
+    for (int mode = 0; mode < 3; ++mode) {
+        for (bool fromGameOver : {false, true}) {
+            StartMode(mode);
+            for (auto& camera : graphics.cams) {
+                camera.SetPos(10, 5, 20);
+                camera.SetFocus(15, 0, 25);
+            }
+            if (fromGameOver) {
+                GameOver();
+                InputTask::keys[SDL_SCANCODE_RETURN] = 1;
+            } else {
+                InputTask::keys[SDL_SCANCODE_ESCAPE] = 1;
+                task.Update();
+                ASSERT_TRUE(task.IsPaused());
+            }
+            task.Update();
+            std::fill(InputTask::keys, InputTask::keys + InputTask::keyCount, 0);
+            ExpectMenu(true);
+
+            const auto cameras = graphics.sceneDataBuilder->ExtractCameraData();
+            ASSERT_EQ(cameras.size(), 1u);
+            for (const auto& camera : graphics.cams) {
+                EXPECT_FLOAT_EQ(camera.xpos(), initialCameras[0].position.x);
+                EXPECT_FLOAT_EQ(camera.ypos(), initialCameras[0].position.y);
+                EXPECT_FLOAT_EQ(camera.zpos(), initialCameras[0].position.z);
+                EXPECT_FLOAT_EQ(camera.xfocus(), initialCameras[0].focus.x);
+                EXPECT_FLOAT_EQ(camera.yfocus(), initialCameras[0].focus.y);
+                EXPECT_FLOAT_EQ(camera.zfocus(), initialCameras[0].focus.z);
+            }
+            for (int x = 0; x < 128; ++x)
+                for (int z = 0; z < 128; ++z)
+                    ASSERT_EQ(level.GetTerrainHeight(x, z), initialTerrain[x * 128 + z]);
+        }
+    }
+}
 
 TEST_F(GameTaskStateTest, ReturningFromGameplayRestoresVisibleMenu) {
     ExpectMenu(true);
